@@ -283,6 +283,195 @@ class ReportGenerator:
 
         auto_width(ws5)
 
+        # ================================================================
+        # Sheet 6: 仕入れ履歴
+        # ================================================================
+        try:
+            from purchase_manager import purchase_manager as pm
+            purchase_df = pm.get_purchases()
+        except Exception:
+            purchase_df = pd.DataFrame()
+
+        ws6 = wb.create_sheet("仕入れ履歴")
+        ws6.sheet_view.showGridLines = False
+        ws6["A1"] = "仕入れ履歴 (Yahoo Shopping / 楽天市場 / 買取商店 / WIKI)"
+        ws6["A1"].font = title_font
+
+        if not purchase_df.empty:
+            ph_cols = ["purchase_id", "purchase_date", "product_name", "platform",
+                       "condition", "quantity", "unit_cost", "total_cost",
+                       "category", "status", "listing_price"]
+            ph_labels = ["仕入れID", "仕入れ日", "商品名", "仕入れ先",
+                         "コンディション", "数量", "単価(¥)", "総仕入れ額(¥)",
+                         "カテゴリ", "ステータス", "出品価格(¥)"]
+            ph_disp = [c for c in ph_cols if c in purchase_df.columns]
+            ph_head = [ph_labels[ph_cols.index(c)] for c in ph_disp]
+
+            for c, h in enumerate(ph_head, 1):
+                ws6.cell(row=3, column=c, value=h)
+            style_header_row(ws6, 3, len(ph_head))
+
+            STATUS_FILLS = {
+                "売却済": good_fill, "出品中": PatternFill("solid", fgColor="E3F2FD"),
+                "未出品": warn_fill,  "返品": danger_fill, "廃棄": PatternFill("solid", fgColor="EEEEEE"),
+            }
+            for i, row in enumerate(purchase_df[ph_disp].itertuples(), start=4):
+                for c, col in enumerate(ph_disp, 1):
+                    val = getattr(row, col, "")
+                    if hasattr(val, "strftime"):
+                        val = val.strftime("%Y-%m-%d")
+                    ws6.cell(row=i, column=c, value=val).border = thin_border
+                # ステータス列の色分け
+                if "status" in ph_disp:
+                    sc = ph_disp.index("status") + 1
+                    st_val = getattr(row, "status", "")
+                    ws6.cell(row=i, column=sc).fill = STATUS_FILLS.get(st_val, alt_fill)
+
+        auto_width(ws6)
+
+        # ================================================================
+        # Sheet 7: 利益計算表
+        # ================================================================
+        try:
+            from profit_calculator import profit_calculator as pc
+            sales_profit_df = pc.get_sales_with_profit()
+        except Exception:
+            sales_profit_df = pd.DataFrame()
+
+        ws7 = wb.create_sheet("利益計算表")
+        ws7.sheet_view.showGridLines = False
+        ws7["A1"] = "利益計算表 (仕入れコスト + Amazon手数料 → 純利益)"
+        ws7["A1"].font = title_font
+
+        if not sales_profit_df.empty:
+            pl_cols = ["sale_id", "sale_date", "product_name", "buy_platform",
+                       "condition", "quantity_sold", "unit_cost", "total_cost",
+                       "sale_price", "amazon_referral_fee", "fba_fee",
+                       "other_costs", "total_fees", "gross_profit",
+                       "net_profit", "profit_margin_pct", "roi_pct", "days_to_sell"]
+            pl_labels = ["売上ID", "売却日", "商品名", "仕入れ先",
+                         "コンディション", "販売数", "仕入れ単価(¥)", "仕入れ総額(¥)",
+                         "売価(¥)", "紹介料(¥)", "FBA料(¥)",
+                         "その他費用(¥)", "手数料合計(¥)", "粗利益(¥)",
+                         "純利益(¥)", "利益率(%)", "ROI(%)", "販売日数"]
+            pl_disp = [c for c in pl_cols if c in sales_profit_df.columns]
+            pl_head = [pl_labels[pl_cols.index(c)] for c in pl_disp]
+
+            for c, h in enumerate(pl_head, 1):
+                ws7.cell(row=3, column=c, value=h)
+            style_header_row(ws7, 3, len(pl_head))
+
+            # KPIサマリー行 (行1下に追加)
+            ws7["A2"] = (f"総純利益: ¥{sales_profit_df['net_profit'].sum():,.0f}  |  "
+                         f"平均利益率: {sales_profit_df['profit_margin_pct'].mean():.1f}%  |  "
+                         f"平均ROI: {sales_profit_df['roi_pct'].mean():.1f}%  |  "
+                         f"件数: {len(sales_profit_df)}")
+            ws7["A2"].font = Font(italic=True, color="555555")
+
+            for i, row in enumerate(sales_profit_df[pl_disp].itertuples(), start=4):
+                for c, col in enumerate(pl_disp, 1):
+                    val = getattr(row, col, "")
+                    if hasattr(val, "strftime"):
+                        val = val.strftime("%Y-%m-%d")
+                    cell = ws7.cell(row=i, column=c, value=val)
+                    cell.border = thin_border
+                # 純利益列の色分け
+                if "net_profit" in pl_disp:
+                    np_col = pl_disp.index("net_profit") + 1
+                    np_val = getattr(row, "net_profit", 0)
+                    np_cell = ws7.cell(row=i, column=np_col)
+                    if np_val < 0:
+                        np_cell.fill = danger_fill
+                        np_cell.font = Font(bold=True, color="C62828")
+                    elif np_val > 0:
+                        np_cell.fill = good_fill
+                        np_cell.font = Font(bold=True, color="2E7D32")
+                if i % 2 == 0:
+                    for c in range(1, len(pl_disp) + 1):
+                        if ws7.cell(row=i, column=c).fill.fgColor.rgb in ("00000000", "FFFFFFFF"):
+                            ws7.cell(row=i, column=c).fill = alt_fill
+
+        auto_width(ws7)
+
+        # ================================================================
+        # Sheet 8: 商品別損益
+        # ================================================================
+        ws8 = wb.create_sheet("商品別損益")
+        ws8.sheet_view.showGridLines = False
+        ws8["A1"] = "商品別損益サマリー"
+        ws8["A1"].font = title_font
+
+        if not sales_profit_df.empty:
+            try:
+                from profit_calculator import profit_calculator as pc2
+                prod_pl = pc2.product_pl(sales_profit_df)
+            except Exception:
+                prod_pl = pd.DataFrame()
+
+            if not prod_pl.empty:
+                pp_cols = ["product_name", "category", "販売件数", "販売数量",
+                           "売上合計", "仕入れ総額", "手数料合計",
+                           "純利益", "平均利益率", "平均ROI"]
+                pp_labels = ["商品名", "カテゴリ", "販売件数", "販売数量",
+                             "売上合計(¥)", "仕入れ総額(¥)", "手数料合計(¥)",
+                             "純利益(¥)", "利益率(%)", "ROI(%)"]
+                pp_disp = [c for c in pp_cols if c in prod_pl.columns]
+                pp_head = [pp_labels[pp_cols.index(c)] for c in pp_disp]
+
+                for c, h in enumerate(pp_head, 1):
+                    ws8.cell(row=3, column=c, value=h)
+                style_header_row(ws8, 3, len(pp_head))
+
+                for rank, row in enumerate(prod_pl[pp_disp].itertuples(), start=4):
+                    for c, col in enumerate(pp_disp, 1):
+                        ws8.cell(row=rank, column=c, value=getattr(row, col, "")).border = thin_border
+                    # 純利益で色分け
+                    if "純利益" in pp_disp:
+                        np_c = pp_disp.index("純利益") + 1
+                        np_v = getattr(row, "純利益", 0)
+                        if np_v < 0:
+                            ws8.cell(row=rank, column=np_c).fill = danger_fill
+                            ws8.cell(row=rank, column=np_c).font = Font(bold=True, color="C62828")
+                        elif rank <= 6:  # 上位3件をゴールド
+                            for c in range(1, len(pp_disp) + 1):
+                                ws8.cell(row=rank, column=c).fill = good_fill
+
+        auto_width(ws8)
+
+        # ================================================================
+        # Sheet 9: プラットフォーム別
+        # ================================================================
+        ws9 = wb.create_sheet("プラットフォーム別")
+        ws9.sheet_view.showGridLines = False
+        ws9["A1"] = "仕入れプラットフォーム別 投資額・利益・ROI比較"
+        ws9["A1"].font = title_font
+
+        if not sales_profit_df.empty:
+            try:
+                from profit_calculator import profit_calculator as pc3
+                plat_df = pc3.platform_profit(sales_profit_df)
+            except Exception:
+                plat_df = pd.DataFrame()
+
+            if not plat_df.empty:
+                pt_cols  = ["buy_platform", "件数", "仕入れ総額", "純利益", "平均利益率", "平均ROI"]
+                pt_labels = ["仕入れ先", "件数", "仕入れ総額(¥)", "純利益(¥)", "平均利益率(%)", "平均ROI(%)"]
+                pt_disp  = [c for c in pt_cols if c in plat_df.columns]
+                pt_head  = [pt_labels[pt_cols.index(c)] for c in pt_disp]
+
+                for c, h in enumerate(pt_head, 1):
+                    ws9.cell(row=3, column=c, value=h)
+                style_header_row(ws9, 3, len(pt_head))
+
+                for i, row in enumerate(plat_df[pt_disp].itertuples(), start=4):
+                    for c, col in enumerate(pt_disp, 1):
+                        ws9.cell(row=i, column=c, value=getattr(row, col, "")).border = thin_border
+                    if i % 2 == 0:
+                        for c in range(1, len(pt_disp) + 1):
+                            ws9.cell(row=i, column=c).fill = alt_fill
+
+        auto_width(ws9)
+
         wb.save(filepath)
         return filepath
 

@@ -1,20 +1,17 @@
 """
-Amazon セラー アナリティクス ダッシュボード
-=============================================
-Streamlit を使ったインタラクティブなWebダッシュボード
+Amazon 物販アナリティクス — ホームダッシュボード
+=================================================
+Streamlit Multi-Page App のエントリポイント。
 
 起動方法:
     streamlit run dashboard.py
 
-機能:
-    - KPIサマリーカード
-    - 日次/週次/月次 売上チャート
-    - 商品別ランキング (棒グラフ + テーブル)
-    - フルフィルメント別分析 (FBA/FBM)
-    - 曜日別売上ヒートマップ
-    - 在庫状況ダッシュボード (アラート付き)
-    - 売上予測チャート
-    - レポートダウンロード (Excel/HTML)
+ページ一覧 (サイドバーから遷移):
+    🏠 ホーム          (このページ) Amazon売上・在庫分析
+    🛒 仕入れ管理      Yahoo Shopping / 楽天市場 / 買取商店 / WIKI
+    💰 利益計算        仕入れ〜販売の損益・ROI分析
+    📊 販売実績管理     商品ライフサイクル統合ビュー
+    ⚖️  出口比較        Amazon vs 買取の最適出口推奨エンジン
 """
 
 import streamlit as st
@@ -95,6 +92,20 @@ with st.sidebar:
     )
 
     st.markdown("---")
+
+    # ページナビゲーション案内
+    st.markdown("#### ページ一覧")
+    st.markdown("""
+🏠 **Amazon売上分析** (このページ)
+🛒 **仕入れ管理**
+💰 **利益計算**
+📊 **販売実績管理**
+⚖️ **出口比較**
+
+← サイドバーのリンクから遷移
+""")
+
+    st.markdown("---")
     api_status = "🟡 デモモード" if not config.lwa_app_id else "🟢 SP-API 接続済"
     st.markdown(f"**API状態:** {api_status}")
 
@@ -110,7 +121,7 @@ AWS_SECRET_ACCESS_KEY=xxx
 AWS_ROLE_ARN=arn:aws:iam::...""", language="bash")
 
     st.markdown("---")
-    generate_report = st.button("📥 レポート生成", use_container_width=True)
+    generate_report = st.button("📥 全データ Excelレポート生成", use_container_width=True)
 
 
 # ================================================================
@@ -119,8 +130,15 @@ AWS_ROLE_ARN=arn:aws:iam::...""", language="bash")
 st.markdown(f"""
 <div style="background:linear-gradient(135deg,#232F3E,#FF8C00);
      padding:20px 28px;border-radius:10px;color:white;margin-bottom:24px">
-  <h1 style="color:white;margin:0;font-size:28px">📦 Amazon セラーアナリティクス</h1>
-  <p style="margin:4px 0 0;opacity:.85">マーケット: 日本 (JP) | 最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}</p>
+  <h1 style="color:white;margin:0;font-size:28px">📦 Amazon 物販アナリティクス</h1>
+  <p style="margin:4px 0 0;opacity:.85">
+    セラーID: {config.seller_id} | マーケット: 日本 (JP) |
+    最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+  </p>
+  <p style="margin:6px 0 0;opacity:.7;font-size:13px">
+    🛒 仕入れ管理 | 💰 利益計算 | 📊 販売実績管理 | ⚖️ 出口比較
+    — サイドバーから各ページへ遷移できます
+  </p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -438,10 +456,10 @@ if not forecast_df.empty and not daily_df.empty:
                f"¥{forecast_df['forecast_revenue'].mean():,.0f}/日")
 
 # ================================================================
-# レポート生成
+# レポート生成 (9シート Excel + HTML)
 # ================================================================
 if generate_report:
-    with st.spinner("レポートを生成中..."):
+    with st.spinner("全データのレポートを生成中 (Amazon売上 + 仕入れ + 利益計算)..."):
         try:
             html_path = report_gen.export_html(
                 kpi, daily_df, monthly_df, product_df, inventory_df
@@ -465,20 +483,25 @@ if generate_report:
             with open(excel_path, "rb") as f:
                 excel_content = f.read()
             st.download_button(
-                "📊 Excelレポートをダウンロード",
+                "📊 Excelレポート (9シート) をダウンロード",
                 data=excel_content,
                 file_name=os.path.basename(excel_path),
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 use_container_width=True
             )
-            st.success("レポート生成完了!")
+            st.success("""レポート生成完了!
+**含まれるシート (9枚):**
+1. KPIサマリー 2. 月次売上 3. 商品別ランキング
+4. 在庫状況 5. 日次売上 6. 仕入れ履歴
+7. 利益計算表 8. 商品別損益 9. プラットフォーム別""")
         except Exception as e:
             st.warning(f"Excelレポートにはopenpyxlが必要です: pip install openpyxl")
 
 st.markdown("---")
 st.markdown(
     f"<div style='text-align:center;color:#aaa;font-size:12px'>"
-    f"Amazon Seller Analytics | セラーID: {config.seller_id} | "
-    f"Powered by Amazon SP-API</div>",
+    f"Amazon 物販アナリティクス | セラーID: {config.seller_id} | "
+    f"Powered by Amazon SP-API | "
+    f"仕入れ先: Yahoo Shopping / 楽天市場 / 買取商店 / WIKI</div>",
     unsafe_allow_html=True
 )
