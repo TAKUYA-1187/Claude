@@ -5,7 +5,7 @@
     {
       "context": "Chat",
       "bindings": {
-        "meta+shift+4": "chat:imagePaste"
+        "meta+shift+4": null
       }
     }
   ]
