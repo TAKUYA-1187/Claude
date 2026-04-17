@@ -324,7 +324,7 @@
 >
 > **📄 会話内容の保存記録:**
 > - 予算資料チェック → [`chatgpt/2026-04-06_budget-review.md`](chatgpt/2026-04-06_budget-review.md)
-> - 決算資料チェック → 未保存（スクリーンショットを送っていただければ記録可能）
+> - 決算資料チェック → [`chatgpt/2026-04-06_settlement-review.md`](chatgpt/2026-04-06_settlement-review.md)
 
 ---
 
