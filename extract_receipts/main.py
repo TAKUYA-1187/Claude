@@ -89,10 +89,7 @@ def run(
     # 1. メール取得
     logger.info(f"=== 領収書抽出開始 (過去{days}日間) ===")
     emails = fetch_purchase_emails(
-        host=config.imap_host,
-        port=config.imap_port,
-        user=config.imap_user,
-        password=config.imap_password,
+        credentials_file=config.credentials_file,
         days_back=days,
     )
 

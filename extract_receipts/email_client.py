@@ -1,187 +1,195 @@
-"""Gmail IMAP クライアント - 購入確認メールを取得する"""
-import imaplib
-import email
-import logging
-import quopri
+"""Gmail API クライアント - 購入確認メールを取得する（OAuth2認証）"""
 import base64
+import logging
+import os
 from datetime import date, timedelta
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 
 logger = logging.getLogger(__name__)
 
-# 処理済み UID を記録するファイル
+SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
+TOKEN_FILE = Path("token.json")
 PROCESSED_UIDS_FILE = Path("processed_uids.txt")
 
-# 対象ショップの送信元ドメイン
-TARGET_DOMAINS = [
-    "mail.yahoo.co.jp",
-    "store.shopping.yahoo.co.jp",
-    "yahoo.co.jp",
-    "rakuten.co.jp",
-    "email.apple.com",
-    "apple.com",
+# 対象ショップの送信元ドメイン（Gmail 検索クエリ用）
+SEARCH_FROM = [
+    "from:mail.yahoo.co.jp",
+    "from:store.shopping.yahoo.co.jp",
+    "from:rakuten.co.jp",
+    "from:email.apple.com",
 ]
 
 
 class EmailMessage:
     """取得したメールの情報を保持するクラス"""
 
-    def __init__(self, uid: int, from_addr: str, subject: str, html_body: str):
+    def __init__(self, uid: str, from_addr: str, subject: str, html_body: str):
         self.uid = uid
         self.from_addr = from_addr
         self.subject = subject
         self.html_body = html_body
 
 
+def _get_gmail_service(credentials_file: str):
+    """Gmail API サービスを取得する（初回はブラウザで認証）"""
+    creds = None
+
+    if TOKEN_FILE.exists():
+        creds = Credentials.from_authorized_user_file(str(TOKEN_FILE), SCOPES)
+
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            if not Path(credentials_file).exists():
+                raise FileNotFoundError(
+                    f"credentials.json が見つかりません: {credentials_file}\n"
+                    "Google Cloud Console から OAuth2 認証情報をダウンロードして\n"
+                    "プロジェクトフォルダに置いてください。"
+                )
+            flow = InstalledAppFlow.from_client_secrets_file(credentials_file, SCOPES)
+            # ブラウザが自動で開き、ユーザーが「許可」をクリックするだけ
+            creds = flow.run_local_server(port=0)
+
+        with open(TOKEN_FILE, "w") as f:
+            f.write(creds.to_json())
+        logger.info("Gmail 認証トークンを保存しました。次回からは自動でログインします。")
+
+    return build("gmail", "v1", credentials=creds)
+
+
 def _load_processed_uids() -> set:
-    """処理済み UID をファイルから読み込む"""
     if not PROCESSED_UIDS_FILE.exists():
         return set()
-    with open(PROCESSED_UIDS_FILE, "r") as f:
-        return {int(line.strip()) for line in f if line.strip().isdigit()}
+    with open(PROCESSED_UIDS_FILE) as f:
+        return {line.strip() for line in f if line.strip()}
 
 
-def _save_processed_uid(uid: int) -> None:
-    """処理済み UID をファイルに追記する"""
+def _save_processed_uid(uid: str) -> None:
     with open(PROCESSED_UIDS_FILE, "a") as f:
         f.write(f"{uid}\n")
 
 
-def _decode_header_value(value: str) -> str:
-    """メールヘッダー値をデコードする"""
-    parts = email.header.decode_header(value)
-    decoded = []
-    for part, charset in parts:
-        if isinstance(part, bytes):
-            decoded.append(part.decode(charset or "utf-8", errors="replace"))
-        else:
-            decoded.append(part)
-    return "".join(decoded)
+def _get_header(headers: list, name: str) -> str:
+    for h in headers:
+        if h["name"].lower() == name.lower():
+            return h["value"]
+    return ""
 
 
-def _extract_html_body(msg: email.message.Message) -> str:
-    """メッセージから HTML ボディを抽出する"""
-    html_part = None
-    text_part = None
+def _extract_html_body(payload: dict) -> str:
+    """Gmail API のペイロードから HTML 本文を抽出する"""
+    mime_type = payload.get("mimeType", "")
+    body_data = payload.get("body", {}).get("data", "")
 
-    if msg.is_multipart():
-        for part in msg.walk():
-            content_type = part.get_content_type()
-            if content_type == "text/html" and html_part is None:
-                html_part = part
-            elif content_type == "text/plain" and text_part is None:
-                text_part = part
-    else:
-        if msg.get_content_type() == "text/html":
-            html_part = msg
-        elif msg.get_content_type() == "text/plain":
-            text_part = msg
+    if mime_type == "text/html" and body_data:
+        return base64.urlsafe_b64decode(body_data + "==").decode("utf-8", errors="replace")
 
-    target_part = html_part or text_part
-    if target_part is None:
-        return ""
+    if mime_type == "text/plain" and body_data and not _extract_html_from_parts(payload.get("parts", [])):
+        return base64.urlsafe_b64decode(body_data + "==").decode("utf-8", errors="replace")
 
-    payload = target_part.get_payload(decode=True)
-    if payload is None:
-        return ""
-
-    charset = target_part.get_content_charset() or "utf-8"
-    return payload.decode(charset, errors="replace")
+    return _extract_html_from_parts(payload.get("parts", []))
 
 
-def _is_target_domain(from_addr: str) -> bool:
-    """送信元アドレスが対象ドメインかどうかを確認する"""
-    from_lower = from_addr.lower()
-    return any(domain in from_lower for domain in TARGET_DOMAINS)
+def _extract_html_from_parts(parts: list) -> str:
+    """マルチパートメールから HTML を再帰的に抽出する"""
+    html_body = ""
+    text_body = ""
+    for part in parts:
+        mime_type = part.get("mimeType", "")
+        body_data = part.get("body", {}).get("data", "")
+        if mime_type == "text/html" and body_data:
+            html_body = base64.urlsafe_b64decode(body_data + "==").decode("utf-8", errors="replace")
+        elif mime_type == "text/plain" and body_data and not html_body:
+            text_body = base64.urlsafe_b64decode(body_data + "==").decode("utf-8", errors="replace")
+        elif "parts" in part:
+            sub = _extract_html_from_parts(part["parts"])
+            if sub:
+                html_body = sub
+    return html_body or text_body
 
 
 def fetch_purchase_emails(
-    host: str,
-    port: int,
-    user: str,
-    password: str,
+    credentials_file: str,
     days_back: int,
     skip_processed: bool = True,
 ) -> List[EmailMessage]:
     """
-    Gmail に IMAP 接続し、対象ショップからの購入確認メールを取得する。
+    Gmail API で対象ショップからの購入確認メールを取得する。
+
+    初回実行時はブラウザが自動で開きます。
+    「このアプリを許可」をクリックするだけで認証完了です。
 
     Args:
-        host: IMAP ホスト (例: imap.gmail.com)
-        port: IMAP ポート (例: 993)
-        user: Gmail アドレス
-        password: Gmail アプリパスワード
+        credentials_file: credentials.json のパス
         days_back: 取得対象の日数
-        skip_processed: True の場合、処理済み UID をスキップする
+        skip_processed: 処理済みメールをスキップするか
 
     Returns:
         EmailMessage のリスト
     """
     processed_uids = _load_processed_uids() if skip_processed else set()
+    service = _get_gmail_service(credentials_file)
 
-    since_date = (date.today() - timedelta(days=days_back)).strftime("%d-%b-%Y")
-    logger.info(f"Gmail に接続中: {user} ({since_date} 以降)")
+    since_date = (date.today() - timedelta(days=days_back)).strftime("%Y/%m/%d")
+    from_query = " OR ".join(SEARCH_FROM)
+    query = f"({from_query}) after:{since_date}"
+
+    logger.info(f"Gmail を検索中 (過去{days_back}日間) ...")
 
     messages: List[EmailMessage] = []
+    page_token = None
 
-    try:
-        mail = imaplib.IMAP4_SSL(host, port)
-        mail.login(user, password)
-        mail.select("INBOX")
+    while True:
+        kwargs = {"userId": "me", "q": query, "maxResults": 100}
+        if page_token:
+            kwargs["pageToken"] = page_token
 
-        # 日付フィルターで検索
-        status, data = mail.search(None, f'SINCE "{since_date}"')
-        if status != "OK" or not data[0]:
-            logger.info("対象メールが見つかりませんでした。")
-            mail.logout()
-            return messages
+        result = service.users().messages().list(**kwargs).execute()
+        msg_refs = result.get("messages", [])
 
-        uid_list = data[0].split()
-        logger.info(f"{len(uid_list)} 件のメールを検索しました。")
-
-        for uid_bytes in uid_list:
-            uid = int(uid_bytes)
-            if uid in processed_uids:
-                logger.debug(f"UID {uid}: 処理済みのためスキップ")
+        for ref in msg_refs:
+            msg_id = ref["id"]
+            if msg_id in processed_uids:
+                logger.debug(f"{msg_id}: 処理済みのためスキップ")
                 continue
 
-            status, msg_data = mail.fetch(uid_bytes, "(RFC822)")
-            if status != "OK" or not msg_data[0]:
-                continue
+            msg = service.users().messages().get(
+                userId="me", id=msg_id, format="full"
+            ).execute()
 
-            raw_email = msg_data[0][1]
-            msg = email.message_from_bytes(raw_email)
-
-            from_addr = msg.get("From", "")
-            if not _is_target_domain(from_addr):
-                continue
-
-            subject = _decode_header_value(msg.get("Subject", ""))
-            html_body = _extract_html_body(msg)
+            payload = msg.get("payload", {})
+            headers = payload.get("headers", [])
+            from_addr = _get_header(headers, "From")
+            subject = _get_header(headers, "Subject")
+            html_body = _extract_html_body(payload)
 
             if not html_body:
-                logger.debug(f"UID {uid}: HTML ボディが空のためスキップ")
+                logger.debug(f"{msg_id}: 本文が空のためスキップ")
                 continue
 
             messages.append(EmailMessage(
-                uid=uid,
+                uid=msg_id,
                 from_addr=from_addr,
                 subject=subject,
                 html_body=html_body,
             ))
-            logger.info(f"UID {uid}: 取得 [{from_addr}] {subject[:50]}")
+            logger.info(f"{msg_id}: 取得 [{from_addr[:40]}] {subject[:50]}")
 
-        mail.logout()
-
-    except imaplib.IMAP4.error as e:
-        logger.error(f"IMAP エラー: {e}")
-        raise
+        page_token = result.get("nextPageToken")
+        if not page_token:
+            break
 
     logger.info(f"対象メール {len(messages)} 件を取得しました。")
     return messages
 
 
-def mark_as_processed(uid: int) -> None:
-    """指定した UID を処理済みとしてマークする"""
+def mark_as_processed(uid: str) -> None:
+    """指定した ID を処理済みとしてマークする"""
     _save_processed_uid(uid)
