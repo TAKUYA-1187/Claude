@@ -27,7 +27,19 @@ GitHub Actions で **毎日 JST 11:00 / 18:00** に更新され、最新結果�
 
 ### 1. 買取スキャナーから CSV を取り出す
 
-買取スキャナー トップ → **「全データCSV保存」** からエクスポートし、`price_comparison/data/input/` に置く。
+買取スキャナー トップ → **「全データCSV保存」** からエクスポートし、以下のいずれかに配置する。
+
+#### 方法A (推奨): OneDrive 共有フォルダに置く
+
+OneDrive の「買取スキャナーCSV」フォルダを **「リンクを知っている全員」で共有** し、得られたリンク
+（例: `https://1drv.ms/f/...`) を GitHub Secrets の `ONEDRIVE_SHARE_URL` に登録する。
+GitHub Actions が実行のたびにフォルダ内の `.csv` をすべて取得してくる。
+ローカル実行の場合は `.env` の `ONEDRIVE_SHARE_URL` に同じURLを入れれば自動取得される。
+
+#### 方法B: リポジトリに置く
+
+`price_comparison/data/input/*.csv` に置く（`.gitignore` 対象なのでコミットされない。自分で管理する場合は .gitignore から外す）。
+
 複数ファイルを置いた場合は、同一JANは買取価格の高い方を採用してマージされる。
 
 > ⚠ CSV には最低限「JAN列」と「買取価格列」が含まれている必要がある。列名は日本語/英語どちらでもOK（`csv_loader.py` に別名マップあり）。
@@ -64,6 +76,7 @@ python -m src.main              # 本番 (全件)
 - `RAKUTEN_APP_ID`
 - `RAKUTEN_AFFILIATE_ID`（任意）
 - `YAHOO_APP_ID`
+- `ONEDRIVE_SHARE_URL`（OneDrive 運用時のみ）
 
 **Variables (任意、利益計算の調整)**: `SHIPPING_COST`, `MIN_PROFIT`, `MIN_PROFIT_RATE` など。
 
@@ -129,6 +142,7 @@ price_comparison/
     ├── config.py
     ├── csv_loader.py
     ├── main.py
+    ├── onedrive_fetcher.py
     ├── profit_calculator.py
     ├── rakuten_client.py
     └── yahoo_client.py

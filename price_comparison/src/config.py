@@ -21,6 +21,8 @@ class Config:
 
     yahoo_app_id: str = os.getenv("YAHOO_APP_ID", "")
 
+    onedrive_share_url: str = os.getenv("ONEDRIVE_SHARE_URL", "")
+
     amazon_fee_rate: float = float(os.getenv("AMAZON_REFERRAL_FEE_RATE", "0.10"))
     amazon_fba_fee: float = float(os.getenv("AMAZON_FBA_FEE", "500"))
     rakuten_fee_rate: float = float(os.getenv("RAKUTEN_FEE_RATE", "0.10"))

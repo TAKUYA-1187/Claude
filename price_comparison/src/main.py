@@ -16,6 +16,7 @@ from pathlib import Path
 
 from .config import config
 from .csv_loader import load_all
+from .onedrive_fetcher import fetch_folder
 from .profit_calculator import PriceRow, compute, is_profitable
 from .rakuten_client import RakutenClient
 from .yahoo_client import YahooClient
@@ -60,7 +61,15 @@ def build_clients():
     return amazon, rakuten, yahoo
 
 
-def run(limit: int | None = None):
+def run(limit: int | None = None, skip_fetch: bool = False):
+    if not skip_fetch and config.onedrive_share_url:
+        log.info("Fetching CSV from OneDrive share...")
+        try:
+            fetched = fetch_folder(config.onedrive_share_url, config.input_dir)
+            log.info("Fetched %d CSV file(s) from OneDrive", len(fetched))
+        except Exception as e:
+            log.error("OneDrive fetch failed: %s", e)
+            # 既存CSVがあれば続行、なければ致命的
     products = load_all(config.input_dir)
     if not products:
         log.error(
@@ -123,8 +132,13 @@ def run(limit: int | None = None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument(
+        "--skip-fetch",
+        action="store_true",
+        help="OneDrive からの取得をスキップし、ローカルCSVのみ使用",
+    )
     args = ap.parse_args()
-    run(limit=args.limit)
+    run(limit=args.limit, skip_fetch=args.skip_fetch)
 
 
 if __name__ == "__main__":
