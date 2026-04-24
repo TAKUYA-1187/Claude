@@ -1,11 +1,16 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def _parse_shops() -> list[str]:
+    raw = os.getenv("ENABLED_SHOPS", "買取商店,ウィキ")
+    return [s.strip() for s in raw.split(",") if s.strip()]
 
 
 @dataclass(frozen=True)
@@ -34,6 +39,8 @@ class Config:
 
     input_dir: Path = ROOT / os.getenv("INPUT_CSV_DIR", "data/input")
     output_dir: Path = ROOT / os.getenv("OUTPUT_DIR", "data/output")
+
+    enabled_shops: list[str] = field(default_factory=_parse_shops)
 
 
 config = Config()

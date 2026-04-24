@@ -70,11 +70,13 @@ def run(limit: int | None = None, skip_fetch: bool = False):
         except Exception as e:
             log.error("OneDrive fetch failed: %s", e)
             # 既存CSVがあれば続行、なければ致命的
-    products = load_all(config.input_dir)
+    log.info("Enabled shops: %s", config.enabled_shops)
+    products = load_all(config.input_dir, config.enabled_shops)
     if not products:
         log.error(
-            "CSV が見つかりません。買取スキャナー『全データCSV保存』で出力したCSVを %s に置いてください。",
+            "対象商品が見つかりません。CSV を %s に配置し、ENABLED_SHOPS (%s) の列が含まれているか確認してください。",
             config.input_dir,
+            config.enabled_shops,
         )
         sys.exit(1)
     if limit:
@@ -87,7 +89,7 @@ def run(limit: int | None = None, skip_fetch: bool = False):
         amz = amazon.min_price_by_jan(p.jan) if amazon else None
         rak = rakuten.min_price_by_jan(p.jan) if rakuten else None
         yho = yahoo.min_price_by_jan(p.jan) if yahoo else None
-        pr = PriceRow(p.jan, p.name, p.buy_price, amz, rak, yho)
+        pr = PriceRow(p.jan, p.name, p.buy_price, p.buy_shop, amz, rak, yho)
         profit_row = compute(pr, config)
         if profit_row is None:
             log.debug("No price found for %s", p.jan)

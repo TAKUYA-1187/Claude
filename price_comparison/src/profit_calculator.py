@@ -18,6 +18,7 @@ class PriceRow:
     jan: str
     name: str
     buy_price: float  # 買取店が支払う金額
+    buy_shop: str
     amazon_price: Optional[int]
     rakuten_price: Optional[int]
     yahoo_price: Optional[int]
@@ -47,6 +48,7 @@ class ProfitRow:
     jan: str
     name: str
     buy_price: float
+    buy_shop: str
     purchase_price: int  # ECでの仕入れ価格
     purchase_source: str
     amazon_price: Optional[int]
@@ -61,6 +63,7 @@ class ProfitRow:
             "jan": self.jan,
             "name": self.name,
             "buy_price": int(self.buy_price),
+            "buy_shop": self.buy_shop,
             "purchase_price": self.purchase_price,
             "purchase_source": self.purchase_source,
             "amazon_price": self.amazon_price,
@@ -86,6 +89,7 @@ def compute(row: PriceRow, cfg: Config) -> Optional[ProfitRow]:
         jan=row.jan,
         name=row.name,
         buy_price=row.buy_price,
+        buy_shop=row.buy_shop,
         purchase_price=sell,
         purchase_source=source,
         amazon_price=row.amazon_price,

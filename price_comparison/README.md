@@ -42,9 +42,19 @@ GitHub Actions が実行のたびにフォルダ内の `.csv` をすべて取得
 
 複数ファイルを置いた場合は、同一JANは買取価格の高い方を採用してマージされる。
 
-> ⚠ CSV には最低限「JAN列」と「買取価格列」が含まれている必要がある。列名は日本語/英語どちらでもOK（`csv_loader.py` に別名マップあり）。
+> ⚠ CSV には最低限「JAN列」と、対象店舗の買取価格列が含まれている必要がある（列名に店舗名が入っていればOK）。
 
-### 2. API キーを取得する
+### 2. 対象にする買取店を設定する
+
+デフォルトでは **買取商店** と **ウィキ** の買取価格が付いた商品だけを抽出する。
+買取スキャナーのCSVは店舗ごとに列が分かれており、列名に「買取商店」「ウィキ」を含む列を自動検出する。
+他の店舗を足したい場合は `ENABLED_SHOPS` を上書きする:
+
+```
+ENABLED_SHOPS=買取商店,ウィキ,ブックオフ,駿河屋
+```
+
+### 3. API キーを取得する
 
 | サイト | 必要なもの | 取得先 |
 | --- | --- | --- |
@@ -54,7 +64,7 @@ GitHub Actions が実行のたびにフォルダ内の `.csv` をすべて取得
 
 最低1サイト設定すれば動作する。Amazon は直近のアフィリエイト売上実績がないとAPI利用権限が失われる点に注意。
 
-### 3. ローカル実行
+### 4. ローカル実行
 
 ```bash
 cd price_comparison
@@ -66,24 +76,62 @@ python -m src.main              # 本番 (全件)
 
 結果は `data/output/profitable_YYYYMMDD_HHMM.csv` と `profitable_latest.csv`。
 
-### 4. GitHub Actions で自動化する
+### 5. GitHub Actions で自動化する（ステップバイステップ）
 
-**リポジトリ Secrets (Settings → Secrets and variables → Actions → Secrets)** に登録:
+#### 5.1 OneDrive 共有リンクを用意する
+1. OneDrive で「買取スキャナーCSV」フォルダを右クリック → **共有**
+2. リンク設定を **「リンクを知っている全員」** に変更
+3. 表示された `https://1drv.ms/f/...` をコピー
 
-- `AMAZON_ACCESS_KEY`
-- `AMAZON_SECRET_KEY`
-- `AMAZON_PARTNER_TAG`
-- `RAKUTEN_APP_ID`
-- `RAKUTEN_AFFILIATE_ID`（任意）
-- `YAHOO_APP_ID`
-- `ONEDRIVE_SHARE_URL`（OneDrive 運用時のみ）
+#### 5.2 API キーを発行する
+| サイト | 取得ページ | 必要な値 |
+| --- | --- | --- |
+| Amazon | https://affiliate.amazon.co.jp/assoc_credentials/home | Access Key / Secret Key / Tracking ID（PartnerTag） |
+| 楽天 | https://webservice.rakuten.co.jp/ → 「アプリID発行」 | applicationId（必須） / affiliateId（任意） |
+| Yahoo! | https://developer.yahoo.co.jp/ → 「アプリケーションの管理」でクライアントID発行 | Client ID |
 
-**Variables (任意、利益計算の調整)**: `SHIPPING_COST`, `MIN_PROFIT`, `MIN_PROFIT_RATE` など。
+#### 5.3 リポジトリに Secrets を登録する
+GitHub 上でリポジトリを開き、**Settings → Secrets and variables → Actions → New repository secret** を押して以下を1つずつ追加:
 
-ワークフロー `.github/workflows/price_comparison.yml` が JST 11:00 / 18:00（UTC 02:00 / 09:00）に起動し、
-`data/output/profitable_latest.csv` を自動コミット＋30日間のアーティファクト保存を行う。
+| Name | Value |
+| --- | --- |
+| `ONEDRIVE_SHARE_URL` | 5.1 でコピーした URL |
+| `AMAZON_ACCESS_KEY` | Amazon の Access Key |
+| `AMAZON_SECRET_KEY` | Amazon の Secret Key |
+| `AMAZON_PARTNER_TAG` | Amazon の Tracking ID（例: `yourtag-22`） |
+| `RAKUTEN_APP_ID` | 楽天の applicationId |
+| `RAKUTEN_AFFILIATE_ID` | 楽天の affiliateId（任意） |
+| `YAHOO_APP_ID` | Yahoo! の Client ID |
 
-手動実行: **Actions タブ → Price Comparison Update → Run workflow**。
+#### 5.4 （任意）利益計算の閾値を調整する
+**Settings → Secrets and variables → Actions → Variables → New repository variable** で以下を追加すると動作が変わる（未設定ならデフォルト値）。
+
+| Name | デフォルト | 意味 |
+| --- | --- | --- |
+| `ENABLED_SHOPS` | `買取商店,ウィキ` | 対象とする買取店（列名マッチ） |
+| `SHIPPING_COST` | `600` | 買取店への送料想定（円） |
+| `MIN_PROFIT` | `500` | これ以上の利益だけ抽出（円） |
+| `MIN_PROFIT_RATE` | `0.15` | これ以上の利益率だけ抽出（0〜1） |
+
+#### 5.5 手動で1回実行して動作確認する
+1. リポジトリの **Actions** タブを開く
+2. 左カラムの **Price Comparison Update** を選択
+3. 右上の **Run workflow** → ブランチを `claude/price-comparison-profit-tool-PQeYK` にして
+   **limit** に `20` を入れて **Run workflow**（20件だけで通しテスト）
+4. ジョブが緑になったら:
+   - **Artifacts** に `profitable-*.zip` が出ている
+   - `price_comparison/data/output/profitable_latest.csv` が自動コミットされている
+5. 問題なければ `limit` を空にして本番実行、または cron に任せる
+
+#### 5.6 スケジュール運用
+ワークフローは **JST 11:00 / 18:00**（UTC 02:00 / 09:00）に自動起動する。cron 定義:
+```yaml
+schedule:
+  - cron: "0 2,9 * * *"
+```
+GitHub の schedule は UTC かつ高負荷時に数分遅延することがある。時刻を変えたい場合は `.github/workflows/price_comparison.yml` を書き換えて push。
+
+> ⚠ public リポジトリの場合、Actions のログにキーが出る心配はない（Secrets は `***` でマスクされる）が、OneDrive の共有 URL は Secrets に入れておくのが安全。
 
 ---
 
@@ -95,7 +143,8 @@ python -m src.main              # 本番 (全件)
 | --- | --- |
 | jan | JAN コード |
 | name | 商品名（CSV に含まれていれば） |
-| buy_price | 買取店が支払う金額 |
+| buy_price | 買取店が支払う金額（対象店舗の最高値） |
+| buy_shop | 最高値を付けた店舗 (`買取商店` / `ウィキ` 等) |
 | purchase_price | EC 最安仕入れ価格 |
 | purchase_source | 最安サイト (amazon / rakuten / yahoo) |
 | amazon_price / rakuten_price / yahoo_price | 各サイト価格（取得できたもの） |
