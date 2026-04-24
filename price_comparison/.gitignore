@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.pyc
+data/input/*.csv
+data/output/profitable_2*.csv
+data/output/profitable_2*.json

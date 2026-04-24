@@ -1,0 +1,75 @@
+name: Price Comparison Update
+
+on:
+  schedule:
+    # JST 11:00 = UTC 02:00, JST 18:00 = UTC 09:00
+    - cron: "0 2,9 * * *"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "件数制限 (テスト用、空なら全件)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: price_comparison
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: price_comparison/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run price comparison
+        env:
+          AMAZON_ACCESS_KEY: ${{ secrets.AMAZON_ACCESS_KEY }}
+          AMAZON_SECRET_KEY: ${{ secrets.AMAZON_SECRET_KEY }}
+          AMAZON_PARTNER_TAG: ${{ secrets.AMAZON_PARTNER_TAG }}
+          RAKUTEN_APP_ID: ${{ secrets.RAKUTEN_APP_ID }}
+          RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
+          YAHOO_APP_ID: ${{ secrets.YAHOO_APP_ID }}
+          AMAZON_REFERRAL_FEE_RATE: ${{ vars.AMAZON_REFERRAL_FEE_RATE || '0.10' }}
+          AMAZON_FBA_FEE: ${{ vars.AMAZON_FBA_FEE || '500' }}
+          RAKUTEN_FEE_RATE: ${{ vars.RAKUTEN_FEE_RATE || '0.10' }}
+          YAHOO_FEE_RATE: ${{ vars.YAHOO_FEE_RATE || '0.08' }}
+          SHIPPING_COST: ${{ vars.SHIPPING_COST || '600' }}
+          MIN_PROFIT: ${{ vars.MIN_PROFIT || '500' }}
+          MIN_PROFIT_RATE: ${{ vars.MIN_PROFIT_RATE || '0.15' }}
+        run: |
+          if [ -n "${{ github.event.inputs.limit }}" ]; then
+            python -m src.main --limit ${{ github.event.inputs.limit }}
+          else
+            python -m src.main
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: profitable-${{ github.run_id }}
+          path: price_comparison/data/output/
+          retention-days: 30
+
+      - name: Commit latest outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cd ..
+          git add price_comparison/data/output/profitable_latest.csv price_comparison/data/output/profitable_latest.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update profitable products list [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi
