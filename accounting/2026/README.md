@@ -17,7 +17,43 @@
 
 黒瀬会計担当全員が閲覧可能な共有フォルダ：
 
-[黒瀬 2026年度会計 - OneDrive](https://1drv.ms/f/c/c37e10a4e80c2802/IgD2pn-7CKv4RZQXlZnEr800ARRKEDfzaa-JSq9v4Vdxcrc?e=eFruFM)
+[黒瀬町内会＿会計資料（共有）- OneDrive](https://1drv.ms/f/c/c37e10a4e80c2802/IgASAmHQCfDwR7vncALTvlaAAYJLbn_yOzdVteXrR_sLpl4?e=tcaexB)
+
+**最終確認日:** 2026-04-27
+
+### フォルダ構成（2026-04-27 時点）
+
+```
+黒瀬町内会＿会計資料（共有）/
+├── 📁 2019年度
+├── 📁 2020年度
+├── 📁 2021年度
+├── 📁 2022年度
+├── 📁 2023年度
+├── 📁 2024年度
+├── 📁 2025年度
+├── 📁 2026年度
+├── 📁 Mail Data
+├── 📁 総会 議事録
+├── 📁 請求書封筒印刷SYS
+├── 📁 田崎DATA
+├── 📁 OneDrive_1_2026-4-27        ← 2026-04-27 新規追加
+├── 📄 黒瀬町内会会則.pdf
+├── 📄 黒瀬町内会会則.xlsx
+├── 📄 支払証明書.xls
+├── 📄 振込先管理.docx
+└── 📄 北銀入金票印刷.xlsx
+```
+
+### OneDrive ルートフォルダ内の会計関連フォルダ
+
+```
+OneDrive/
+├── 📁 黒瀬町内会_会計資料（共有）  ← 上記の共有フォルダ
+├── 📁 黒瀬会計                      ← 個人用会計フォルダ
+├── 📁 添付ファイル
+└── 📁 黒瀬町内会ファイル202504
+```
 
 ---
 
@@ -25,9 +61,12 @@
 
 ```
 accounting/2026/
-├── README.md       # この概要ファイル
-├── timeline.md     # 年間活動タイムライン（Markdown形式・閲覧用）
-└── timeline.csv    # 年間活動タイムライン（CSV形式・データ管理用）
+├── README.md            # この概要ファイル
+├── timeline.md          # 年間活動タイムライン（Markdown形式・閲覧用）
+├── timeline.csv         # 年間活動タイムライン（CSV形式・データ管理用）
+└── chatgpt/
+    ├── 2026-04-06_budget-review.md      # 予算資料ChatGPTチェック記録
+    └── 2026-04-06_settlement-review.md  # 決算資料ChatGPTチェック記録
 ```
 
 ---
