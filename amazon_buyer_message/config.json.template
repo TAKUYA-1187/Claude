@@ -1,0 +1,10 @@
+{
+  "_comment": "このファイルをコピーして config.json を作成し、各値を入力してください",
+  "lwa_client_id": "YOUR_LWA_CLIENT_ID",
+  "lwa_client_secret": "YOUR_LWA_CLIENT_SECRET",
+  "lwa_refresh_token": "YOUR_REFRESH_TOKEN",
+  "aws_access_key": "YOUR_AWS_ACCESS_KEY",
+  "aws_secret_key": "YOUR_AWS_SECRET_KEY",
+  "role_arn": "YOUR_ROLE_ARN",
+  "days_back": 2
+}

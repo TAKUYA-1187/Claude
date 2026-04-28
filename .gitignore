@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+amazon_buyer_message/config.json
+amazon_buyer_message/*.log
