@@ -139,33 +139,30 @@ async def login(page) -> bool:
 
 
 async def get_orders_for_asin(page, asin: str) -> list:
-    """指定ASINの注文一覧を取得する。"""
+    """指定ASINの注文一覧を取得する。ページ全体から注文IDを正規表現で抽出。"""
+    import re
+
     search_url = (
         f"{SELLER_CENTRAL_URL}/orders-v3/search"
-        f"?q={asin}&qt=asin&page=1&date-range=30"
+        f"?q={asin}&qt=asin"
     )
+    logger.info(f"  検索URL: {search_url}")
     await page.goto(search_url, wait_until="networkidle")
-    await page.wait_for_timeout(2000)
+    await page.wait_for_timeout(3000)
 
-    orders = []
-    try:
-        # 注文行を取得
-        rows = await page.query_selector_all("tr.data-row, [data-order-id], .order-row")
-        for row in rows:
-            order_id_el = await row.query_selector("[data-order-id], .order-id a, td a[href*='order-details']")
-            if not order_id_el:
-                continue
-            href = await order_id_el.get_attribute("href") or ""
-            text = (await order_id_el.inner_text()).strip()
-            # 注文IDはXXX-XXXXXXX-XXXXXXX 形式
-            import re
-            match = re.search(r"\d{3}-\d{7}-\d{7}", href + " " + text)
-            if match:
-                orders.append(match.group())
-    except Exception as e:
-        logger.warning(f"注文一覧取得中にエラー ({asin}): {e}")
+    # ページ全体のHTMLから注文IDパターン(XXX-XXXXXXX-XXXXXXX)を抽出
+    content = await page.content()
+    order_ids = list(set(re.findall(r"\d{3}-\d{7}-\d{7}", content)))
 
-    return orders
+    # デバッグ用スクリーンショット
+    screenshot_path = SCRIPT_DIR / f"debug_{asin}.png"
+    await page.screenshot(path=str(screenshot_path))
+    logger.info(f"  スクリーンショット保存: {screenshot_path}")
+
+    if not order_ids:
+        logger.info(f"  注文が見つかりませんでした（ASIN: {asin}）")
+
+    return order_ids
 
 
 async def send_message_to_order(page, order_id: str) -> bool:
