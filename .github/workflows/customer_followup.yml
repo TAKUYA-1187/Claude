@@ -1,0 +1,62 @@
+name: Customer Followup Messages
+
+on:
+  schedule:
+    # JST 15:00 = UTC 06:00, 毎日実行
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "ドライラン（送信せず注文一覧のみ表示）"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+
+jobs:
+  send-messages:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: customer_followup
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # sent_orders.json の最新状態を取得するため fetch-depth: 0
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: customer_followup/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run customer followup
+        env:
+          SP_API_CLIENT_ID: ${{ secrets.SP_API_CLIENT_ID }}
+          SP_API_CLIENT_SECRET: ${{ secrets.SP_API_CLIENT_SECRET }}
+          SP_API_REFRESH_TOKEN: ${{ secrets.SP_API_REFRESH_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: python main.py
+
+      - name: Commit updated sent_orders.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cd ..
+          git add customer_followup/sent_orders.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update sent_orders.json [skip ci]"
+            git push origin HEAD
+          else
+            echo "No new messages sent today"
+          fi
