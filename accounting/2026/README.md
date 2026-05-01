@@ -17,9 +17,10 @@
 
 黒瀬会計担当全員が閲覧可能な共有フォルダ：
 
-[黒瀬町内会＿会計資料（共有）- OneDrive](https://1drv.ms/f/c/c37e10a4e80c2802/IgASAmHQCfDwR7vncALTvlaAAYJLbn_yOzdVteXrR_sLpl4?e=tcaexB)
+[黒瀬町内会＿会計資料（共有）- OneDrive](https://1drv.ms/f/c/c37e10a4e80c2802/IgCfu7olYcZ7RZj6BJd8DVxMAVmU7-M0rxhaZYcqkDcQllY?e=XbiuSz)
 
 **最終確認日:** 2026-04-27
+**URL更新日:** 2026-05-01
 
 ### フォルダ構成（2026-04-27 時点）
 

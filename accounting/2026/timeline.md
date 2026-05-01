@@ -1,6 +1,6 @@
 # 2026年度 黒瀬町内会 会計活動タイムライン（個人記録）
 
-共有OneDriveフォルダ（参照のみ）: [黒瀬町内会＿会計資料（共有）](https://1drv.ms/f/c/c37e10a4e80c2802/IgASAmHQCfDwR7vncALTvlaAAYJLbn_yOzdVteXrR_sLpl4?e=tcaexB)
+共有OneDriveフォルダ（参照のみ）: [黒瀬町内会＿会計資料（共有）](https://1drv.ms/f/c/c37e10a4e80c2802/IgCfu7olYcZ7RZj6BJd8DVxMAVmU7-M0rxhaZYcqkDcQllY?e=XbiuSz)
 
 添付資料フォルダ（個人保管）: [メール添付資料](https://1drv.ms/f/c/c37e10a4e80c2802/IgDoamQJBHXWSKM3egNnK9q_AebxUIdAYn0WkupDH4WWqlo?e=vWWs5H)
 
@@ -421,3 +421,15 @@
 | 📁 | 総会 |
 | 📁 | 役務費 |
 | 📁 | 予算委員会 |
+
+---
+
+## 2026年5月
+
+### 2026-05-01（金）
+
+| 種別 | 内容 | ステータス |
+|------|------|-----------|
+| OneDrive URL変更 | 会計フォルダのURLが新しいリンクに変更された | 完了 |
+
+**新URL:** https://1drv.ms/f/c/c37e10a4e80c2802/IgCfu7olYcZ7RZj6BJd8DVxMAVmU7-M0rxhaZYcqkDcQllY?e=XbiuSz
