@@ -149,19 +149,22 @@ async def login(page) -> bool:
         logger.info("自動ログイン成功")
         return True
 
-    # 自動ログイン失敗 → 手動ログインを促す
+    # 自動ログイン失敗 → 手動ログインを自動検知（最大3分待機）
     logger.warning("自動ログインに失敗しました。")
-    logger.warning(">>> 開いたブラウザで手動でログインしてください。")
-    logger.warning(">>> ログイン完了後、このターミナルでEnterを押してください。")
-    input(">>> ログイン完了したらEnterを押してください: ")
-    await page.wait_for_timeout(2000)
+    logger.warning(">>> 開いたブラウザでログインしてください（Touch ID またはパスワード）。")
+    logger.warning(">>> ログイン完了後、自動的に処理が続行されます（最大3分待機）...")
 
-    if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url.lower():
-        logger.info("手動ログイン確認OK")
+    try:
+        await page.wait_for_url(
+            lambda url: "sellercentral.amazon.co.jp" in url and "signin" not in url.lower() and "ap/" not in url.lower(),
+            timeout=180000,  # 最大3分
+        )
+        await page.wait_for_timeout(2000)
+        logger.info("手動ログイン確認OK → 処理を続行します")
         return True
-
-    logger.error(f"ログイン失敗: {page.url}")
-    return False
+    except PlaywrightTimeout:
+        logger.error("3分以内にログインが完了しませんでした。スクリプトを終了します。")
+        return False
 
 
 async def get_orders_for_asin(page, asin: str) -> list:
