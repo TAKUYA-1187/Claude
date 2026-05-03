@@ -40,7 +40,7 @@ EMAIL = "taku.ino.19811014@gmail.com"
 PASSWORD = "takuya1178"
 
 # True: 動作確認のみ（実際には送信しない）  False: 実際に送信する
-DRY_RUN = True
+DRY_RUN = False
 
 TARGET_ASINS = {
     "B0G1B3LND1",
