@@ -100,36 +100,43 @@ async def save_screenshot(page, name: str) -> None:
 
 
 async def login(page) -> bool:
+    """
+    セラーセントラルへのログイン。
+    保存済みセッションがあれば自動スキップ。
+    未ログインの場合はブラウザで手動ログインを促す。
+    """
     logger.info("セラーセントラルにアクセス中...")
     await page.goto(SELLER_CENTRAL_URL, wait_until="networkidle")
+    await page.wait_for_timeout(2000)
 
+    # すでにログイン済みか確認
     if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url:
-        logger.info("すでにログイン済みです")
+        logger.info("ログイン済みです（セッション再利用）")
         return True
 
+    # 自動ログイン試行
+    logger.info("自動ログインを試みます...")
     try:
-        await page.wait_for_selector("#ap_email", timeout=10000)
-        await page.fill("#ap_email", EMAIL)
-        await page.click("#continue")
-        await page.wait_for_timeout(1500)
-    except PlaywrightTimeout:
-        logger.error("メールフィールドが見つかりません")
-        return False
+        email_field = await page.query_selector("#ap_email")
+        if email_field:
+            await email_field.fill(EMAIL)
+            await page.click("#continue")
+            await page.wait_for_timeout(1500)
 
-    try:
-        await page.wait_for_selector("#ap_password", timeout=8000)
-        await page.fill("#ap_password", PASSWORD)
-        await page.click("#signInSubmit")
-        await page.wait_for_timeout(3000)
-    except PlaywrightTimeout:
-        logger.error("パスワードフィールドが見つかりません")
-        return False
+        password_field = await page.query_selector("#ap_password")
+        if password_field:
+            await password_field.fill(PASSWORD)
+            await page.click("#signInSubmit")
+            await page.wait_for_timeout(3000)
+    except Exception as e:
+        logger.warning(f"自動ログイン中にエラー: {e}")
 
+    # OTP処理
     for otp_sel in ["#auth-mfa-otpcode", "#otp", "input[name='otpCode']"]:
         otp_field = await page.query_selector(otp_sel)
         if otp_field:
             logger.warning("二段階認証が必要です")
-            otp = input("OTPコードを入力してください: ").strip()
+            otp = input(">>> スマホに届いたOTPコードを入力してEnter: ").strip()
             await otp_field.fill(otp)
             submit = await page.query_selector("#auth-signin-button, [type=submit]")
             if submit:
@@ -137,8 +144,20 @@ async def login(page) -> bool:
             await page.wait_for_timeout(3000)
             break
 
+    # 自動ログイン成功確認
     if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url.lower():
-        logger.info("ログイン成功")
+        logger.info("自動ログイン成功")
+        return True
+
+    # 自動ログイン失敗 → 手動ログインを促す
+    logger.warning("自動ログインに失敗しました。")
+    logger.warning(">>> 開いたブラウザで手動でログインしてください。")
+    logger.warning(">>> ログイン完了後、このターミナルでEnterを押してください。")
+    input(">>> ログイン完了したらEnterを押してください: ")
+    await page.wait_for_timeout(2000)
+
+    if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url.lower():
+        logger.info("手動ログイン確認OK")
         return True
 
     logger.error(f"ログイン失敗: {page.url}")
@@ -366,13 +385,17 @@ async def main():
     sent_orders = load_sent_orders()
     logger.info(f"送信済み注文数: {len(sent_orders)}")
 
+    # ログインセッションをローカルに保存（初回のみ手動ログインが必要）
+    USER_DATA_DIR = SCRIPT_DIR / "chrome_session"
+
     async with async_playwright() as p:
-        browser = await p.chromium.launch(
+        context = await p.chromium.launch_persistent_context(
+            user_data_dir=str(USER_DATA_DIR),
+            channel="chrome",
             headless=False,
-            channel="chrome",  # システムインストール済みのGoogle Chromeを使用
+            locale="ja-JP",
             args=["--lang=ja-JP"],
         )
-        context = await browser.new_context(locale="ja-JP")
         page = await context.new_page()
 
         try:
@@ -416,7 +439,7 @@ async def main():
         except Exception as e:
             logger.error(f"予期せぬエラー: {e}", exc_info=True)
         finally:
-            await browser.close()
+            await context.close()
 
     logger.info(
         f"処理完了 - 送信: {sent_count}件 / スキップ: {skip_count}件 / エラー: {error_count}件"
