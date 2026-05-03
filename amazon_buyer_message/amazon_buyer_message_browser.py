@@ -369,6 +369,7 @@ async def main():
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=False,
+            channel="chrome",  # システムインストール済みのGoogle Chromeを使用
             args=["--lang=ja-JP"],
         )
         context = await browser.new_context(locale="ja-JP")
