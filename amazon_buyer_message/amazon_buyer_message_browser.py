@@ -90,12 +90,16 @@ def save_sent_orders(sent_orders: set) -> None:
 
 
 def is_test_order(order_id: str) -> bool:
-    """Amazonのテスト注文IDを判定する（000-で始まるものは除外）。"""
     return order_id.startswith("000-")
 
 
+async def save_screenshot(page, name: str) -> None:
+    path = SCRIPT_DIR / f"debug_{name}.png"
+    await page.screenshot(path=str(path), full_page=True)
+    logger.info(f"  スクリーンショット: {path}")
+
+
 async def login(page) -> bool:
-    """セラーセントラルにログインする。OTPが必要な場合はコンソールで入力を促す。"""
     logger.info("セラーセントラルにアクセス中...")
     await page.goto(SELLER_CENTRAL_URL, wait_until="networkidle")
 
@@ -109,7 +113,7 @@ async def login(page) -> bool:
         await page.click("#continue")
         await page.wait_for_timeout(1500)
     except PlaywrightTimeout:
-        logger.error("ログインページのメールフィールドが見つかりません")
+        logger.error("メールフィールドが見つかりません")
         return False
 
     try:
@@ -121,157 +125,184 @@ async def login(page) -> bool:
         logger.error("パスワードフィールドが見つかりません")
         return False
 
-    if await page.query_selector("#auth-mfa-otpcode") or await page.query_selector("#otp"):
-        logger.warning("二段階認証が必要です")
-        otp = input("スマホ/メールに届いたOTPコードを入力してください: ").strip()
-        otp_field = await page.query_selector("#auth-mfa-otpcode") or await page.query_selector("#otp")
+    for otp_sel in ["#auth-mfa-otpcode", "#otp", "input[name='otpCode']"]:
+        otp_field = await page.query_selector(otp_sel)
         if otp_field:
+            logger.warning("二段階認証が必要です")
+            otp = input("OTPコードを入力してください: ").strip()
             await otp_field.fill(otp)
-            submit = await page.query_selector("#auth-signin-button") or await page.query_selector("[type=submit]")
+            submit = await page.query_selector("#auth-signin-button, [type=submit]")
             if submit:
                 await submit.click()
             await page.wait_for_timeout(3000)
+            break
 
     if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url.lower():
         logger.info("ログイン成功")
         return True
-    else:
-        logger.error(f"ログイン失敗。現在のURL: {page.url}")
-        return False
+
+    logger.error(f"ログイン失敗: {page.url}")
+    return False
 
 
 async def get_orders_for_asin(page, asin: str) -> list:
-    """指定ASINの注文一覧を取得する。ページ全体から注文IDを正規表現で抽出。"""
+    """指定ASINの注文IDをorders-v3検索ページから取得する。"""
     search_url = f"{SELLER_CENTRAL_URL}/orders-v3/search?q={asin}&qt=asin"
-    logger.info(f"  検索URL: {search_url}")
+    logger.info(f"  検索: {search_url}")
     await page.goto(search_url, wait_until="networkidle")
     await page.wait_for_timeout(3000)
 
     content = await page.content()
     order_ids = list(set(re.findall(r"\d{3}-\d{7}-\d{7}", content)))
-
-    screenshot_path = SCRIPT_DIR / f"debug_{asin}.png"
-    await page.screenshot(path=str(screenshot_path))
-    logger.info(f"  スクリーンショット保存: {screenshot_path}")
-
-    if not order_ids:
-        logger.info(f"  注文が見つかりませんでした（ASIN: {asin}）")
-
+    await save_screenshot(page, f"search_{asin}")
     return order_ids
 
 
-async def find_contact_link(page, order_id: str) -> tuple:
+async def send_via_messaging_compose(page, order_id: str) -> bool:
     """
-    注文詳細ページから「購入者に連絡」リンクを探す。
-    Returns: (element_or_None, url_or_None, found_method)
+    メッセージ作成URLへ直接遷移して送信する。
+    複数のURLパターンを試みる。
     """
-    # ページ上の全リンクを収集してデバッグログに出力
-    content = await page.content()
-    all_hrefs = re.findall(r'href=["\']([^"\']+)["\']', content)
-
-    # messagingやcontact関連のURLを抽出
-    contact_urls = [
-        h for h in all_hrefs
-        if any(kw in h.lower() for kw in ["messaging", "contact", "buyer", "message"])
+    compose_urls = [
+        f"{SELLER_CENTRAL_URL}/messaging/compose?orderID={order_id}",
+        f"{SELLER_CENTRAL_URL}/cu/messaging/compose?orderID={order_id}",
+        f"{SELLER_CENTRAL_URL}/gp/communication-manager/inbox.html?orderId={order_id}",
     ]
-    logger.info(f"  [DEBUG] 連絡関連URL候補: {contact_urls[:5]}")
 
-    # リンクテキストで「購入者」「連絡」「Contact」を含むものを列挙
-    links = await page.query_selector_all("a")
-    for link in links:
-        text = (await link.inner_text()).strip()
-        href = await link.get_attribute("href") or ""
-        if text:
-            logger.info(f"  [DEBUG] リンク: '{text[:40]}' -> {href[:80]}")
+    for url in compose_urls:
+        logger.info(f"  メッセージ作成URL試行: {url}")
+        await page.goto(url, wait_until="networkidle")
+        await page.wait_for_timeout(2000)
 
-    # --- 方法1: テキストで探す ---
-    text_selectors = [
+        textarea = await page.query_selector("textarea")
+        if textarea:
+            logger.info(f"  メッセージ入力欄を検出 → 送信処理へ")
+            return await fill_and_send(page, order_id)
+
+    return False
+
+
+async def send_via_order_detail(page, order_id: str) -> bool:
+    """
+    注文詳細ページから「購入者に連絡」ボタンを探して送信する。
+    orders-v3?page=1 の一覧から対象注文をクリックする方式も試みる。
+    """
+    # 方法A: 注文詳細ページへ直接遷移
+    detail_url = f"{SELLER_CENTRAL_URL}/orders-v3/order/{order_id}"
+    await page.goto(detail_url, wait_until="networkidle")
+    await page.wait_for_timeout(3000)
+    await save_screenshot(page, f"detail_{order_id.replace('-', '_')}")
+
+    # 方法B: orders-v3一覧ページで注文行をクリック（ユーザーが確認した動作方式）
+    if not await _find_and_click_contact(page, order_id):
+        list_url = f"{SELLER_CENTRAL_URL}/orders-v3?page=1"
+        logger.info(f"  一覧ページから注文を探す: {list_url}")
+        await page.goto(list_url, wait_until="networkidle")
+        await page.wait_for_timeout(3000)
+
+        # 注文IDが含まれる行をクリック
+        order_row = await page.query_selector(f"text={order_id}")
+        if order_row:
+            await order_row.click()
+            await page.wait_for_timeout(2000)
+            await save_screenshot(page, f"list_clicked_{order_id.replace('-', '_')}")
+
+    return await _find_and_click_contact(page, order_id)
+
+
+async def _find_and_click_contact(page, order_id: str) -> bool:
+    """ページ上の「購入者に連絡」要素を探してクリックし、送信フォームへ進む。"""
+
+    # 1. テキストで直接探す
+    for selector in [
         "a:has-text('購入者に連絡')",
-        "a:has-text('購入者へ連絡')",
         "button:has-text('購入者に連絡')",
+        "a:has-text('購入者へ連絡')",
+        "span:has-text('購入者に連絡')",
         "a:has-text('Contact buyer')",
         "a:has-text('Contact Buyer')",
-        "a:has-text('Buyer')",
-        "span:has-text('購入者に連絡')",
-    ]
-    for sel in text_selectors:
-        el = await page.query_selector(sel)
+        "li:has-text('購入者に連絡') a",
+        "li:has-text('購入者に連絡') button",
+    ]:
+        el = await page.query_selector(selector)
         if el:
-            href = await el.get_attribute("href") or ""
-            logger.info(f"  連絡リンク検出（テキスト）: '{sel}' -> {href}")
-            return el, href, f"text:{sel}"
+            logger.info(f"  連絡ボタン検出: {selector}")
+            await el.click()
+            await page.wait_for_timeout(2000)
+            # フォームが開いたか確認
+            if await page.query_selector("textarea"):
+                return await fill_and_send(page, order_id)
 
-    # --- 方法2: hrefのキーワードで探す ---
-    href_keywords = ["messaging", "contact-buyer", "contactBuyer", "contact_buyer", "buyer-message"]
+    # 2. アクションドロップダウンを開いて探す
+    for dd_sel in [
+        "button:has-text('アクション')",
+        "button:has-text('Actions')",
+        ".a-dropdown-trigger",
+        "[data-action='dropdown-trigger']",
+        "button.a-button-dropdown",
+        "span.a-dropdown-prompt",
+    ]:
+        dd = await page.query_selector(dd_sel)
+        if dd:
+            logger.info(f"  ドロップダウン開く: {dd_sel}")
+            await dd.click()
+            await page.wait_for_timeout(1000)
+            for contact_sel in [
+                "a:has-text('購入者に連絡')",
+                "a:has-text('Contact buyer')",
+                "li:has-text('購入者に連絡')",
+            ]:
+                item = await page.query_selector(contact_sel)
+                if item:
+                    await item.click()
+                    await page.wait_for_timeout(2000)
+                    if await page.query_selector("textarea"):
+                        return await fill_and_send(page, order_id)
+
+    # 3. href に messaging/contact を含むリンクを探す
+    links = await page.query_selector_all("a[href]")
     for link in links:
         href = await link.get_attribute("href") or ""
-        if any(kw in href.lower() for kw in href_keywords):
+        if any(kw in href.lower() for kw in ["messaging", "contact-buyer", "contactbuyer", "contact_buyer"]):
             text = (await link.inner_text()).strip()
-            logger.info(f"  連絡リンク検出（href）: '{text}' -> {href}")
-            return link, href, f"href:{href}"
+            logger.info(f"  連絡リンク(href): '{text}' -> {href}")
+            full_url = href if href.startswith("http") else SELLER_CENTRAL_URL + href
+            await page.goto(full_url, wait_until="networkidle")
+            await page.wait_for_timeout(2000)
+            if await page.query_selector("textarea"):
+                return await fill_and_send(page, order_id)
 
-    # --- 方法3: HTMLから直接URLを抽出して直接遷移 ---
-    for url in contact_urls:
-        if any(kw in url.lower() for kw in ["messaging", "contact-buyer", "contactBuyer"]):
-            full_url = url if url.startswith("http") else SELLER_CENTRAL_URL + url
-            logger.info(f"  連絡URL直接抽出: {full_url}")
-            return None, full_url, "direct_url"
+    # デバッグ: ページ上の全リンクをログ出力
+    logger.warning(f"  購入者連絡ボタンが見つかりません: {order_id}")
+    all_links = await page.query_selector_all("a")
+    for link in all_links:
+        text = (await link.inner_text()).strip()
+        href = await link.get_attribute("href") or ""
+        if text and len(text) < 30:
+            logger.info(f"    [DEBUG] '{text}' -> {href[:100]}")
 
-    return None, None, "not_found"
+    return False
 
 
-async def send_message_to_order(page, order_id: str) -> bool:
-    """注文の購入者にメッセージを送信する（DRY_RUN=Trueの場合はログのみ）。"""
-    order_url = f"{SELLER_CENTRAL_URL}/orders-v3/order/{order_id}"
-    logger.info(f"  注文詳細ページへ: {order_url}")
-    await page.goto(order_url, wait_until="networkidle")
-    await page.wait_for_timeout(3000)
+async def fill_and_send(page, order_id: str) -> bool:
+    """メッセージフォームに本文を入力して送信する。"""
+    await save_screenshot(page, f"form_{order_id.replace('-', '_')}")
 
-    # 注文詳細ページのスクリーンショット
-    ss_path = SCRIPT_DIR / f"debug_order_{order_id.replace('-', '_')}.png"
-    await page.screenshot(path=str(ss_path), full_page=True)
-    logger.info(f"  注文詳細スクリーンショット: {ss_path}")
-
-    el, contact_url, method = await find_contact_link(page, order_id)
-
-    if method == "not_found":
-        logger.warning(f"  [!] 購入者連絡リンクが見つかりません: {order_id}")
-        if DRY_RUN:
-            logger.info(f"  [DRY-RUN] 送信スキップ（ボタン未検出）: {order_id}")
-        return False
-
-    if DRY_RUN:
-        logger.info(f"  [DRY-RUN] 連絡ボタン検出OK（方法: {method}）")
-        logger.info(f"  [DRY-RUN] 送信予定の注文: {order_id}")
-        logger.info(f"  [DRY-RUN] メッセージ冒頭: {MESSAGE_TEXT[:60]}...")
-        return True
-
-    # --- 実際の送信（DRY_RUN=False のとき） ---
-    if el:
-        await el.click()
-    elif contact_url:
-        await page.goto(contact_url, wait_until="networkidle")
-    await page.wait_for_timeout(2000)
-
-    # スクリーンショット（メッセージ入力ページ）
-    ss_msg_path = SCRIPT_DIR / f"debug_msg_{order_id.replace('-', '_')}.png"
-    await page.screenshot(path=str(ss_msg_path), full_page=True)
-    logger.info(f"  メッセージページスクリーンショット: {ss_msg_path}")
-
-    # 件名ドロップダウン（存在する場合）
-    subject_dd = await page.query_selector("select[name*='subject'], select[id*='subject']")
+    # 件名ドロップダウン（ある場合）
+    subject_dd = await page.query_selector("select[name*='subject'], select[id*='subject'], select[name*='reason']")
     if subject_dd:
         options = await subject_dd.query_selector_all("option")
         for opt in options:
-            opt_text = (await opt.inner_text()).lower()
-            if any(kw in opt_text for kw in ["追加", "製品", "情報", "その他", "additional", "product", "other"]):
-                val = await opt.get_attribute("value")
+            val = await opt.get_attribute("value") or ""
+            text = (await opt.inner_text()).lower()
+            if any(kw in text for kw in ["追加", "製品", "情報", "その他", "additional", "product", "other", "inquiry"]):
                 await subject_dd.select_option(value=val)
+                logger.info(f"  件名選択: {await opt.inner_text()}")
                 break
 
     # メッセージ入力欄
     textarea = await page.query_selector(
-        "textarea[name*='message'], textarea[id*='message'], textarea.message-body, textarea"
+        "textarea[name*='message'], textarea[id*='message'], textarea[name*='body'], textarea"
     )
     if not textarea:
         textareas = await page.query_selector_all("textarea")
@@ -285,12 +316,17 @@ async def send_message_to_order(page, order_id: str) -> bool:
     await textarea.fill(MESSAGE_TEXT)
     await page.wait_for_timeout(1000)
 
+    if DRY_RUN:
+        logger.info(f"  [DRY-RUN] フォーム入力完了。送信はスキップ: {order_id}")
+        await save_screenshot(page, f"dryrun_{order_id.replace('-', '_')}")
+        return True
+
     # 送信ボタン
     for sel in [
-        "button[type=submit]:has-text('送信')",
+        "button:has-text('送信')",
         "input[type=submit][value*='送信']",
         "button:has-text('Send')",
-        "button:has-text('送信')",
+        "button:has-text('送信する')",
         "button[type=submit]",
         "input[type=submit]",
     ]:
@@ -298,6 +334,7 @@ async def send_message_to_order(page, order_id: str) -> bool:
         if btn:
             await btn.click()
             await page.wait_for_timeout(3000)
+            await save_screenshot(page, f"sent_{order_id.replace('-', '_')}")
             logger.info(f"  メッセージ送信完了: {order_id}")
             return True
 
@@ -305,11 +342,26 @@ async def send_message_to_order(page, order_id: str) -> bool:
     return False
 
 
+async def send_message_to_order(page, order_id: str) -> bool:
+    """購入者へのメッセージ送信。複数の方法を順に試みる。"""
+
+    # 方法1: メッセージ作成URLへ直接遷移
+    if await send_via_messaging_compose(page, order_id):
+        return True
+
+    # 方法2: 注文詳細 / 注文一覧から連絡ボタンを探す
+    if await send_via_order_detail(page, order_id):
+        return True
+
+    logger.error(f"  すべての送信方法が失敗しました: {order_id}")
+    return False
+
+
 async def main():
     logger.info("=" * 60)
-    logger.info(f"Amazon購入者 取扱説明書メッセージ送信 開始")
+    logger.info("Amazon購入者 取扱説明書メッセージ送信 開始")
     logger.info(f"実行時刻: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    logger.info(f"モード: {'[DRY-RUN] 確認のみ（送信しない）' if DRY_RUN else '[LIVE] 実際に送信'}")
+    logger.info(f"モード: {'[DRY-RUN] 確認のみ' if DRY_RUN else '[LIVE] 実際に送信'}")
 
     sent_orders = load_sent_orders()
     logger.info(f"送信済み注文数: {len(sent_orders)}")
@@ -324,13 +376,13 @@ async def main():
 
         try:
             if not await login(page):
-                logger.error("ログインに失敗しました。終了します。")
+                logger.error("ログイン失敗。終了します。")
                 return
 
             sent_count = 0
             skip_count = 0
             error_count = 0
-            processed_orders: set = set()  # ASIN間の重複処理を防ぐ
+            processed: set = set()
 
             for asin in TARGET_ASINS:
                 logger.info(f"ASIN {asin} の注文を検索中...")
@@ -338,22 +390,19 @@ async def main():
                 logger.info(f"  取得注文数: {len(order_ids)}")
 
                 for order_id in order_ids:
-                    # テスト注文を除外
                     if is_test_order(order_id):
                         logger.info(f"  スキップ（テスト注文）: {order_id}")
                         continue
 
-                    # 送信済み・処理済みをスキップ
-                    if order_id in sent_orders or order_id in processed_orders:
-                        logger.info(f"  スキップ（送信済み/処理済み）: {order_id}")
+                    if order_id in sent_orders or order_id in processed:
+                        logger.info(f"  スキップ（送信済み）: {order_id}")
                         skip_count += 1
                         continue
 
-                    processed_orders.add(order_id)
-                    logger.info(f"  処理中: {order_id}")
+                    processed.add(order_id)
+                    logger.info(f"  送信処理: {order_id}")
 
-                    success = await send_message_to_order(page, order_id)
-                    if success:
+                    if await send_message_to_order(page, order_id):
                         if not DRY_RUN:
                             sent_orders.add(order_id)
                             save_sent_orders(sent_orders)
@@ -368,11 +417,11 @@ async def main():
         finally:
             await browser.close()
 
-    mode = "DRY-RUN確認" if DRY_RUN else "送信"
-    logger.info(f"処理完了 - {mode}: {sent_count}件 / スキップ: {skip_count}件 / エラー: {error_count}件")
+    logger.info(
+        f"処理完了 - 送信: {sent_count}件 / スキップ: {skip_count}件 / エラー: {error_count}件"
+    )
     if DRY_RUN:
         logger.info("※ DRY_RUN=True のため実際には送信していません。")
-        logger.info("  送信する場合は DRY_RUN = False に変更して再実行してください。")
     logger.info("=" * 60)
 
 
