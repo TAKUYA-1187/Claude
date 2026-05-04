@@ -283,17 +283,26 @@ async def _find_and_click_contact(page, order_id: str) -> bool:
                         return await fill_and_send(page, order_id)
 
     # 3. href に messaging/contact を含むリンクを探す
+    # ページ遷移前に全hrefを収集してから処理（stale element対策）
     links = await page.query_selector_all("a[href]")
+    link_data = []
     for link in links:
-        href = await link.get_attribute("href") or ""
-        if any(kw in href.lower() for kw in ["messaging", "contact-buyer", "contactbuyer", "contact_buyer"]):
+        try:
+            href = await link.get_attribute("href") or ""
             text = (await link.inner_text()).strip()
-            logger.info(f"  連絡リンク(href): '{text}' -> {href}")
-            full_url = href if href.startswith("http") else SELLER_CENTRAL_URL + href
-            await page.goto(full_url, wait_until="networkidle")
-            await page.wait_for_timeout(2000)
-            if await page.query_selector("textarea"):
-                return await fill_and_send(page, order_id)
+            link_data.append((href, text))
+        except Exception:
+            pass
+
+    for href, text in link_data:
+        if not any(kw in href.lower() for kw in ["contact-buyer", "contactbuyer", "contact_buyer"]):
+            continue
+        logger.info(f"  連絡リンク(href): '{text}' -> {href}")
+        full_url = href if href.startswith("http") else SELLER_CENTRAL_URL + href
+        await page.goto(full_url, wait_until="networkidle")
+        await page.wait_for_timeout(2000)
+        if await page.query_selector("textarea"):
+            return await fill_and_send(page, order_id)
 
     # デバッグ: ページ上の全リンクをログ出力
     logger.warning(f"  購入者連絡ボタンが見つかりません: {order_id}")
