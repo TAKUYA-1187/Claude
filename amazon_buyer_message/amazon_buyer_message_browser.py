@@ -209,25 +209,26 @@ async def send_via_order_detail(page, order_id: str) -> bool:
     注文詳細ページから「購入者に連絡」ボタンを探して送信する。
     orders-v3?page=1 の一覧から対象注文をクリックする方式も試みる。
     """
-    # 方法A: 注文詳細ページへ直接遷移
+    # 方法A: 注文詳細ページへ直接遷移して連絡ボタンを探す
     detail_url = f"{SELLER_CENTRAL_URL}/orders-v3/order/{order_id}"
     await page.goto(detail_url, wait_until="networkidle")
     await page.wait_for_timeout(3000)
     await save_screenshot(page, f"detail_{order_id.replace('-', '_')}")
 
-    # 方法B: orders-v3一覧ページで注文行をクリック（ユーザーが確認した動作方式）
-    if not await _find_and_click_contact(page, order_id):
-        list_url = f"{SELLER_CENTRAL_URL}/orders-v3?page=1"
-        logger.info(f"  一覧ページから注文を探す: {list_url}")
-        await page.goto(list_url, wait_until="networkidle")
-        await page.wait_for_timeout(3000)
+    if await _find_and_click_contact(page, order_id):
+        return True
 
-        # 注文IDが含まれる行をクリック
-        order_row = await page.query_selector(f"text={order_id}")
-        if order_row:
-            await order_row.click()
-            await page.wait_for_timeout(2000)
-            await save_screenshot(page, f"list_clicked_{order_id.replace('-', '_')}")
+    # 方法B: orders-v3一覧ページで注文行をクリック（ユーザーが確認した動作方式）
+    list_url = f"{SELLER_CENTRAL_URL}/orders-v3?page=1"
+    logger.info(f"  一覧ページから注文を探す: {list_url}")
+    await page.goto(list_url, wait_until="networkidle")
+    await page.wait_for_timeout(3000)
+
+    order_row = await page.query_selector(f"text={order_id}")
+    if order_row:
+        await order_row.click()
+        await page.wait_for_timeout(2000)
+        await save_screenshot(page, f"list_clicked_{order_id.replace('-', '_')}")
 
     return await _find_and_click_contact(page, order_id)
 
