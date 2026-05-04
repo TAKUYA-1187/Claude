@@ -215,6 +215,11 @@ async def send_via_order_detail(page, order_id: str) -> bool:
     await page.wait_for_timeout(3000)
     await save_screenshot(page, f"detail_{order_id.replace('-', '_')}")
 
+    # サインインページにリダイレクトされた場合は無効な注文IDとしてスキップ
+    if "signin" in page.url or "/ap/" in page.url:
+        logger.warning(f"  注文詳細がサインインページにリダイレクト → 無効な注文IDとしてスキップ: {order_id}")
+        return None  # Noneは「無効注文」を示す特別な値
+
     if await _find_and_click_contact(page, order_id):
         return True
 
@@ -369,15 +374,20 @@ async def fill_and_send(page, order_id: str) -> bool:
     return False
 
 
-async def send_message_to_order(page, order_id: str) -> bool:
-    """購入者へのメッセージ送信。複数の方法を順に試みる。"""
-
+async def send_message_to_order(page, order_id: str):
+    """
+    購入者へのメッセージ送信。複数の方法を順に試みる。
+    Returns: True=送信成功 / False=送信失敗 / None=無効注文ID（以後スキップ）
+    """
     # 方法1: メッセージ作成URLへ直接遷移
     if await send_via_messaging_compose(page, order_id):
         return True
 
     # 方法2: 注文詳細 / 注文一覧から連絡ボタンを探す
-    if await send_via_order_detail(page, order_id):
+    result = await send_via_order_detail(page, order_id)
+    if result is None:
+        return None  # 無効注文ID
+    if result:
         return True
 
     logger.error(f"  すべての送信方法が失敗しました: {order_id}")
@@ -434,7 +444,14 @@ async def main():
                     processed.add(order_id)
                     logger.info(f"  送信処理: {order_id}")
 
-                    if await send_message_to_order(page, order_id):
+                    result = await send_message_to_order(page, order_id)
+                    if result is None:
+                        # 無効注文ID（サインインリダイレクト）→ 登録して以後スキップ
+                        logger.warning(f"  無効注文IDとして登録（以後スキップ）: {order_id}")
+                        sent_orders.add(order_id)
+                        save_sent_orders(sent_orders)
+                        skip_count += 1
+                    elif result:
                         if not DRY_RUN:
                             sent_orders.add(order_id)
                             save_sent_orders(sent_orders)
