@@ -424,17 +424,31 @@ async def main():
     sent_orders = load_sent_orders()
     logger.info(f"送信済み注文数: {len(sent_orders)}")
 
-    # ログインセッションをローカルに保存（初回のみ手動ログインが必要）
     USER_DATA_DIR = SCRIPT_DIR / "chrome_session"
+    CDP_URL = "http://localhost:9222"
 
     async with async_playwright() as p:
-        context = await p.chromium.launch_persistent_context(
-            user_data_dir=str(USER_DATA_DIR),
-            channel="chrome",
-            headless=False,
-            locale="ja-JP",
-            args=["--lang=ja-JP"],
-        )
+        use_cdp = False
+        browser = None
+        context = None
+
+        # 既存Chromeへの接続を試みる（リモートデバッグポート9222）
+        try:
+            browser = await p.chromium.connect_over_cdp(CDP_URL)
+            contexts = browser.contexts
+            context = contexts[0] if contexts else await browser.new_context(locale="ja-JP")
+            logger.info(f"既存Chromeに接続しました（リモートデバッグ）")
+            use_cdp = True
+        except Exception:
+            logger.info("既存Chrome未検出 → 新規Chromeを起動します")
+            context = await p.chromium.launch_persistent_context(
+                user_data_dir=str(USER_DATA_DIR),
+                channel="chrome",
+                headless=False,
+                locale="ja-JP",
+                args=["--lang=ja-JP"],
+            )
+
         page = await context.new_page()
 
         try:
@@ -485,7 +499,9 @@ async def main():
         except Exception as e:
             logger.error(f"予期せぬエラー: {e}", exc_info=True)
         finally:
-            await context.close()
+            await page.close()
+            if not use_cdp:
+                await context.close()
 
     logger.info(
         f"処理完了 - 送信: {sent_count}件 / スキップ: {skip_count}件 / エラー: {error_count}件"
