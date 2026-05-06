@@ -173,11 +173,30 @@ async def get_orders_for_asin(page, asin: str) -> list:
     logger.info(f"  検索: {search_url}")
     await page.goto(search_url, wait_until="networkidle")
     await page.wait_for_timeout(3000)
-
-    content = await page.content()
-    order_ids = list(set(re.findall(r"\d{3}-\d{7}-\d{7}", content)))
     await save_screenshot(page, f"search_{asin}")
-    return order_ids
+
+    # 注文詳細ページへのリンクのhrefからのみ注文IDを抽出（ページテンプレートの誤検出を防ぐ）
+    order_ids = set()
+    links = await page.query_selector_all("a[href]")
+    for link in links:
+        href = await link.get_attribute("href") or ""
+        if any(kw in href for kw in ["/orders-v3/order/", "orderId=", "orderID=", "order-id="]):
+            matches = re.findall(r"\d{3}-\d{7}-\d{7}", href)
+            if matches:
+                logger.info(f"    注文リンク: {href[:100]}")
+                order_ids.update(matches)
+
+    if order_ids:
+        return list(order_ids)
+
+    # フォールバック: 全hrefをスキャン（ページテンプレートを除外するため全文スキャンは使わない）
+    for link in links:
+        href = await link.get_attribute("href") or ""
+        matches = re.findall(r"\d{3}-\d{7}-\d{7}", href)
+        order_ids.update(matches)
+
+    logger.info(f"  全hrefスキャン結果: {sorted(order_ids)}")
+    return list(order_ids)
 
 
 async def send_via_messaging_compose(page, order_id: str) -> bool:
