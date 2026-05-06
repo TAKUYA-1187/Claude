@@ -234,23 +234,8 @@ async def send_via_order_detail(page, order_id: str) -> bool:
         await order_row.click()
         await page.wait_for_timeout(3000)
         await save_screenshot(page, f"list_clicked_{order_id.replace('-', '_')}")
-
-        # パネル内の「購入者に連絡」ボタンを待ってからJavaScriptでクリック
-        for contact_sel in [
-            "span:has-text('購入者に連絡')",
-            "a:has-text('購入者に連絡')",
-            "button:has-text('購入者に連絡')",
-        ]:
-            try:
-                el = await page.wait_for_selector(contact_sel, timeout=5000)
-                if el:
-                    # JavaScriptクリックで非表示/オーバーレイを回避
-                    await page.evaluate("el => el.click()", el)
-                    await page.wait_for_timeout(2000)
-                    if await page.query_selector("textarea"):
-                        return await fill_and_send(page, order_id)
-            except PlaywrightTimeout:
-                continue
+        if await _find_and_click_contact(page, order_id):
+            return True
 
     return False
 
@@ -303,6 +288,23 @@ async def _find_and_click_contact(page, order_id: str) -> bool:
                     await page.wait_for_timeout(2000)
                     if await page.query_selector("textarea"):
                         return await fill_and_send(page, order_id)
+
+    # 3. href に messaging/contact を含むリンクを探す（stale element safe）
+    links = await page.query_selector_all("a[href]")
+    messaging_urls = []
+    for link in links:
+        href = await link.get_attribute("href") or ""
+        if any(kw in href.lower() for kw in ["messaging", "contact-buyer", "contactbuyer", "contact_buyer"]):
+            text = (await link.inner_text()).strip()
+            full_url = href if href.startswith("http") else SELLER_CENTRAL_URL + href
+            messaging_urls.append((full_url, text))
+
+    for full_url, text in messaging_urls:
+        logger.info(f"  連絡リンク(href): '{text}' -> {full_url}")
+        await page.goto(full_url, wait_until="networkidle")
+        await page.wait_for_timeout(2000)
+        if await page.query_selector("textarea"):
+            return await fill_and_send(page, order_id)
 
     # デバッグ: ページ上の全リンクをログ出力
     logger.warning(f"  購入者連絡ボタンが見つかりません: {order_id}")
