@@ -100,21 +100,14 @@ async def save_screenshot(page, name: str) -> None:
 
 
 async def login(page) -> bool:
-    """
-    セラーセントラルへのログイン。
-    保存済みセッションがあれば自動スキップ。
-    未ログインの場合はブラウザで手動ログインを促す。
-    """
     logger.info("セラーセントラルにアクセス中...")
     await page.goto(SELLER_CENTRAL_URL, wait_until="networkidle")
     await page.wait_for_timeout(2000)
 
-    # すでにログイン済みか確認
     if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url:
         logger.info("ログイン済みです（セッション再利用）")
         return True
 
-    # 自動ログイン試行
     logger.info("自動ログインを試みます...")
     try:
         email_field = await page.query_selector("#ap_email")
@@ -131,7 +124,6 @@ async def login(page) -> bool:
     except Exception as e:
         logger.warning(f"自動ログイン中にエラー: {e}")
 
-    # OTP処理
     for otp_sel in ["#auth-mfa-otpcode", "#otp", "input[name='otpCode']"]:
         otp_field = await page.query_selector(otp_sel)
         if otp_field:
@@ -144,12 +136,10 @@ async def login(page) -> bool:
             await page.wait_for_timeout(3000)
             break
 
-    # 自動ログイン成功確認
     if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url.lower():
         logger.info("自動ログイン成功")
         return True
 
-    # 自動ログイン失敗 → 手動ログインを自動検知（最大3分待機）
     logger.warning("自動ログインに失敗しました。")
     logger.warning(">>> 開いたブラウザでログインしてください（Touch ID またはパスワード）。")
     logger.warning(">>> ログイン完了後、自動的に処理が続行されます（最大3分待機）...")
@@ -157,10 +147,10 @@ async def login(page) -> bool:
     try:
         await page.wait_for_url(
             lambda url: "sellercentral.amazon.co.jp" in url and "signin" not in url.lower() and "ap/" not in url.lower(),
-            timeout=180000,  # 最大3分
+            timeout=180000,
         )
         await page.wait_for_timeout(2000)
-        logger.info("手動ログイン確認OK → 処理を続行します")
+        logger.info("ログイン確認OK → 処理を続行します")
         return True
     except PlaywrightTimeout:
         logger.error("3分以内にログインが完了しませんでした。スクリプトを終了します。")
@@ -175,7 +165,7 @@ async def get_orders_for_asin(page, asin: str) -> list:
     await page.wait_for_timeout(3000)
     await save_screenshot(page, f"search_{asin}")
 
-    # 注文詳細ページへのリンクのhrefからのみ注文IDを抽出（ページテンプレートの誤検出を防ぐ）
+    # 注文詳細ページへのリンクhrefからのみ注文IDを抽出（ページテンプレートの誤検出を防ぐ）
     order_ids = set()
     links = await page.query_selector_all("a[href]")
     for link in links:
@@ -189,7 +179,7 @@ async def get_orders_for_asin(page, asin: str) -> list:
     if order_ids:
         return list(order_ids)
 
-    # フォールバック: 全hrefをスキャン（ページテンプレートを除外するため全文スキャンは使わない）
+    # フォールバック: 全hrefをスキャン
     for link in links:
         href = await link.get_attribute("href") or ""
         matches = re.findall(r"\d{3}-\d{7}-\d{7}", href)
@@ -200,10 +190,7 @@ async def get_orders_for_asin(page, asin: str) -> list:
 
 
 async def send_via_messaging_compose(page, order_id: str) -> bool:
-    """
-    メッセージ作成URLへ直接遷移して送信する。
-    複数のURLパターンを試みる。
-    """
+    """メッセージ作成URLへ直接遷移して送信する。"""
     compose_urls = [
         f"{SELLER_CENTRAL_URL}/messaging/compose?orderID={order_id}",
         f"{SELLER_CENTRAL_URL}/cu/messaging/compose?orderID={order_id}",
@@ -224,39 +211,27 @@ async def send_via_messaging_compose(page, order_id: str) -> bool:
 
 
 async def send_via_order_detail(page, order_id: str) -> bool:
-    """
-    注文詳細ページから「購入者に連絡」ボタンを探して送信する。
-    orders-v3?page=1 の一覧から対象注文をクリックする方式も試みる。
-    """
-    # 方法A: 注文詳細ページへ直接遷移して連絡ボタンを探す
+    """注文詳細ページから「購入者に連絡」ボタンを探して送信する。"""
+    # 方法A: 注文詳細ページへ直接遷移
     detail_url = f"{SELLER_CENTRAL_URL}/orders-v3/order/{order_id}"
     await page.goto(detail_url, wait_until="networkidle")
     await page.wait_for_timeout(3000)
     await save_screenshot(page, f"detail_{order_id.replace('-', '_')}")
 
-    # サインインページにリダイレクトされた場合は無効な注文IDとしてスキップ
-    if "signin" in page.url or "/ap/" in page.url:
-        logger.warning(f"  注文詳細がサインインページにリダイレクト → 無効な注文IDとしてスキップ: {order_id}")
-        return None  # Noneは「無効注文」を示す特別な値
-
-    if await _find_and_click_contact(page, order_id):
-        return True
-
-    # 方法B: orders-v3一覧ページで注文行をクリックしてパネルを開く
-    list_url = f"{SELLER_CENTRAL_URL}/orders-v3?page=1"
-    logger.info(f"  一覧ページから注文を探す: {list_url}")
-    await page.goto(list_url, wait_until="networkidle")
-    await page.wait_for_timeout(3000)
-
-    order_row = await page.query_selector(f"text={order_id}")
-    if order_row:
-        await order_row.click()
+    if not await _find_and_click_contact(page, order_id):
+        # 方法B: orders-v3一覧ページで注文行をクリック（コワーク確認済み動作方式）
+        list_url = f"{SELLER_CENTRAL_URL}/orders-v3?page=1"
+        logger.info(f"  一覧ページから注文を探す: {list_url}")
+        await page.goto(list_url, wait_until="networkidle")
         await page.wait_for_timeout(3000)
-        await save_screenshot(page, f"list_clicked_{order_id.replace('-', '_')}")
-        if await _find_and_click_contact(page, order_id):
-            return True
 
-    return False
+        order_row = await page.query_selector(f"text={order_id}")
+        if order_row:
+            await order_row.click()
+            await page.wait_for_timeout(2000)
+            await save_screenshot(page, f"list_clicked_{order_id.replace('-', '_')}")
+
+    return await _find_and_click_contact(page, order_id)
 
 
 async def _find_and_click_contact(page, order_id: str) -> bool:
@@ -278,7 +253,6 @@ async def _find_and_click_contact(page, order_id: str) -> bool:
             logger.info(f"  連絡ボタン検出: {selector}")
             await el.click()
             await page.wait_for_timeout(2000)
-            # フォームが開いたか確認
             if await page.query_selector("textarea"):
                 return await fill_and_send(page, order_id)
 
@@ -341,7 +315,6 @@ async def fill_and_send(page, order_id: str) -> bool:
     """メッセージフォームに本文を入力して送信する。"""
     await save_screenshot(page, f"form_{order_id.replace('-', '_')}")
 
-    # 件名ドロップダウン（ある場合）
     subject_dd = await page.query_selector("select[name*='subject'], select[id*='subject'], select[name*='reason']")
     if subject_dd:
         options = await subject_dd.query_selector_all("option")
@@ -353,7 +326,6 @@ async def fill_and_send(page, order_id: str) -> bool:
                 logger.info(f"  件名選択: {await opt.inner_text()}")
                 break
 
-    # メッセージ入力欄
     textarea = await page.query_selector(
         "textarea[name*='message'], textarea[id*='message'], textarea[name*='body'], textarea"
     )
@@ -374,7 +346,6 @@ async def fill_and_send(page, order_id: str) -> bool:
         await save_screenshot(page, f"dryrun_{order_id.replace('-', '_')}")
         return True
 
-    # 送信ボタン
     for sel in [
         "button:has-text('送信')",
         "input[type=submit][value*='送信']",
@@ -395,20 +366,12 @@ async def fill_and_send(page, order_id: str) -> bool:
     return False
 
 
-async def send_message_to_order(page, order_id: str):
-    """
-    購入者へのメッセージ送信。複数の方法を順に試みる。
-    Returns: True=送信成功 / False=送信失敗 / None=無効注文ID（以後スキップ）
-    """
-    # 方法1: メッセージ作成URLへ直接遷移
+async def send_message_to_order(page, order_id: str) -> bool:
+    """購入者へのメッセージ送信。複数の方法を順に試みる。"""
     if await send_via_messaging_compose(page, order_id):
         return True
 
-    # 方法2: 注文詳細 / 注文一覧から連絡ボタンを探す
-    result = await send_via_order_detail(page, order_id)
-    if result is None:
-        return None  # 無効注文ID
-    if result:
+    if await send_via_order_detail(page, order_id):
         return True
 
     logger.error(f"  すべての送信方法が失敗しました: {order_id}")
@@ -425,30 +388,15 @@ async def main():
     logger.info(f"送信済み注文数: {len(sent_orders)}")
 
     USER_DATA_DIR = SCRIPT_DIR / "chrome_session"
-    CDP_URL = "http://localhost:9222"
 
     async with async_playwright() as p:
-        use_cdp = False
-        browser = None
-        context = None
-
-        # 既存Chromeへの接続を試みる（リモートデバッグポート9222）
-        try:
-            browser = await p.chromium.connect_over_cdp(CDP_URL)
-            contexts = browser.contexts
-            context = contexts[0] if contexts else await browser.new_context(locale="ja-JP")
-            logger.info(f"既存Chromeに接続しました（リモートデバッグ）")
-            use_cdp = True
-        except Exception:
-            logger.info("既存Chrome未検出 → 新規Chromeを起動します")
-            context = await p.chromium.launch_persistent_context(
-                user_data_dir=str(USER_DATA_DIR),
-                channel="chrome",
-                headless=False,
-                locale="ja-JP",
-                args=["--lang=ja-JP"],
-            )
-
+        context = await p.chromium.launch_persistent_context(
+            user_data_dir=str(USER_DATA_DIR),
+            channel="chrome",
+            headless=False,
+            locale="ja-JP",
+            args=["--lang=ja-JP"],
+        )
         page = await context.new_page()
 
         try:
@@ -479,14 +427,7 @@ async def main():
                     processed.add(order_id)
                     logger.info(f"  送信処理: {order_id}")
 
-                    result = await send_message_to_order(page, order_id)
-                    if result is None:
-                        # 無効注文ID（サインインリダイレクト）→ 登録して以後スキップ
-                        logger.warning(f"  無効注文IDとして登録（以後スキップ）: {order_id}")
-                        sent_orders.add(order_id)
-                        save_sent_orders(sent_orders)
-                        skip_count += 1
-                    elif result:
+                    if await send_message_to_order(page, order_id):
                         if not DRY_RUN:
                             sent_orders.add(order_id)
                             save_sent_orders(sent_orders)
@@ -499,9 +440,7 @@ async def main():
         except Exception as e:
             logger.error(f"予期せぬエラー: {e}", exc_info=True)
         finally:
-            await page.close()
-            if not use_cdp:
-                await context.close()
+            await context.close()
 
     logger.info(
         f"処理完了 - 送信: {sent_count}件 / スキップ: {skip_count}件 / エラー: {error_count}件"
