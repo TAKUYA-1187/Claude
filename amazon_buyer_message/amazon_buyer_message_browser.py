@@ -408,7 +408,9 @@ async def fill_and_send(page, order_id: str) -> bool:
         await save_screenshot(page, f"dryrun_{order_id.replace('-', '_')}")
         return True
 
+    # 送信ボタンクリック（Katal UIコンポーネント対応: force=True + JS fallback）
     for sel in [
+        "kat-button[label='送信']",
         "button:has-text('送信')",
         "input[type=submit][value*='送信']",
         "button:has-text('Send')",
@@ -418,11 +420,41 @@ async def fill_and_send(page, order_id: str) -> bool:
     ]:
         btn = await page.query_selector(sel)
         if btn:
-            await btn.click()
+            try:
+                await btn.click(force=True)
+            except Exception:
+                await page.evaluate("el => el.click()", btn)
             await page.wait_for_timeout(3000)
             await save_screenshot(page, f"sent_{order_id.replace('-', '_')}")
             logger.info(f"  メッセージ送信完了: {order_id}")
             return True
+
+    # JSで送信ボタンを探してクリック
+    sent = await page.evaluate("""
+        () => {
+            // kat-button[label='送信']
+            for (const el of document.querySelectorAll('kat-button')) {
+                if (el.getAttribute('label') === '送信') {
+                    el.click();
+                    el.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+                    return true;
+                }
+            }
+            // 通常のbutton
+            for (const el of document.querySelectorAll('button')) {
+                if (el.textContent.trim() === '送信') {
+                    el.click();
+                    return true;
+                }
+            }
+            return false;
+        }
+    """)
+    if sent:
+        await page.wait_for_timeout(3000)
+        await save_screenshot(page, f"sent_{order_id.replace('-', '_')}")
+        logger.info(f"  メッセージ送信完了(JS): {order_id}")
+        return True
 
     logger.warning(f"  送信ボタンが見つかりません: {order_id}")
     return False
