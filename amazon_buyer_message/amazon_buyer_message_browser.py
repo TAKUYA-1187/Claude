@@ -168,6 +168,35 @@ async def get_orders_for_asin(page, asin: str) -> list:
     return list(order_ids)
 
 
+async def get_orders_from_list(page) -> set:
+    """
+    注文一覧ページから対象ASINに一致する注文IDを取得する。
+    ASINが新規注文のASIN検索に反映されるまでのタイムラグを補う。
+    """
+    list_url = f"{SELLER_CENTRAL_URL}/orders-v3?page=1"
+    logger.info(f"注文一覧から新規注文を確認: {list_url}")
+    await page.goto(list_url, wait_until="networkidle")
+    await page.wait_for_timeout(3000)
+
+    content = await page.content()
+    order_ids = set()
+
+    for asin in TARGET_ASINS:
+        pos = 0
+        while True:
+            idx = content.find(asin, pos)
+            if idx == -1:
+                break
+            # ASIN前後500文字以内の注文IDを抽出（同一行内にある）
+            context = content[max(0, idx - 500): idx + 500]
+            for oid in re.findall(r"\d{3}-\d{7}-\d{7}", context):
+                order_ids.add(oid)
+                logger.info(f"  一覧から検出: {oid} (ASIN:{asin})")
+            pos = idx + 1
+
+    return order_ids
+
+
 async def send_via_messaging_compose(page, order_id: str) -> bool:
     """
     /messaging/contact へ直接遷移して送信する。
@@ -406,12 +435,23 @@ async def main():
             error_count = 0
             processed: set = set()
 
+            # 全対象ASINの注文IDを収集（ASIN検索）
+            all_order_ids: set = set()
             for asin in TARGET_ASINS:
                 logger.info(f"ASIN {asin} の注文を検索中...")
                 order_ids = await get_orders_for_asin(page, asin)
-                logger.info(f"  取得注文数: {len(order_ids)}")
+                logger.info(f"  ASIN検索結果: {len(order_ids)}件")
+                all_order_ids.update(order_ids)
 
-                for order_id in order_ids:
+            # 注文一覧からも収集（新規注文の漏れを防ぐ）
+            list_orders = await get_orders_from_list(page)
+            new_found = list_orders - all_order_ids
+            if new_found:
+                logger.info(f"注文一覧から追加検出: {sorted(new_found)}")
+            all_order_ids.update(list_orders)
+            logger.info(f"処理対象注文ID合計: {len(all_order_ids)}件")
+
+            for order_id in sorted(all_order_ids):
                     if is_test_order(order_id):
                         logger.info(f"  スキップ（テスト注文）: {order_id}")
                         continue
