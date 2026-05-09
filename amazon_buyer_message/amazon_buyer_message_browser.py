@@ -200,8 +200,7 @@ async def get_orders_from_list(page) -> set:
 async def send_via_messaging_compose(page, order_id: str) -> bool:
     """
     /messaging/contact へ直接遷移して送信する。
-    ラジオボタン「注文の詳細を確認する」または「その他」を選択後、
-    メッセージ欄に入力して送信する。
+    「注文の詳細を確認する」ラジオ（○→◉）を選択後にメッセージ欄が表示される。
     """
     contact_url = f"{SELLER_CENTRAL_URL}/messaging/contact?orderID={order_id}&marketplaceID={MARKETPLACE_ID}"
     logger.info(f"  メッセージURL: {contact_url}")
@@ -212,21 +211,45 @@ async def send_via_messaging_compose(page, order_id: str) -> bool:
         logger.warning(f"  メッセージページへのアクセス失敗（ログイン切れ）")
         return False
 
-    # ラジオボタン選択: 「注文の詳細を確認する」優先、なければ「その他」
+    # ラジオボタン選択: 複数の方法で試みる
+    radio_selected = False
+
+    # 方法1: labelテキストで検索してクリック
     for radio_text in ["注文の詳細を確認する", "その他"]:
         label = await page.query_selector(f"label:has-text('{radio_text}')")
         if label:
             await label.click()
-            await page.wait_for_timeout(1500)
-            logger.info(f"  ラジオ選択: {radio_text}")
+            await page.wait_for_timeout(2000)
+            logger.info(f"  ラジオ選択(label): {radio_text}")
+            radio_selected = True
             break
 
-    textarea = await page.query_selector("textarea")
-    if textarea:
-        logger.info(f"  メッセージ入力欄を検出 → 送信処理へ")
-        return await fill_and_send(page, order_id)
+    # 方法2: input[type=radio] を直接クリック
+    if not radio_selected:
+        first_radio = await page.query_selector("input[type='radio']")
+        if first_radio:
+            await first_radio.click()
+            await page.wait_for_timeout(2000)
+            logger.info("  ラジオ選択(input直接)")
+            radio_selected = True
 
-    logger.warning(f"  メッセージ入力欄が見つかりません: {contact_url}")
+    # 方法3: JavaScriptで最初のラジオをクリック
+    if not radio_selected:
+        await page.evaluate("() => { const r = document.querySelector('input[type=\"radio\"]'); if(r) r.click(); }")
+        await page.wait_for_timeout(2000)
+        logger.info("  ラジオ選択(JS)")
+
+    # テキストエリアの出現を待つ（最大5秒）
+    try:
+        textarea = await page.wait_for_selector("textarea", timeout=5000)
+        if textarea:
+            logger.info("  メッセージ入力欄を検出 → 送信処理へ")
+            return await fill_and_send(page, order_id)
+    except PlaywrightTimeout:
+        pass
+
+    logger.warning(f"  メッセージ入力欄が表示されませんでした: {contact_url}")
+    await save_screenshot(page, f"no_textarea_{order_id.replace('-', '_')}")
     return False
 
 
