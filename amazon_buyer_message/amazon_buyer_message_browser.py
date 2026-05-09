@@ -102,58 +102,26 @@ async def save_screenshot(page, name: str) -> None:
 async def login(page) -> bool:
     logger.info("セラーセントラルにアクセス中...")
     await page.goto(SELLER_CENTRAL_URL, wait_until="networkidle")
-    await page.wait_for_timeout(2000)
+    await page.wait_for_timeout(3000)
 
-    if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url:
+    if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url and "/ap/" not in page.url:
         logger.info("ログイン済みです（セッション再利用）")
         return True
 
-    logger.info("自動ログインを試みます...")
-    try:
-        email_field = await page.query_selector("#ap_email")
-        if email_field:
-            await email_field.fill(EMAIL)
-            await page.click("#continue")
-            await page.wait_for_timeout(1500)
-
-        password_field = await page.query_selector("#ap_password")
-        if password_field:
-            await password_field.fill(PASSWORD)
-            await page.click("#signInSubmit")
-            await page.wait_for_timeout(3000)
-    except Exception as e:
-        logger.warning(f"自動ログイン中にエラー: {e}")
-
-    for otp_sel in ["#auth-mfa-otpcode", "#otp", "input[name='otpCode']"]:
-        otp_field = await page.query_selector(otp_sel)
-        if otp_field:
-            logger.warning("二段階認証が必要です")
-            otp = input(">>> スマホに届いたOTPコードを入力してEnter: ").strip()
-            await otp_field.fill(otp)
-            submit = await page.query_selector("#auth-signin-button, [type=submit]")
-            if submit:
-                await submit.click()
-            await page.wait_for_timeout(3000)
-            break
-
-    if "sellercentral.amazon.co.jp" in page.url and "signin" not in page.url.lower():
-        logger.info("自動ログイン成功")
-        return True
-
-    logger.warning("自動ログインに失敗しました。")
-    logger.warning(">>> 開いたブラウザでログインしてください（Touch ID またはパスワード）。")
-    logger.warning(">>> ログイン完了後、自動的に処理が続行されます（最大3分待機）...")
+    logger.warning("ログインが必要です。")
+    logger.warning(">>> 開いたブラウザでログインしてください（パスワード または Touch ID）。")
+    logger.warning(">>> ログイン完了後、自動的に処理が続行されます（最大5分待機）...")
 
     try:
         await page.wait_for_url(
-            lambda url: "sellercentral.amazon.co.jp" in url and "signin" not in url.lower() and "ap/" not in url.lower(),
-            timeout=180000,
+            lambda url: "sellercentral.amazon.co.jp" in url and "signin" not in url.lower() and "/ap/" not in url.lower(),
+            timeout=300000,
         )
-        await page.wait_for_timeout(2000)
+        await page.wait_for_timeout(3000)
         logger.info("ログイン確認OK → 処理を続行します")
         return True
     except PlaywrightTimeout:
-        logger.error("3分以内にログインが完了しませんでした。スクリプトを終了します。")
+        logger.error("5分以内にログインが完了しませんでした。スクリプトを終了します。")
         return False
 
 
