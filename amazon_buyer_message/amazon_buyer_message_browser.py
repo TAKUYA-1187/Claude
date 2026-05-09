@@ -50,6 +50,7 @@ TARGET_ASINS = {
 }
 
 SELLER_CENTRAL_URL = "https://sellercentral.amazon.co.jp"
+MARKETPLACE_ID = "A1VC38T7YXB528"  # Amazon.co.jp
 
 MESSAGE_TEXT = """大変お世話になっております。
 この度は当店の商品をご購入いただき、誠にありがとうございます。
@@ -147,34 +148,56 @@ async def get_orders_for_asin(page, asin: str) -> list:
     if order_ids:
         return list(order_ids)
 
-    # フォールバック: 全hrefをスキャン
+    # フォールバック1: 全hrefをスキャン
     for link in links:
         href = await link.get_attribute("href") or ""
         matches = re.findall(r"\d{3}-\d{7}-\d{7}", href)
         order_ids.update(matches)
 
-    logger.info(f"  全hrefスキャン結果: {sorted(order_ids)}")
+    if order_ids:
+        logger.info(f"  全hrefスキャン結果: {sorted(order_ids)}")
+        return list(order_ids)
+
+    # フォールバック2: リンクの表示テキストから注文IDを取得
+    for link in links:
+        text = (await link.inner_text()).strip()
+        matches = re.findall(r"\d{3}-\d{7}-\d{7}", text)
+        order_ids.update(matches)
+
+    logger.info(f"  テキストスキャン結果: {sorted(order_ids)}")
     return list(order_ids)
 
 
 async def send_via_messaging_compose(page, order_id: str) -> bool:
-    """メッセージ作成URLへ直接遷移して送信する。"""
-    compose_urls = [
-        f"{SELLER_CENTRAL_URL}/messaging/compose?orderID={order_id}",
-        f"{SELLER_CENTRAL_URL}/cu/messaging/compose?orderID={order_id}",
-        f"{SELLER_CENTRAL_URL}/gp/communication-manager/inbox.html?orderId={order_id}",
-    ]
+    """
+    /messaging/contact へ直接遷移して送信する。
+    ラジオボタン「注文の詳細を確認する」または「その他」を選択後、
+    メッセージ欄に入力して送信する。
+    """
+    contact_url = f"{SELLER_CENTRAL_URL}/messaging/contact?orderID={order_id}&marketplaceID={MARKETPLACE_ID}"
+    logger.info(f"  メッセージURL: {contact_url}")
+    await page.goto(contact_url, wait_until="networkidle")
+    await page.wait_for_timeout(2000)
 
-    for url in compose_urls:
-        logger.info(f"  メッセージ作成URL試行: {url}")
-        await page.goto(url, wait_until="networkidle")
-        await page.wait_for_timeout(2000)
+    if "signin" in page.url or "/ap/" in page.url:
+        logger.warning(f"  メッセージページへのアクセス失敗（ログイン切れ）")
+        return False
 
-        textarea = await page.query_selector("textarea")
-        if textarea:
-            logger.info(f"  メッセージ入力欄を検出 → 送信処理へ")
-            return await fill_and_send(page, order_id)
+    # ラジオボタン選択: 「注文の詳細を確認する」優先、なければ「その他」
+    for radio_text in ["注文の詳細を確認する", "その他"]:
+        label = await page.query_selector(f"label:has-text('{radio_text}')")
+        if label:
+            await label.click()
+            await page.wait_for_timeout(1500)
+            logger.info(f"  ラジオ選択: {radio_text}")
+            break
 
+    textarea = await page.query_selector("textarea")
+    if textarea:
+        logger.info(f"  メッセージ入力欄を検出 → 送信処理へ")
+        return await fill_and_send(page, order_id)
+
+    logger.warning(f"  メッセージ入力欄が見つかりません: {contact_url}")
     return False
 
 
