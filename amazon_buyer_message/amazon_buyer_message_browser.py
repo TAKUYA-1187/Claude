@@ -211,37 +211,50 @@ async def send_via_messaging_compose(page, order_id: str) -> bool:
         logger.warning(f"  メッセージページへのアクセス失敗（ログイン切れ）")
         return False
 
-    # ラジオボタン選択: 複数の方法で試みる
-    radio_selected = False
+    # ラジオボタン選択
+    # Amazon KatalコンポーネントはPointerEventを遮断するため force=True が必要
+    radio_clicked = False
 
-    # 方法1: labelテキストで検索してクリック
+    # 方法1: kat-label[text=...] を force=True でクリック（kat-popover遮断をバイパス）
     for radio_text in ["注文の詳細を確認する", "その他"]:
-        label = await page.query_selector(f"label:has-text('{radio_text}')")
-        if label:
-            await label.click()
+        try:
+            await page.click(f"kat-label[text='{radio_text}']", force=True, timeout=3000)
             await page.wait_for_timeout(2000)
-            logger.info(f"  ラジオ選択(label): {radio_text}")
-            radio_selected = True
+            logger.info(f"  ラジオ選択(force): {radio_text}")
+            radio_clicked = True
             break
+        except Exception:
+            pass
 
-    # 方法2: input[type=radio] を直接クリック
-    if not radio_selected:
-        first_radio = await page.query_selector("input[type='radio']")
-        if first_radio:
-            await first_radio.click()
-            await page.wait_for_timeout(2000)
-            logger.info("  ラジオ選択(input直接)")
-            radio_selected = True
-
-    # 方法3: JavaScriptで最初のラジオをクリック
-    if not radio_selected:
-        await page.evaluate("() => { const r = document.querySelector('input[type=\"radio\"]'); if(r) r.click(); }")
+    # 方法2: JavaScriptでtemplate-radio-buttonの最初の要素にdispatchEvent
+    if not radio_clicked:
+        await page.evaluate("""
+            () => {
+                // kat-labelのtext属性で「注文の詳細を確認する」を探す
+                const labels = document.querySelectorAll('kat-label');
+                for (const label of labels) {
+                    const t = label.getAttribute('text') || '';
+                    if (t.includes('注文の詳細を確認する')) {
+                        let el = label;
+                        for (let i = 0; i < 5; i++) {
+                            el.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}));
+                            if (!el.parentElement) break;
+                            el = el.parentElement;
+                        }
+                        return;
+                    }
+                }
+                // フォールバック: .template-radio-button の最初をクリック
+                const btn = document.querySelector('.template-radio-button');
+                if (btn) btn.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}));
+            }
+        """)
         await page.wait_for_timeout(2000)
-        logger.info("  ラジオ選択(JS)")
+        logger.info("  ラジオ選択(JS dispatchEvent)")
 
-    # テキストエリアの出現を待つ（最大5秒）
+    # textareaの出現を待つ（最大8秒）
     try:
-        textarea = await page.wait_for_selector("textarea", timeout=5000)
+        textarea = await page.wait_for_selector("textarea", timeout=8000)
         if textarea:
             logger.info("  メッセージ入力欄を検出 → 送信処理へ")
             return await fill_and_send(page, order_id)
