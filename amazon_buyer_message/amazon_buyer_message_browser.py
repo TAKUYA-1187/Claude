@@ -211,6 +211,8 @@ async def _find_and_click_contact(page, order_id: str) -> bool:
 
     # 1. テキストで直接探す
     for selector in [
+        "tr:has-text('購入者に連絡') a",       # 注文詳細ページ: ラベル行内の購入者名リンク
+        "div:has-text('購入者に連絡:') a",     # 同上（divレイアウトの場合）
         "a:has-text('購入者に連絡')",
         "button:has-text('購入者に連絡')",
         "a:has-text('購入者へ連絡')",
@@ -259,7 +261,7 @@ async def _find_and_click_contact(page, order_id: str) -> bool:
     messaging_urls = []
     for link in links:
         href = await link.get_attribute("href") or ""
-        if any(kw in href.lower() for kw in ["messaging", "contact-buyer", "contactbuyer", "contact_buyer"]):
+        if any(kw in href.lower() for kw in ["messaging", "contact-buyer", "contactbuyer", "contact_buyer", "communication-manager"]):
             text = (await link.inner_text()).strip()
             full_url = href if href.startswith("http") else SELLER_CENTRAL_URL + href
             messaging_urls.append((full_url, text))
