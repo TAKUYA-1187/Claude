@@ -186,20 +186,24 @@ async def send_via_order_detail(page, order_id: str) -> bool:
     await page.wait_for_timeout(3000)
     await save_screenshot(page, f"detail_{order_id.replace('-', '_')}")
 
-    if not await _find_and_click_contact(page, order_id):
-        # 方法B: orders-v3一覧ページで注文行をクリック（コワーク確認済み動作方式）
-        list_url = f"{SELLER_CENTRAL_URL}/orders-v3?page=1"
-        logger.info(f"  一覧ページから注文を探す: {list_url}")
-        await page.goto(list_url, wait_until="networkidle")
-        await page.wait_for_timeout(3000)
+    if await _find_and_click_contact(page, order_id):
+        return True
 
-        order_row = await page.query_selector(f"text={order_id}")
-        if order_row:
-            await order_row.click()
-            await page.wait_for_timeout(2000)
-            await save_screenshot(page, f"list_clicked_{order_id.replace('-', '_')}")
+    # 方法B: orders-v3一覧ページで注文行をクリック（コワーク確認済み動作方式）
+    list_url = f"{SELLER_CENTRAL_URL}/orders-v3?page=1"
+    logger.info(f"  一覧ページから注文を探す: {list_url}")
+    await page.goto(list_url, wait_until="networkidle")
+    await page.wait_for_timeout(3000)
 
-    return await _find_and_click_contact(page, order_id)
+    order_row = await page.query_selector(f"text={order_id}")
+    if order_row:
+        await order_row.click()
+        await page.wait_for_timeout(2000)
+        await save_screenshot(page, f"list_clicked_{order_id.replace('-', '_')}")
+        if await _find_and_click_contact(page, order_id):
+            return True
+
+    return False
 
 
 async def _find_and_click_contact(page, order_id: str) -> bool:
