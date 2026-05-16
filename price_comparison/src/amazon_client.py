@@ -8,6 +8,7 @@ Docs: https://webservices.amazon.com/paapi5/documentation/
 from __future__ import annotations
 
 import logging
+import threading
 import time
 from typing import Optional
 
@@ -32,12 +33,14 @@ class AmazonClient:
 
         self.api = AmazonApi(access_key, secret_key, partner_tag, "JP", throttling=1.0)
         self._last_call = 0.0
+        self._lock = threading.Lock()
 
     def _throttle(self):
-        elapsed = time.time() - self._last_call
-        if elapsed < 1.05:
-            time.sleep(1.05 - elapsed)
-        self._last_call = time.time()
+        with self._lock:
+            elapsed = time.time() - self._last_call
+            if elapsed < 1.05:
+                time.sleep(1.05 - elapsed)
+            self._last_call = time.time()
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=2, max=16))
     def min_price_by_jan(self, jan: str) -> Optional[int]:

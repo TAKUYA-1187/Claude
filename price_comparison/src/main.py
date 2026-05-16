@@ -11,6 +11,7 @@ import csv
 import json
 import logging
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
@@ -84,19 +85,50 @@ def run(limit: int | None = None, skip_fetch: bool = False):
 
     amazon, rakuten, yahoo = build_clients()
 
-    rows: list = []
-    for i, p in enumerate(products, 1):
-        amz = amazon.min_price_by_jan(p.jan) if amazon else None
-        rak = rakuten.min_price_by_jan(p.jan) if rakuten else None
-        yho = yahoo.min_price_by_jan(p.jan) if yahoo else None
+    def fetch_one(p):
+        """1商品分のAPI呼び出しを並列実行（Amazon・楽天・Yahoo を同時取得）。"""
+        with ThreadPoolExecutor(max_workers=3) as ex:
+            fut_amz = ex.submit(amazon.min_price_by_jan, p.jan) if amazon else None
+            fut_rak = ex.submit(rakuten.min_price_by_jan, p.jan) if rakuten else None
+            fut_yho = ex.submit(yahoo.min_price_by_jan, p.jan) if yahoo else None
+
+            def safe_result(fut):
+                try:
+                    return fut.result() if fut else None
+                except Exception as e:
+                    log.warning("Price fetch error for %s: %s", p.jan, e)
+                    return None
+
+            amz = safe_result(fut_amz)
+            rak = safe_result(fut_rak)
+            yho = safe_result(fut_yho)
+
         pr = PriceRow(p.jan, p.name, p.buy_price, p.buy_shop, amz, rak, yho)
-        profit_row = compute(pr, config)
-        if profit_row is None:
-            log.debug("No price found for %s", p.jan)
-            continue
-        rows.append(profit_row)
-        if i % 50 == 0:
-            log.info("Processed %d / %d", i, len(products))
+        return compute(pr, config)
+
+    rows: list = []
+    total = len(products)
+    done = 0
+
+    # 商品単位で並列処理。各クライアントは内部ロックでレート制限を保証する。
+    max_workers = min(5, total) if total > 0 else 1
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        future_to_product = {pool.submit(fetch_one, p): p for p in products}
+        for fut in as_completed(future_to_product):
+            done += 1
+            p = future_to_product[fut]
+            try:
+                profit_row = fut.result()
+            except Exception as e:
+                log.warning("Failed to process %s: %s", p.jan, e)
+                profit_row = None
+            if profit_row is None:
+                log.debug("No price found for %s", p.jan)
+            else:
+                rows.append(profit_row)
+            if done % 50 == 0:
+                log.info("Processed %d / %d", done, total)
+    log.info("Processed %d / %d (complete)", done, total)
 
     profitable = sorted(
         (r for r in rows if is_profitable(r, config)),

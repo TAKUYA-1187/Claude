@@ -5,6 +5,7 @@ Docs: https://developer.yahoo.co.jp/webapi/shopping/v3/itemsearch.html
 from __future__ import annotations
 
 import logging
+import threading
 import time
 from typing import Optional
 
@@ -22,13 +23,14 @@ class YahooClient:
             raise ValueError("YAHOO_APP_ID is required")
         self.app_id = app_id
         self._last_call = 0.0
+        self._lock = threading.Lock()
 
     def _throttle(self):
-        # 1req/sec 程度に抑制
-        elapsed = time.time() - self._last_call
-        if elapsed < 0.3:
-            time.sleep(0.3 - elapsed)
-        self._last_call = time.time()
+        with self._lock:
+            elapsed = time.time() - self._last_call
+            if elapsed < 0.3:
+                time.sleep(0.3 - elapsed)
+            self._last_call = time.time()
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=2, max=16))
     def _get(self, params: dict) -> dict:
