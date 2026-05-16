@@ -2,8 +2,8 @@ name: Price Comparison Update
 
 on:
   schedule:
-    # JST 11:00 = UTC 02:00, JST 18:00 = UTC 09:00
-    - cron: "0 2,9 * * *"
+    # JST 06:00 = UTC 21:00 (前日)
+    - cron: "0 21 * * *"
   workflow_dispatch:
     inputs:
       limit:
