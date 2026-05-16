@@ -1,2 +1,29 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# 仮想環境
+.venv/
+venv/
+env/
+
+# 環境変数（機密情報）
+.env
+.env.local
+
+# 領収書・生成ファイル（大容量）
+receipts/
+videos/*.mp4
+
+# エディタ・OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
