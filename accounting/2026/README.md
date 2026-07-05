@@ -69,9 +69,11 @@ OneDrive/
 
 ```
 accounting/2026/
-├── README.md            # この概要ファイル
-├── timeline.md          # 年間活動タイムライン（Markdown形式・閲覧用）
-├── timeline.csv         # 年間活動タイムライン（CSV形式・データ管理用）
+├── README.md                        # この概要ファイル
+├── timeline.md                      # 年間活動タイムライン（Markdown形式・閲覧用）
+├── timeline.csv                     # 年間活動タイムライン（CSV形式・データ管理用）
+├── action-list.md                   # 2026年度アクションリスト
+├── reconciliation-2026-06.md        # 徴収状況突合レポート（2026年7月5日時点）
 └── chatgpt/
     ├── 2026-04-06_budget-review.md      # 予算資料ChatGPTチェック記録
     └── 2026-04-06_settlement-review.md  # 決算資料ChatGPTチェック記録
