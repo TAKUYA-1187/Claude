@@ -13,6 +13,18 @@ def _parse_shops() -> list[str]:
     return [s.strip() for s in raw.split(",") if s.strip()]
 
 
+DEFAULT_COLLECT_KEYWORDS = (
+    "Nintendo Switch,プレイステーション5,ポケモンカード,ワイヤレスイヤホン,"
+    "美容家電,炊飯器,掃除機,ゲームソフト,フィギュア,レゴ"
+)
+
+
+def _parse_csv_env(name: str, default: str = "") -> list[str]:
+    # 空文字で設定されている場合もデフォルトにフォールバックする
+    raw = os.getenv(name) or default
+    return [s.strip() for s in raw.split(",") if s.strip()]
+
+
 @dataclass(frozen=True)
 class Config:
     amazon_access_key: str = os.getenv("AMAZON_ACCESS_KEY", "")
@@ -30,6 +42,8 @@ class Config:
 
     amazon_fee_rate: float = float(os.getenv("AMAZON_REFERRAL_FEE_RATE", "0.10"))
     amazon_fba_fee: float = float(os.getenv("AMAZON_FBA_FEE", "500"))
+    amazon_fee_tax_rate: float = float(os.getenv("AMAZON_FEE_TAX_RATE", "0.10"))
+    amazon_inbound_cost: float = float(os.getenv("AMAZON_INBOUND_COST", "200"))
     rakuten_fee_rate: float = float(os.getenv("RAKUTEN_FEE_RATE", "0.10"))
     yahoo_fee_rate: float = float(os.getenv("YAHOO_FEE_RATE", "0.08"))
     shipping_cost: float = float(os.getenv("SHIPPING_COST", "600"))
@@ -39,8 +53,18 @@ class Config:
 
     input_dir: Path = ROOT / os.getenv("INPUT_CSV_DIR", "data/input")
     output_dir: Path = ROOT / os.getenv("OUTPUT_DIR", "data/output")
+    collected_dir: Path = ROOT / os.getenv("COLLECTED_DIR", "data/collected")
 
     enabled_shops: list[str] = field(default_factory=_parse_shops)
+
+    # === JAN 収集 (jan_collector) ===
+    collect_keywords: list[str] = field(
+        default_factory=lambda: _parse_csv_env("COLLECT_KEYWORDS", DEFAULT_COLLECT_KEYWORDS)
+    )
+    collect_yahoo_genres: list[str] = field(
+        default_factory=lambda: _parse_csv_env("COLLECT_YAHOO_GENRES")
+    )
+    collect_pages: int = int(os.getenv("COLLECT_PAGES", "3"))
 
 
 config = Config()

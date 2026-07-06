@@ -10,6 +10,20 @@ on:
         description: "件数制限 (テスト用、空なら全件)"
         required: false
         default: ""
+      mode:
+        description: "利益判定ルート"
+        required: false
+        default: "both"
+        type: choice
+        options:
+          - both
+          - buyback
+          - amazon
+      collect:
+        description: "ECサイトから売れ筋JANを収集して母集団に加える"
+        required: false
+        default: true
+        type: boolean
 
 permissions:
   contents: write
@@ -44,17 +58,25 @@ jobs:
           ENABLED_SHOPS: ${{ vars.ENABLED_SHOPS || '買取商店,ウィキ' }}
           AMAZON_REFERRAL_FEE_RATE: ${{ vars.AMAZON_REFERRAL_FEE_RATE || '0.10' }}
           AMAZON_FBA_FEE: ${{ vars.AMAZON_FBA_FEE || '500' }}
+          AMAZON_FEE_TAX_RATE: ${{ vars.AMAZON_FEE_TAX_RATE || '0.10' }}
+          AMAZON_INBOUND_COST: ${{ vars.AMAZON_INBOUND_COST || '200' }}
           RAKUTEN_FEE_RATE: ${{ vars.RAKUTEN_FEE_RATE || '0.10' }}
           YAHOO_FEE_RATE: ${{ vars.YAHOO_FEE_RATE || '0.08' }}
           SHIPPING_COST: ${{ vars.SHIPPING_COST || '600' }}
           MIN_PROFIT: ${{ vars.MIN_PROFIT || '500' }}
           MIN_PROFIT_RATE: ${{ vars.MIN_PROFIT_RATE || '0.15' }}
+          COLLECT_KEYWORDS: ${{ vars.COLLECT_KEYWORDS || '' }}
+          COLLECT_YAHOO_GENRES: ${{ vars.COLLECT_YAHOO_GENRES || '' }}
+          COLLECT_PAGES: ${{ vars.COLLECT_PAGES || '3' }}
         run: |
-          if [ -n "${{ github.event.inputs.limit }}" ]; then
-            python -m src.main --limit ${{ github.event.inputs.limit }}
-          else
-            python -m src.main
+          ARGS="--mode ${{ github.event.inputs.mode || 'both' }}"
+          if [ "${{ github.event.inputs.collect || 'true' }}" = "true" ]; then
+            ARGS="$ARGS --collect"
           fi
+          if [ -n "${{ github.event.inputs.limit }}" ]; then
+            ARGS="$ARGS --limit ${{ github.event.inputs.limit }}"
+          fi
+          python -m src.main $ARGS
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -68,7 +90,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           cd ..
-          git add price_comparison/data/output/profitable_latest.csv price_comparison/data/output/profitable_latest.json || true
+          git add price_comparison/data/output/profitable_latest.csv price_comparison/data/output/profitable_latest.json price_comparison/data/output/amazon_profitable_latest.csv price_comparison/data/output/amazon_profitable_latest.json || true
           if ! git diff --cached --quiet; then
             git commit -m "chore: update profitable products list [skip ci]"
             git push

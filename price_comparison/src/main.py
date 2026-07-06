@@ -1,8 +1,16 @@
 """価格比較 & 利益商品抽出のオーケストレーター。
 
 使い方:
-  python -m src.main            # data/input/*.csv を読んで data/output へ出力
-  python -m src.main --limit 10 # 先頭10件だけ処理 (テスト用)
+  python -m src.main                          # 買取ルート + Amazon販売ルートの両方
+  python -m src.main --mode buyback           # 買取ルートのみ (従来動作)
+  python -m src.main --mode amazon            # Amazon販売ルートのみ
+  python -m src.main --collect                # EC からの JAN 収集も実行して母集団に加える
+  python -m src.main --limit 10               # 先頭10件だけ処理 (テスト用)
+
+母集団 (JANコードの集合):
+  - 買取スキャナーの全データCSV (data/input/*.csv)
+  - --collect 指定時は Yahoo!ショッピング / 楽天ブックス / Amazon から
+    売れ筋商品の JAN を収集してマージ (data/collected/collected_latest.csv)
 """
 from __future__ import annotations
 
@@ -11,13 +19,22 @@ import csv
 import json
 import logging
 import sys
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 
 from .config import config
 from .csv_loader import load_all
+from .jan_collector import collect_all, save_collected
 from .onedrive_fetcher import fetch_folder
-from .profit_calculator import PriceRow, compute, is_profitable
+from .profit_calculator import (
+    PriceRow,
+    compute,
+    compute_amazon,
+    is_amazon_profitable,
+    is_profitable,
+)
 from .rakuten_client import RakutenClient
 from .yahoo_client import YahooClient
 
@@ -25,6 +42,18 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
 )
 log = logging.getLogger("main")
+
+
+@dataclass
+class Candidate:
+    """利益判定の対象となる1商品 (JAN単位)。"""
+
+    jan: str
+    name: str = ""
+    category: str = ""
+    buy_price: Optional[float] = None  # 買取店の買取価格 (CSV由来)
+    buy_shop: str = ""
+    seed_prices: dict = field(default_factory=dict)  # 収集時に見えた価格 {source: price}
 
 
 def build_clients():
@@ -61,7 +90,82 @@ def build_clients():
     return amazon, rakuten, yahoo
 
 
-def run(limit: int | None = None, skip_fetch: bool = False):
+def build_candidates(collect: bool, amazon_client) -> list[Candidate]:
+    candidates: dict[str, Candidate] = {}
+
+    # 1) 買取スキャナー CSV (買取価格つき)
+    products = load_all(config.input_dir, config.enabled_shops)
+    for p in products:
+        candidates[p.jan] = Candidate(
+            jan=p.jan,
+            name=p.name,
+            category=p.category or "",
+            buy_price=p.buy_price,
+            buy_shop=p.buy_shop,
+        )
+
+    # 2) EC から収集した JAN (買取価格なし → Amazon販売ルートのみ判定対象)
+    if collect:
+        log.info(
+            "Collecting JANs from EC sites (keywords=%d, yahoo_genres=%d, pages=%d)...",
+            len(config.collect_keywords),
+            len(config.collect_yahoo_genres),
+            config.collect_pages,
+        )
+        collected = collect_all(
+            keywords=config.collect_keywords,
+            yahoo_genres=config.collect_yahoo_genres,
+            pages=config.collect_pages,
+            yahoo_app_id=config.yahoo_app_id,
+            rakuten_app_id=config.rakuten_app_id,
+            amazon_client=amazon_client,
+        )
+        save_collected(collected, config.collected_dir)
+        for jan, item in collected.items():
+            c = candidates.get(jan)
+            if c is None:
+                c = Candidate(jan=jan, name=item.name, category=item.category)
+                candidates[jan] = c
+            elif not c.name:
+                c.name = item.name
+            if item.price:
+                c.seed_prices[item.source] = item.price
+
+    return list(candidates.values())
+
+
+def write_outputs(rows: list, prefix: str, ts: str):
+    if not rows:
+        log.info("No profitable products for '%s' this run", prefix)
+        return
+    config.output_dir.mkdir(parents=True, exist_ok=True)
+    fieldnames = list(rows[0].as_dict().keys())
+    for target in (
+        config.output_dir / f"{prefix}_{ts}.csv",
+        config.output_dir / f"{prefix}_latest.csv",
+    ):
+        with target.open("w", newline="", encoding="utf-8-sig") as f:
+            w = csv.DictWriter(f, fieldnames=fieldnames)
+            w.writeheader()
+            for r in rows:
+                w.writerow(r.as_dict())
+    for target in (
+        config.output_dir / f"{prefix}_{ts}.json",
+        config.output_dir / f"{prefix}_latest.json",
+    ):
+        target.write_text(
+            json.dumps([r.as_dict() for r in rows], ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+    log.info("Wrote %s_{%s,latest}.{csv,json} (%d rows)", prefix, ts, len(rows))
+
+
+def run(
+    limit: int | None = None,
+    skip_fetch: bool = False,
+    mode: str = "both",
+    collect: bool = False,
+):
     if not skip_fetch and config.onedrive_share_url:
         log.info("Fetching CSV from OneDrive share...")
         try:
@@ -70,77 +174,103 @@ def run(limit: int | None = None, skip_fetch: bool = False):
         except Exception as e:
             log.error("OneDrive fetch failed: %s", e)
             # 既存CSVがあれば続行、なければ致命的
-    log.info("Enabled shops: %s", config.enabled_shops)
-    products = load_all(config.input_dir, config.enabled_shops)
-    if not products:
+    log.info("Mode: %s / Enabled shops: %s", mode, config.enabled_shops)
+
+    amazon, rakuten, yahoo = build_clients()
+    candidates = build_candidates(collect=collect, amazon_client=amazon)
+
+    if not candidates:
         log.error(
-            "対象商品が見つかりません。CSV を %s に配置し、ENABLED_SHOPS (%s) の列が含まれているか確認してください。",
+            "対象商品が見つかりません。買取スキャナーCSVを %s に配置するか、"
+            "--collect で EC からの JAN 収集を有効にしてください。",
             config.input_dir,
-            config.enabled_shops,
         )
         sys.exit(1)
     if limit:
-        products = products[:limit]
+        candidates = candidates[:limit]
+    log.info("Candidates: %d JAN codes", len(candidates))
 
-    amazon, rakuten, yahoo = build_clients()
+    buyback_rows: list = []
+    amazon_rows: list = []
+    for i, c in enumerate(candidates, 1):
+        amz = amazon.min_price_by_jan(c.jan) if amazon else None
+        rak = rakuten.min_price_by_jan(c.jan) if rakuten else None
+        yho = yahoo.min_price_by_jan(c.jan) if yahoo else None
+        # API で取れなかったソースは収集時の価格 (参考値) で補完
+        amz = amz or c.seed_prices.get("amazon")
+        rak = rak or c.seed_prices.get("rakuten_books")
+        yho = yho or c.seed_prices.get("yahoo")
 
-    rows: list = []
-    for i, p in enumerate(products, 1):
-        amz = amazon.min_price_by_jan(p.jan) if amazon else None
-        rak = rakuten.min_price_by_jan(p.jan) if rakuten else None
-        yho = yahoo.min_price_by_jan(p.jan) if yahoo else None
-        pr = PriceRow(p.jan, p.name, p.buy_price, p.buy_shop, amz, rak, yho)
-        profit_row = compute(pr, config)
-        if profit_row is None:
-            log.debug("No price found for %s", p.jan)
-            continue
-        rows.append(profit_row)
-        if i % 50 == 0:
-            log.info("Processed %d / %d", i, len(products))
+        # ルートA: EC仕入れ → 買取店売却 (買取価格がある商品のみ)
+        if mode in ("buyback", "both") and c.buy_price:
+            pr = PriceRow(c.jan, c.name, c.buy_price, c.buy_shop, amz, rak, yho)
+            row = compute(pr, config)
+            if row is not None:
+                buyback_rows.append(row)
 
-    profitable = sorted(
-        (r for r in rows if is_profitable(r, config)),
-        key=lambda r: r.profit,
-        reverse=True,
-    )
-    log.info("Total: %d, Profitable: %d", len(rows), len(profitable))
-
-    config.output_dir.mkdir(parents=True, exist_ok=True)
-    ts = datetime.now().strftime("%Y%m%d_%H%M")
-    csv_path = config.output_dir / f"profitable_{ts}.csv"
-    json_path = config.output_dir / f"profitable_{ts}.json"
-    latest_csv = config.output_dir / "profitable_latest.csv"
-    latest_json = config.output_dir / "profitable_latest.json"
-
-    if profitable:
-        fieldnames = list(profitable[0].as_dict().keys())
-        for target in (csv_path, latest_csv):
-            with target.open("w", newline="", encoding="utf-8-sig") as f:
-                w = csv.DictWriter(f, fieldnames=fieldnames)
-                w.writeheader()
-                for r in profitable:
-                    w.writerow(r.as_dict())
-        for target in (json_path, latest_json):
-            target.write_text(
-                json.dumps([r.as_dict() for r in profitable], ensure_ascii=False, indent=2),
-                encoding="utf-8",
+        # ルートB: 楽天/Yahoo仕入れ → Amazon販売 (FBA手数料控除)
+        if mode in ("amazon", "both"):
+            row = compute_amazon(
+                jan=c.jan,
+                name=c.name,
+                category=c.category,
+                amazon_price=amz,
+                rakuten_price=rak,
+                yahoo_price=yho,
+                cfg=config,
+                buyback_price=c.buy_price,
+                buyback_shop=c.buy_shop,
             )
-        log.info("Wrote %s and %s", csv_path, json_path)
-    else:
-        log.info("No profitable products this run")
-        # 前回のlatestを上書きしないよう、空ファイルは出力しない
+            if row is not None:
+                amazon_rows.append(row)
+
+        if i % 50 == 0:
+            log.info("Processed %d / %d", i, len(candidates))
+
+    ts = datetime.now().strftime("%Y%m%d_%H%M")
+
+    if mode in ("buyback", "both"):
+        profitable = sorted(
+            (r for r in buyback_rows if is_profitable(r, config)),
+            key=lambda r: r.profit,
+            reverse=True,
+        )
+        log.info("[買取ルート] priced: %d, profitable: %d", len(buyback_rows), len(profitable))
+        write_outputs(profitable, "profitable", ts)
+
+    if mode in ("amazon", "both"):
+        profitable = sorted(
+            (r for r in amazon_rows if is_amazon_profitable(r, config)),
+            key=lambda r: r.profit,
+            reverse=True,
+        )
+        log.info(
+            "[Amazon販売ルート] priced: %d, profitable: %d", len(amazon_rows), len(profitable)
+        )
+        write_outputs(profitable, "amazon_profitable", ts)
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument(
+        "--mode",
+        choices=["buyback", "amazon", "both"],
+        default="both",
+        help="buyback=EC仕入れ→買取店 / amazon=楽天・Yahoo仕入れ→Amazon販売 / both=両方",
+    )
+    ap.add_argument(
+        "--collect",
+        action="store_true",
+        help="EC サイトから売れ筋商品の JAN を収集して母集団に加える",
+    )
+    ap.add_argument(
         "--skip-fetch",
         action="store_true",
         help="OneDrive からの取得をスキップし、ローカルCSVのみ使用",
     )
     args = ap.parse_args()
-    run(limit=args.limit, skip_fetch=args.skip_fetch)
+    run(limit=args.limit, skip_fetch=args.skip_fetch, mode=args.mode, collect=args.collect)
 
 
 if __name__ == "__main__":
