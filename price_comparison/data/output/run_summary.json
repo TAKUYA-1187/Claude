@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-07-06T18:23:15",
+  "run_at": "2026-07-06T19:23:57",
   "mode": "both",
-  "candidates": 526,
+  "candidates": 513,
   "buyback_candidates": 0,
   "price_hits": {
     "amazon": 0,
     "rakuten": 0,
-    "yahoo": 526
+    "yahoo": 513
   },
   "sources": {
     "amazon_api": "未設定 (PA-APIキーなし → Amazon価格・Amazon販売ルート判定不可)",
