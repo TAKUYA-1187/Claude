@@ -82,11 +82,22 @@ def parse_results(page: str) -> list[dict]:
 
 
 class KaitoriClient:
+    """トップページの検索フォームは jQuery の $.ajax で POST し、
+    返ってきた HTML 断片を #search-content に挿入する仕組みのため、
+    X-Requested-With ヘッダとセッション Cookie を付けて同じリクエストを再現する。
+    """
+
     def __init__(self):
         self.session = requests.Session()
         self.session.headers.update(UA)
         self._last = 0.0
         self.consecutive_errors = 0
+        # セッション Cookie を得るためトップページへ一度アクセス
+        try:
+            r = self.session.get(f"{BASE}/", timeout=30)
+            log.info("Warmup GET / -> HTTP %d (cookies: %s)", r.status_code, list(self.session.cookies.keys()))
+        except Exception as e:
+            log.warning("Warmup failed: %s", e)
 
     def _throttle(self):
         elapsed = time.time() - self._last
@@ -95,40 +106,44 @@ class KaitoriClient:
         self._last = time.time()
 
     def search(self, keyword: str) -> tuple[str, int]:
-        """検索して HTML とステータスを返す。POST が駄目なら GET も試す。"""
-        self._throttle()
-        try:
-            r = self.session.post(
-                SEARCH_URL,
-                data={
-                    "page_type": "1",
-                    "tag_id": "",
-                    "last_category_id": "",
-                    "category_id": "",
-                    "name": keyword,
-                },
-                timeout=30,
-            )
-            if r.ok:
-                self.consecutive_errors = 0
-                return r.text, r.status_code
-            log.warning("POST search HTTP %d for %s", r.status_code, keyword)
-        except Exception as e:
-            log.warning("POST search error for %s: %s", keyword, e)
+        """検索して HTML とステータスを返す。ステータスが 404 でも
+        本文に中身があればパース対象として返す (0件時に404を返す実装がある)。"""
+        ajax_headers = {
+            "X-Requested-With": "XMLHttpRequest",
+            "Referer": f"{BASE}/",
+            "Origin": BASE,
+        }
+        data = {
+            "page_type": "1",
+            "tag_id": "",
+            "last_category_id": "",
+            "name": keyword,
+        }
+        last_text, last_status = "", 0
+        # category_id 空 → デフォルト値 7 の順に試す
+        for cat in ("", "7"):
+            self._throttle()
+            try:
+                r = self.session.post(
+                    SEARCH_URL,
+                    data={**data, "category_id": cat},
+                    headers=ajax_headers,
+                    timeout=30,
+                )
+                last_text, last_status = r.text, r.status_code
+                if r.ok:
+                    self.consecutive_errors = 0
+                    return r.text, r.status_code
+                log.warning("POST(cat=%r) HTTP %d for %s (len=%d)", cat, r.status_code, keyword, len(r.text))
+            except Exception as e:
+                log.warning("POST(cat=%r) error for %s: %s", cat, keyword, e)
 
-        self._throttle()
-        try:
-            r = self.session.get(
-                f"{BASE}/products/list", params={"name": keyword}, timeout=30
-            )
-            if r.ok:
-                self.consecutive_errors = 0
-                return r.text, r.status_code
-            log.warning("GET search HTTP %d for %s", r.status_code, keyword)
-        except Exception as e:
-            log.warning("GET search error for %s: %s", keyword, e)
+        if len(last_text) > 500:
+            # エラーステータスでも本文があれば結果ページの可能性があるので返す
+            self.consecutive_errors = 0
+            return last_text, last_status
         self.consecutive_errors += 1
-        return "", 0
+        return last_text, last_status
 
 
 def load_collected() -> list[dict]:
@@ -149,6 +164,15 @@ def main():
     log.info("Target products: %d", len(products))
 
     client = KaitoriClient()
+
+    # 制御用: 確実にヒットするはずのキーワードで検索機能の生存確認
+    page, status = client.search("iPhone")
+    control_hits = parse_results(page) if page else []
+    log.info("Control search 'iPhone': HTTP %d, len=%d, parsed hits=%d", status, len(page), len(control_hits))
+    if page:
+        (RECON_DIR / "sample_control.html").write_text(page[:150_000], encoding="utf-8")
+    client.consecutive_errors = 0
+
     all_rows: list[dict] = []
     samples_saved = 0
     no_hit = 0
