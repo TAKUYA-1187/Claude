@@ -41,16 +41,18 @@ MAX_PAGES_PER_CATEGORY = int(os.getenv("MAX_PAGES_PER_CATEGORY", "20"))
 _last_call = 0.0
 session = requests.Session()
 session.headers.update(UA)
+# カテゴリページの商品リストは AJAX で読み込まれるため XHR ヘッダを付ける
+XHR_HEADERS = {"X-Requested-With": "XMLHttpRequest", "Referer": f"{BASE}/"}
 
 
-def fetch(url: str) -> str:
+def fetch(url: str, xhr: bool = False) -> str:
     global _last_call
     elapsed = time.time() - _last_call
     if elapsed < THROTTLE_SEC:
         time.sleep(THROTTLE_SEC - elapsed)
     _last_call = time.time()
     try:
-        r = session.get(url, timeout=30)
+        r = session.get(url, headers=XHR_HEADERS if xhr else None, timeout=30)
         if not r.ok:
             log.warning("GET %s -> HTTP %d", url, r.status_code)
             return ""
@@ -67,14 +69,27 @@ def category_urls() -> list[str]:
     return urls
 
 
-def crawl_category(url: str) -> list[dict]:
+def list_endpoint(category_url: str) -> str | None:
+    """/category/A/B → /products/A/list_category/B (トップページのJSと同じ変換)。"""
+    m = re.search(r"/category/(\d+)/(\d+)", category_url)
+    if not m:
+        return None
+    return f"{BASE}/products/{m.group(1)}/list_category/{m.group(2)}"
+
+
+def crawl_category(category_url: str, save_sample: bool = False) -> list[dict]:
+    endpoint = list_endpoint(category_url)
+    if not endpoint:
+        return []
     items: list[dict] = []
     seen_first: str | None = None
     for page_no in range(1, MAX_PAGES_PER_CATEGORY + 1):
-        page_url = url if page_no == 1 else f"{url}?pageno={page_no}"
-        html = fetch(page_url)
+        page_url = endpoint if page_no == 1 else f"{endpoint}?pageno={page_no}"
+        html = fetch(page_url, xhr=True)
         if not html:
             break
+        if save_sample and page_no == 1:
+            (RECON_DIR / "sample_category.html").write_text(html[:150_000], encoding="utf-8")
         rows = [r for r in parse_results(html) if r.get("jan")]
         if not rows:
             break
@@ -84,7 +99,7 @@ def crawl_category(url: str) -> list[dict]:
         if page_no == 1:
             seen_first = rows[0]["jan"] if rows else None
         items.extend(rows)
-        # 次ページへのリンクが無ければ終了
+        # 次ページへの手掛かりが無ければ終了
         if f"pageno={page_no + 1}" not in html:
             break
     return items
@@ -109,7 +124,7 @@ def main():
     catalog: dict[str, dict] = {}  # jan -> {name, price, category_url}
     urls = category_urls()
     for i, url in enumerate(urls, 1):
-        rows = crawl_category(url)
+        rows = crawl_category(url, save_sample=(i == 1))
         for r in rows:
             existing = catalog.get(r["jan"])
             if existing is None or r["price"] > existing["price"]:
