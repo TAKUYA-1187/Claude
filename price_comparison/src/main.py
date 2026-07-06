@@ -194,16 +194,16 @@ def run(
     amazon_rows: list = []
     price_hits = {"amazon": 0, "rakuten": 0, "yahoo": 0}
     for i, c in enumerate(candidates, 1):
-        amz = amazon.min_price_by_jan(c.jan) if amazon else None
-        rak = rakuten.min_price_by_jan(c.jan) if rakuten else None
-        yho = yahoo.min_price_by_jan(c.jan) if yahoo else None
+        # 収集時に価格が取れているソースは再照会せず流用する (APIクォータ節約)。
+        # 収集は売れ筋順のため最安値より高い場合があるが、仕入れ値としては保守的な近似になる
+        amz = c.seed_prices.get("amazon") or (amazon.min_price_by_jan(c.jan) if amazon else None)
+        rak = c.seed_prices.get("rakuten_books") or (
+            rakuten.min_price_by_jan(c.jan) if rakuten else None
+        )
+        yho = c.seed_prices.get("yahoo") or (yahoo.min_price_by_jan(c.jan) if yahoo else None)
         price_hits["amazon"] += 1 if amz else 0
         price_hits["rakuten"] += 1 if rak else 0
         price_hits["yahoo"] += 1 if yho else 0
-        # API で取れなかったソースは収集時の価格 (参考値) で補完
-        amz = amz or c.seed_prices.get("amazon")
-        rak = rak or c.seed_prices.get("rakuten_books")
-        yho = yho or c.seed_prices.get("yahoo")
 
         # ルートA: EC仕入れ → 買取店売却 (買取価格がある商品のみ)
         if mode in ("buyback", "both") and c.buy_price:
