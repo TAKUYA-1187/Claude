@@ -255,12 +255,34 @@ def collect_all(
 
 
 def save_collected(items: dict[str, CollectedItem], out_dir: Path) -> Path:
+    """既存の collected_latest.csv とマージして保存する (新しいデータ優先)。"""
     out_dir.mkdir(parents=True, exist_ok=True)
     path = out_dir / "collected_latest.csv"
+
+    merged: dict[str, CollectedItem] = {}
+    if path.exists():
+        try:
+            with path.open(encoding="utf-8-sig") as f:
+                for row in csv.DictReader(f):
+                    jan = (row.get("jan") or "").strip()
+                    if not jan:
+                        continue
+                    price = row.get("price") or ""
+                    merged[jan] = CollectedItem(
+                        jan=jan,
+                        name=row.get("name") or "",
+                        price=int(float(price)) if price else None,
+                        source=row.get("source") or "",
+                        category=row.get("category") or "",
+                    )
+        except Exception as e:
+            log.warning("既存の収集CSVの読み込みに失敗 (新規のみ保存): %s", e)
+    merged.update(items)  # 今回収集分を優先
+
     with path.open("w", newline="", encoding="utf-8-sig") as f:
         w = csv.writer(f)
         w.writerow(["jan", "name", "price", "source", "category"])
-        for it in items.values():
+        for it in merged.values():
             w.writerow([it.jan, it.name, it.price or "", it.source, it.category])
-    log.info("Wrote %s", path)
+    log.info("Wrote %s (%d rows, merged)", path, len(merged))
     return path

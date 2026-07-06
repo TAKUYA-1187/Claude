@@ -37,13 +37,14 @@ SHIPPING_COST = int(os.getenv("SHIPPING_COST", "600"))
 MIN_PROFIT = int(os.getenv("MIN_PROFIT", "1"))  # 「利益が出るもの全て」なので1円から
 LIMIT = int(os.getenv("SCRAPE_LIMIT", "0")) or None
 
-# 商品ブロック抽出用の正規表現 (EC-CUBE系の一覧ページを想定した複数パターン)
+# 検索結果は <tr id="ex-product-NNN" class="price_list_item ..."> の表構造。
+# 商品名は名前セルの先頭テキスト、JANは product-code-default スパン、
+# 買取価格は item-price div (「新品買取額」列)。
+ROW_RE = re.compile(r'<tr id="ex-product-\d+"[^>]*>(?P<body>.*?)</tr>', re.S)
+PRICE_DIV_RE = re.compile(r'class="item-price[^"]*"[^>]*>\s*([0-9][0-9,]*)\s*円', re.S)
+JAN_SPAN_RE = re.compile(r'class="product-code-default"[^>]*>\s*(\d{8,13})\s*<')
+NAME_TD_RE = re.compile(r'<td class="align-middle">\s*(?!<img)(.*?)<div class="item-desc">', re.S)
 PRICE_RE = re.compile(r"([0-9][0-9,]{2,})\s*円")
-# <a href="/products/detail/123"> ... 商品名 ... 価格円 ... </a> のようなカード単位
-CARD_RE = re.compile(
-    r'<a[^>]+href="(?P<url>[^"]*/products/detail/\d+[^"]*)"[^>]*>(?P<body>.*?)</a>',
-    re.S,
-)
 TAG_RE = re.compile(r"<[^>]+>")
 
 
@@ -52,32 +53,33 @@ def strip_tags(s: str) -> str:
 
 
 def parse_results(page: str) -> list[dict]:
-    """検索結果ページから (商品名, 買取価格, URL) を抽出する。"""
+    """検索結果ページから (商品名, JAN, 買取価格) を抽出する。"""
     items: list[dict] = []
-    seen = set()
-    for m in CARD_RE.finditer(page):
+    for m in ROW_RE.finditer(page):
         body = m.group("body")
-        prices = [int(p.replace(",", "")) for p in PRICE_RE.findall(body)]
+        prices = [int(p.replace(",", "")) for p in PRICE_DIV_RE.findall(body)]
         if not prices:
             continue
-        text = strip_tags(body)
-        # 価格表記や空白を除いた先頭部分を商品名として扱う
-        name = re.sub(r"\s+", " ", text)[:120]
-        url = m.group("url")
-        key = (url, max(prices))
-        if key in seen:
-            continue
-        seen.add(key)
-        items.append({"name": name, "price": max(prices), "url": url})
+        name_m = NAME_TD_RE.search(body)
+        name = re.sub(r"\s+", " ", strip_tags(name_m.group(1)))[:120] if name_m else ""
+        jan_m = JAN_SPAN_RE.search(body)
+        items.append(
+            {
+                "name": name,
+                "jan": jan_m.group(1) if jan_m else "",
+                "price": max(prices),
+                "url": "",
+            }
+        )
     if items:
         return items
 
-    # フォールバック: カード構造が違う場合、ページ全体の「◯◯円」を商品名候補と共に拾う
+    # フォールバック: 行構造が変わった場合はページ全体から価格らしき表記を拾う
     for m in PRICE_RE.finditer(page):
         start = max(0, m.start() - 300)
         ctx = strip_tags(page[start : m.start()])
         name = re.sub(r"\s+", " ", ctx)[-80:]
-        items.append({"name": name, "price": int(m.group(1).replace(",", "")), "url": ""})
+        items.append({"name": name, "jan": "", "price": int(m.group(1).replace(",", "")), "url": ""})
     return items
 
 
@@ -191,10 +193,12 @@ def main():
                 page[:150_000], encoding="utf-8"
             )
             samples_saved += 1
-        if not hits:
+        # JAN が取れている行は完全一致のみ採用 (部分一致の誤マッチ防止)
+        exact = [h for h in hits if h.get("jan") == jan]
+        if not exact and all(h.get("jan") for h in hits):
             no_hit += 1
             continue
-        best = max(hits, key=lambda h: h["price"])
+        best = max(exact or hits, key=lambda h: h["price"])
         ec_price = int(float(p["price"]))
         profit = best["price"] - ec_price - SHIPPING_COST
         all_rows.append(
@@ -207,7 +211,7 @@ def main():
                 "shipping": SHIPPING_COST,
                 "profit": profit,
                 "profit_rate": round(profit / ec_price, 4) if ec_price else 0,
-                "kaitori_url": (BASE + best["url"]) if best["url"].startswith("/") else best["url"],
+                "kaitori_url": f"{BASE}/?s={jan}",
                 "category": p.get("category", ""),
             }
         )

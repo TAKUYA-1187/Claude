@@ -84,6 +84,12 @@ jobs:
           fi
           python -m src.main $ARGS
 
+      - name: Match against Kaitorishouten buyback prices
+        working-directory: .
+        env:
+          SHIPPING_COST: ${{ vars.SHIPPING_COST || '600' }}
+        run: python price_comparison/scripts/kaitori_scraper.py
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -103,6 +109,8 @@ jobs:
                    price_comparison/data/output/amazon_profitable_latest.csv \
                    price_comparison/data/output/amazon_profitable_latest.json \
                    price_comparison/data/output/run_summary.json \
+                   price_comparison/data/output/kaitorishouten_all_latest.csv \
+                   price_comparison/data/output/kaitorishouten_profitable_latest.csv \
                    price_comparison/data/collected/collected_latest.csv; do
             if [ -f "$f" ]; then git add "$f"; fi
           done

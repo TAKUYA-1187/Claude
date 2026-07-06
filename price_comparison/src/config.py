@@ -13,9 +13,13 @@ def _parse_shops() -> list[str]:
     return [s.strip() for s in raw.split(",") if s.strip()]
 
 
+# 買取店 (買取商店等) の主力カテゴリに合わせたキーワード:
+# スマホ/Apple製品・ゲーム機本体・家電・お酒は買取価格が付きやすい
 DEFAULT_COLLECT_KEYWORDS = (
-    "Nintendo Switch,プレイステーション5,ポケモンカード,ワイヤレスイヤホン,"
-    "美容家電,炊飯器,掃除機,ゲームソフト,フィギュア,レゴ"
+    "iPhone 16 SIMフリー,iPhone 15 SIMフリー,iPad 第11世代,AirPods Pro,"
+    "Apple Watch,Nintendo Switch 2,プレイステーション5,"
+    "ダイソン ドライヤー,ルンバ,ブラウン シェーバー,"
+    "サントリー 山崎,サントリー 響,ポケモンカード"
 )
 
 

@@ -1,12 +1,8 @@
 name: Kaitorishouten Match
 
+# 通常は Price Comparison Update ワークフローの1ステップとして実行される。
+# ここは単体で再実行したい場合の手動起動用。
 on:
-  push:
-    branches:
-      - claude/resale-profit-analysis-nhbnaz
-    paths:
-      - "price_comparison/scripts/kaitori_scraper.py"
-      - ".github/workflows/kaitori_match.yml"
   workflow_dispatch:
     inputs:
       limit:
