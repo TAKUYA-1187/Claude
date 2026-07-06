@@ -1,0 +1,131 @@
+{
+  "fetched_at": "2026-07-06 16:06:14",
+  "pages": {
+    "robots": {
+      "url": "https://www.kaitorishouten-co.jp/robots.txt",
+      "status": 403,
+      "final_url": "https://www.kaitorishouten-co.jp/robots.txt",
+      "content_type": "text/html; charset=iso-8859-1",
+      "length": 290
+    },
+    "home": {
+      "url": "https://www.kaitorishouten-co.jp/",
+      "status": 200,
+      "final_url": "https://www.kaitorishouten-co.jp/",
+      "content_type": "text/html; charset=UTF-8",
+      "length": 39137,
+      "title": "スマホ・iPhone他携帯や家電、お酒の買取、換金なら買取商店",
+      "has_jan": false,
+      "hits_yen": 0
+    },
+    "search_wp": {
+      "url": "https://www.kaitorishouten-co.jp/?s=4902370554359",
+      "status": 200,
+      "final_url": "https://www.kaitorishouten-co.jp/?s=4902370554359",
+      "content_type": "text/html; charset=UTF-8",
+      "length": 39137,
+      "title": "スマホ・iPhone他携帯や家電、お酒の買取、換金なら買取商店",
+      "has_jan": false,
+      "hits_yen": 0
+    },
+    "search_wp_kw": {
+      "url": "https://www.kaitorishouten-co.jp/?s=スプラトゥーン",
+      "status": 200,
+      "final_url": "https://www.kaitorishouten-co.jp/?s=%E3%82%B9%E3%83%97%E3%83%A9%E3%83%88%E3%82%A5%E3%83%BC%E3%83%B3",
+      "content_type": "text/html; charset=UTF-8",
+      "length": 39137,
+      "title": "スマホ・iPhone他携帯や家電、お酒の買取、換金なら買取商店",
+      "has_jan": false,
+      "hits_yen": 0
+    },
+    "search_path": {
+      "url": "https://www.kaitorishouten-co.jp/search?q=4902370554359",
+      "status": 404,
+      "final_url": "https://www.kaitorishouten-co.jp/search?q=4902370554359",
+      "content_type": "text/html; charset=UTF-8",
+      "length": 17882
+    },
+    "item_search": {
+      "url": "https://www.kaitorishouten-co.jp/item/?s=4902370554359",
+      "status": 404,
+      "final_url": "https://www.kaitorishouten-co.jp/item/?s=4902370554359",
+      "content_type": "text/html; charset=UTF-8",
+      "length": 17882
+    },
+    "products": {
+      "url": "https://www.kaitorishouten-co.jp/products/",
+      "status": 404,
+      "final_url": "https://www.kaitorishouten-co.jp/products/",
+      "content_type": "text/html",
+      "length": 153
+    },
+    "price_list": {
+      "url": "https://www.kaitorishouten-co.jp/price/",
+      "status": 404,
+      "final_url": "https://www.kaitorishouten-co.jp/price/",
+      "content_type": "text/html; charset=UTF-8",
+      "length": 17882
+    },
+    "kaitori_list": {
+      "url": "https://www.kaitorishouten-co.jp/kaitori/",
+      "status": 404,
+      "final_url": "https://www.kaitorishouten-co.jp/kaitori/",
+      "content_type": "text/html; charset=UTF-8",
+      "length": 17882
+    },
+    "sitemap": {
+      "url": "https://www.kaitorishouten-co.jp/sitemap.xml",
+      "status": 200,
+      "final_url": "https://www.kaitorishouten-co.jp/sitemap.xml",
+      "content_type": "text/xml; charset=UTF-8",
+      "length": 44041,
+      "title": "",
+      "has_jan": false,
+      "hits_yen": 0
+    }
+  },
+  "home_links": [
+    "/category/1/17",
+    "/category/1/262",
+    "/category/2/278",
+    "/category/2/70",
+    "/category/2/703",
+    "/category/2/74",
+    "/category/3/394",
+    "/html/favicon.jpg",
+    "/html/template/mova/assets2/css/animate.min.css",
+    "/html/template/mova/assets2/css/style-responsive.min.css",
+    "/html/template/mova/assets2/css/style.css",
+    "/html/template/mova/assets2/css/style.min.css&quot; rel=&quot;stylesheet",
+    "/html/template/mova/assets2/css/style2.css",
+    "/html/template/mova/assets2/css/theme/default.css",
+    "/html/template/mova/assets2/plugins/bootstrap/css/bootstrap.min.css",
+    "/html/user_data/assets2/css/customize.css rel=",
+    "https://www.kaitorishouten-co.jp/",
+    "https://www.kaitorishouten-co.jp/3/news/62",
+    "https://www.kaitorishouten-co.jp/3/news/80",
+    "https://www.kaitorishouten-co.jp/3/news/90",
+    "https://www.kaitorishouten-co.jp/3/news/91",
+    "https://www.kaitorishouten-co.jp/cart",
+    "https://www.kaitorishouten-co.jp/company?id=0",
+    "https://www.kaitorishouten-co.jp/contact?id=0",
+    "https://www.kaitorishouten-co.jp/corporateflow?id=0",
+    "https://www.kaitorishouten-co.jp/faq?id=0",
+    "https://www.kaitorishouten-co.jp/guide?id=0",
+    "https://www.kaitorishouten-co.jp/help/doc?id=0",
+    "https://www.kaitorishouten-co.jp/help/doc?id=3",
+    "https://www.kaitorishouten-co.jp/kaden",
+    "https://www.kaitorishouten-co.jp/keitai",
+    "https://www.kaitorishouten-co.jp/mailingflow?id=0",
+    "https://www.kaitorishouten-co.jp/mypage/login",
+    "https://www.kaitorishouten-co.jp/nitiyouhin",
+    "https://www.kaitorishouten-co.jp/privacypolicy?id=0",
+    "https://www.kaitorishouten-co.jp/shop?id=0",
+    "https://www.kaitorishouten-co.jp/shop?id=0#tenpo1",
+    "https://www.kaitorishouten-co.jp/shop?id=0#tenpo2",
+    "https://www.kaitorishouten-co.jp/shop?id=0#tenpo3",
+    "https://www.kaitorishouten-co.jp/shop?id=0#tenpo5",
+    "https://www.kaitorishouten-co.jp/shopflow?id=0",
+    "https://www.kaitorishouten-co.jp/terms?id=0"
+  ]
+}
