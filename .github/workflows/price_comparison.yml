@@ -4,6 +4,12 @@ on:
   schedule:
     # JST 11:00 = UTC 02:00, JST 18:00 = UTC 09:00
     - cron: "0 2,9 * * *"
+  push:
+    branches:
+      - claude/resale-profit-analysis-nhbnaz
+    paths:
+      - "price_comparison/src/**"
+      - ".github/workflows/price_comparison.yml"
   workflow_dispatch:
     inputs:
       limit:
