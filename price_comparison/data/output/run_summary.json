@@ -1,17 +1,17 @@
 {
-  "run_at": "2026-07-06T15:14:54",
+  "run_at": "2026-07-06T15:28:15",
   "mode": "both",
   "candidates": 672,
   "buyback_candidates": 0,
   "price_hits": {
     "amazon": 0,
     "rakuten": 0,
-    "yahoo": 40
+    "yahoo": 672
   },
   "sources": {
     "amazon_api": "未設定 (PA-APIキーなし → Amazon価格・Amazon販売ルート判定不可)",
     "rakuten_api": "停止 (連続失敗でスキップ)",
-    "yahoo_api": "停止 (連続失敗でスキップ)",
+    "yahoo_api": "ok",
     "kaitori_csv": "なし (OneDrive共有リンクが解決できないか、CSV未配置 → 買取ルート判定不可)"
   },
   "routes": {
