@@ -6,4 +6,3 @@ data/output/profitable_2*.csv
 data/output/profitable_2*.json
 data/output/amazon_profitable_2*.csv
 data/output/amazon_profitable_2*.json
-data/collected/*.csv

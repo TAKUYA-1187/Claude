@@ -60,8 +60,8 @@ class YahooJanCollector:
     def _get(self, params: dict) -> dict:
         self._throttle()
         r = requests.get(YAHOO_ENDPOINT, params=params, timeout=15)
-        if r.status_code == 429:
-            raise requests.HTTPError(response=r)
+        if not r.ok:
+            log.warning("Yahoo collect HTTP %d: %s", r.status_code, r.text[:200])
         r.raise_for_status()
         return r.json()
 
@@ -132,8 +132,8 @@ class RakutenBooksCollector:
     def _get(self, params: dict) -> dict:
         self._throttle()
         r = requests.get(RAKUTEN_BOOKS_ENDPOINT, params=params, timeout=15)
-        if r.status_code == 429:
-            raise requests.HTTPError(response=r)
+        if not r.ok:
+            log.warning("Rakuten Books collect HTTP %d: %s", r.status_code, r.text[:200])
         r.raise_for_status()
         return r.json()
 

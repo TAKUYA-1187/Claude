@@ -88,7 +88,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: profitable-${{ github.run_id }}
-          path: price_comparison/data/output/
+          path: |
+            price_comparison/data/output/
+            price_comparison/data/collected/
           retention-days: 30
 
       - name: Commit latest outputs
@@ -96,7 +98,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           cd ..
-          git add price_comparison/data/output/profitable_latest.csv price_comparison/data/output/profitable_latest.json price_comparison/data/output/amazon_profitable_latest.csv price_comparison/data/output/amazon_profitable_latest.json || true
+          for f in price_comparison/data/output/profitable_latest.csv \
+                   price_comparison/data/output/profitable_latest.json \
+                   price_comparison/data/output/amazon_profitable_latest.csv \
+                   price_comparison/data/output/amazon_profitable_latest.json \
+                   price_comparison/data/output/run_summary.json \
+                   price_comparison/data/collected/collected_latest.csv; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
           if ! git diff --cached --quiet; then
             git commit -m "chore: update profitable products list [skip ci]"
             git push

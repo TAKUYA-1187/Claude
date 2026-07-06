@@ -192,10 +192,14 @@ def run(
 
     buyback_rows: list = []
     amazon_rows: list = []
+    price_hits = {"amazon": 0, "rakuten": 0, "yahoo": 0}
     for i, c in enumerate(candidates, 1):
         amz = amazon.min_price_by_jan(c.jan) if amazon else None
         rak = rakuten.min_price_by_jan(c.jan) if rakuten else None
         yho = yahoo.min_price_by_jan(c.jan) if yahoo else None
+        price_hits["amazon"] += 1 if amz else 0
+        price_hits["rakuten"] += 1 if rak else 0
+        price_hits["yahoo"] += 1 if yho else 0
         # API で取れなかったソースは収集時の価格 (参考値) で補完
         amz = amz or c.seed_prices.get("amazon")
         rak = rak or c.seed_prices.get("rakuten_books")
@@ -228,6 +232,23 @@ def run(
             log.info("Processed %d / %d", i, len(candidates))
 
     ts = datetime.now().strftime("%Y%m%d_%H%M")
+    summary: dict = {
+        "run_at": datetime.now().isoformat(timespec="seconds"),
+        "mode": mode,
+        "candidates": len(candidates),
+        "buyback_candidates": sum(1 for c in candidates if c.buy_price),
+        "price_hits": price_hits,
+        "sources": {
+            "amazon_api": "ok" if amazon else "未設定 (PA-APIキーなし → Amazon価格・Amazon販売ルート判定不可)",
+            "rakuten_api": ("停止 (連続失敗でスキップ)" if rakuten and rakuten.dead else "ok" if rakuten else "未設定"),
+            "yahoo_api": ("停止 (連続失敗でスキップ)" if yahoo and yahoo.dead else "ok" if yahoo else "未設定"),
+        },
+        "routes": {},
+    }
+    if not summary["buyback_candidates"]:
+        summary["sources"]["kaitori_csv"] = (
+            "なし (OneDrive共有リンクが解決できないか、CSV未配置 → 買取ルート判定不可)"
+        )
 
     if mode in ("buyback", "both"):
         profitable = sorted(
@@ -237,6 +258,7 @@ def run(
         )
         log.info("[買取ルート] priced: %d, profitable: %d", len(buyback_rows), len(profitable))
         write_outputs(profitable, "profitable", ts)
+        summary["routes"]["buyback"] = {"priced": len(buyback_rows), "profitable": len(profitable)}
 
     if mode in ("amazon", "both"):
         profitable = sorted(
@@ -248,6 +270,14 @@ def run(
             "[Amazon販売ルート] priced: %d, profitable: %d", len(amazon_rows), len(profitable)
         )
         write_outputs(profitable, "amazon_profitable", ts)
+        summary["routes"]["amazon"] = {"priced": len(amazon_rows), "profitable": len(profitable)}
+
+    config.output_dir.mkdir(parents=True, exist_ok=True)
+    summary_path = config.output_dir / "run_summary.json"
+    summary_path.write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    log.info("Run summary: %s", json.dumps(summary, ensure_ascii=False))
 
 
 def main():
