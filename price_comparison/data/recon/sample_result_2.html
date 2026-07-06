@@ -1,0 +1,984 @@
+
+    <style>
+    .panel-collapse{
+    	display: none;
+    }
+		.form-check input[type="radio"] {
+			position: absolute;
+			margin-top: 2px;
+			margin-left: -20px;
+		}
+		.form-check {
+			position: relative;
+			display: inline-block;
+			padding-left: 20px;
+			margin-bottom: 0;
+			font-weight: normal;
+			vertical-align: middle;
+			cursor: pointer;
+			font-size:12px;
+		}
+		.form-check + .form-check {
+			margin-top: 0;
+			/*margin-left: 10px;*/
+		}
+
+		.quantity {
+			width: 50px;
+			height: 28px;
+			padding: 0px 0px;
+			font-size: 12px;
+			line-height: 28px;
+			text-align: right;
+ 		}
+
+		.new-product-icon {
+			padding: 1px 5px !important;
+			background: #f59c1a !important;
+			color: #fff !important;
+		}
+
+		.mem-product-icon {
+			padding: 1px 5px !important;
+			background: #f59c1a !important;
+			color: #fff !important;
+		}
+
+		.category-border-left-1 { border-left: 5px solid #f59c1a !important; }
+		.category-border-bottom-1 { border-bottom: 1px solid #f59c1a !important; }
+
+        .text-grey-lighter { color: #b6c2c9 !important; }
+        a.text-grey-lighter:hover,
+        a.text-grey-lighter:focus { 
+            color: #ff7c79 !important; 
+        }
+
+        /* PC */
+		.col-product-name {
+			width:25% !important;
+		}
+		.col-product-price {
+            width:15% !important;
+        }
+		.col-product-request-btn {
+			display:none !important;
+		}
+		.col-product-check {
+			width:25% !important;
+		}
+        /* tablet */
+        @media (max-width: 1020px) and (min-width: 992px) {
+			.col-product-name {
+				width:25% !important;
+			}
+			.col-product-price {
+				width:15% !important;
+			}
+			.col-product-check {
+				width:25% !important;
+			}
+        }
+        @media (max-width: 991px) and (min-width: 768px) {
+			.col-product-name {
+				width:25% !important;
+			}
+			.col-product-price {
+				width:15% !important;
+			}
+			.col-product-check {
+				width:25% !important;
+			}
+        }
+        /* smartphone */
+        @media (max-width: 767px) {
+			.col-product-name {
+				width:50% !important;
+			}
+			.col-product-price {
+				width:15% !important;
+			}
+			.col-product-request-btn {
+				display:block !important;
+			}
+			.col-product-disabled {
+				display:none !important;
+			}
+        }
+
+        .slick-slider {
+            margin-bottom: 30px;
+        }
+
+        .slick-dots {
+            position: absolute;
+            bottom: -45px;
+            display: block;
+            width: 100%;
+            padding: 0;
+            list-style: none;
+            text-align: center;
+        }
+
+        .slick-dots li {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin: 0 5px;
+            padding: 0;
+
+            cursor: pointer;
+        }
+
+        .slick-dots li button {
+            font-size: 0;
+            line-height: 0;
+            display: block;
+            width: 20px;
+            height: 20px;
+            padding: 5px;
+            cursor: pointer;
+            color: transparent;
+            border: 0;
+            outline: none;
+            background: transparent;
+        }
+
+        .slick-dots li button:hover,
+        .slick-dots li button:focus {
+            outline: none;
+        }
+
+        .slick-dots li button:hover:before,
+        .slick-dots li button:focus:before {
+            opacity: 1;
+        }
+
+        .slick-dots li button:before {
+            content: " ";
+            line-height: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 12px;
+            text-align: center;
+            opacity: .25;
+            background-color: black;
+            border-radius: 50%;
+
+        }
+
+        .slick-dots li.slick-active button:before {
+            opacity: .75;
+            background-color: black;
+        }
+
+        .slick-dots li button.thumbnail img {
+            width: 0;
+            height: 0;
+        }
+
+	.btn-outline-primary {
+	  color: #437ec4;
+	  border-color: #437ec4; }
+	.btn-outline-primary:hover {
+	    color: #fff;
+	    background-color: #437ec4;
+	    border-color: #437ec4; }
+	.btn-outline-primary:focus, .btn-outline-primary.focus {
+	    box-shadow: 0 0 0 0.2rem rgba(67, 126, 196, 0.5); }
+	.btn-outline-primary.disabled, .btn-outline-primary:disabled {
+	    color: #437ec4;
+	    background-color: transparent; }
+	.btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
+	  .show > .btn-outline-primary.dropdown-toggle {
+	    color: #fff;
+	    background-color: #437ec4;
+	    border-color: #437ec4; }
+	.btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+	    .show > .btn-outline-primary.dropdown-toggle:focus {
+	      box-shadow: 0 0 0 0.2rem rgba(67, 126, 196, 0.5); }
+	.btn-outline-secondary {
+	  color: #54687A;
+	  border-color: #54687A; }
+	.btn-outline-secondary:hover {
+	    color: #fff;
+	    background-color: #54687A;
+	    border-color: #54687A; }
+	.btn-outline-secondary:focus, .btn-outline-secondary.focus {
+	    box-shadow: 0 0 0 0.2rem rgba(84, 104, 122, 0.5); }
+	.btn-outline-secondary.disabled, .btn-outline-secondary:disabled {
+	    color: #54687A;
+	    background-color: transparent; }
+	.btn-outline-secondary:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active,
+	  .show > .btn-outline-secondary.dropdown-toggle {
+	    color: #fff;
+	    background-color: #54687A;
+	    border-color: #54687A; }
+	.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus,
+	    .show > .btn-outline-secondary.dropdown-toggle:focus {
+	      box-shadow: 0 0 0 0.2rem rgba(84, 104, 122, 0.5); }
+	.btn-outline-success {
+	  color: #25b877;
+	  border-color: #25b877; }
+	.btn-outline-success:hover {
+	    color: #fff;
+	    background-color: #25b877;
+	    border-color: #25b877; }
+	.btn-outline-success:focus, .btn-outline-success.focus {
+	    box-shadow: 0 0 0 0.2rem rgba(37, 184, 119, 0.5); }
+	.btn-outline-success.disabled, .btn-outline-success:disabled {
+	    color: #25b877;
+	    background-color: transparent; }
+	.btn-outline-success:not(:disabled):not(.disabled):active, .btn-outline-success:not(:disabled):not(.disabled).active,
+	  .show > .btn-outline-success.dropdown-toggle {
+	    color: #fff;
+	    background-color: #25b877;
+	    border-color: #25b877; }
+	.btn-outline-success:not(:disabled):not(.disabled):active:focus, .btn-outline-success:not(:disabled):not(.disabled).active:focus,
+	    .show > .btn-outline-success.dropdown-toggle:focus {
+	      box-shadow: 0 0 0 0.2rem rgba(37, 184, 119, 0.5); }
+	.btn-outline-info {
+	  color: #17a2b8;
+	  border-color: #17a2b8; }
+	.btn-outline-info:hover {
+	    color: #fff;
+	    background-color: #17a2b8;
+	    border-color: #17a2b8; }
+	.btn-outline-info:focus, .btn-outline-info.focus {
+	    box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5); }
+	.btn-outline-info.disabled, .btn-outline-info:disabled {
+	    color: #17a2b8;
+	    background-color: transparent; }
+	.btn-outline-info:not(:disabled):not(.disabled):active, .btn-outline-info:not(:disabled):not(.disabled).active,
+	  .show > .btn-outline-info.dropdown-toggle {
+	    color: #fff;
+	    background-color: #17a2b8;
+	    border-color: #17a2b8; }
+	.btn-outline-info:not(:disabled):not(.disabled):active:focus, .btn-outline-info:not(:disabled):not(.disabled).active:focus,
+	    .show > .btn-outline-info.dropdown-toggle:focus {
+	      box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5); }
+	.btn-outline-warning {
+	  color: #eeb128;
+	  border-color: #eeb128; }
+	.btn-outline-warning:hover {
+	    color: #212529;
+	    background-color: #eeb128;
+	    border-color: #eeb128; }
+	.btn-outline-warning:focus, .btn-outline-warning.focus {
+	    box-shadow: 0 0 0 0.2rem rgba(238, 177, 40, 0.5); }
+	.btn-outline-warning.disabled, .btn-outline-warning:disabled {
+	    color: #eeb128;
+	    background-color: transparent; }
+	.btn-outline-warning:not(:disabled):not(.disabled):active, .btn-outline-warning:not(:disabled):not(.disabled).active,
+	  .show > .btn-outline-warning.dropdown-toggle {
+	    color: #212529;
+	    background-color: #eeb128;
+	    border-color: #eeb128; }
+	.btn-outline-warning:not(:disabled):not(.disabled):active:focus, .btn-outline-warning:not(:disabled):not(.disabled).active:focus,
+	    .show > .btn-outline-warning.dropdown-toggle:focus {
+	      box-shadow: 0 0 0 0.2rem rgba(238, 177, 40, 0.5); }
+	.btn-outline-danger {
+	  color: #c04949;
+	  border-color: #c04949; }
+	.btn-outline-danger:hover {
+	    color: #fff;
+	    background-color: #c04949;
+	    border-color: #c04949; }
+	.btn-outline-danger:focus, .btn-outline-danger.focus {
+	    box-shadow: 0 0 0 0.2rem rgba(192, 73, 73, 0.5); }
+	.btn-outline-danger.disabled, .btn-outline-danger:disabled {
+	    color: #c04949;
+	    background-color: transparent; }
+	.btn-outline-danger:not(:disabled):not(.disabled):active, .btn-outline-danger:not(:disabled):not(.disabled).active,
+	  .show > .btn-outline-danger.dropdown-toggle {
+	    color: #fff;
+	    background-color: #c04949;
+	    border-color: #c04949; }
+	.btn-outline-danger:not(:disabled):not(.disabled):active:focus, .btn-outline-danger:not(:disabled):not(.disabled).active:focus,
+	    .show > .btn-outline-danger.dropdown-toggle:focus {
+	      box-shadow: 0 0 0 0.2rem rgba(192, 73, 73, 0.5); }
+	.btn-outline-light {
+	  color: #eff0f4;
+	  border-color: #eff0f4; }
+	.btn-outline-light:hover {
+	    color: #212529;
+	    background-color: #eff0f4;
+	    border-color: #eff0f4; }
+	.btn-outline-light:focus, .btn-outline-light.focus {
+	    box-shadow: 0 0 0 0.2rem rgba(239, 240, 244, 0.5); }
+	.btn-outline-light.disabled, .btn-outline-light:disabled {
+	    color: #eff0f4;
+	    background-color: transparent; }
+	.btn-outline-light:not(:disabled):not(.disabled):active, .btn-outline-light:not(:disabled):not(.disabled).active,
+	  .show > .btn-outline-light.dropdown-toggle {
+	    color: #212529;
+	    background-color: #eff0f4;
+	    border-color: #eff0f4; }
+	.btn-outline-light:not(:disabled):not(.disabled):active:focus, .btn-outline-light:not(:disabled):not(.disabled).active:focus,
+	    .show > .btn-outline-light.dropdown-toggle:focus {
+	      box-shadow: 0 0 0 0.2rem rgba(239, 240, 244, 0.5); }
+	.btn-outline-dark {
+	  color: #595959;
+	  border-color: #595959; }
+	.btn-outline-dark:hover {
+	    color: #fff;
+	    background-color: #595959;
+	    border-color: #595959; }
+	.btn-outline-dark:focus, .btn-outline-dark.focus {
+	    box-shadow: 0 0 0 0.2rem rgba(89, 89, 89, 0.5); }
+	.btn-outline-dark.disabled, .btn-outline-dark:disabled {
+	    color: #595959;
+	    background-color: transparent; }
+	.btn-outline-dark:not(:disabled):not(.disabled):active, .btn-outline-dark:not(:disabled):not(.disabled).active,
+	  .show > .btn-outline-dark.dropdown-toggle {
+	    color: #fff;
+	    background-color: #595959;
+	    border-color: #595959; }
+	.btn-outline-dark:not(:disabled):not(.disabled):active:focus, .btn-outline-dark:not(:disabled):not(.disabled).active:focus,
+	    .show > .btn-outline-dark.dropdown-toggle:focus {
+	      box-shadow: 0 0 0 0.2rem rgba(89, 89, 89, 0.5); }
+    .tag-selected {
+        display: inline-block;
+        text-align: center;
+        white-space: nowrap;
+        border-radius: 0px;
+        text-decoration: none;
+        background: #808080;
+        vertical-align: middle;
+        display: inline-block;
+        color: #fff;
+        padding: 8px 40px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+	
+
+	.encrypt-price {
+		margin: 0px !important;
+		position: relative;
+		height: 18px;
+		padding-bottom: 23px;
+	}
+	.col-product-price .plain-price {
+		display: inline-block;
+		margin: 0 !important;
+		padding: 0 !important;
+		height: auto;
+		line-height: 1.4;
+		font-size: 14px;
+		font-weight: bold;
+		color: #ff4d4f;
+		white-space: nowrap;
+	}
+	span.encrypt-num {
+		display: inline-block;
+		background-image:url("/products/encrypt_price/");
+		margin-bottom:-2px;
+		height: 16px;
+		width: 10px;
+	}
+
+	.item-biko {
+		color: #f59c1a !important;
+	}
+    </style>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script>
+        //eccube_option.productsClassOptions = {
+			eccube_option.productsClassOptions={};
+                    //};
+
+        $(function() {
+            $('.do-product-list1').on('click', function(e) {
+                e.preventDefault();
+
+                $('#last_category_id').val($('#last_category').val());
+                var url = $(this).data('url');
+
+				if($("#search_name").val()){
+					 var $form = $("#product_search_form");
+					 //$form.attr('action', url);
+					 var current_page = $("#current_page").val();
+					 //var url = $form.attr('action');
+					 if(current_page){
+						  url = url + '?pageno=' + current_page;
+					 }
+					 $.ajax({
+						url: url,
+						type: $form.attr('method'),
+						data: $form.serialize(),
+					}).done(function(data) {
+						$('#search-content').html(data);
+					});
+					return;
+				}else if($('#last_category_id').val()){
+					 var $form = $("#product_search_form");
+					 //$form.attr('action', url);
+					 var current_page = $("#current_page").val();
+					 //var url = $form.attr('action');
+					 if(current_page){
+						  url = url + '?pageno=' + current_page;
+					 }
+					 $.ajax({
+						url: url,
+						type: $form.attr('method'),
+						data: $form.serialize(),
+					}).done(function(data) {
+						$('#search-content').html(data);
+					});
+					return;
+				}
+                // 商品一覧を更新する
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                }).done(function(data) {
+                    $('#search-content').html(data);
+                });
+            });
+
+            $('.product_collapse').on('click', function(e) {
+                var id = $(this).attr('id');
+				//console.log(id);
+				if ($('.'+id).hasClass("hidden") ) {
+					$('.'+id).removeClass("hidden");
+				} else {
+					$('.'+id).addClass("hidden");
+				}
+            });
+
+            $(".rankoption-close").on('click', function(){
+                $("[id^='new-rankoption-']").removeClass("open");
+                $("[id^='old-rankoption-']").removeClass("open");
+            });
+
+            $(".form-check-input").on('click', function(){
+                var value = $(this).val();
+				//console.log(value);
+                var name = $(this).attr('name');
+				console.log('click:'+name);
+                if (name =="ranktype") {
+                    var parent = $(this).parents('.rankoption_collapse');
+                    var id = parent.attr('id');
+					//console.log(id);
+                    //var child = $('#'+id).find('.rankoption_select_1');
+                    //var child2 = $('#'+id).find('.rankoption_select_2');
+                    var child = $('#new-'+id);
+                    var child2 = $('#old-'+id);
+
+                    if ('1' === value) {
+						if (child.hasClass("open")) {
+                            $("[id^='new-rankoption-']").removeClass("open");
+                            $("[id^='old-rankoption-']").removeClass("open");
+							//child.removeClass("open");
+						} else {
+                            $("[id^='new-rankoption-']").removeClass("open");
+                            $("[id^='old-rankoption-']").removeClass("open");
+							child.addClass("open");
+						}
+                    }
+                    if ('2' === value) {
+						if (child2.hasClass("open")) {
+                            $("[id^='new-rankoption-']").removeClass("open");
+                            $("[id^='old-rankoption-']").removeClass("open");
+							//child2.removeClass("open");
+						} else {
+                            $("[id^='new-rankoption-']").removeClass("open");
+                            $("[id^='old-rankoption-']").removeClass("open");
+							child2.addClass("open");
+						}
+                    }
+                }
+			});
+
+            $(".form-check-input").change(function(){
+                var value = $(this).val();
+				//console.log(value);
+                var name = $(this).attr('name');
+				console.log("change:"+name);
+
+				var target = "";
+                if (name =="option_new_id1") target = "option_new_id";
+                if (name =="option_old_id1") target = "option_old_id";
+
+                if (name =="option_new_id1" || name =="option_old_id1") {
+					var $parent = $(this).parents('.product-class-option-set');
+                    var product_class_id = $parent.attr('data-class-id');
+					var $form = $("#productForm"+product_class_id)
+					var $sele1 = $(this);
+					var $sele2 = $("#"+ target +"2"+product_class_id);
+
+					if (!$sele2.length) {
+						// 規格1のみの場合
+						console.log('規格1のみ');
+						eccube_option.setClassOptions($form, product_class_id, $sele1.val(), null, target);
+					} else {
+						// 規格2ありの場合
+						console.log('規格2あり');
+						eccube_option.setClassOptions($form, product_class_id, $sele1, $sele2, target);
+					}
+				}
+
+                if (name =="ranktype") {
+                    var parent = $(this).parents('.rankoption_collapse');
+                    var id = parent.attr('id');
+					//console.log(id);
+                    //var child = $('#'+id).find('.rankoption_select_1');
+                    //var child2 = $('#'+id).find('.rankoption_select_2');
+                    var child = $('#new-'+id);
+                    var child2 = $('#old-'+id);
+					
+
+                    if ('1' === value) {
+                        //child.removeClass("hidden");
+                        //child2.addClass("hidden");
+						child.addClass("open");
+						child2.removeClass("open");
+                    }
+                    if ('2' === value) {
+                        //child.addClass("hidden");
+                        //child2.removeClass("hidden");
+                        child.removeClass("open");
+                        child2.addClass("open");
+                    }
+                }
+				return;
+
+                var $form = $(this).parents('form');
+                var url = $form.data('calc-url');
+                //console.log("action:" + url);
+                //console.log("method:" + $form.attr('method'));
+                //console.log("data:" + $form.serialize());
+                $.ajax({
+                    url: url,
+                    type: $form.attr('method'),
+                    data: $form.serialize(),
+                    dataType: 'json',
+                    beforeSend: function(xhr, settings) {
+                    }
+                }).done(function(data) {
+                    // レスポンス内のメッセージをalertで表示
+                    if (data.done) {
+						if (data.price) {
+							var obj = $form.find('.item-price-adjusted');
+							obj.html(data.price + "円");
+						}
+                    } else {
+                        $.each(data.messages, function() {
+                            $('#ec-modal-header').html(this);
+                        });
+                        $('#ec-modal-checkbox').prop('checked', true);
+                    }
+
+
+                }).fail(function(data) {
+                }).always(function(data) {
+                });
+
+            });
+
+            $('.add_favorite').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+                var id = $(this).data('id');
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    beforeSend: function(xhr, settings) {
+                        // Buttonを無効にする
+                        $('.add_favorite').prop('disabled', true);
+                    }
+                }).done(function(data) {
+                    // レスポンス内のメッセージをalertで表示
+                    $.each(data.messages, function() {
+						if (data.done) {
+							$('.add_favorite_'+id).addClass('hidden');
+							$('.remove_favorite_'+id).removeClass('hidden');
+						} else {
+							alert(this);
+						}
+                    });
+                }).fail(function(data) {
+                    //alert('お気に入りへの追加に失敗しました。');
+                }).always(function(data) {
+                    // Buttonを有効にする
+                    $('.add_favorite').prop('disabled', false);
+                });
+            });
+
+            $('.remove_favorite').on('click', function(e) {
+                e.preventDefault();
+                var url = $(this).data('url');
+				var id = $(this).data('id');
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    beforeSend: function(xhr, settings) {
+                        // Buttonを無効にする
+                        $('.remove_favorite').prop('disabled', true);
+                    }
+                }).done(function(data) {
+                    // レスポンス内のメッセージをalertで表示
+                    $.each(data.messages, function() {
+						if (data.done) {
+							$('.add_favorite_'+id).removeClass('hidden');
+							$('.remove_favorite_'+id).addClass('hidden');
+						} else {
+							alert(this);
+						}
+                    });
+                }).fail(function(data) {
+                    //alert('お気に入りへの追加に失敗しました。');
+                }).always(function(data) {
+                    // Buttonを有効にする
+                    $('.remove_favorite').prop('disabled', false);
+                });
+            });
+
+            $('.add-product').on('click', function(e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                console.log("id:" + id);
+                var url = $(this).data('url');
+                console.log("url:" + url);
+				if(id){
+					url = url + '?productclass_id=' + id;
+	                // 商品一覧を更新する
+					 $.ajax({
+						url: url,
+						type: 'GET',
+					}).done(function(data) {
+						$('#search-content').html(data);
+					});
+					return;
+				}
+            });
+
+            $('.add-cart').on('click', function(e) {
+                var id = $(this).data('cartid');
+                //console.log("id:" + id);
+                var $form = $('#productForm'+id);
+
+                //console.log("action:" + $form.attr('action'));
+                //console.log("method:" + $form.attr('method'));
+                //console.log("data:" + $form.serialize());
+				var params = $('#ex-product-' + id + ' :input');
+				//console.log("data2:" + params.serialize());
+
+                // 個数フォームのチェック
+                var $quantity = $form.parent().find('.quantity');
+				//console.log("quantity:"+$quantity.val());
+                if ($quantity.val() < 1) {
+					alert('数量は、1以上で入力してください。');
+					return true;
+                    $quantity[0].setCustomValidity('1以上で入力してください。');
+                    setTimeout(function() {
+                        loadingOverlay('hide');
+                    }, 100);
+                    return true;
+                } else {
+                    $quantity[0].setCustomValidity('');
+                }
+                e.preventDefault();
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: $form.attr('method'),
+                    data: params.serialize(),
+                    dataType: 'json',
+                    beforeSend: function(xhr, settings) {
+                        // Buttonを無効にする
+                        $('.add-cart').prop('disabled', true);
+                    }
+                }).done(function(data) {
+                    // レスポンス内のメッセージをalertで表示
+                    $.each(data.messages, function() {
+                        $('#ec-modal-header').html(this);
+                        if(this != 'カートに追加しました。'){
+                           $('#cart_button').css('background-color','rgb(229, 135, 135)').css('border-color','rgb(229, 135, 135)').css("pointer-events","none");
+                        }else{
+                          $('#cart_button').css('pointer-events', '').css('background-color','#DE5D50').css('border-color','#DE5D50'); 
+                        }
+                    });
+
+                    $('#ec-modal-checkbox').prop('checked', true);
+
+                    // カートブロックを更新する
+                    $.ajax({
+                        url: 'https://www.kaitorishouten-co.jp/block/cart',
+                        type: 'GET',
+                    }).done(function(data) {
+                        $('.top_cart_list').html(data);
+                    });
+                }).fail(function(data) {
+                    alert('カートへの追加に失敗しました。');
+                }).always(function(data) {
+                    // Buttonを有効にする
+                    $('.add-cart').prop('disabled', false);
+                });
+            });
+         
+             $('.do-product-list-tag').on('click', function(e) {
+                e.preventDefault();
+                $('#tag_id').val(e.target.getAttribute("data-id"));
+                $('#last_category_id').val($('#last_category').val());
+                var url = $(this).data('url');
+                $('#tag_url').val(url);
+                var $form = $("#product_search_form");
+                //$form.attr('action', url);
+				//var current_page = $("#current_page").val();
+				//if(current_page){
+				//	url = url + '?pageno=' + current_page;
+				//}
+
+				$.ajax({
+					url: url,
+					type: $form.attr('method'),
+					data: $form.serialize(),
+				}).done(function(data) {
+					$('#search-content').html(data);
+				});
+				return;
+				
+                // 商品一覧を更新する
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                }).done(function(data) {
+                    $('#search-content').html(data);
+                });
+            });
+            
+            $('.do-product-list-without-tag').on('click', function(e) {
+                e.preventDefault();
+                $('#tag_id').val(e.target.getAttribute("data-id"));
+                $('#last_category_id').val($('#last_category').val());
+                $('#search_type').val('without-tag');
+                var url = $(this).data('url');
+                $('#tag_url').val(url);
+                var $form = $("#product_search_form");
+				//var current_page = $("#current_page").val();
+				//if(current_page){
+				//	url = url + '?pageno=' + current_page;
+				//}
+
+				$.ajax({
+					url: url,
+					type: $form.attr('method'),
+					data: $form.serialize(),
+				}).done(function(data) {
+					$('#search-content').html(data);
+				});
+				return;
+				
+                // 商品一覧を更新する
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                }).done(function(data) {
+                    $('#search-content').html(data);
+                });
+            });
+        });
+    </script>
+
+            	<!-- ヘッダー -->
+		<div class="panel panel-inverse panel-faq">
+		<div class="panel-heading title">
+			<h2 class="panel-title">買取商品一覧　
+							  			<span class="pull-right text-warning p-l-10"><a href="javascript:void(0);" class="do-product-list1" data-url="https://www.kaitorishouten-co.jp/products/1/big/list_category/"><img src="https://dzy37jby78jd1.cloudfront.net/html/new/img/change2_ac.svg"></a></span>
+					
+					
+			<span class="pull-right text-warning p-l-20"><a href="javascript:void(0);"><img src="https://dzy37jby78jd1.cloudfront.net/html/new/img/change1.svg"></a></li></span>
+			<span class="pull-right" style="color:#f15a24;">更新日 2026/07/07</span>
+			</h4>
+		</div>
+
+					
+			<!-- お売り頂く前の確認事項 -->
+					
+	</div>
+
+																			<div class="ec-searchnavRole">
+			<!--<span class="text-warning">1 件の商品は見つかりました</span>-->
+			                                                                                                      <a href="javascript:void(0);" class="do-product-list-without-tag tag-selected" data-id="" data-url="https://www.kaitorishouten-co.jp/products/1/list_category/">すべて</a>
+                                                                                        				    				            					  <a href="javascript:void(0);" class="do-product-list-tag tag-not-selected" data-id="320" data-url="https://www.kaitorishouten-co.jp/products/1/list_category//list_tag/320">ゲームソフト</a>
+    				    				    				               
+            			
+		</div>
+
+		<div class="search-item-container bg-white card rounded border-0 mb-4 d-block">
+			<div class="card-body p-0">
+				<table class="table table-sm">
+					<thead>
+					<tr>
+						<th class="border-top-0 pl-3 pt-2 pb-2">画像</th>
+						<th class="border-top-0 pt-2 pb-2 col-product-name">商品名（JANコード）</th>
+						<th class="border-top-0 pt-2 pb-2 col-product-price">新品買取額</th>
+												<!-- 備考 -->
+						<th class="border-top-0 pt-2 pb-2 col-product-check">備考(オプション)</th>
+						<!-- 数量 -->
+						<th class="border-top-0 pt-2 pb-2 col-product-disabled"></th>
+						<!-- ボタン -->
+						<th class="border-top-0 pt-2 pb-2 pr-3 col-product-disabled"></th>	
+					</tr>
+					</thead>
+					<tbody>
+																
+						
+																											<tr id="ex-product-23511" class="price_list_item class_list_23179">
+																							<td class="align-middle">
+									<img src="/html/upload/save_image/0425121009_680afd1133811.jpg"
+											style="max-width: 50px">
+								</td>
+								<td class="align-middle">
+									マリオカート ワールド/Switch 2
+									<div class="item-desc">
+																					<span class="product-code-default">JAN:</span>
+											<span class="product-code-default">4902370553260</span>
+																			</div>
+									<div class="item-desc">
+																																					    									</div>
+								</td>
+								<td class="align-middle col-product-price">
+																    <div class="item-price encrypt-price plain-price">8,000円</div>
+									
+								</td>
+							
+									
+								
+
+																	<form name="form23511" id="productForm23511" action="https://www.kaitorishouten-co.jp/cart/add/23179" data-calc-url="https://www.kaitorishouten-co.jp/cart/calc_cartitem/23179" method="post">
+																												<td class="align-middle col-product-check product-class-option-set" data-class-id="23511">
+																							<div class="item-desc item-biko">
+															                                            	※再シュリンク買取不可
+		                                            												</div>
+																																												<div class="ec-productRole__btn col-product-request-btn">
+												<button style="width:48px;height: 28px;line-height: 28px;font-size: 12px;padding: 0px 0px;" type="button" class="ec-blockBtn--action add-product"
+													data-id="23511" 
+													data-url="https://www.kaitorishouten-co.jp/products/1/list_category/"
+													>
+													申込み
+												</button>
+											</div>
+											<div id="rankoption-23511" class="col-product-disabled rankoption_collapse">
+																									<div id="ranktype23511" class=""><div class="form-check">        <input type="radio" id="ranktype_12351123511" name="ranktype" required="required" class="form-check-input" value="1" />
+        <label class="form-check-label required" for="ranktype_12351123511">新品</label></div></div>
+																							</div>
+																																</td>
+									
+									<td class="align-middle col-product-disabled">
+										<div class="ec-numberInput-1" class="quantity text-right">
+											 <input type="number" id="quantity23511" name="quantity" required="required" min="1" maxlength="9" class="quantity form-control" placeholder="数量" />
+											
+										</div>
+										<div class="hidden"><input type="hidden" id="product_id23511" name="product_id" value="23179" /><input type="hidden" id="ProductClass23511" name="ProductClass" value="23511" /><input type="hidden" id="_token23511" name="_token" value="fcwp3X_EzxBJeZMamCtqs1hr5KT8OoFbTDB1uyf9l9c" /></div>
+									</td>
+									<td class="align-middle col-product-disabled">
+										<div class="ec-productRole__btn">
+																							<button style="min-width:96px;width:75%;height: 28px;line-height: 28px;font-size: 12px;padding: 0px 0px;margin: 0;" type="button" class="ec-blockBtn--action add-cart" data-cartid="23511" form="productForm23511">
+													買取申込
+												</button>
+																									<div class="pull-right p-t-5">
+													   														<div class="btn-group" style="margin-top: -10px;">
+															<button type="button" class="btn btn-sm btn-info dropdown-toggle no-bg no-border" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																<i class="fa fa-share-alt fa-2x text-info" aria-hidden="true"></i>
+															</button>
+															<ul class="dropdown-menu pull-right">
+																<li><a class="dropdown-item g-px-10" href="#" onclick="window.open('https://twitter.com/share?url=https%3A%2F%2Fwww.kaitorishouten-co.jp%2Fkeitai&text=マリオカート ワールド/Switch 2 買取商店','twitter','resizable,height=600,width=600'); return false;" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i>Twitter</a></li>
+															</ul>
+														</div>
+													</div>
+																																	</div>
+									</td>
+									</form>
+															</tr>
+											
+					</tbody>
+				</table>
+			</div>
+			<div class="ec-pagerRole">
+				    <script>
+    function goto_page(pageno){
+        var $form = $("#product_search_form");
+        var url = $form.attr('action') + '?pageno=' + pageno;
+        console.log('tag_url:'+$("#tag_url").val());
+        console.log('category_url:'+$("#category_url").val());
+        if($("#tag_url").val()){
+            url = $("#tag_url").val() + '?pageno=' + pageno
+            // カートブロックを更新する
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: $form.serialize(),
+            }).done(function(data) {
+                $('#search-content').html(data);
+                $('html,body').animate({'scrollTop': 340}, 500);
+            });
+            return
+        }else if($("#category_url").val()){
+            url = $("#category_url").val() + '?pageno=' + pageno
+            // カートブロックを更新する
+            $.ajax({
+                url: url,
+                type: 'GET',
+            }).done(function(data) {
+                $('#search-content').html(data);
+                $('html,body').animate({'scrollTop': 340}, 500);
+            });
+            return
+        }
+        
+        $.ajax({
+            url: url,
+            type: $form.attr('method'),
+            data: $form.serialize(),
+        }).done(function(data) {
+            $('#search-content').html(data);
+            $('html,body').animate({'scrollTop': 340}, 500);
+        });
+    }
+    </script>
+
+			</div>
+		</div>
+
+		<div class="ec-modal">
+			<input type="checkbox" id="ec-modal-checkbox" class="checkbox">
+			<div class="ec-modal-overlay">
+				<label for="ec-modal-checkbox" class="ec-modal-overlay-close"></label>
+				<div class="ec-modal-wrap">
+					<label for="ec-modal-checkbox" class="ec-modal-close"><span class="ec-icon"><img src="/html/template/mova/assets/icon/cross-dark.svg" alt=""/></span></label>
+                    <div id="ec-modal-warning" class="">
+                    	<img src="https://dzy37jby78jd1.cloudfront.net/html/new/img/tyui.svg">
+                    	<div id="ec-modal-header" class="text-center red-bold">カートに追加しました。</div>
+                    </div>
+					
+					<div class="ec-modal-box">
+						<div class="ec-role">
+							<a href="https://www.kaitorishouten-co.jp/cart" id='cart_button' class="ec-inlineBtn--action">買取を申し込む</a>
+							<p><label for="ec-modal-checkbox" class="">他の商品を追加する</label></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<nav aria-label="...">
+			<ul class="pager">
+				<li class="previous"><a href='https://www.kaitorishouten-co.jp/keitai'><span aria-hidden="true">&larr;</span>スマホ・携帯・家電・電化製品・日用品買取・換金の買取なら買取専門の買取商店のページに戻る</a></li>											</ul>
+		</nav>
+    	    <hidden id="kaitori_page_title">
+                    買取商店
+             / 検索結果                </hidden>
+        <hidden id="kaitori_page_description">
+                </hidden>
+        <hidden id="kaitori_page_keywords">
+                </hidden>
