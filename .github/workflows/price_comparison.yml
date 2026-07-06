@@ -9,6 +9,7 @@ on:
       - claude/resale-profit-analysis-nhbnaz
     paths:
       - "price_comparison/src/**"
+      - "price_comparison/scripts/**"
       - ".github/workflows/price_comparison.yml"
   workflow_dispatch:
     inputs:
