@@ -1,0 +1,6 @@
+# ローカル実行の一時生成物
+.env
+out.html
+preview_sample.html
+__pycache__/
+*.pyc
