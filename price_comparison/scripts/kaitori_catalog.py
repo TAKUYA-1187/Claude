@@ -37,6 +37,21 @@ THROTTLE_SEC = float(os.getenv("CRAWL_THROTTLE", "1.2"))
 SHIPPING_COST = int(os.getenv("SHIPPING_COST", "600"))
 MIN_PROFIT = int(os.getenv("MIN_PROFIT", "1"))
 MAX_PAGES_PER_CATEGORY = int(os.getenv("MAX_PAGES_PER_CATEGORY", "20"))
+# Yahoo!ショッピングのポイント還元率 (PayPayポイント等の実質値引き分)。
+# 通常〜5%、LYPプレミアム/日曜日/キャンペーン適用で10〜15%程度まで上がる
+POINT_RATE = float(os.getenv("POINT_RATE", "0.05"))
+
+# 仕入れ側の商品状態が新品完品と一致しない可能性を示すキーワード
+CAUTION_WORDS = [
+    "中古", "ばら売り", "バラ売り", "ばら ", "ジャンク", "訳あり", "アウトレット",
+    "箱なし", "箱無し", "ダウンロード", "コード", "未検品", "再生品", "整備済",
+]
+
+
+def caution_note(ec_name: str) -> str:
+    """仕入れ商品名から、買取条件 (新品完品) と食い違う可能性のある語を抽出する。"""
+    hits = [w for w in CAUTION_WORDS if w in ec_name]
+    return "要確認: " + "/".join(h.strip() for h in hits) if hits else ""
 
 _last_call = 0.0
 session = requests.Session()
@@ -155,30 +170,45 @@ def main():
         if not y:
             continue
         yp = int(float(y["price"]))
+        ec_name = y.get("name", "")
         profit = it["price"] - yp - SHIPPING_COST
+        # ポイント還元を実質値引きとして織り込んだ実質利益
+        effective_cost = int(round(yp * (1 - POINT_RATE)))
+        effective_profit = it["price"] - effective_cost - SHIPPING_COST
         both.append(
             {
                 "jan": jan,
-                "ec_name": y.get("name", ""),
+                "ec_name": ec_name,
                 "kaitori_name": it["name"],
                 "kaitori_price": it["price"],
                 "yahoo_price": yp,
                 "shipping": SHIPPING_COST,
                 "profit": profit,
                 "profit_rate": round(profit / yp, 4) if yp else 0,
+                "point_rate": POINT_RATE,
+                "effective_cost": effective_cost,
+                "effective_profit": effective_profit,
+                "effective_profit_rate": round(effective_profit / effective_cost, 4)
+                if effective_cost
+                else 0,
+                "note": caution_note(ec_name),
                 "kaitori_url": it["category_url"],
                 "category": y.get("category", ""),
             }
         )
-    both.sort(key=lambda r: r["profit"], reverse=True)
+    both.sort(key=lambda r: r["effective_profit"], reverse=True)
 
     fieldnames = [
         "jan", "ec_name", "kaitori_name", "kaitori_price", "yahoo_price",
-        "shipping", "profit", "profit_rate", "kaitori_url", "category",
+        "shipping", "profit", "profit_rate",
+        "point_rate", "effective_cost", "effective_profit", "effective_profit_rate",
+        "note", "kaitori_url", "category",
     ]
+    # 実質利益ベースで抽出 (noteが付いた条件不一致候補も、判断材料として残す)
+    profitable = [r for r in both if r["effective_profit"] >= MIN_PROFIT]
     for name, rows in (
         ("kaitorishouten_all_latest.csv", both),
-        ("kaitorishouten_profitable_latest.csv", [r for r in both if r["profit"] >= MIN_PROFIT]),
+        ("kaitorishouten_profitable_latest.csv", profitable),
     ):
         with (OUT_DIR / name).open("w", newline="", encoding="utf-8-sig") as f:
             w = csv.DictWriter(f, fieldnames=fieldnames)
@@ -187,8 +217,13 @@ def main():
         log.info("Wrote %s (%d rows)", name, len(rows))
 
     log.info(
-        "Summary: catalog=%d, matched_with_yahoo=%d, profitable=%d",
-        len(catalog), len(both), sum(1 for r in both if r["profit"] >= MIN_PROFIT),
+        "Summary: catalog=%d, matched_with_yahoo=%d, "
+        "profitable(raw)=%d, profitable(point %d%%込)=%d",
+        len(catalog),
+        len(both),
+        sum(1 for r in both if r["profit"] >= MIN_PROFIT),
+        int(POINT_RATE * 100),
+        len(profitable),
     )
 
 

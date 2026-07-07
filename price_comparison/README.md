@@ -231,6 +231,48 @@ profit_rate  = profit / purchase_price
 
 ---
 
+## ルートC: 買取商店 (kaitorishouten-co.jp) 直接突合
+
+買取スキャナーのCSVが無くても、**買取商店の公式サイトから全カテゴリの買取価格表を
+直接クロール**して Yahoo!ショッピング価格と突合する (`scripts/kaitori_catalog.py`)。
+Price Comparison ワークフローの1ステップとして毎回自動実行される。
+
+```
+sitemap.xml → 全カテゴリの商品リスト (AJAX) → JAN・新品買取額を抽出
+   ↓
+data/collected/collected_latest.csv (Yahoo!価格) と JAN で突合
+   ↓
+data/output/kaitorishouten_catalog_latest.csv     … 買取価格表 全件
+data/output/kaitorishouten_all_latest.csv         … 両価格あり全件 (実質利益順)
+data/output/kaitorishouten_profitable_latest.csv  … 実質利益 >= MIN_PROFIT のみ
+```
+
+### 実質利益 (ポイント還元込み)
+
+Yahoo!ショッピングはPayPayポイント還元があるため、額面の価格差に加えて
+**還元分を実質値引きとして織り込んだ利益**を計算する:
+
+```
+effective_cost   = yahoo_price × (1 − POINT_RATE)
+effective_profit = kaitori_price − effective_cost − SHIPPING_COST
+```
+
+| 列 | 意味 |
+| --- | --- |
+| profit | 額面の利益 (還元を考慮しない) |
+| point_rate | 適用したポイント還元率 (`POINT_RATE`、デフォルト0.05) |
+| effective_cost / effective_profit | 還元込みの実質仕入値・実質利益 |
+| note | 「要確認: 中古/ばら売り/コード」等、仕入れ側の状態が新品完品と食い違う可能性 |
+
+自分の還元率 (LYPプレミアム・日曜日・キャンペーンで10〜15%になる場合も) に合わせて
+リポジトリ変数 `POINT_RATE` を設定すると精度が上がる。
+
+> ⚠ `note` 付きの行は仕入れ側が中古・ばら売り・DLコード等の可能性があるため、
+> 買取条件 (新品未開封・完品) と一致するか必ず商品ページで確認すること。
+> 買取価格は日々変動するため、仕入れ前に買取商店のサイトで最新額を再確認すること。
+
+---
+
 ## 家電量販店の対応について
 
 ヨドバシ・ビックカメラ・ヤマダ電機などは公式価格APIを提供していないため、初期スコープ外。

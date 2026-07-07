@@ -89,6 +89,7 @@ jobs:
         working-directory: price_comparison/scripts
         env:
           SHIPPING_COST: ${{ vars.SHIPPING_COST || '600' }}
+          POINT_RATE: ${{ vars.POINT_RATE || '0.05' }}
         run: python kaitori_catalog.py
 
       - name: Upload artifacts
