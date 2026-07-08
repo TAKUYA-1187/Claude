@@ -292,7 +292,7 @@ rows = [
     ("40–50", "レクチャー②", "「知っている」を「動ける」に変える／4Sシートの書き方", "講義10分", NAVY),
     ("50–70", "ワーク②", "自施設の4Sシートを作成（成功像→課題→原因→解決策）", "個人ワーク", GREEN),
     ("70–80", "共有②", "3人グループで発表＋フィードバック", "グループ", GREEN),
-    ("80–90", "レクチャー③＋まとめ", "エリア戦略へ繋げる／明日からの3つの行動", "講義＋全員", NAVY),
+    ("80–90", "レクチャー③＋まとめ", "エリア戦略へ繋げる／ギフト集（持ち帰り可）／明日からの行動", "講義＋全員", NAVY),
 ]
 y = 1.82
 for tm, ttl, desc, form, col in rows:
@@ -700,6 +700,152 @@ card(s, 0.8, 5.85, 11.7, 0.95,
          R("次回のチーム会議・上司との同行前に、この1文を作って口頭で伝えてみる。", 13.5, False, INK)], space_after=3),
       P([R("「シートを書ける人」より「ストーリーを語れる人」が、エリアを任される人。", 12.5, True, GRAY)])],
      fill=YPALE, radius=0.1)
+
+# ================================================================ GIFT① 7つの習慣
+GOLD = RGBColor(0xB8, 0x6A, 0x00)
+s = add_slide()
+header(s, "GIFT ①", "私からのギフト：明日から真似できる「大学担当 7つの習慣」", kcolor=GOLD)
+habits = [
+    ("① 面会後5分メモ", "Wetな情報は3時間で蒸発する。廊下を出たらその場でメモ。誰が・何を・どんな表情で、まで"),
+    ("② 週1回のHP巡回", "外来表・医局員一覧・行事案内の更新は、異動や方針転換の予兆。変化に最初に気づく人になる"),
+    ("③ 秘書さん・連携室に名前を覚えてもらう", "面会の成否の3割は「取り次ぎ」で決まる。医師の手前にいる人こそ丁寧に"),
+    ("④ 質問を1つ持って行く", "用件がない日ほど「教えてください」が効く。教育的な質問は先生との関係を深める"),
+    ("⑤ 4月と10月は種まき月間", "人事異動の直後は、新任の先生も情報を欲しがっている。関係構築のゴールデンタイム"),
+    ("⑥ 若手・専攻医こそ丁寧に", "3年後、エリアの関連病院で「あの時のMRさん」として再会する。未来への先行投資"),
+    ("⑦ 情報は先に差し出す", "学会・地域・連携の情報を先にギブする。情報は、出す人のところに集まってくる"),
+]
+for i, (t, d) in enumerate(habits):
+    x = 0.8 + (i % 2) * 6.0
+    y = 1.82 + (i // 2) * 1.16
+    c = card(s, x, y, 5.7, 1.04,
+             [P([R(t, 13, True, GOLD)], space_after=3, align=PP_ALIGN.LEFT),
+              P([R(d, 11, False, INK)], line=1.18, align=PP_ALIGN.LEFT)],
+             fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.MIDDLE)
+    c.text_frame.margin_left = c.text_frame.margin_right = Inches(0.15)
+c = card(s, 6.8, 1.82 + 3 * 1.16, 5.7, 1.04,
+         [P([R("どれも特別な才能は要らない。", 12.5, True, DEEP)], space_after=3),
+          P([R("1つでも習慣になれば、今日の90分の元は取れます。", 11.5, False, INK)])],
+         fill=PALE, anchor=MSO_ANCHOR.MIDDLE)
+txt(s, 0.8, 6.72, 11.7, 0.35,
+    [P([R("※ 時間が押した場合は持ち帰り用。次の1週間で「まず1つ」選んで試してみてください。", 11.5, False, GRAY)])])
+
+# ================================================================ GIFT② なるほど視点6選
+s = add_slide()
+header(s, "GIFT ②", "視点が変わる「なるほど」6選 — 活動に取り入れてほしい見方", kcolor=GOLD)
+views = [
+    ("「会えない日」は「観察日」", "面会ゼロでも収穫はある。外来表・掲示板・待合の混み具合・医局前の空気が施設を語っている。"),
+    ("医師の後ろに「流れ」を見る", "目の前の1人は、人事・患者・情報という3つの流れの結節点。1人の言葉からエリアが読める。"),
+    ("大学1施設＝エリア10施設", "大学での30分は、関連病院10軒分の価値になり得る。だから大学担当は「割に合う」仕事。"),
+    ("「知らない」と言えるのは強さ", "分からないことを「？」として言語化できた人から成長する。曖昧なままが一番怖い。"),
+    ("会場では「誰と誰が話すか」を見る", "講演会・研究会は構造マップの答え合わせの場。演題より人の繋がりに注目する。"),
+    ("記録は「未来の自分」への申し送り", "構造マップと4Sは、担当が変わっても戦える資産。引き継ぎ資料としても最強。"),
+]
+for i, (t, d) in enumerate(views):
+    x = 0.8 + (i % 3) * 4.02
+    y = 1.9 + (i // 3) * 2.35
+    c = card(s, x, y, 3.82, 2.2,
+             [P([R("なるほど", 10, True, WHITE)], space_after=0)],
+             fill=GOLD, radius=0.08, anchor=MSO_ANCHOR.TOP)
+    # 上帯つきカード：帯の下に白ボディを重ねる
+    body = card(s, x, y + 0.34, 3.82, 1.86,
+             [P([R(t, 13, True, DEEP)], space_after=6, line=1.15, align=PP_ALIGN.LEFT),
+              P([R(d, 11, False, INK)], line=1.25, align=PP_ALIGN.LEFT)],
+             fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP)
+    body.text_frame.margin_top = Inches(0.12)
+    body.text_frame.margin_left = body.text_frame.margin_right = Inches(0.15)
+card(s, 0.8, 6.55, 11.7, 0.5,
+     [P([R("共通点：どれも「追加の時間」はほぼゼロ。", 13, True, DEEP),
+         R("　変えるのは行動量ではなく、ものの見方。", 13, False, INK)])],
+     fill=PALE, radius=0.15)
+
+# ================================================================ GIFT③ 4Sを完璧に仕上げる8つのコツ
+s = add_slide()
+header(s, "GIFT ③", "４Sシートを完璧に仕上げる「8つのコツ」", kcolor=GOLD)
+card(s, 0.8, 1.82, 5.75, 0.52, [P([R("書くときの4つ", 14.5, True, WHITE)])], fill=GREEN, radius=0.12)
+card(s, 6.75, 1.82, 5.75, 0.52, [P([R("磨くときの4つ", 14.5, True, WHITE)])], fill=NAVY, radius=0.12)
+tips_w = [
+    ("1．成功像は「日付＋固有名詞＋状態」", "「1年後、B病院から早期の紹介が月5件ある」— 曖昧な理想は測れず、測れないものは達成できない"),
+    ("2．主役は患者さんと医療の姿", "自社都合の成功像は医師に見せられない。医療の姿で書けば、そのまま先生と共有できる4Sになる"),
+    ("3．課題は数字とセット", "「少ない」ではなく「月1件」。数字で書けない課題は、現状把握がまだ足りないサイン"),
+    ("4．原因は「人・関係性・場・情報」の4方向", "この4分類で探すと漏れがない。大抵の真因は「場がない」「関係が診療科レベルでない」に潜む"),
+]
+tips_m = [
+    ("5．3回目の「なぜ」は自分に向ける", "環境のせいで終わらせず「自分に何が足りない？」まで掘る。そこから先だけが自分で変えられる"),
+    ("6．解決策は「電話1本サイズ」に割る", "最初の一歩が小さいほど実行される。「連携室に共催の前例を1本聞く」から始まる戦略もある"),
+    ("7．2分で語れるかテスト", "シートを見ずに語れない箇所＝考え切れていない箇所。語る練習が最高の推敲になる"),
+    ("8．四半期に1回、書き直す", "4Sは提出物ではなく「生きた作戦板」。情報が更新されたら書き換えるから武器であり続ける"),
+]
+for col_i, tips in enumerate((tips_w, tips_m)):
+    x = 0.8 + col_i * 5.95
+    lcol = GREEN if col_i == 0 else NAVY
+    y = 2.44
+    for t, d in tips:
+        c = card(s, x, y, 5.75, 0.98,
+                 [P([R(t, 12.5, True, lcol)], space_after=3, align=PP_ALIGN.LEFT),
+                  P([R(d, 10.5, False, INK)], line=1.18, align=PP_ALIGN.LEFT)],
+                 fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.MIDDLE)
+        c.text_frame.margin_left = c.text_frame.margin_right = Inches(0.15)
+        y += 1.06
+txt(s, 0.8, 6.72, 11.7, 0.3,
+    [P([R("今日のワーク②では1〜4を、宿題（2週間以内の上司共有）では5〜8を意識してみてください。", 11.5, True, GRAY)])])
+
+# ================================================================ GIFT④ 失敗と処方箋
+s = add_slide()
+header(s, "GIFT ④", "大学担当がやりがちな3つの失敗と処方箋", kcolor=GOLD)
+txt(s, 0.8, 1.75, 11.7, 0.45,
+    [P([R("どれも「頑張っている人」ほど陥る罠。先に知っておけば、数年分ショートカットできます。", 14, True, INK)])])
+fails = [
+    ("失敗①　教授にだけ通う", "「教授に会えている＝担当できている」という錯覚。教授は多忙で、現場の情報はむしろ薄い",
+     "医局長・若手・コメディカルまで「面」で通う。構造マップの◎○★◇を巡回ルートにする"),
+    ("失敗②　集めて満足する", "手帳は情報でいっぱい、でも行動はゼロ。「情報通のMR」で止まってしまう",
+     "情報を得た日は「So What?（だから何）」を1行書き足す。書けない情報は、まだ活かせていない情報"),
+    ("失敗③　講演会が目的化する", "「開催すること」がゴールになり、成功像が消える。終わった後に何も変わらない会になる",
+     "4Sの④→①確認を使う：「この会で成功像に近づくか？」にYesと言えない企画は、やり直す"),
+]
+y = 2.3
+for t, d, fix in fails:
+    c = card(s, 0.8, y, 5.2, 1.32,
+             [P([R(t, 13.5, True, RED)], space_after=4, align=PP_ALIGN.LEFT),
+              P([R(d, 11, False, INK)], line=1.2, align=PP_ALIGN.LEFT)],
+             fill=RPALE, line=RED, anchor=MSO_ANCHOR.MIDDLE)
+    c.text_frame.margin_left = c.text_frame.margin_right = Inches(0.15)
+    arrow(s, 6.12, y + 0.44, 0.5, 0.44, color=GRAY)
+    c = card(s, 6.75, y, 5.75, 1.32,
+             [P([R("処方箋", 11, True, GREEN)], space_after=3, align=PP_ALIGN.LEFT),
+              P([R(fix, 11.5, True, INK)], line=1.22, align=PP_ALIGN.LEFT)],
+             fill=PALE, line=GREEN, anchor=MSO_ANCHOR.MIDDLE)
+    c.text_frame.margin_left = c.text_frame.margin_right = Inches(0.15)
+    y += 1.48
+card(s, 0.8, 6.75, 11.7, 0.42,
+     [P([R("失敗は恥ではなく教材。今日の4Sシートには、この3つの「防止装置」がすでに組み込まれています。", 12, True, DEEP)])],
+     fill=YPALE, radius=0.15)
+
+# ================================================================ GIFT⑤ 4S習熟度セルフチェック
+s = add_slide()
+header(s, "GIFT ⑤", "４S習熟度セルフチェック — 自分は今どのレベル？", kcolor=GOLD)
+levels = [
+    ("LEVEL 1", "埋められる", "4つの箱を自分の言葉で書き切れる", "← 今日、全員ここに到達", PALE, GREEN),
+    ("LEVEL 2", "根拠がある", "全項目が数字・固有名詞で裏づけられている", "目安：2週間以内（上司共有まで）", PALEB, NAVY),
+    ("LEVEL 3", "2分で語れる", "シートを見ずに、質問にも答えながら戦略として話せる", "目安：1ヶ月（実行開始まで）", YPALE, GOLD),
+    ("LEVEL 4", "エリアへ展開", "大学の4Sを、エリア全施設の打ち手に翻訳できる", "ここまで来たら、大学担当として一人前", RPALE, RED),
+]
+base_bottom = 6.5
+for i, (lv, t, d, note, fill, col) in enumerate(levels):
+    h = 1.35 + i * 0.75
+    x = 0.85 + i * 2.98
+    y = base_bottom - h
+    c = card(s, x, y, 2.78, h,
+             [P([R(lv, 12, True, col)], space_after=2),
+              P([R(t, 15.5, True, col)], space_after=5),
+              P([R(d, 11, False, INK)], line=1.2, align=PP_ALIGN.LEFT, space_after=4),
+              P([R(note, 10, True, GRAY)], align=PP_ALIGN.LEFT)],
+             fill=fill, line=col, anchor=MSO_ANCHOR.TOP)
+    c.text_frame.margin_top = Inches(0.12)
+    c.text_frame.margin_left = c.text_frame.margin_right = Inches(0.13)
+card(s, 0.85, 6.58, 11.66, 0.5,
+     [P([R("卒業基準：", 13.5, True, DEEP),
+         R("上司の「あなたのエリア戦略は？」に、4Sの型（成功像→課題→原因→解決策）で即答できること。", 13.5, True, INK)])],
+     fill=PALE, radius=0.12)
 
 # ================================================================ 20. まとめ
 s = add_slide()
