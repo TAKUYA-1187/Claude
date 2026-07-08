@@ -162,6 +162,7 @@ box(s, 0.9, 2.62, 0.14, 1.7, fill=YELL, shape=MSO_SHAPE.RECTANGLE)
 txt(s, 1.0, 0.9, 11.4, 0.6,
     [P([R("大学担当者育成勉強会（全4回）", 18, True, RGBColor(0xBF, 0xE8, 0xD2))])])
 card(s, 1.0, 1.55, 2.1, 0.62, [P([R("第 4 回", 22, True, DEEP)])], fill=YELL, radius=0.3)
+txt(s, 3.3, 1.65, 3.0, 0.5, [P([R("— シリーズ最終回 —", 15, True, RGBColor(0xBF, 0xE8, 0xD2))])])
 txt(s, 1.25, 2.5, 11.3, 2.0,
     [P([R("ちょっと分かるだけで", 44, True, WHITE)], space_after=4),
      P([R("世界が変わる", 44, True, WHITE)])])
@@ -200,21 +201,22 @@ txt(s, 0.8, 5.85, 11.7, 0.9,
 s = add_slide()
 header(s, "ROADMAP", "ここまでの歩み — 今日は「集めた情報」を回収する回")
 items = [
-    ("第1回", "大学・基幹病院の\nイロハ", "大学はなぜあるのか\n偉さと役割・採用の心得", False),
-    ("第2回", "「会えない」を\n「会える」に変える", "医師の導線・面会設計\n継続的に会う工夫", False),
-    ("第3回", "やっぱりMRは\n情報が命", "何を・どこでつかむか\nDry＆Wetの情報収集", False),
-    ("第4回", "ちょっと分かるだけで\n世界が変わる", "情報を整理し打ち手に変換\nエリア戦略まで繋げる", True),
+    ("第1回", "大学・基幹病院のイロハ", "大学担当者に求められる視点を理解し、医師・施設の影響力構造とニーズを説明できる", False),
+    ("第2回", "「会えない」を「会える」に変える", "医師の行動パターンを基にBest Time / Best Placeを特定し、面談機会を設計できる", False),
+    ("第3回", "やっぱりMRは情報が命", "施設・医師の仮説に基づき、必要な情報を意図的に取りに行く行動を設計・実行できる", False),
+    ("第4回", "ちょっと分かるだけで世界が変わる", "収集した情報から4Sシートを用いて、エリアの課題・原因・解決方法を可視化できる", True),
 ]
 for i, (no, t, d, today) in enumerate(items):
     x = 0.65 + i * 3.12
-    ch = slide_ch = s.shapes.add_shape(MSO_SHAPE.CHEVRON, Inches(x), Inches(2.0), Inches(3.25), Inches(0.85))
+    ch = s.shapes.add_shape(MSO_SHAPE.CHEVRON, Inches(x), Inches(2.0), Inches(3.25), Inches(0.85))
     ch.fill.solid(); ch.fill.fore_color.rgb = DEEP if today else GREEN2
     ch.line.fill.background(); ch.shadow.inherit = False
     tf = ch.text_frame; tf.word_wrap = True
     box_txt(ch, [P([R(no + "　★本日" if today else no, 15, True, WHITE)])])
     cardc = card(s, x, 3.05, 2.9, 2.9,
-         [P([R(t.replace("\n", ""), 15, True, DEEP if today else GREEN)], space_after=8, line=1.1),
-          P([R(d.replace("\n", "。"), 12.5, False, INK)], line=1.25)],
+         [P([R(t, 14, True, DEEP if today else GREEN)], space_after=7, line=1.1),
+          P([R("到達目標", 10.5, True, GRAY)], space_after=3),
+          P([R(d, 11.5, False, INK)], line=1.25)],
          fill=(YPALE if today else WHITE), line=(YELL if today else LGRAY), anchor=MSO_ANCHOR.TOP)
     cardc.text_frame.margin_top = Inches(0.15)
     cardc.text_frame.margin_left = cardc.text_frame.margin_right = Inches(0.14)
@@ -223,6 +225,38 @@ card(s, 0.65, 6.15, 12.15, 0.75,
          R("整理して・意味づけて・行動に変えて", 15, True, RED),
          R("初めて成果になる。今日はその変換装置を手に入れる回。", 15, False, INK)])],
      fill=PALE, radius=0.15)
+
+# ================================================================ 3.5 道具箱（第1〜3回の学びを今日使う）
+s = add_slide()
+header(s, "TOOLBOX", "第1〜3回で手に入れた「道具」を、今日すべて使う")
+tools = [
+    ("第1回", "影響力構造のメガネ", "偉さと役割の違い・採用ルール・大学の影響圏という「見る目」",
+     "ワーク①：構造マップの土台になる", GREEN),
+    ("第2回", "Best Time × Best Place", "医師の導線・スケジュール仮説から面談機会を設計する技術",
+     "特定したキーパーソンに「実際に会いに行く」計画で使う", NAVY),
+    ("第3回", "情報源マップ＋Wetな情報", "病院HP・Veeva Link・スマイルPJ等のDry情報と、現場でつかむWet情報",
+     "ワーク②：4Sシートの「根拠」になる", RGBColor(0xB8, 0x6A, 0x00)),
+]
+y = 1.95
+for no, t, d, use, col in tools:
+    card(s, 0.8, y, 1.75, 1.32,
+         [P([R(no, 13.5, True, WHITE)], space_after=3), P([R("の道具", 11, False, WHITE)])], fill=col, radius=0.12)
+    c = card(s, 2.7, y, 5.9, 1.32,
+             [P([R(t, 15, True, DEEP)], space_after=4, align=PP_ALIGN.LEFT),
+              P([R(d, 12, False, INK)], line=1.22, align=PP_ALIGN.LEFT)],
+             fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.MIDDLE)
+    c.text_frame.margin_left = Inches(0.18)
+    arrow(s, 8.7, y + 0.45, 0.45, 0.42, color=col)
+    c = card(s, 9.25, y, 3.25, 1.32,
+             [P([R("今日の使い所", 10.5, True, GRAY)], space_after=3, align=PP_ALIGN.LEFT),
+              P([R(use, 11.5, True, col)], line=1.2, align=PP_ALIGN.LEFT)],
+             fill=PALE2, anchor=MSO_ANCHOR.MIDDLE)
+    c.text_frame.margin_left = Inches(0.15)
+    y += 1.52
+card(s, 0.8, 6.55, 11.7, 0.55,
+     [P([R("今日の90分は、3回分の学びの総決算。", 15, True, DEEP),
+         R("　道具はもう揃っている。あとは組み合わせて「戦略」にするだけ。", 13.5, False, INK)])],
+     fill=PALE, radius=0.12)
 
 # ================================================================ 4. 本日のゴール
 s = add_slide()
@@ -494,16 +528,19 @@ quads = [
 for x, y, t, sub, d, col, fill in quads:
     card(s, x, y, 5.75, 0.72,
          [P([R(t, 16, True, WHITE), R("　" + sub, 11.5, False, WHITE)])], fill=col, radius=0.1)
-    c = card(s, x, y + 0.78, 5.75, 1.55,
+    c = card(s, x, y + 0.78, 5.75, 1.42,
              [P([R(d, 12.5, False, INK)], line=1.3, align=PP_ALIGN.LEFT)], fill=fill, anchor=MSO_ANCHOR.TOP)
     c.text_frame.margin_top = Inches(0.12); c.text_frame.margin_left = c.text_frame.margin_right = Inches(0.16)
 arrow(s, 6.3, 2.6, 0.4, 0.4, color=GRAY)                     # ①→②
 a = arrow(s, 6.42, 3.82, 0.42, 0.48, color=GRAY, direction="down")  # ②→③（斜め下・左向き）
 a.rotation = 45
 arrow(s, 6.3, 5.05, 0.4, 0.4, color=GRAY)                    # ③→④
-card(s, 0.8, 6.55, 11.7, 0.55,
-     [P([R("書く順番：①成功像 → ②現状・課題 → ③原因 → ④解決策。", 13.5, True, DEEP),
-         R("　現状から書き始めると「愚痴のリスト」になる。理想から書くと「戦略」になる。", 13, False, INK)])],
+# ④→① 確認の戻り矢印（右端を上へ）
+a = arrow(s, 12.62, 2.55, 0.32, 3.3, color=GREEN2, direction="up")
+card(s, 0.8, 6.5, 11.7, 0.62,
+     [P([R("書く順番：①成功像 → ②現状・課題 → ③原因 → ④解決策。", 12.5, True, DEEP),
+         R("　現状から書くと「愚痴のリスト」、理想から書くと「戦略」になる。", 12, False, INK)], space_after=3),
+      P([R("仕上げの確認：④→①へ戻り「この打ち手で、成功像に本当に近づくか？」をチェック — これで4Sが1周閉じる。", 12, True, GREEN)])],
      fill=WHITE, line=GREEN, radius=0.12)
 
 # ================================================================ 14. 4S記入例
@@ -525,9 +562,9 @@ for x, y, t, col, fill, d in exq:
              [P([R(d, 12, False, INK)], line=1.28, align=PP_ALIGN.LEFT)], fill=fill, anchor=MSO_ANCHOR.TOP)
     c.text_frame.margin_top = Inches(0.1); c.text_frame.margin_left = c.text_frame.margin_right = Inches(0.15)
 card(s, 0.8, 6.5, 11.7, 0.62,
-     [P([R("注目：", 13.5, True, RED),
-         R("「講演会」が先にあるのではない。成功像→課題→原因と掘った結果、手段として講演会が出てくる。", 13.5, True, INK),
-         R("　この順番が説得力の正体。", 13, False, GRAY)])],
+     [P([R("注目：", 13, True, RED),
+         R("「講演会」が先にあるのではない。成功像→課題→原因と掘った結果、手段として会が出てくる。この順番が説得力の正体。", 13, True, INK)], space_after=3),
+      P([R("最後に④→①の確認：「この会で紹介の目安が共有されれば、双方向の流れに近づくか？」→ Yesなら実行。", 12, False, GRAY)])],
      fill=YPALE, radius=0.12)
 
 # ================================================================ 15. 良い4S・惜しい4S
@@ -772,7 +809,7 @@ card(s, 0.8, 6.72, 11.7, 0.42,
 s = add_slide()
 header(s, "APPENDIX C", "ファシリテーター用メモ（進行のコツ）", kcolor=GRAY)
 tips = [
-    ("時間管理", ["タイマーを画面共有 or スマホで見えるように置く", "ワークは「あと2分」を必ず予告してから切る", "延長判断は共有②の前に宣言する（80分経過が目安）"]),
+    ("事前準備・時間管理", ["事前案内（Outlook）：A4白紙2枚とペンを持参、担当施設の顔ぶれを思い出してくる", "タイマーを見えるように置き、ワークは「あと2分」を予告してから切る", "延長判断は共有②の前に宣言する（80分経過が目安）"]),
     ("場づくり", ["チェックインは自分（進行役）が30秒の見本を最初にやる", "ワーク中は沈黙OKと伝える。机間巡視で1人1声かけ", "共有で出た良い視点は、その場で口頭で「今のは◎」と拾う"]),
     ("つまずき対応", ["マップが書けない人には「まず外来と病棟の2箱から」", "4Sが止まった人には巻末のヒント欄を指差しで案内", "議論が製品の話に寄ったら「今日は構造と戦略の日」と戻す"]),
     ("次回への接続", ["最終回なので、シリーズ全体の感想を1言ずつ集めて終える", "作成した4Sシートは各自のエリア計画・上司面談で活用を宣言", "希望者には構造マップ・4Sのデータ版テンプレを共有"]),
