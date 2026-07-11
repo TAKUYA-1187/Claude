@@ -12,9 +12,8 @@ try:
 except Exception:  # python-dotenv 未導入でも動作させる
     pass
 
-# 既定の配信先（担当者本人の 2 アドレス）
+# 既定の配信先
 DEFAULT_RECIPIENTS = [
-    "taku.ino.19811014@gmail.com",
     "takuya.inoue@novartis.com",
 ]
 

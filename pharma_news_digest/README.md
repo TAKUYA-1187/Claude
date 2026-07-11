@@ -3,9 +3,8 @@
 ノバルティス 腎臓領域（**ファビハルタ／IgA腎症**）担当者向けに、関連ニュース・
 医療業界動向・最新論文を **毎朝 7:00 (JST)** に自動でメール配信するツールです。
 
-配信先（既定）:
-- taku.ino.19811014@gmail.com
-- takuya.inoue@novartis.com
+- 送信元：Gmail（`taku.ino.19811014@gmail.com`）または iCloud（`takuya0.0@icloud.com`）
+- 配信先：`takuya.inoue@novartis.com`
 
 ## 配信内容（メール構成）
 
@@ -34,25 +33,29 @@ GitHub Actions (毎日 22:00 UTC = 07:00 JST)
 
 ## セットアップ（初回のみ）
 
-### 1. 送信元 Gmail のアプリパスワードを発行
+### 1. 送信元のアプリパスワードを発行
 
-1. Google アカウント → **セキュリティ** → **2 段階認証** を有効化
-2. **アプリパスワード** で 16 桁のパスワードを発行
+送信元は Gmail か iCloud のどちらでも構いません。**通常のログインパスワードでは SMTP 送信できない**ため、必ず専用のアプリパスワードを発行してください。
 
-> Gmail は通常のログインパスワードでの SMTP 送信を許可していません。必ずアプリパスワードを使ってください。
+- **Gmail の場合**：Google アカウント → **セキュリティ** → **2 段階認証** を有効化 → **アプリパスワード**（16 桁）を発行
+- **iCloud の場合**：appleid.apple.com → **サインインとセキュリティ** → **App 用パスワード** を発行
 
-### 2. GitHub リポジトリに Secrets を登録
+### 2. GitHub リポジトリに Secrets / Variables を登録
 
 リポジトリの **Settings → Secrets and variables → Actions** で登録します。
 
 | 種別 | 名前 | 値 |
 |---|---|---|
-| Secret | `SENDER_EMAIL` | 送信元 Gmail アドレス |
-| Secret | `SENDER_APP_PASSWORD` | 上記で発行した 16 桁 |
+| Secret | `SENDER_EMAIL` | 送信元アドレス（Gmail か iCloud） |
+| Secret | `SENDER_APP_PASSWORD` | 上記で発行したアプリパスワード |
 | Secret | `NCBI_API_KEY` | （任意）PubMed のレート制限緩和用 |
-| Variable | `RECIPIENTS` | （任意）配信先を変える場合のみ。カンマ区切り |
+| Variable | `SMTP_HOST` | iCloud 送信時のみ `smtp.mail.me.com`（Gmail は不要） |
+| Variable | `SMTP_PORT` | iCloud 送信時のみ `587`（Gmail は不要、既定 465） |
+| Variable | `RECIPIENTS` | （任意）配信先を変える場合のみ。既定 `takuya.inoue@novartis.com` |
 
-Secrets を登録すれば、翌朝から自動配信が始まります。
+Gmail を使う場合は `SENDER_EMAIL` と `SENDER_APP_PASSWORD` の 2 つだけで動きます。
+iCloud を使う場合のみ `SMTP_HOST` / `SMTP_PORT` の Variable を追加してください。
+登録すれば翌朝から自動配信が始まります。
 
 ### 3. 手動テスト
 

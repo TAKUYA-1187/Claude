@@ -40,7 +40,9 @@ jobs:
         env:
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
           SENDER_APP_PASSWORD: ${{ secrets.SENDER_APP_PASSWORD }}
-          RECIPIENTS: ${{ vars.RECIPIENTS || 'taku.ino.19811014@gmail.com,takuya.inoue@novartis.com' }}
+          RECIPIENTS: ${{ vars.RECIPIENTS || 'takuya.inoue@novartis.com' }}
+          SMTP_HOST: ${{ vars.SMTP_HOST || 'smtp.gmail.com' }}
+          SMTP_PORT: ${{ vars.SMTP_PORT || '465' }}
           NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
         run: |
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then

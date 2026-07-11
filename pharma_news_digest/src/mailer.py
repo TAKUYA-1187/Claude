@@ -30,8 +30,16 @@ def send(cfg: Config, subject: str, html_body: str, text_body: str) -> None:
     msg.attach(MIMEText(html_body, "html", "utf-8"))
 
     context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(cfg.smtp_host, cfg.smtp_port, context=context) as server:
-        server.login(cfg.sender_email, cfg.sender_password)
-        server.sendmail(cfg.sender_email, cfg.recipients, msg.as_string())
+    # ポート 465 は暗黙 SSL（Gmail 既定）、587 は STARTTLS（iCloud 等）
+    if cfg.smtp_port == 465:
+        with smtplib.SMTP_SSL(cfg.smtp_host, cfg.smtp_port, context=context) as server:
+            server.login(cfg.sender_email, cfg.sender_password)
+            server.sendmail(cfg.sender_email, cfg.recipients, msg.as_string())
+    else:
+        with smtplib.SMTP(cfg.smtp_host, cfg.smtp_port) as server:
+            server.ehlo()
+            server.starttls(context=context)
+            server.login(cfg.sender_email, cfg.sender_password)
+            server.sendmail(cfg.sender_email, cfg.recipients, msg.as_string())
 
     logger.info("メール送信完了: %s", ", ".join(cfg.recipients))
