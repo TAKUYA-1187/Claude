@@ -10,6 +10,7 @@ on:
     paths:
       - "price_comparison/src/**"
       - "price_comparison/scripts/**"
+      - "price_comparison/.refresh"
       - ".github/workflows/price_comparison.yml"
   workflow_dispatch:
     inputs:
