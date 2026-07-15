@@ -1,0 +1,70 @@
+name: Amazon Price Drop Alerts
+
+on:
+  schedule:
+    # 15分ごとに実行 (GitHub Actions の実用的な最短間隔。高負荷時は数分遅延あり)
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "dry-run (メール送信せず抽出のみ)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: amazon-price-alerts
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: amazon_price_alerts
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: amazon_price_alerts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check price drops and send alerts
+        env:
+          KEEPA_API_KEY: ${{ secrets.KEEPA_API_KEY }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          ALERT_EMAIL_TO: ${{ vars.ALERT_EMAIL_TO || 'taku.ino.19811014@gmail.com' }}
+          MIN_DROP_PERCENT: ${{ vars.MIN_DROP_PERCENT || '30' }}
+          MIN_DROP_YEN: ${{ vars.MIN_DROP_YEN || '1000' }}
+          MIN_SELLERS: ${{ vars.MIN_SELLERS || '3' }}
+          MIN_PRICE: ${{ vars.MIN_PRICE || '1500' }}
+          MAX_PRICE: ${{ vars.MAX_PRICE || '300000' }}
+          MAX_SALES_RANK: ${{ vars.MAX_SALES_RANK || '80000' }}
+        run: |
+          if [ -n "${{ github.event.inputs.dry_run }}" ]; then
+            python -m src.main --dry-run
+          else
+            python -m src.main
+          fi
+
+      - name: Commit alert state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cd ..
+          git add amazon_price_alerts/data/alerted_asins.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update alerted ASINs state [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            git push
+          else
+            echo "No state changes to commit"
+          fi
