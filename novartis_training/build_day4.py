@@ -300,26 +300,25 @@ card(s, 0.6, 5.85, 12.15, 1.05,
 # ================================================================ 10 チェックイン
 s = add_slide()
 shape(s, 0, 0, 13.333, 7.5, fill=PALE2, kind=MSO_SHAPE.RECTANGLE)
-chip(s, 0.6, 0.34, 3.4, 0.42, "CHECK IN　｜　5分", fill=GREEN)
-card(s, 0.6, 1.0, 12.15, 1.05,
-     [P([R("この3回で、実際に変わったことは何ですか？", 30, True, INK)], align=PP_ALIGN.CENTER)],
-     fill=WHITE, line=GREEN, line_w=1.6, radius=0.06, pad=0.18)
-card(s, 1.9, 2.3, 9.55, 0.85,
-     [P([R("Teamsチャットに、", 17, True, DEEP),
-         R("「以前と比べて変わったこと」を1つ、1行で", 17, True, RED)], align=PP_ALIGN.CENTER)],
+chip(s, 0.6, 0.34, 3.4, 0.42, "CHECK IN　｜　3分", fill=GREEN)
+card(s, 0.6, 1.15, 12.15, 1.8,
+     [P([R("この3回で、あなたの", 28, True, INK),
+         R("「大学の見方」", 28, True, RED),
+         R("は変わりましたか？", 28, True, INK)], align=PP_ALIGN.CENTER, space_after=10),
+      P([R("大学担当としての", 28, True, INK),
+         R("「自信」", 28, True, RED),
+         R("はつきましたか？", 28, True, INK)], align=PP_ALIGN.CENTER)],
+     fill=WHITE, line=GREEN, line_w=1.6, radius=0.06, pad=0.2)
+card(s, 3.2, 3.55, 6.95, 0.85,
+     [P([R("Teamsチャットへ、自由に書き込んでください", 18, True, DEEP)], align=PP_ALIGN.CENTER)],
      fill=YELL, radius=0.15, pad=0.14)
-txt(s, 0.6, 3.4, 12.15, 0.32, [P([R("例", 13, True, GRAY)], align=PP_ALIGN.CENTER)])
-exs = ["教授以外のキーパーソンにも、目を向けるようになった",
-       "面会前に、確認したい仮説を考えるようになった",
-       "医師同士や施設間の関係を、見るようになった"]
-y = 3.8
-for e in exs:
-    card(s, 2.6, y, 8.15, 0.62, [P([R(e, 15, False, INK)], align=PP_ALIGN.CENTER)],
-         fill=WHITE, line=LGRAY, radius=0.1)
-    y += 0.72
-card(s, 2.6, 6.0, 8.15, 0.62,
-     [P([R("まだ変化がない方は、「今も不安なこと」を1つどうぞ", 15, True, DEEP)], align=PP_ALIGN.CENTER)],
-     fill=PALE, line=GREEN, radius=0.12)
+hooks = [("大学に行くとき、以前と違うことは？", GREEN),
+         ("会う人・聞くことは、変わった？", NAVY),
+         ("まだ「分からない」と思うことは？", GOLD)]
+for i, (t, col) in enumerate(hooks):
+    card(s, 0.6 + i * 4.1, 5.3, 3.95, 1.05,
+         [P([R(t, 15, True, INK)], align=PP_ALIGN.CENTER, line=1.2)],
+         fill=WHITE, line=col, line_w=1.3, radius=0.1, pad=0.16)
 footer(s)
 
 # ================================================================ 11 DAY3→DAY4
