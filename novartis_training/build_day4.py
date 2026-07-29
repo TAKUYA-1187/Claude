@@ -271,28 +271,28 @@ for i, (t, d, col) in enumerate(pillars):
          [P([R("◆ " + t, 15.5, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
           P([R(d, 11.5, False, WHITE)], align=PP_ALIGN.CENTER)],
          fill=col, radius=0.1)
-card(s, 0.6, 2.75, 12.15, 0.95,
+card(s, 0.6, 2.72, 12.15, 0.9,
      [P([R("到達目標：", 14, True, DEEP),
-         R("担当施設と周辺エリアに対する", 15, True, INK),
-         R("成功像・現状・課題・解決法を言語化できる", 15, True, RED)], align=PP_ALIGN.CENTER, space_after=4),
+         R("収集した情報から、エリアの課題・原因・解決方法を可視化できる", 16, True, RED)],
+       align=PP_ALIGN.CENTER, space_after=4),
       P([R("本日の到達点：誰が何を動かせるかを整理し、次に確認する情報と行動を決められる", 12.5, True, DEEP)],
         align=PP_ALIGN.CENTER)],
      fill=YPALE, line=YELL, radius=0.1)
 two = [("① 影響力", "誰が、何を動かせるのか", "肩書きではなく「動かせるもの」で見る",
-        "テーマ①", NAVY, PALEB),
+        "テーマ①　施設情報を構造で整理し、キーパーソンを特定", NAVY, PALEB),
        ("② 影響の輪", "その力は、どこまで届くのか", "施設 → 関連病院 → エリア → その先",
-        "テーマ②", GOLD, YPALE)]
+        "テーマ②　エリアアプローチ戦略を検討・説明できる", GOLD, YPALE)]
 for i, (t, sub, d, tag, col, fill) in enumerate(two):
     x = 0.6 + i * 6.15
-    card(s, x, 3.75, 6.0, 0.75,
-         [P([R(t, 20, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
-          P([R(sub, 13, False, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
-    card(s, x, 4.58, 6.0, 0.95, [P([R(d, 15, True, INK)], align=PP_ALIGN.CENTER, line=1.25)],
+    card(s, x, 3.72, 6.0, 0.7,
+         [P([R(t, 19, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
+          P([R(sub, 12.5, False, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
+    card(s, x, 4.5, 6.0, 0.85, [P([R(d, 14.5, True, INK)], align=PP_ALIGN.CENTER, line=1.25)],
          fill=fill, radius=0.1, pad=0.16)
-    card(s, x + 2.35, 5.62, 1.3, 0.42, [P([R(tag, 12, True, col)], align=PP_ALIGN.CENTER)],
-         fill=WHITE, line=col, radius=0.2)
-card(s, 0.6, 6.25, 12.15, 0.72,
-     [P([R("戦略的思考 ＝ 影響力を見極め、その輪をどこまで広げるかを決めること", 17, True, DEEP)],
+    card(s, x, 5.43, 6.0, 0.55, [P([R(tag, 11, True, col)], align=PP_ALIGN.CENTER, line=1.15)],
+         fill=WHITE, line=col, radius=0.12, pad=0.1)
+card(s, 0.6, 6.1, 12.15, 0.8,
+     [P([R("戦略的思考 ＝ 影響力を見極め、その輪をどこまで広げるかを決めること", 16.5, True, DEEP)],
        align=PP_ALIGN.CENTER)],
      fill=PALE, radius=0.12)
 
@@ -308,8 +308,8 @@ days = [("DAY 1", "大学・基幹病院のイロハ", GREEN,
           "カレンダー管理と行動ログ", "会う理由を設計し、次の約束を残す"],
          "動かせる人に“会える”"),
         ("DAY 3", "やっぱりMRは情報が命", GOLD,
-         ["ドライ情報 × ウェット情報", "small b として面会に持ち込む",
-          "顧客理解＝現状把握", "面会後は「なぜ」を分解して次へ"],
+         ["顧客理解を深める必要性", "どこで、どの情報を取るか",
+          "仮説を持ち、クローズドで聞ける状態にする", "そして —— その情報を、どう活かすか"],
          "その人のニーズが“分かる”")]
 for i, (d, t, col, lines, gain) in enumerate(days):
     x = 0.6 + i * 4.09
@@ -322,9 +322,10 @@ for i, (d, t, col, lines, gain) in enumerate(days):
     card(s, x, 4.72, 3.9, 0.55, [P([R(gain, 13, True, col)], align=PP_ALIGN.CENTER)],
          fill=PALE2, radius=0.12)
 card(s, 0.6, 5.5, 12.15, 1.3,
-     [P([R("この3つが揃うと、「影響力」が見える。", 24, True, WHITE)],
+     [P([R("この3つが揃うと、「影響力」が見える。", 22, True, WHITE)],
        align=PP_ALIGN.CENTER, space_after=6),
-      P([R("今日は、それを戦略にします。", 15, False, MINT)], align=PP_ALIGN.CENTER)],
+      P([R("DAY3の最後の問い —— 「営業として、その情報をどう活かすか」。今日は、その答えを出します。", 14, True, MINT)],
+        align=PP_ALIGN.CENTER)],
      fill=DEEP, radius=0.1, pad=0.2)
 
 # ================================================================ 11 チェックイン（1問）
@@ -632,13 +633,53 @@ ex = [("① 実現したい状態", "大学の専門的な知見が、主要な�
       ("③ 分からないこと", "医局が今後力を入れたいテーマが、まだ分からない", GOLD, YPALE),
       ("④ 取りに行く情報", "医局長に、教育・研究で注力したいテーマを確認する", NAVY, PALEB),
       ("⑤ 次の行動", "今週、医局長との面会を打診する", RED, RPALE)]
-y = 4.66
+y = 4.42
 for t, d, col, fill in ex:
-    card(s, 0.6, y, 2.3, 0.42, [P([R(t, 11, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
-    card(s, 3.0, y, 9.75, 0.42, [P([R(d, 11.5, False, INK)])], fill=fill, radius=0.1, pad=0.11)
-    y += 0.47
+    card(s, 0.6, y, 2.3, 0.36, [P([R(t, 10.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
+    card(s, 3.0, y, 9.75, 0.36, [P([R(d, 11, False, INK)])], fill=fill, radius=0.1, pad=0.09)
+    y += 0.4
+card(s, 0.6, 6.45, 12.15, 0.45,
+     [P([R("DAY3の共有事例：", 11.5, True, RED),
+         R("同年同卒・同門のつながりを調べて講演会を設計 → 参加率向上／面会困難な医師との接点創出／エリア認知向上", 11.5, True, INK)],
+       align=PP_ALIGN.CENTER)],
+     fill=YPALE, radius=0.12, pad=0.1)
 
-# ================================================================ 23 ワーク②
+# ================================================================ 23 情報源（DAY3の回収）
+s = add_slide()
+header(s, "THEME ②", "その情報は、誰から取れるか", "30分", kcolor=NAVY,
+       lead="DAY3で共有された入手先です。ワーク②の「次の一手」は、ここから選べば決まります。")
+srcs = [("医師本人", "直接聞くのが、最も有効",
+         ["今後の目標・成し遂げたいこと", "興味のある領域・研究テーマ",
+          "参考にしている先生・KOL", "人脈、連携している施設"], GREEN),
+        ("周辺関係者", "会えない時間を埋めてくれる",
+         ["医局秘書：予定・医局の動き", "看護師・師長：現場の課題と関係性",
+          "若手医師：医局の雰囲気と本音", "前任者・他領域MR・MS・社内メディカル"], NAVY),
+        ("学会・研究会", "人的ネットワークが見える",
+         ["共著論文：誰と誰が組んでいるか", "演者の顔ぶれ・座長との関係",
+          "卒大・同門・同年次のつながり", "※DAY3事例：同年同卒を調べて会を設計"], GOLD)]
+for i, (t, sub, lines, col) in enumerate(srcs):
+    x = 0.6 + i * 4.09
+    card(s, x, 2.15, 3.9, 0.75,
+         [P([R(t, 16, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
+          P([R(sub, 11, False, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
+    card(s, x, 2.98, 3.9, 2.15,
+         [P([R("・" + l, 11.5, False, INK)], line=1.25, space_after=9) for l in lines],
+         fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.16)
+card(s, 0.6, 5.3, 6.0, 0.85,
+     [P([R("聞き方のコツ（DAY3）", 12.5, True, DEEP)], space_after=4),
+      P([R("仮説を持って行き、「クローズドで聞ける状態」にしてから会う", 12, False, INK)], line=1.2)],
+     fill=PALEB, radius=0.1, pad=0.16)
+card(s, 6.75, 5.3, 6.0, 0.85,
+     [P([R("噂レベルの情報は", 12.5, True, DEEP)], space_after=4),
+      P([R("複数の関係者から確認して、精度を上げる", 12, False, INK)], line=1.2)],
+     fill=PALEB, radius=0.1, pad=0.16)
+card(s, 0.6, 6.3, 12.15, 0.62,
+     [P([R("信頼が深まっているサイン　—　", 13, False, INK),
+         R("プライベートな話をしてくれる／将来の話をしてくれる", 15, True, RED),
+         R("　→ 味方になってくれる可能性が高い", 13, False, INK)], align=PP_ALIGN.CENTER)],
+     fill=YPALE, radius=0.12)
+
+# ================================================================ 24 ワーク②
 s = add_slide()
 header(s, "WORK ②", "大学・基幹病院を、どう活かすか考える", "10分", kcolor=GREEN)
 card(s, 0.6, 1.72, 12.15, 0.55,
@@ -647,19 +688,19 @@ card(s, 0.6, 1.72, 12.15, 0.55,
      fill=PALE, radius=0.1)
 qs4 = [("Q1", "目指したい状態", "担当する大学・基幹病院・周辺エリアが、どうなっていたら理想ですか？（製品名・処方目標は不要）", GREEN),
        ("Q2", "使いたい影響力", "その状態に近づくために、誰の・どの影響力を活かしたいですか？", NAVY2),
-       ("Q3", "実現したいこと", "その先生・医局は、何を実現したいですか？（分からなければ「何を確認するか」を書く）", GOLD),
+       ("Q3", "実現したいこと", "その先生・医局は、何を実現したいですか？（DAY3の「成し遂げたいことを直接聞く」／分からなければ確認事項を）", GOLD),
        ("Q4", "次の一手", "今週、誰に・何を確認しますか？", RED)]
-y = 2.42
+y = 2.35
 for tag, t, q, col in qs4:
-    circle(s, 0.6, y + 0.03, 0.6, tag, fill=col, size=14)
-    card(s, 1.4, y, 2.2, 0.66, [P([R(t, 13.5, True, col)], align=PP_ALIGN.CENTER)],
+    circle(s, 0.6, y + 0.02, 0.6, tag, fill=col, size=14)
+    card(s, 1.4, y, 2.2, 0.64, [P([R(t, 13.5, True, col)], align=PP_ALIGN.CENTER)],
          fill=PALE2, line=col, radius=0.12)
-    card(s, 3.75, y, 9.0, 0.66, [P([R(q, 12.5, False, INK)], line=1.15)],
-         fill=WHITE, line=LGRAY, radius=0.1, pad=0.15)
-    y += 0.78
-card(s, 0.6, 5.62, 12.15, 0.45, [P([R("完成文：この4行が書けたら完成です", 13.5, True, WHITE)],
+    card(s, 3.75, y, 9.0, 0.64, [P([R(q, 12, False, INK)], line=1.15)],
+         fill=WHITE, line=LGRAY, radius=0.1, pad=0.14)
+    y += 0.74
+card(s, 0.6, 5.4, 12.15, 0.42, [P([R("完成文：この4行が書けたら完成です", 13.5, True, WHITE)],
      align=PP_ALIGN.CENTER)], fill=DEEP, radius=0.1)
-card(s, 0.6, 6.15, 12.15, 0.85,
+card(s, 0.6, 5.9, 12.15, 0.85,
      [P([R("私が目指したい状態は ", 13.5, False, INK), R("〇〇", 13.5, True, RED),
          R("。そのために ", 13.5, False, INK), R("△△先生の□□という影響力", 13.5, True, RED),
          R(" を活かしたい。", 13.5, False, INK)], align=PP_ALIGN.CENTER, space_after=4),
@@ -668,7 +709,7 @@ card(s, 0.6, 6.15, 12.15, 0.85,
          R("☆☆", 13.5, True, RED), R(" を確認する。", 13.5, False, INK)], align=PP_ALIGN.CENTER)],
      fill=YPALE, radius=0.1, pad=0.16)
 
-# ================================================================ 24 ディスカッション
+# ================================================================ 25 ディスカッション
 s = add_slide()
 header(s, "DISCUSSION", "3人1組で、仮説を確かめ合う", "12分", kcolor=GREEN)
 prog = [("1人3分 × 3人", "発表2分 ＋ 質問1分", GREEN),
@@ -735,9 +776,10 @@ card(s, 2.6, 4.08, 8.15, 0.95,
 card(s, 2.6, 5.35, 8.15, 0.85,
      [P([R("ワーク②のQ4に書いたことを、そのまま投稿すればOKです", 15, True, DEEP)], align=PP_ALIGN.CENTER)],
      fill=PALE, radius=0.12)
-card(s, 2.6, 6.35, 8.15, 0.6,
-     [P([R("「電話1本サイズ」に割ること。小さいほど、実行されます。", 14, True, GRAY)], align=PP_ALIGN.CENTER)],
-     fill=WHITE, line=LGRAY, radius=0.12)
+card(s, 2.6, 6.3, 8.15, 0.68,
+     [P([R("「電話1本サイズ」に割ること。小さいほど、実行されます。", 13.5, True, GRAY)], align=PP_ALIGN.CENTER, space_after=3),
+      P([R("描いたマップは、営業所でも共有を（DAY3）", 12.5, True, DEEP)], align=PP_ALIGN.CENTER)],
+     fill=WHITE, line=LGRAY, radius=0.12, pad=0.1)
 footer(s)
 
 # ================================================================ 27 最終メッセージ
@@ -761,7 +803,7 @@ card(s, 0.9, 3.2, 11.5, 1.5,
 txt(s, 0.9, 5.0, 11.5, 0.5,
     [P([R("そう言える担当者を目指しましょう。", 20, True, WHITE)], align=PP_ALIGN.CENTER)])
 items = [("今日中", "行動宣言をチャットへ"),
-         ("今週", "録画・資料・気づきリストを共有"),
+         ("今週", "影響力マップを営業所で共有"),
          ("これから", "困ったら、全国の仲間に相談を")]
 for i, (t, d) in enumerate(items):
     x = 0.9 + i * 3.87
@@ -943,8 +985,8 @@ tips = [("当日の投影",
           "テーマ① 講義7・ワーク8・共有5／テーマ② 講義8・ワーク10・ディスカッション12"]),
         ("ワークの前提",
          ["疾患・製品の戦略は作らせない。今分かっている情報で考えてもらう",
-          "「C3腎症の経験や、今後のIgA腎症をイメージしてもOK」と口頭で補足",
-          "「完成条件の一文」が書けたら完成、と最初に伝える"]),
+          "「完成条件の一文」が書けたら完成、と最初に伝える",
+          "Q4が書けない人は「その情報は、誰から取れるか」のスライドに戻す"]),
         ("共有・ディスカッション",
          ["共有①は時計回りで1人60秒。質問は「その判断の根拠になった情報は？」",
           "ディスカッションは1人3分×3人＋気づき3分。質問は「その情報が分かると、次の活動はどう変わる？」",
@@ -952,7 +994,7 @@ tips = [("当日の投影",
         ("締め方",
          ["まとめは3つのメッセージだけ。IgA腎症への接続は一文で言い切る",
           "行動宣言はワーク②のQ4をそのまま投稿してもらう",
-          "最終メッセージまで必ず2分残す"])]
+          "DAY3のチーム展開（営業所で共有）への接続を一言添えて終える"])]
 for i, (t, lines) in enumerate(tips):
     x = 0.6 + (i % 2) * 6.15
     y = 1.9 + (i // 2) * 2.5
