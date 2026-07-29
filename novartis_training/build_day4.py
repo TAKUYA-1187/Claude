@@ -6,18 +6,17 @@ Renal MR スキルアッププロジェクト DAY4
 DAY4_base_1-7.pptx の冒頭7枚を保持し（Agendaの文言のみ更新）、8枚目以降を生成。
 
 ■ 構成（計60分）
-   オープニング 5分 ／ テーマ①「影響力を考える」25分 ／
-   テーマ②「影響の輪を考える」25分 ／ エリア戦略・まとめ 5分
+   オープニング（含DAY3→DAY4）9分 ／ テーマ①「影響力を見極めた経験」16分 ／
+   テーマ②「エリアの中の影響力」31分（藤さんの事例10分を含む） ／ まとめ 4分
 
 ■ 到達目標（プロジェクト公式・戦略的思考）
    担当施設と周辺エリアに対する成功像・現状・課題・解決法を言語化できる
 
 ■ 設計の柱（企画ミーティング＋DAY1〜3の内容を反映）
    - 戦略的思考 ＝ ①影響力（誰が、何を動かせるか）× ②影響の輪（どこまで届くか）
-   - ワークの冒頭で対象疾患を1つ選ばせる（慢性糸球体腎炎の診療を題材に）
-   - ワークは「完成条件（作る一文）」まで明示する
-   - 共有は発表の型と時間を決め、全員が確実に発言できるようにする
-   - ワーク②は到達目標（成功像・現状/課題・解決法）と一致させる
+   - 疾患・製品の戦略は作らせない。IgA腎症は付録の参考例のみ
+   - テーマ①②とも「過去の経験の共有」を軸にしたフリーディスカッション
+   - 詳細な講義コンテンツは付録に格納し、本編は問いと対話に集中させる
    - テーマ①はDAY1の「"影響力"を紐解いてみよう」を、自分の担当施設で実際にやる回。
      DAY2で会えた人・DAY3で得た情報を、ここで結びつける
    - テーマ②は影響の輪をエリアへ広げ、エリアプランニングを簡単にディスカッションする回
@@ -78,10 +77,10 @@ if BLANK is None:
     BLANK = prs.slide_masters[0].slide_layouts[6]
 
 # --- 冒頭2枚目のAgenda文言のみ更新（書式は維持） ---
-AGENDA_LINES = ["■オープニング　5分",
-                "■テーマ①「影響力を考える」　20分",
-                "■テーマ②「影響の輪を考える」　30分",
-                "■エリア戦略・まとめ　5分"]
+AGENDA_LINES = ["■オープニング　9分",
+                "■テーマ①「影響力を見極めた経験」　16分",
+                "■テーマ②「エリアの中の影響力」　31分",
+                "■まとめ・行動宣言　4分"]
 for sh in prs.slides[1].shapes:
     if sh.has_text_frame and "オープニング" in sh.text_frame.text:
         for pi, para in enumerate(sh.text_frame.paragraphs):
@@ -243,411 +242,525 @@ def section(s, no, title, subtitle, question, bullets):
 # ================================================================ 8 Agenda
 s = add_slide()
 header(s, "AGENDA", "本日の進め方")
-blocks = [("オープニング", "5分", "3回の振り返り／今日の2つの視点", GREEN),
-          ("テーマ①「影響力を考える」", "20分", "誰が、何を動かせるのか", NAVY),
-          ("テーマ②「影響の輪を考える」", "30分", "その力を、どう活かすか", NAVY),
-          ("エリア戦略・まとめ", "5分", "まとめ／今週の一手", GREEN)]
+blocks = [("オープニング", "9分", "3回の振り返り／DAY3からDAY4へ", GREEN),
+          ("テーマ①「影響力を見極めた経験」", "16分", "これまでの経験を持ち寄る", NAVY),
+          ("テーマ②「エリアの中の影響力」", "31分", "藤さんの事例10分 → 自分のエリアへ", NAVY),
+          ("まとめ・行動宣言", "4分", "3つの学び／次に確かめたいこと", GREEN)]
 y = 1.9
 for t, tm, d, col in blocks:
-    card(s, 0.6, y, 6.3, 1.0, [P([R("■ " + t, 17, True, WHITE)])], fill=col, radius=0.1, pad=0.22)
+    card(s, 0.6, y, 6.3, 1.0, [P([R("■ " + t, 16.5, True, WHITE)])], fill=col, radius=0.1, pad=0.22)
     card(s, 7.0, y, 1.2, 1.0, [P([R(tm, 15, True, col)], align=PP_ALIGN.CENTER)],
          fill=PALE2, line=col, radius=0.15)
-    card(s, 8.35, y, 4.4, 1.0, [P([R(d, 13.5, False, INK)], line=1.2)],
+    card(s, 8.35, y, 4.4, 1.0, [P([R(d, 13, False, INK)], line=1.2)],
          fill=WHITE, line=LGRAY, radius=0.1, pad=0.18)
     y += 1.13
 card(s, 0.6, 6.45, 12.15, 0.48,
-     [P([R("テーマ① 講義7 → ワーク8 → 共有5　　｜　　テーマ② 講義8 → ワーク10 → ディスカッション12", 13, True, DEEP)],
+     [P([R("レクチャーは合計6分ほど。皆さんが考え、話す時間を40分とっています。", 13.5, True, DEEP)],
        align=PP_ALIGN.CENTER)],
      fill=YPALE, radius=0.12)
 
-# ================================================================ 9 今日の2つの視点
+# ================================================================ 9 今日のテーマ
 s = add_slide()
-header(s, "TODAY'S DESIGN", "第4回のテーマは「戦略的思考」")
+header(s, "TODAY'S DESIGN", "顧客理解を、エリアを見る力に変える")
+txt(s, 0.6, 1.58, 12.15, 0.4,
+    [P([R("― 大学・基幹病院の影響力を見極め、エリア全体を捉える ―", 15, True, GRAY)],
+       align=PP_ALIGN.CENTER)])
 pillars = [("採用", "DAY 1", GREEN2), ("面会", "DAY 2", GREEN2),
            ("情報収集", "DAY 3", GREEN2), ("戦略的思考", "DAY 4", DEEP)]
 for i, (t, d, col) in enumerate(pillars):
     x = 0.6 + i * 3.12
-    card(s, x, 1.8, 2.95, 0.8,
-         [P([R("◆ " + t, 15.5, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
-          P([R(d, 11.5, False, WHITE)], align=PP_ALIGN.CENTER)],
+    card(s, x, 2.1, 2.95, 0.75,
+         [P([R("◆ " + t, 15, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
+          P([R(d, 11, False, WHITE)], align=PP_ALIGN.CENTER)],
          fill=col, radius=0.1)
-card(s, 0.6, 2.72, 12.15, 0.9,
-     [P([R("到達目標：", 14, True, DEEP),
-         R("収集した情報から、エリアの課題・原因・解決方法を可視化できる", 16, True, RED)],
-       align=PP_ALIGN.CENTER, space_after=4),
-      P([R("本日の到達点：誰が何を動かせるかを整理し、次に確認する情報と行動を決められる", 12.5, True, DEEP)],
+card(s, 0.6, 3.0, 12.15, 0.9,
+     [P([R("到達目標：", 13.5, True, DEEP),
+         R("収集した情報から、エリアの課題・原因・解決方法を可視化できる", 15, True, RED)],
+       align=PP_ALIGN.CENTER, space_after=5),
+      P([R("本日の到達点：自分のエリアにおける影響力のつながりを、自分の言葉で説明できる", 13, True, DEEP)],
         align=PP_ALIGN.CENTER)],
      fill=YPALE, line=YELL, radius=0.1)
-two = [("① 影響力", "誰が、何を動かせるのか", "肩書きではなく「動かせるもの」で見る",
-        "テーマ①　施設情報を構造で整理し、キーパーソンを特定", NAVY, PALEB),
-       ("② 影響の輪", "その力は、どこまで届くのか", "施設 → 関連病院 → エリア → その先",
-        "テーマ②　エリアアプローチ戦略を検討・説明できる", GOLD, YPALE)]
-for i, (t, sub, d, tag, col, fill) in enumerate(two):
-    x = 0.6 + i * 6.15
-    card(s, x, 3.72, 6.0, 0.7,
-         [P([R(t, 19, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
-          P([R(sub, 12.5, False, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
-    card(s, x, 4.5, 6.0, 0.85, [P([R(d, 14.5, True, INK)], align=PP_ALIGN.CENTER, line=1.25)],
-         fill=fill, radius=0.1, pad=0.16)
-    card(s, x, 5.43, 6.0, 0.55, [P([R(tag, 11, True, col)], align=PP_ALIGN.CENTER, line=1.15)],
-         fill=WHITE, line=col, radius=0.12, pad=0.1)
-card(s, 0.6, 6.1, 12.15, 0.8,
-     [P([R("戦略的思考 ＝ 影響力を見極め、その輪をどこまで広げるかを決めること", 16.5, True, DEEP)],
-       align=PP_ALIGN.CENTER)],
-     fill=PALE, radius=0.12)
-
-# ================================================================ 10 3回で手に入れた力
-s = add_slide()
-header(s, "LOOK BACK", "3回で手に入れた力")
-days = [("DAY 1", "大学・基幹病院のイロハ", GREEN,
-         ["大学の3使命と医師派遣", "影響力はテリトリー×ニーズ（HP／HS）",
-          "教授の裁量権／医局の集合体", "薬審・採用の流れ"],
-         "誰が“何を動かせるか”"),
-        ("DAY 2", "「会えない」を「会える」に", NAVY,
-         ["未訪問 → 初回接点 → 仮説面会 → 定期面会", "Best Time / Best Place",
-          "カレンダー管理と行動ログ", "会う理由を設計し、次の約束を残す"],
-         "動かせる人に“会える”"),
-        ("DAY 3", "やっぱりMRは情報が命", GOLD,
-         ["顧客理解を深める必要性", "どこで、どの情報を取るか",
-          "仮説を持ち、クローズドで聞ける状態にする", "そして —— その情報を、どう活かすか"],
-         "その人のニーズが“分かる”")]
-for i, (d, t, col, lines, gain) in enumerate(days):
+flow3 = [("① 経験を持ち寄る", "影響力を、どう見極めてきたか", "テーマ①", NAVY),
+         ("② 事例から学ぶ", "藤さんのエリアでは、どう広がっていたか", "テーマ②", GOLD),
+         ("③ 自分に当てはめる", "私のエリアでは、どうつながっているか", "テーマ②", GREEN)]
+for i, (t, d, tag, col) in enumerate(flow3):
     x = 0.6 + i * 4.09
-    card(s, x, 1.85, 3.9, 0.75,
-         [P([R(d, 15, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
-          P([R(t, 11.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
-    card(s, x, 2.68, 3.9, 1.95,
-         [P([R("・" + l, 12, False, INK)], line=1.25, space_after=10) for l in lines],
-         fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.18)
-    card(s, x, 4.72, 3.9, 0.55, [P([R(gain, 13, True, col)], align=PP_ALIGN.CENTER)],
-         fill=PALE2, radius=0.12)
-card(s, 0.6, 5.5, 12.15, 1.3,
-     [P([R("この3つが揃うと、「影響力」が見える。", 22, True, WHITE)],
+    card(s, x, 4.15, 3.9, 0.62, [P([R(t, 15, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
+    card(s, x, 4.85, 3.9, 0.8, [P([R(d, 12.5, False, INK)], align=PP_ALIGN.CENTER, line=1.25)],
+         fill=PALE2, radius=0.1, pad=0.14)
+    if i < 2:
+        arrow(s, x + 3.94, 4.32, 0.14, 0.28, color=GREEN2)
+card(s, 0.6, 5.85, 12.15, 1.05,
+     [P([R("完成したエリアプランをつくる回ではありません。", 14, False, WHITE)],
        align=PP_ALIGN.CENTER, space_after=6),
-      P([R("DAY3の最後の問い —— 「営業として、その情報をどう活かすか」。今日は、その答えを出します。", 14, True, MINT)],
+      P([R("「自分のエリアでは、どの施設・医師が、どんな関係を通じて周囲に影響しているか」を語れれば成功です。", 15, True, YELL)],
         align=PP_ALIGN.CENTER)],
-     fill=DEEP, radius=0.1, pad=0.2)
+     fill=DEEP, radius=0.1, pad=0.18)
 
-# ================================================================ 11 チェックイン（1問）
+# ================================================================ 10 チェックイン
 s = add_slide()
 shape(s, 0, 0, 13.333, 7.5, fill=PALE2, kind=MSO_SHAPE.RECTANGLE)
-chip(s, 0.6, 0.34, 3.4, 0.42, "CHECK IN　｜　3分", fill=GREEN)
+chip(s, 0.6, 0.34, 3.4, 0.42, "CHECK IN　｜　5分", fill=GREEN)
 card(s, 0.6, 1.0, 12.15, 1.05,
      [P([R("この3回で、実際に変わったことは何ですか？", 30, True, INK)], align=PP_ALIGN.CENTER)],
      fill=WHITE, line=GREEN, line_w=1.6, radius=0.06, pad=0.18)
-card(s, 1.9, 2.3, 9.55, 0.95,
+card(s, 1.9, 2.3, 9.55, 0.85,
      [P([R("Teamsチャットに、", 17, True, DEEP),
-         R("「以前と比べて変わったこと」を1つ、1行で", 17, True, RED)],
-       align=PP_ALIGN.CENTER, space_after=3),
-      P([R("大学・基幹病院の見方、行動、準備の仕方 — どれでも構いません", 12.5, False, GRAY)],
-        align=PP_ALIGN.CENTER)],
-     fill=YELL, radius=0.15, pad=0.16)
-txt(s, 0.6, 3.55, 12.15, 0.32, [P([R("例", 13, True, GRAY)], align=PP_ALIGN.CENTER)])
+         R("「以前と比べて変わったこと」を1つ、1行で", 17, True, RED)], align=PP_ALIGN.CENTER)],
+     fill=YELL, radius=0.15, pad=0.14)
+txt(s, 0.6, 3.4, 12.15, 0.32, [P([R("例", 13, True, GRAY)], align=PP_ALIGN.CENTER)])
 exs = ["教授以外のキーパーソンにも、目を向けるようになった",
        "面会前に、確認したい仮説を考えるようになった",
-       "大学と基幹病院の関係を、見るようになった"]
-y = 3.95
+       "医師同士や施設間の関係を、見るようになった"]
+y = 3.8
 for e in exs:
     card(s, 2.6, y, 8.15, 0.62, [P([R(e, 15, False, INK)], align=PP_ALIGN.CENTER)],
          fill=WHITE, line=LGRAY, radius=0.1)
     y += 0.72
-card(s, 2.6, 6.15, 8.15, 0.7,
-     [P([R("まだ変わっていない方は、「今も不安なこと」を1つどうぞ", 15, True, DEEP)],
-       align=PP_ALIGN.CENTER)],
+card(s, 2.6, 6.0, 8.15, 0.62,
+     [P([R("まだ変化がない方は、「今も不安なこと」を1つどうぞ", 15, True, DEEP)], align=PP_ALIGN.CENTER)],
      fill=PALE, line=GREEN, radius=0.12)
 footer(s)
 
+# ================================================================ 11 DAY3→DAY4
+s = add_slide()
+header(s, "BRIDGE", "情報を集めるだけでは、エリアは見えてこない", "4分", kcolor=GOLD)
+card(s, 0.6, 2.0, 5.8, 0.62, [P([R("DAY3までにできるようになったこと", 14.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=GRAY, radius=0.1)
+d3 = ["どんな情報が必要か", "どこから情報を取るか", "仮説を持って確認する", "顧客理解を深める"]
+card(s, 0.6, 2.72, 5.8, 2.15,
+     [P([R("・" + l, 13, False, INK)], line=1.25, space_after=11) for l in d3],
+     fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.2)
+arrow(s, 6.62, 3.4, 0.65, 0.6, color=GOLD)
+card(s, 7.5, 2.0, 5.25, 0.62, [P([R("DAY4で考えること", 14.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=GREEN, radius=0.1)
+d4 = ["その情報から、誰の影響力が見えるか", "その影響は、どこまで広がっているか",
+      "大学・基幹病院が、エリアでどんな役割を持つか"]
+card(s, 7.5, 2.72, 5.25, 2.15,
+     [P([R("・" + l, 13, True, INK)], line=1.25, space_after=14) for l in d4],
+     fill=PALE, line=GREEN, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.2)
+card(s, 0.6, 5.15, 12.15, 1.35,
+     [P([R("情報の価値は、持っている量ではなく、", 17, False, WHITE)], align=PP_ALIGN.CENTER, space_after=6),
+      P([R("見方や活動が変わるかで決まる。", 23, True, YELL)], align=PP_ALIGN.CENTER)],
+     fill=DEEP, radius=0.1, pad=0.2)
 # ================================================================ 12 テーマ①扉
 s = add_slide()
-section(s, "①", "影響力を考える", "テーマ①　｜　誰が、何を動かせるのか　｜　20分（講義7・ワーク8・共有5）",
-        "あなたの担当施設で、「何かを動かせる人」は誰ですか？",
-        ["DAY1の「“影響力”を紐解く」を、自分の担当施設で実際にやってみる",
-         "影響力は「肩書き」ではなく「何を動かせるか」で見る",
-         "DAY2で会えた人・DAY3で分かったニーズを、ここで結びつける"])
+section(s, "①", "影響力を見極めた経験", "テーマ①　｜　16分（ディスカッション12分・全体共有4分）",
+        "「この先生・この施設が鍵だった」と気づいた経験は？",
+        ["正解を教える時間ではありません。皆さんの経験を持ち寄る時間です",
+         "3〜4人で、思い出した経験を自由に話してください",
+         "最後にグループで「影響力を見極めるうえで重要だったこと」を1つ決めます"])
 
-# ================================================================ 13 DAY1復習
+# ================================================================ 13 テーマ①ディスカッション
 s = add_slide()
-header(s, "THEME ①", "影響力は「テリトリー」と「ニーズ」で決まる", "DAY1の復習", kcolor=NAVY)
-tiers = [("HP（基幹病院）", ["1病院", "医師会・医療圏", "関連病院・出身医局"],
-          "紹介率を上げたい／関連病院と協働したい／院内で負けたくない", GREEN),
-         ("HS（大学病院）", ["県内", "県内＋他大学・専門領域", "日本全体・学会・世界"],
-          "研修医が欲しい／論文を出したい／県内での存在感が欲しい", NAVY)]
-for i, (t, terr, need, col) in enumerate(tiers):
-    x = 0.6 + i * 6.15
-    card(s, x, 2.05, 6.0, 0.6, [P([R(t, 17, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
-    yy = 2.78
-    for j, tr in enumerate(terr):
-        card(s, x + 0.45 * (2 - j), yy, 6.0 - 0.9 * (2 - j), 0.5,
-             [P([R(tr, 13, True, col)], align=PP_ALIGN.CENTER)],
-             fill=PALE2, line=col, radius=0.2)
-        yy += 0.6
-    card(s, x, 4.7, 6.0, 0.62, [P([R("ニーズ：" + need, 12.5, False, INK)], line=1.2)],
+header(s, "DISCUSSION ①", "影響力を見極めた経験を共有してください", "12分", kcolor=GREEN)
+card(s, 0.6, 1.85, 12.15, 0.95,
+     [P([R("これまでの活動で、", 18, False, INK),
+         R("「この先生・この施設が鍵だった」", 18, True, RED),
+         R("と気づいた経験は？", 18, False, INK)], align=PP_ALIGN.CENTER)],
+     fill=PALE, line=GREEN, radius=0.08, pad=0.16)
+card(s, 0.6, 3.0, 12.15, 0.48, [P([R("話を深めるヒント", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=NAVY, radius=0.12)
+hints = ["何をきっかけに、その先生・施設が重要だと気づきましたか？",
+         "その後、活動の進め方や関わる相手はどう変わりましたか？",
+         "結果として、何が前進しましたか？"]
+y = 3.55
+for i, h in enumerate(hints):
+    circle(s, 0.6, y, 0.58, str(i + 1), fill=NAVY2, size=15)
+    card(s, 1.42, y, 11.33, 0.58, [P([R(h, 15, True, INK)])],
          fill=WHITE, line=LGRAY, radius=0.1, pad=0.16)
-card(s, 0.6, 5.55, 12.15, 1.3,
-     [P([R("テリトリーが違えば、ニーズも違う。ニーズが違えば、動かせるものも違う。", 16, False, WHITE)],
-       align=PP_ALIGN.CENTER, space_after=8),
-      P([R("「この先生は、何を動かせるのか？」", 24, True, YELL)], align=PP_ALIGN.CENTER)],
+    y += 0.66
+steps = [("最初の1分", "話したい経験を、ひとつ思い出す", GREEN),
+         ("9分", "3〜4人で自由に話す（順番も型もありません）", GREEN),
+         ("最後の2分", "グループで「影響力を見極めるうえで重要だったこと」を1つ決める", NAVY)]
+y = 5.5
+for t, d, col in steps:
+    card(s, 0.6, y, 2.2, 0.34, [P([R(t, 11.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.12)
+    card(s, 3.0, y, 9.75, 0.34, [P([R(d, 12, False, INK)])], fill=PALE2, radius=0.1, pad=0.1)
+    y += 0.38
+
+# ================================================================ 14 テーマ①全体共有
+s = add_slide()
+header(s, "SHARE ①", "全体共有 — 影響力は、どこを見れば分かるのか", "4分", kcolor=GREEN)
+card(s, 0.6, 1.85, 12.15, 0.6,
+     [P([R("2〜3グループから、30〜45秒ずつ　—　「私たちのグループでは、〇〇が重要だという意見になりました」", 14.5, True, DEEP)],
+       align=PP_ALIGN.CENTER)],
+     fill=PALE, radius=0.1)
+views = [("① 周囲がどう反応しているか", ["誰に相談しているか", "誰の意見を参考にしているか",
+                                "誰の発言で議論が進むか"], NAVY),
+         ("② 実際にどんな役割を担っているか", ["診療方針を示す／新しい取り組みを実行する",
+                                   "若手を育成する／施設間をつなぐ", "院外へ情報を発信する"], GREEN),
+         ("③ その影響がどこまで届くか", ["施設の中", "関連病院／担当エリア",
+                               "担当エリアの外"], GOLD)]
+for i, (t, lines, col) in enumerate(views):
+    x = 0.6 + i * 4.09
+    card(s, x, 2.7, 3.9, 0.62, [P([R(t, 13, True, WHITE)], align=PP_ALIGN.CENTER, line=1.15)],
+         fill=col, radius=0.1)
+    card(s, x, 3.4, 3.9, 1.85,
+         [P([R("・" + l, 12, False, INK)], line=1.25, space_after=10) for l in lines],
+         fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.17)
+card(s, 0.6, 5.45, 12.15, 1.35,
+     [P([R("皆さんの経験は、この3つの見方に整理できます。", 15, False, WHITE)],
+       align=PP_ALIGN.CENTER, space_after=6),
+      P([R("肩書きではなく、周囲の反応・実際の役割・届く範囲で見る。", 21, True, YELL)],
+        align=PP_ALIGN.CENTER)],
      fill=DEEP, radius=0.1, pad=0.2)
 
-# ================================================================ 14 何を動かせるか
+# ================================================================ 15 テーマ②扉
 s = add_slide()
-header(s, "THEME ①", "影響力は「肩書き」ではなく「何を動かせるか」", "20分", kcolor=NAVY)
-funcs = [("教育", "若手が数年後にエリアへ散る", GREEN),
-         ("研究", "学会・論文で外へ届く", GREEN),
-         ("臨床", "症例が集まる・評価の場", GREEN),
-         ("医局人事", "関連病院の部長・医長を決める", NAVY),
-         ("医師派遣", "エリアの布陣が決まる", NAVY),
-         ("情報発信", "治療方針がエリアの標準に", GOLD),
-         ("講演会・研究会", "地域の共通認識をつくる", GOLD)]
-for i, (t, d, col) in enumerate(funcs):
+section(s, "②", "エリアの中の影響力", "テーマ②　｜　31分（事例10分・個人ワーク6分・共有13分）",
+        "その影響力は、エリアの中でどう広がっているか？",
+        ["一人の医師、一つの大学の影響力は、その施設の中だけで完結するとは限らない",
+         "まず藤さんの事例から、影響力の広がり方を具体的に見る",
+         "そのあと、自分のエリアに当てはめて考え、メンバーと共有する"])
+
+# ================================================================ 16 テーマ②オープニング
+s = add_slide()
+header(s, "THEME ②", "影響力は、何を通じて広がるのか", "2分", kcolor=NAVY)
+paths = [("医局人事・医師派遣", GREEN), ("患者紹介・症例相談", GREEN),
+         ("教育・若手育成", NAVY2), ("同門・卒大・人脈", NAVY2),
+         ("研究会・講演会", GOLD), ("研究・学会発信", GOLD),
+         ("日常的な医師同士の相談", RED)]
+for i, (t, col) in enumerate(paths):
     x = 0.6 + (i % 4) * 3.12
-    y = 2.0 + (i // 4) * 1.5
-    card(s, x, y, 2.95, 0.55, [P([R(t, 14, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.12)
-    card(s, x, y + 0.6, 2.95, 0.75, [P([R(d, 11.5, False, INK)], align=PP_ALIGN.CENTER, line=1.2)],
-         fill=WHITE, line=LGRAY, radius=0.1, pad=0.13)
-card(s, 9.96, 3.5, 2.79, 1.35,
-     [P([R("あなたの担当施設は", 12.5, True, WHITE)], align=PP_ALIGN.CENTER, space_after=5),
-      P([R("どれを動かせる？", 15, True, YELL)], align=PP_ALIGN.CENTER)],
-     fill=DEEP, radius=0.1, pad=0.14)
-card(s, 0.6, 5.15, 6.0, 1.65,
-     [P([R("教授の裁量権（DAY1）", 14, True, DEEP)], space_after=8),
-      P([R("① 臨床機会の配分　② 医局人事・異動", 12.5, False, INK)], space_after=6, line=1.25),
-      P([R("③ 教授会・教授選　④ 研究・教育の方向性", 12.5, False, INK)], space_after=8, line=1.25),
-      P([R("＝ 教授は「処方者」ではなく、これらを動かせる人", 12, True, NAVY)], line=1.25)],
-     fill=PALEB, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.2)
-card(s, 6.75, 5.15, 6.0, 1.65,
-     [P([R("肩書きの落とし穴（DAY1）", 14, True, RED)], space_after=8),
-      P([R("病院教授・特任教授は「教授」でも動かせるものが違う", 12.5, True, INK)], space_after=8, line=1.25),
-      P([R("財源・任期・実権・医局への接続で見極める（付録E）", 12, False, INK)], line=1.25)],
-     fill=YPALE, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.2)
-
-# ================================================================ 15 1人に集中しない
+    y = 2.05 + (i // 4) * 0.95
+    card(s, x, y, 2.95, 0.7, [P([R(t, 13.5, True, WHITE)], align=PP_ALIGN.CENTER, line=1.15)],
+         fill=col, radius=0.12)
+card(s, 9.96, 3.0, 2.79, 0.7,
+     [P([R("…など", 13.5, True, GRAY)], align=PP_ALIGN.CENTER)],
+     fill=PALE2, line=LGRAY, radius=0.12)
+card(s, 0.6, 4.15, 12.15, 1.25,
+     [P([R("大学が常に中心とは限らない。", 22, True, YELL)], align=PP_ALIGN.CENTER, space_after=6),
+      P([R("大学と基幹病院が、それぞれ異なる役割を持っている場合もある。", 15, False, WHITE)],
+        align=PP_ALIGN.CENTER)],
+     fill=DEEP, radius=0.1, pad=0.2)
+card(s, 0.6, 5.7, 12.15, 1.1,
+     [P([R("では、実際にどう広がっているのか。", 15, False, INK)], align=PP_ALIGN.CENTER, space_after=6),
+      P([R("藤さんの事例から、一緒に見ていきましょう。", 19, True, DEEP)], align=PP_ALIGN.CENTER)],
+     fill=YPALE, radius=0.1, pad=0.18)
+# ================================================================ 17 事例の見どころ
 s = add_slide()
-header(s, "THEME ①", "影響力は、1人に集中していない", "20分", kcolor=NAVY)
-roles = [("◎", "方針を決める", "治療方針が、この人の一言で決まる", GREEN),
-         ("○", "最初に試す", "新しい治療を最初に使う。実務の中心", GREEN2),
-         ("★", "情報ハブ", "若手が困ったら聞きに行く。医局長に多い", GOLD),
-         ("◇", "連携の要", "紹介患者の受け入れ・行き先を差配", NAVY),
-         ("□", "対外の顔", "研究会・講演会で外に発信する", NAVY2)]
-y = 2.0
-for mk, t, d, col in roles:
-    circle(s, 0.6, y, 0.62, mk, fill=col, size=17)
-    card(s, 1.42, y, 2.6, 0.62, [P([R(t, 14, True, col)], align=PP_ALIGN.CENTER)],
-         fill=PALE2, line=col, radius=0.12)
-    card(s, 4.18, y, 4.9, 0.62, [P([R(d, 12.5, False, INK)])],
-         fill=WHITE, line=LGRAY, radius=0.1, pad=0.14)
-    y += 0.74
-card(s, 9.3, 2.0, 3.45, 3.32,
-     [P([R("DAY2・DAY3が効く", 14.5, True, WHITE)], align=PP_ALIGN.CENTER, space_after=14),
-      P([R("この5人を見分けるには、会って話すしかない", 12.5, False, WHITE)], space_after=14, line=1.3),
-      P([R("DAY2　会えるようになった", 12.5, True, MINT)], space_after=8, line=1.25),
-      P([R("DAY3　ニーズが見えてきた", 12.5, True, MINT)], space_after=14, line=1.25),
-      P([R("3回分の学びが、ここで1つに。", 13, True, YELL)], line=1.25)],
-     fill=DEEP, anchor=MSO_ANCHOR.TOP, radius=0.08, pad=0.2)
-card(s, 0.6, 5.62, 12.15, 1.2,
-     [P([R("「この施設で、何かを動かせるのは誰か」を固有名詞で言えるか。", 18, True, DEEP)],
-       align=PP_ALIGN.CENTER, space_after=8),
-      P([R("言えない場所が、次に会いに行く相手です。", 14, False, INK)], align=PP_ALIGN.CENTER)],
-     fill=PALE, radius=0.1, pad=0.2)
-# ================================================================ 16 ワーク①
-s = add_slide()
-header(s, "WORK ①", "担当する大学・基幹病院の「影響力マップ」を描く", "8分", kcolor=GREEN)
-steps = [("STEP 1", "2分", "重要だと思う施設を、3つ描く",
-          "丸の大きさ＝その施設が動いたとき、周囲の施設や診療にどれだけ影響するか"),
-         ("STEP 2", "3分", "各施設で、最も影響力がある人物を1名書く",
-          "氏名が分からなければ、役職でOK"),
-         ("STEP 3", "2分", "その人物が「何を動かせるか」を書く",
-          "診療方針・治療導入・教育・研究・派遣人事・連携・発信 から"),
-         ("STEP 4", "1分", "まだ分からないことを「？」で1つ書く",
-          "その「？」が、次に取りに行く情報です")]
-y = 1.85
-for st, tm, t, d in steps:
-    card(s, 0.6, y, 1.4, 0.8, [P([R(st, 12, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
-                               P([R(tm, 11, False, WHITE)], align=PP_ALIGN.CENTER)],
-         fill=GREEN, radius=0.12)
-    card(s, 2.15, y, 6.5, 0.8,
-         [P([R(t, 13, True, DEEP)], space_after=3), P([R(d, 10.5, False, INK)], line=1.15)],
-         fill=WHITE, line=LGRAY, radius=0.1, pad=0.15)
-    y += 0.93
-card(s, 0.6, 5.65, 8.05, 1.15,
-     [P([R("疾患・製品の戦略を書く必要はありません。", 14, True, RED)], space_after=5),
-      P([R("今、知っている構造・人物・関係性で考えてください。C3腎症の経験や、今後のIgA腎症をイメージしても構いません。", 12, False, INK)], line=1.25)],
-     fill=YPALE, radius=0.08, pad=0.18)
-card(s, 8.9, 1.85, 3.85, 2.5,
-     [P([R("完成条件", 15, True, DEEP)], align=PP_ALIGN.CENTER, space_after=10),
-      P([R("次の一文が作れたら完成です", 11.5, False, INK)], space_after=8),
-      P([R("「最も影響力が大きいと考えるのは〇〇施設の△△先生。□□を動かせるから」", 12.5, True, INK)], line=1.35)],
-     fill=YELL, anchor=MSO_ANCHOR.TOP, radius=0.08, pad=0.18)
-card(s, 8.9, 4.5, 3.85, 2.3,
-     [P([R("迷ったら", 14, True, WHITE)], align=PP_ALIGN.CENTER, space_after=12),
-      P([R("・大学が一番大きいとは限らない", 12, False, WHITE)], space_after=10, line=1.25),
-      P([R("・影響が担当エリアを超えるなら、そう書いてよい", 12, False, WHITE)], space_after=10, line=1.25),
-      P([R("・分からないところは「？」", 12, True, MINT)], line=1.25)],
-     fill=DEEP, anchor=MSO_ANCHOR.TOP, radius=0.06, pad=0.18)
-
-# ================================================================ 17 共有①
-s = add_slide()
-header(s, "SHARE ①", "3人1組で、1人60秒ずつ", "5分", kcolor=GREEN)
-card(s, 0.6, 1.85, 12.15, 0.65,
-     [P([R("時計回りに、全員が話してください。1人60秒。", 17, True, DEEP)], align=PP_ALIGN.CENTER)],
+header(s, "CASE", "藤さんの事例紹介 — 見どころ", "10分", kcolor=GOLD)
+card(s, 0.6, 1.85, 12.15, 0.6,
+     [P([R("成功事例の紹介ではなく、", 15, False, INK),
+         R("「どの情報から、エリア内の影響力のつながりを読み取ったか」", 15, True, RED),
+         R("を見てください。", 15, False, INK)], align=PP_ALIGN.CENTER)],
      fill=PALE, radius=0.1)
-card(s, 0.6, 2.7, 12.15, 0.5, [P([R("発表の型", 14, True, WHITE)], align=PP_ALIGN.CENTER)],
+parts = [("① 担当エリアの背景", "1分", "どんな大学・基幹病院があるか／当初どう見ていたか", GREEN),
+         ("② 転機となった情報・気づき", "2分", "どの先生・施設が鍵だと気づいたか／何がきっかけか", NAVY2),
+         ("③ 影響力のつながり", "3分", "大学と基幹病院がどうつながっていたか（図）", NAVY),
+         ("④ 活動の変化", "2分", "見方が変わる前と後で、活動はどう変わったか", GOLD),
+         ("⑤ 伝えたい学び", "2分", "肩書きだけでは分からなかったこと／応用できる視点", RED)]
+y = 2.6
+for t, tm, d, col in parts:
+    card(s, 0.6, y, 3.5, 0.5, [P([R(t, 12.5, True, WHITE)])], fill=col, radius=0.1, pad=0.14)
+    card(s, 4.25, y, 0.9, 0.5, [P([R(tm, 12, True, col)], align=PP_ALIGN.CENTER)],
+         fill=PALE2, line=col, radius=0.15)
+    card(s, 5.3, y, 7.45, 0.5, [P([R(d, 12, False, INK)])], fill=WHITE, line=LGRAY, radius=0.1, pad=0.14)
+    y += 0.58
+card(s, 0.6, 5.62, 12.15, 1.25,
+     [P([R("最後に、藤さんへの問い", 13, True, MINT)], align=PP_ALIGN.CENTER, space_after=7),
+      P([R("「自分のエリアを見るとき、最初にどこを確認するとよいと思いますか？」", 20, True, YELL)],
+        align=PP_ALIGN.CENTER)],
+     fill=DEEP, radius=0.1, pad=0.18)
+
+# ================================================================ 18-21 事例テンプレート
+case_tpl = [("① 担当エリアの背景", "1分", GREEN,
+             ["どんな大学・基幹病院がありますか？", "当初、エリアをどのように見ていましたか？"]),
+            ("② 転機となった情報・気づき", "2分", NAVY2,
+             ["どの先生・施設が鍵だと気づきましたか？", "何をきっかけに気づきましたか？",
+              "Dry情報／Wet情報のどちらでしたか？　誰から得た情報でしたか？"]),
+            ("③ 影響力のつながり", "3分", NAVY,
+             ["大学と基幹病院は、どうつながっていましたか？",
+              "医師同士の関係／人事・派遣／患者紹介／研究会・同門／情報発信"]),
+            ("④ 活動の変化と、伝えたい学び", "4分", GOLD,
+             ["見方が変わる前と後で、活動はどう変わりましたか？",
+              "大学だけでなく、基幹病院をどう組み合わせましたか？",
+              "肩書きだけでは分からなかったこと／他のエリアでも応用できる視点"])]
+for idx, (t, tm, col, qs) in enumerate(case_tpl):
+    s = add_slide()
+    header(s, "CASE", "藤さんの事例　" + t, tm, kcolor=GOLD)
+    card(s, 0.6, 1.78, 12.15, 0.42 + 0.26 * len(qs),
+         [P([R("・" + q, 12, True, INK)], line=1.2, space_after=5) for q in qs],
+         fill=PALE2, line=LGRAY, anchor=MSO_ANCHOR.MIDDLE, radius=0.1, pad=0.14)
+    top = 1.78 + 0.42 + 0.26 * len(qs) + 0.15
+    shape(s, 0.6, top, 12.15, 6.85 - top, fill=WHITE, line=col, line_w=1.4, radius=0.02)
+    if idx == 2:
+        txt(s, 0.85, top + 0.12, 11.6, 0.3,
+            [P([R("凡例：　人事・派遣　／　患者紹介・症例相談　／　同門・卒大　／　研究会・教育　／　情報発信", 10.5, False, GRAY)])])
+    txt(s, 0.85, 6.4, 11.6, 0.3,
+        [P([R("※ 藤さんのスライド・図をこのエリアに配置してください", 10, False, LGRAY)])])
+
+# ================================================================ 22 個人ワーク
+s = add_slide()
+header(s, "WORK", "自分のエリアの「影響力のつながり」を考える", "6分", kcolor=GREEN)
+card(s, 0.6, 1.75, 12.15, 0.72,
+     [P([R("自分の担当エリアで、", 16, False, INK),
+         R("大学・基幹病院の影響力が、どこからどこへ、どのように広がっているか", 16, True, RED),
+         R("を考えてください。", 16, False, INK)], align=PP_ALIGN.CENTER)],
+     fill=PALE, radius=0.1)
+card(s, 0.6, 2.62, 6.0, 0.5, [P([R("考えるヒント", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=NAVY, radius=0.12)
-lines = [("最も影響力が大きいと思う施設は", "〇〇", "です。"),
-         ("キーパーソンは", "△△先生", "です。"),
-         ("", "□□", "を動かせると考えています。"),
-         ("まだ分からないことは", "◇◇", "です。")]
-y = 3.32
-for a, b, c in lines:
-    card(s, 0.6, y, 12.15, 0.62,
-         [P([R(a, 15, False, INK), R(b, 15, True, RED), R(c, 15, False, INK)], align=PP_ALIGN.CENTER)],
-         fill=WHITE, line=LGRAY, radius=0.1)
-    y += 0.72
-card(s, 0.6, 6.3, 12.15, 0.6,
-     [P([R("聞き手の質問は1つだけ　—　", 14, False, INK),
-         R("「その判断の根拠になった情報は何ですか？」", 16.5, True, GREEN)], align=PP_ALIGN.CENTER)],
-     fill=YPALE, radius=0.12)
+hints = ["影響力の起点となっている先生・施設はどこですか？",
+         "どのようなつながりを通じて、影響が広がっていますか？",
+         "大学と基幹病院は、それぞれどんな役割を持っていますか？",
+         "まだ分からない関係やつながりは、どこですか？"]
+card(s, 0.6, 3.22, 6.0, 2.1,
+     [P([R("・" + h, 12, False, INK)], line=1.25, space_after=10) for h in hints],
+     fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.17)
+card(s, 6.75, 2.62, 6.0, 0.5, [P([R("描いてよいもの", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=GREEN, radius=0.12)
+items = ["大学・基幹病院／重要な医師", "医局人事・医師派遣", "患者紹介・症例相談",
+         "同門・卒大／教育・研究会", "情報発信", "分からない関係は「？」"]
+card(s, 6.75, 3.22, 6.0, 2.1,
+     [P([R("・" + i2, 12, False, INK)], line=1.25, space_after=7) for i2 in items],
+     fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.17)
+card(s, 0.6, 5.55, 12.15, 1.3,
+     [P([R("正確な組織図をつくるワークではありません。", 17, True, RED)], align=PP_ALIGN.CENTER, space_after=7),
+      P([R("文字でも図でも構いません。今分かっている範囲で、自分がエリアをどう見ているかを自由に表してください。", 13.5, False, INK)],
+        align=PP_ALIGN.CENTER, line=1.25)],
+     fill=YPALE, radius=0.1, pad=0.18)
 
-# ================================================================ 18 テーマ②扉
+# ================================================================ 23 テーマ②ディスカッション
 s = add_slide()
-section(s, "②", "影響の輪を考える", "テーマ②　｜　その力は、どこまで届くのか　｜　30分",
-        "その影響力は、どこまで届きますか？",
-        ["影響の輪：施設の中 → 関連病院 → 担当エリア → その先",
-         "大学に固執しない。輪が一番大きいのは大学とは限らない",
-         "目的から逆算して、次に取りに行く情報を決める"])
-
-# ================================================================ 19 影響の輪
-s = add_slide()
-header(s, "THEME ②", "影響の輪 — その力は、どこまで届くのか", "30分", kcolor=NAVY)
-rings = [("① 施設の中", 4.3, GREEN2), ("② 関連病院", 3.4, GREEN),
-         ("③ 担当エリア", 2.5, NAVY2), ("④ その先", 1.6, NAVY)]
-cx, cy = 3.5, 4.1
-for label, d, col in rings:
-    shape(s, cx - d / 2, cy - d / 2, d, d, fill=None, line=col, line_w=1.8, kind=MSO_SHAPE.OVAL)
-for label, d, col in rings:
-    txt(s, cx - 1.1, cy - d / 2 + 0.07, 2.2, 0.28,
-        [P([R(label, 11, True, col)], align=PP_ALIGN.CENTER)])
-circle(s, cx - 0.4, cy - 0.4, 0.8, "先生", fill=YELL, size=12, color=DEEP)
-lv = [("① 施設の中まで", "院内の方針・採用は動く。エリアには届かない", GREEN2),
-      ("② 関連病院まで", "医局人事・派遣を通じて、系列に届く", GREEN),
-      ("③ 担当エリアまで", "研究会・講演会・地域連携で、系列を越える", NAVY2),
-      ("④ その先まで", "学会・全国の研究会で、担当範囲を超える", NAVY)]
-y = 1.95
-for t, d, col in lv:
-    card(s, 6.9, y, 5.85, 1.0,
-         [P([R(t, 14.5, True, col)], space_after=4), P([R(d, 11.5, False, INK)], line=1.2)],
-         fill=WHITE, line=LGRAY, radius=0.1, pad=0.17)
-    y += 1.12
-card(s, 0.6, 6.42, 12.15, 0.5,
-     [P([R("輪の大きさは、肩書きでは決まらない。　", 14, False, INK),
-         R("あなたの担当で、一番大きな輪を持つのは誰？", 15, True, RED)], align=PP_ALIGN.CENTER)],
-     fill=YPALE, radius=0.12)
-
-# ================================================================ 20 大学に固執しない
-s = add_slide()
-header(s, "THEME ②", "大学に固執しない — 大学はエリアの中の「1施設」", "30分", kcolor=NAVY)
-pats = [("① 大学の輪が最大",
-         [("A大", 1.2, 1.05, 0.5, PALE, DEEP), ("基幹", 0.62, 2.15, 1.4, WHITE, GRAY),
-          ("基幹", 0.62, 0.32, 1.5, WHITE, GRAY)],
-         "方針がエリア全体に波及。人事と発信が効く", GREEN),
-        ("② 複数の大学が並ぶ",
-         [("A大", 1.0, 0.45, 0.55, PALE, DEEP), ("B大", 1.0, 1.75, 1.2, PALE, GREEN2),
-          ("基幹", 0.6, 1.35, 0.3, WHITE, GRAY)],
-         "1大学では動かない。共通する課題を探す", NAVY),
-        ("③ 基幹病院の輪が最大",
-         [("基幹", 1.25, 0.9, 0.55, PALEB, NAVY), ("A大", 0.72, 0.38, 1.6, PALE, DEEP),
-          ("基幹", 0.66, 2.05, 1.55, PALEB, NAVY2)],
-         "実務は基幹病院。大学は研究・教育で効かせる", GOLD),
-        ("④ 輪がエリアを超える",
-         [("A大", 1.15, 0.48, 0.5, PALE, DEEP), ("県外", 0.66, 2.05, 0.42, WHITE, GRAY),
-          ("県外", 0.66, 2.15, 1.55, WHITE, GRAY)],
-         "営業所・全国への展開を考える", RED)]
-for i, (t, circles, note, col) in enumerate(pats):
-    x = 0.6 + i * 3.12
-    card(s, x, 1.95, 2.95, 0.52, [P([R(t, 12.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.12)
-    shape(s, x, 2.52, 2.95, 2.7, fill=PALE2, line=LGRAY, radius=0.04)
-    for lbl, d, dx, dy, fc, lc in circles:
-        circle(s, x + dx, 2.68 + dy, d, lbl, fill=fc, line=lc,
-               size=10.5 if d > 0.9 else 9, color=lc)
-    card(s, x, 5.32, 2.95, 1.0, [P([R(note, 12, False, INK)], line=1.25)],
+header(s, "DISCUSSION ②", "自分のエリアの見え方を共有する", "10分", kcolor=GREEN)
+card(s, 0.6, 1.82, 12.15, 0.55,
+     [P([R("3人1組。1人約3分で自分のエリアを説明します。発表の型はありません。", 15, True, DEEP)],
+       align=PP_ALIGN.CENTER)],
+     fill=PALE, radius=0.1)
+pts = [("① 影響力の中心はどこか", "大学か／基幹病院か／特定の医師か／複数の施設か", NAVY),
+       ("② 何を通じて広がっているか", "人事・派遣／患者紹介／教育／同門・人脈／研究会／情報発信", GREEN),
+       ("③ 大学と基幹病院の役割の違い", "大学が方針を示し基幹病院が実践する／基幹病院の経験を大学が発信する など", GOLD),
+       ("④ まだ分からないことは何か", "誰が誰に相談しているか／医局人事の実態／研究会の中心人物／施設間の関係性", RED)]
+y = 2.6
+for t, d, col in pts:
+    card(s, 0.6, y, 3.6, 0.72, [P([R(t, 12.5, True, WHITE)], line=1.15)], fill=col, radius=0.1, pad=0.15)
+    card(s, 4.35, y, 8.4, 0.72, [P([R(d, 12, False, INK)], line=1.15)],
          fill=WHITE, line=LGRAY, radius=0.1, pad=0.15)
-card(s, 0.6, 6.45, 12.15, 0.5,
-     [P([R("「大学を軸としたエリア攻略」ではなく、", 14, False, INK),
-         R("「エリアを動かすために、どの輪を使うか」", 15, True, RED)], align=PP_ALIGN.CENTER)],
+    y += 0.84
+card(s, 0.6, 6.0, 12.15, 0.85,
+     [P([R("残り時間で、", 14, False, INK),
+         R("「他の人のエリアと比べて、最も違っていた点・参考になった点」", 15, True, DEEP),
+         R("を話してください。", 14, False, INK)], align=PP_ALIGN.CENTER)],
+     fill=YPALE, radius=0.1, pad=0.16)
+
+# ================================================================ 24 テーマ②全体共有
+s = add_slide()
+header(s, "SHARE ②", "全体共有 — エリアの見方は、どう変わったか", "3分", kcolor=GREEN)
+card(s, 0.6, 1.9, 12.15, 1.0,
+     [P([R("他の人のエリアを聞いて、", 20, False, INK),
+         R("自分のエリアの見方が変わった点", 20, True, RED),
+         R("は何ですか？", 20, False, INK)], align=PP_ALIGN.CENTER)],
+     fill=WHITE, line=GREEN, line_w=1.6, radius=0.08, pad=0.16)
+txt(s, 0.6, 3.1, 12.15, 0.32,
+    [P([R("こんな気づきが出てきます", 13, True, GRAY)], align=PP_ALIGN.CENTER)])
+finds = ["大学が中心ではないエリアがある",
+         "同じ大学でも、疾患やテーマによって影響範囲が違う",
+         "基幹病院の臨床的な影響が大きいこともある",
+         "一人の医師が、複数の施設をつないでいる",
+         "自分が把握できていない関係が見えた"]
+y = 3.46
+for f in finds:
+    card(s, 2.2, y, 8.95, 0.5, [P([R(f, 14, False, INK)], align=PP_ALIGN.CENTER)],
+         fill=PALE2, line=LGRAY, radius=0.1)
+    y += 0.58
+card(s, 0.6, 6.36, 12.15, 0.5,
+     [P([R("優れたエリア戦略を発表する場ではありません。「視座が変わったこと」を共有してください。", 13, True, DEEP)],
+       align=PP_ALIGN.CENTER)],
+     fill=YPALE, radius=0.12)
+# ================================================================ 25 まとめ
+s = add_slide()
+header(s, "WRAP UP", "本日の3つの学び")
+msgs = [(("1"), "影響力は、肩書きだけでは分からない",
+         "周囲が誰を頼り、誰の意見で動いているかを見る。", NAVY),
+        (("2"), "影響力は、施設の外へ広がっている",
+         "人事、派遣、紹介、教育、研究会、人脈を通じてエリアへ広がる。", GOLD),
+        (("3"), "エリアの見方に、唯一の正解はない",
+         "大学が中心の場合も、基幹病院が中心の場合もある。自分の言葉で説明できることが重要。", GREEN)]
+y = 1.95
+for no, t, d, col in msgs:
+    circle(s, 0.6, y + 0.15, 0.8, no, fill=col, size=20)
+    card(s, 1.6, y, 11.15, 1.1,
+         [P([R(t, 17, True, col)], space_after=5), P([R(d, 13, False, INK)], line=1.2)],
+         fill=WHITE, line=LGRAY, radius=0.1, pad=0.22)
+    y += 1.25
+card(s, 0.6, 5.66, 12.15, 1.12,
+     [P([R("大学の中だけを詳しく知ることが、大学担当者の仕事ではない。", 15, False, WHITE)],
+       align=PP_ALIGN.CENTER, space_after=6),
+      P([R("エリアの中で、どうつながり、どこに影響しているかを説明できること。", 20, True, YELL)],
+        align=PP_ALIGN.CENTER)],
+     fill=DEEP, radius=0.1, pad=0.18)
+
+# ================================================================ 26 行動宣言
+s = add_slide()
+shape(s, 0, 0, 13.333, 7.5, fill=PALE2, kind=MSO_SHAPE.RECTANGLE)
+chip(s, 0.6, 0.34, 2.4, 0.42, "ACTION", fill=GREEN)
+txt(s, 0.6, 0.95, 12.2, 0.8, [P([R("行動宣言", 32, True, DEEP)])])
+card(s, 0.6, 1.95, 12.15, 1.0,
+     [P([R("Teamsチャットに、", 21, True, INK),
+         R("「自分のエリアで、次に確かめたいこと」", 21, True, RED),
+         R("を1つ、1行で", 21, True, INK)], align=PP_ALIGN.CENTER)],
+     fill=WHITE, line=GREEN, line_w=1.6, radius=0.06, pad=0.18)
+txt(s, 0.6, 3.2, 12.15, 0.32, [P([R("例", 13, True, GRAY)], align=PP_ALIGN.CENTER)])
+exs = ["大学と主要基幹病院の間で、誰が日常的に相談されているか確認する",
+       "医局長に、関連病院への派遣と役割分担を聞く",
+       "基幹病院部長が、どの先生の意見を参考にしているか確認する",
+       "研究会の企画を、実際に動かしている先生を確認する"]
+y = 3.62
+for e in exs:
+    card(s, 2.2, y, 8.95, 0.56, [P([R(e, 14, False, INK)], align=PP_ALIGN.CENTER)],
+         fill=WHITE, line=LGRAY, radius=0.1)
+    y += 0.66
+card(s, 2.2, 6.28, 8.95, 0.62,
+     [P([R("描いたエリアの図は、営業所でも共有を（DAY3）", 14, True, DEEP)], align=PP_ALIGN.CENTER)],
+     fill=PALE, line=GREEN, radius=0.12)
+footer(s)
+
+# ================================================================ 27 クロージング
+s = add_slide()
+shape(s, 0, 0, 13.333, 7.5, fill=DEEP, kind=MSO_SHAPE.RECTANGLE)
+txt(s, 0.9, 1.0, 11.5, 0.5, [P([R("ありがとうございました", 19, True, MINT)])])
+steps4 = [("第1回", "見る力", GREEN2), ("第2回", "会う力", GREEN2),
+          ("第3回", "情報を取る力", GREEN2), ("第4回", "エリアを見る力", YELL)]
+for i, (d, t, col) in enumerate(steps4):
+    x = 0.9 + i * 2.95
+    card(s, x, 1.65, 2.75, 0.95,
+         [P([R(d, 12.5, True, DEEP if col == YELL else WHITE)], align=PP_ALIGN.CENTER, space_after=4),
+          P([R(t, 14, True, DEEP if col == YELL else WHITE)], align=PP_ALIGN.CENTER, line=1.15)],
+         fill=col if col == YELL else RGBColor(0x11, 0x63, 0x45), radius=0.1, pad=0.14)
+    if i < 3:
+        arrow(s, x + 2.78, 2.0, 0.14, 0.24, color=MINT)
+card(s, 0.9, 2.95, 11.5, 1.45,
+     [P([R("第3回では、顧客を理解するために「どんな情報を取るか」を考えました。", 15, False, WHITE)],
+       align=PP_ALIGN.CENTER, space_after=8),
+      P([R("第4回では、その情報をつなげ、大学・基幹病院の影響力をエリアの中で捉えました。", 15, False, WHITE)],
+        align=PP_ALIGN.CENTER)],
+     fill=RGBColor(0x11, 0x63, 0x45), radius=0.1, pad=0.18)
+card(s, 0.9, 4.65, 11.5, 1.5,
+     [P([R("大学担当者に求められるのは、大学の中だけを詳しく知ることではありません。", 15, True, DEEP)],
+       align=PP_ALIGN.CENTER, space_after=8),
+      P([R("大学・基幹病院がエリアの中でどうつながり、", 19, True, DEEP)], align=PP_ALIGN.CENTER, space_after=4),
+      P([R("どこに影響しているかを説明できることです。", 19, True, DEEP)], align=PP_ALIGN.CENTER)],
+     fill=YELL, radius=0.1, pad=0.18)
+footer(s, dark=True)
+
+# ================================================================ 28 付録A ワークシート
+s = add_slide()
+header(s, "APPENDIX A", "ワークシート：自分のエリアの「影響力のつながり」", kcolor=GRAY)
+txt(s, 0.6, 1.62, 12.15, 0.32,
+    [P([R("担当エリア（　　　　　　　　　　　　）　　作成日（　　／　　）　　作成者（　　　　　　）", 12, False, INK)])])
+shape(s, 0.6, 2.0, 8.9, 4.35, fill=PALE2, line=GREEN, radius=0.02)
+txt(s, 0.85, 2.12, 8.4, 0.3,
+    [P([R("文字でも図でも構いません。分からない関係は「？」で。", 11, False, GRAY)])])
+card(s, 9.75, 2.0, 3.0, 2.1,
+     [P([R("描いてよいもの", 13.5, True, WHITE)], align=PP_ALIGN.CENTER, space_after=9),
+      P([R("□ 大学・基幹病院／重要な医師", 11.5, False, WHITE)], space_after=7, line=1.2),
+      P([R("□ 医局人事・医師派遣", 11.5, False, WHITE)], space_after=7),
+      P([R("□ 患者紹介・症例相談", 11.5, False, WHITE)], space_after=7),
+      P([R("□ 同門・卒大／教育・研究会", 11.5, False, WHITE)], space_after=7, line=1.2),
+      P([R("□ 情報発信", 11.5, False, WHITE)])],
+     fill=DEEP, anchor=MSO_ANCHOR.TOP, radius=0.08, pad=0.17)
+card(s, 9.75, 4.25, 3.0, 2.1,
+     [P([R("考えるヒント", 13, True, INK)], align=PP_ALIGN.CENTER, space_after=9),
+      P([R("・影響力の起点はどこか", 11.5, False, INK)], space_after=8),
+      P([R("・何を通じて広がっているか", 11.5, False, INK)], space_after=8),
+      P([R("・大学と基幹病院の役割の違い", 11.5, False, INK)], space_after=8, line=1.2),
+      P([R("・まだ分からない関係はどこか", 11.5, True, GOLD)], line=1.2)],
+     fill=YPALE, line=YELL, anchor=MSO_ANCHOR.TOP, radius=0.08, pad=0.17)
+card(s, 0.6, 6.45, 12.15, 0.45,
+     [P([R("正確な組織図ではなく、「自分がエリアをどう見ているか」を表すシートです。", 12, True, DEEP)],
+       align=PP_ALIGN.CENTER)],
      fill=PALE, radius=0.15)
 
-# ================================================================ 21 WIN-WIN
+# ================================================================ 29 付録B 影響力の見極め方
 s = add_slide()
-header(s, "THEME ②", "輪を動かす鍵 — 大学・基幹病院が「実現したいこと」", "30分", kcolor=NAVY)
-set_alpha(shape(s, 0.95, 2.1, 3.5, 3.5, fill=NAVY2, line=NAVY, line_w=1.8, kind=MSO_SHAPE.OVAL), 78)
-set_alpha(shape(s, 2.9, 2.1, 3.5, 3.5, fill=GREEN, line=GREEN, line_w=1.8, kind=MSO_SHAPE.OVAL), 78)
-txt(s, 0.72, 2.5, 2.1, 0.72,
-    [P([R("エリアで\n実現したいこと", 12.5, True, NAVY)], align=PP_ALIGN.CENTER, line=1.2)])
-txt(s, 4.55, 2.5, 2.1, 0.72,
-    [P([R("大学・医局が\n実現したいこと", 12.5, True, GREEN)], align=PP_ALIGN.CENTER, line=1.2)])
-txt(s, 3.05, 3.5, 1.3, 0.9,
-    [P([R("打ち手", 17, True, RED)], align=PP_ALIGN.CENTER, space_after=2),
-     P([R("はここ", 11, True, RED)], align=PP_ALIGN.CENTER)])
-txt(s, 0.95, 5.72, 5.4, 0.32,
-    [P([R("重なりが大きいほど、相手は本気で動く", 12.5, True, DEEP)], align=PP_ALIGN.CENTER)])
-card(s, 6.75, 2.1, 6.0, 0.55,
-     [P([R("医局が「実現したいこと」の例", 14, True, WHITE)], align=PP_ALIGN.CENTER)],
+header(s, "APPENDIX B", "参考：影響力の見極め方（DAY1の復習）", kcolor=GRAY)
+card(s, 0.6, 1.85, 6.0, 0.5, [P([R("テリトリーとニーズ", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=GREEN, radius=0.12)
-wants = ["専門性の高い症例を集めたい", "若手・専攻医を増やしたい、育てたい",
-         "研究データを出したい・論文を書きたい", "関連病院との連携／派遣先を確保したい",
-         "県内・地域での存在感を高めたい", "学会・研究会で発信したい"]
-card(s, 6.75, 2.72, 6.0, 2.35,
-     [P([R("・" + w, 12.5, False, INK)], line=1.2, space_after=8) for w in wants],
-     fill=PALE, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.18)
-card(s, 6.75, 5.2, 6.0, 0.75,
-     [P([R("DAY1で見た「HSのニーズ」そのもの", 13, True, DEEP)], align=PP_ALIGN.CENTER)],
-     fill=WHITE, line=GREEN, radius=0.1, pad=0.14)
-card(s, 0.6, 6.15, 12.15, 0.8,
-     [P([R("「先生・医局が実現したいこと」を後押ししながら、「エリアで実現したいこと」も進む打ち手は何か？", 15.5, True, RED)],
+tiers = [("HP（基幹病院）", "1病院 → 医師会・医療圏 → 関連病院・出身医局",
+          "紹介率を上げたい／関連病院と協働したい"),
+         ("HS（大学病院）", "県内 → 県内＋他大学・専門領域 → 日本全体・学会",
+          "研修医が欲しい／論文を出したい／県内での存在感")]
+y = 2.45
+for t, terr, need in tiers:
+    card(s, 0.6, y, 6.0, 1.05,
+         [P([R(t, 13, True, DEEP)], space_after=4),
+          P([R(terr, 11, False, INK)], space_after=3, line=1.2),
+          P([R("ニーズ：" + need, 10.5, False, GRAY)], line=1.2)],
+         fill=WHITE, line=LGRAY, radius=0.1, pad=0.16)
+    y += 1.17
+card(s, 0.6, 4.8, 6.0, 0.5, [P([R("大学が動かせるもの（7つ）", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=NAVY, radius=0.12)
+card(s, 0.6, 5.4, 6.0, 1.0,
+     [P([R("教育／研究／臨床／医局人事／医師派遣／情報発信／講演会・研究会", 13, True, INK)], line=1.35)],
+     fill=PALEB, radius=0.1, pad=0.17)
+card(s, 6.75, 1.85, 6.0, 0.5, [P([R("影響力を持つ5つの役割", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=GOLD, radius=0.12)
+roles = [("◎", "方針を決める", "治療方針が、この人の一言で決まる"),
+         ("○", "最初に試す", "新しい治療を最初に使う。実務の中心"),
+         ("★", "情報ハブ", "若手が困ったら聞きに行く。医局長に多い"),
+         ("◇", "連携の要", "紹介患者の受け入れ・行き先を差配"),
+         ("□", "対外の顔", "研究会・講演会で外に発信する")]
+y = 2.45
+for mk, t, d in roles:
+    circle(s, 6.75, y, 0.52, mk, fill=GOLD, size=14)
+    card(s, 7.45, y, 5.3, 0.52,
+         [P([R(t + "　", 12.5, True, GOLD), R(d, 11, False, INK)])],
+         fill=WHITE, line=LGRAY, radius=0.1, pad=0.13)
+    y += 0.62
+card(s, 6.75, 5.55, 6.0, 0.85,
+     [P([R("教授の裁量権（DAY1）", 12.5, True, DEEP)], space_after=4),
+      P([R("① 臨床機会の配分　② 医局人事・異動　③ 教授会・教授選　④ 研究・教育の方向性", 11, False, INK)], line=1.2)],
+     fill=PALE, radius=0.1, pad=0.15)
+card(s, 0.6, 6.55, 12.15, 0.42,
+     [P([R("本編では扱いません。ディスカッションで「見極めの視点」を整理するときの参考に。", 12, True, GRAY)],
        align=PP_ALIGN.CENTER)],
-     fill=YPALE, radius=0.12, pad=0.14)
+     fill=PALE2, radius=0.15)
 
-# ================================================================ 22 目的から逆算
+# ================================================================ 30 付録C エリアのパターンと影響の輪
 s = add_slide()
-header(s, "THEME ②", "目的から逆算して、情報を取りに行く — 第4回の本質", "30分", kcolor=NAVY)
-flow = [("① 実現したい状態", "担当・エリアがどうなっていたら理想か", GREEN),
-        ("② 期待する役割", "誰の・どの影響力を活かすか", NAVY2),
-        ("③ 分からないこと", "その仮説の、どこが未確認か", GOLD),
-        ("④ 取りに行く情報", "誰に・何を聞けば分かるか", NAVY),
-        ("⑤ 次の行動", "今週、まず何をするか", RED)]
-for i, (t, d, col) in enumerate(flow):
-    x = 0.6 + i * 2.47
-    card(s, x, 1.95, 2.28, 0.6, [P([R(t, 12, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
-    card(s, x, 2.62, 2.28, 0.95, [P([R(d, 11, False, INK)], align=PP_ALIGN.CENTER, line=1.25)],
-         fill=PALE2, radius=0.1, pad=0.13)
-    if i < 4:
-        arrow(s, x + 2.31, 2.12, 0.14, 0.26, color=GREEN2)
-txt(s, 0.6, 3.72, 12.15, 0.3,
-    [P([R("情報から考えるのではなく、目的から逆算する。DAY3の「取り方」に「取りに行く理由」が加わります。", 12, True, GRAY)],
-       align=PP_ALIGN.CENTER)])
-card(s, 0.6, 4.12, 12.15, 0.45,
-     [P([R("例（架空）", 13, True, WHITE)], align=PP_ALIGN.CENTER)],
-     fill=DEEP, radius=0.1)
-ex = [("① 実現したい状態", "大学の専門的な知見が、主要な基幹病院に共有されている", GREEN, PALE),
-      ("② 期待する役割", "A大学教授＝情報発信（③の輪）／B基幹病院部長＝実臨床での影響力（①の輪）", NAVY2, PALEB),
-      ("③ 分からないこと", "医局が今後力を入れたいテーマが、まだ分からない", GOLD, YPALE),
-      ("④ 取りに行く情報", "医局長に、教育・研究で注力したいテーマを確認する", NAVY, PALEB),
-      ("⑤ 次の行動", "今週、医局長との面会を打診する", RED, RPALE)]
-y = 4.42
-for t, d, col, fill in ex:
-    card(s, 0.6, y, 2.3, 0.36, [P([R(t, 10.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
-    card(s, 3.0, y, 9.75, 0.36, [P([R(d, 11, False, INK)])], fill=fill, radius=0.1, pad=0.09)
-    y += 0.4
-card(s, 0.6, 6.45, 12.15, 0.45,
-     [P([R("DAY3の共有事例：", 11.5, True, RED),
-         R("同年同卒・同門のつながりを調べて講演会を設計 → 参加率向上／面会困難な医師との接点創出／エリア認知向上", 11.5, True, INK)],
-       align=PP_ALIGN.CENTER)],
-     fill=YPALE, radius=0.12, pad=0.1)
+header(s, "APPENDIX C", "参考：エリアのパターンと、影響が届く範囲", kcolor=GRAY)
+pats = [("① 大学の輪が最大",
+         [("A大", 1.15, 1.0, 0.45, PALE, DEEP), ("基幹", 0.6, 2.05, 1.3, WHITE, GRAY),
+          ("基幹", 0.6, 0.3, 1.4, WHITE, GRAY)],
+         "方針がエリア全体に波及", GREEN),
+        ("② 複数の大学が並ぶ",
+         [("A大", 0.95, 0.45, 0.5, PALE, DEEP), ("B大", 0.95, 1.7, 1.1, PALE, GREEN2),
+          ("基幹", 0.58, 1.3, 0.28, WHITE, GRAY)],
+         "1大学では動かない", NAVY),
+        ("③ 基幹病院の輪が最大",
+         [("基幹", 1.2, 0.85, 0.5, PALEB, NAVY), ("A大", 0.7, 0.35, 1.5, PALE, DEEP),
+          ("基幹", 0.62, 1.95, 1.45, PALEB, NAVY2)],
+         "実務の影響力は基幹病院", GOLD),
+        ("④ 輪がエリアを超える",
+         [("A大", 1.1, 0.45, 0.45, PALE, DEEP), ("県外", 0.62, 1.95, 0.4, WHITE, GRAY),
+          ("県外", 0.62, 2.05, 1.45, WHITE, GRAY)],
+         "営業所・全国への展開", RED)]
+for i, (t, circles, note, col) in enumerate(pats):
+    x = 0.6 + i * 3.12
+    card(s, x, 1.9, 2.95, 0.48, [P([R(t, 12, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.12)
+    shape(s, x, 2.43, 2.95, 2.35, fill=PALE2, line=LGRAY, radius=0.04)
+    for lbl, d, dx, dy, fc, lc in circles:
+        circle(s, x + dx, 2.58 + dy, d, lbl, fill=fc, line=lc,
+               size=10 if d > 0.9 else 8.5, color=lc)
+    card(s, x, 4.88, 2.95, 0.48, [P([R(note, 11.5, False, INK)], align=PP_ALIGN.CENTER)],
+         fill=WHITE, line=LGRAY, radius=0.1, pad=0.1)
+card(s, 0.6, 5.55, 12.15, 0.5, [P([R("影響が届く範囲（4層）", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=NAVY, radius=0.12)
+lv = [("① 施設の中", "院内の方針・採用は動く", GREEN2),
+      ("② 関連病院", "医局人事・派遣を通じて系列に届く", GREEN),
+      ("③ 担当エリア", "研究会・講演会・地域連携で系列を越える", NAVY2),
+      ("④ その先", "学会・全国の研究会で担当範囲を超える", NAVY)]
+for i, (t, d, col) in enumerate(lv):
+    x = 0.6 + i * 3.12
+    card(s, x, 6.15, 2.95, 0.72,
+         [P([R(t, 12, True, col)], align=PP_ALIGN.CENTER, space_after=3),
+          P([R(d, 10, False, INK)], align=PP_ALIGN.CENTER, line=1.15)],
+         fill=WHITE, line=LGRAY, radius=0.1, pad=0.12)
 
-# ================================================================ 23 情報源（DAY3の回収）
+# ================================================================ 31 付録D 情報の入手先
 s = add_slide()
-header(s, "THEME ②", "その情報は、誰から取れるか", "30分", kcolor=NAVY,
-       lead="DAY3で共有された入手先です。ワーク②の「次の一手」は、ここから選べば決まります。")
+header(s, "APPENDIX D", "参考：その情報は、誰から取れるか（DAY3）", kcolor=GRAY)
 srcs = [("医師本人", "直接聞くのが、最も有効",
          ["今後の目標・成し遂げたいこと", "興味のある領域・研究テーマ",
           "参考にしている先生・KOL", "人脈、連携している施設"], GREEN),
@@ -659,247 +772,28 @@ srcs = [("医師本人", "直接聞くのが、最も有効",
           "卒大・同門・同年次のつながり", "※DAY3事例：同年同卒を調べて会を設計"], GOLD)]
 for i, (t, sub, lines, col) in enumerate(srcs):
     x = 0.6 + i * 4.09
-    card(s, x, 2.15, 3.9, 0.75,
+    card(s, x, 1.95, 3.9, 0.75,
          [P([R(t, 16, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
           P([R(sub, 11, False, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
-    card(s, x, 2.98, 3.9, 2.15,
+    card(s, x, 2.78, 3.9, 2.15,
          [P([R("・" + l, 11.5, False, INK)], line=1.25, space_after=9) for l in lines],
          fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.16)
-card(s, 0.6, 5.3, 6.0, 0.85,
+card(s, 0.6, 5.1, 6.0, 0.85,
      [P([R("聞き方のコツ（DAY3）", 12.5, True, DEEP)], space_after=4),
       P([R("仮説を持って行き、「クローズドで聞ける状態」にしてから会う", 12, False, INK)], line=1.2)],
      fill=PALEB, radius=0.1, pad=0.16)
-card(s, 6.75, 5.3, 6.0, 0.85,
+card(s, 6.75, 5.1, 6.0, 0.85,
      [P([R("噂レベルの情報は", 12.5, True, DEEP)], space_after=4),
       P([R("複数の関係者から確認して、精度を上げる", 12, False, INK)], line=1.2)],
      fill=PALEB, radius=0.1, pad=0.16)
-card(s, 0.6, 6.3, 12.15, 0.62,
+card(s, 0.6, 6.1, 12.15, 0.75,
      [P([R("信頼が深まっているサイン　—　", 13, False, INK),
          R("プライベートな話をしてくれる／将来の話をしてくれる", 15, True, RED),
          R("　→ 味方になってくれる可能性が高い", 13, False, INK)], align=PP_ALIGN.CENTER)],
-     fill=YPALE, radius=0.12)
-
-# ================================================================ 24 ワーク②
+     fill=YPALE, radius=0.12, pad=0.14)
+# ================================================================ 32 付録E DAY1-3総まとめ
 s = add_slide()
-header(s, "WORK ②", "大学・基幹病院を、どう活かすか考える", "10分", kcolor=GREEN)
-card(s, 0.6, 1.72, 12.15, 0.55,
-     [P([R("4つの問いに、1人でメモしてください。疾患・製品の戦略を完成させる必要はありません。", 15, True, DEEP)],
-       align=PP_ALIGN.CENTER)],
-     fill=PALE, radius=0.1)
-qs4 = [("Q1", "目指したい状態", "担当する大学・基幹病院・周辺エリアが、どうなっていたら理想ですか？（製品名・処方目標は不要）", GREEN),
-       ("Q2", "使いたい影響力", "その状態に近づくために、誰の・どの影響力を活かしたいですか？", NAVY2),
-       ("Q3", "実現したいこと", "その先生・医局は、何を実現したいですか？（DAY3の「成し遂げたいことを直接聞く」／分からなければ確認事項を）", GOLD),
-       ("Q4", "次の一手", "今週、誰に・何を確認しますか？", RED)]
-y = 2.35
-for tag, t, q, col in qs4:
-    circle(s, 0.6, y + 0.02, 0.6, tag, fill=col, size=14)
-    card(s, 1.4, y, 2.2, 0.64, [P([R(t, 13.5, True, col)], align=PP_ALIGN.CENTER)],
-         fill=PALE2, line=col, radius=0.12)
-    card(s, 3.75, y, 9.0, 0.64, [P([R(q, 12, False, INK)], line=1.15)],
-         fill=WHITE, line=LGRAY, radius=0.1, pad=0.14)
-    y += 0.74
-card(s, 0.6, 5.4, 12.15, 0.42, [P([R("完成文：この4行が書けたら完成です", 13.5, True, WHITE)],
-     align=PP_ALIGN.CENTER)], fill=DEEP, radius=0.1)
-card(s, 0.6, 5.9, 12.15, 0.85,
-     [P([R("私が目指したい状態は ", 13.5, False, INK), R("〇〇", 13.5, True, RED),
-         R("。そのために ", 13.5, False, INK), R("△△先生の□□という影響力", 13.5, True, RED),
-         R(" を活かしたい。", 13.5, False, INK)], align=PP_ALIGN.CENTER, space_after=4),
-      P([R("先生・医局が実現したいのは ", 13.5, False, INK), R("◇◇", 13.5, True, RED),
-         R(" だと考える（分からなければ、◇◇を確認する）。まず私は、今週 ", 13.5, False, INK),
-         R("☆☆", 13.5, True, RED), R(" を確認する。", 13.5, False, INK)], align=PP_ALIGN.CENTER)],
-     fill=YPALE, radius=0.1, pad=0.16)
-
-# ================================================================ 25 ディスカッション
-s = add_slide()
-header(s, "DISCUSSION", "3人1組で、仮説を確かめ合う", "12分", kcolor=GREEN)
-prog = [("1人3分 × 3人", "発表2分 ＋ 質問1分", GREEN),
-        ("最後の3分", "グループの一番の気づきを1つ決める", NAVY)]
-y = 1.9
-for t, d, col in prog:
-    card(s, 0.6, y, 4.0, 0.85, [P([R(t, 16, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.12)
-    card(s, 4.75, y, 8.0, 0.85, [P([R(d, 15, False, INK)])],
-         fill=WHITE, line=LGRAY, radius=0.1, pad=0.18)
-    y += 1.0
-card(s, 0.6, 4.0, 12.15, 0.5, [P([R("発表は、ワーク②の4行をそのまま読むだけでOK", 14, True, WHITE)],
-     align=PP_ALIGN.CENTER)], fill=DEEP, radius=0.1)
-card(s, 0.6, 4.68, 12.15, 1.15,
-     [P([R("聞き手の質問は1つだけ", 13.5, True, GRAY)], align=PP_ALIGN.CENTER, space_after=8),
-      P([R("「その情報が分かると、次の活動はどう変わりますか？」", 22, True, RED)], align=PP_ALIGN.CENTER)],
-     fill=YPALE, radius=0.1, pad=0.16)
-card(s, 0.6, 6.0, 12.15, 0.9,
-     [P([R("集めるための情報収集で終わらせず、", 14, False, INK),
-         R("「その情報の使い道」まで確かめる時間", 15, True, DEEP),
-         R("にしてください。", 14, False, INK)], align=PP_ALIGN.CENTER)],
-     fill=PALE, radius=0.1, pad=0.16)
-
-# ================================================================ 25 まとめ＋Beyond
-s = add_slide()
-header(s, "WRAP UP", "本日のまとめ")
-msgs = [(("誰が", "動かせるか"), "影響力は「肩書き」ではなく「何を動かせるか」",
-         "◎方針／○最初に試す／★情報ハブ／◇連携の要／□対外の顔。1人とは限らない。", NAVY),
-        (("どこまで", "届くか"), "影響の輪で見る。大学に固執しない",
-         "施設の中／関連病院／担当エリア／その先。一番大きいのは大学とは限らない。", GOLD),
-        (("何を", "確認するか"), "目的から逆算して、次の情報を取りに行く",
-         "実現したい状態 → 期待する役割 → 分からないこと → 次の一手。", GREEN)]
-y = 1.9
-for no, t, d, col in msgs:
-    card(s, 0.6, y, 1.7, 1.1,
-         [P([R(no[0], 13, True, WHITE)], align=PP_ALIGN.CENTER, line=1.15, space_after=2),
-          P([R(no[1], 13, True, WHITE)], align=PP_ALIGN.CENTER, line=1.15)],
-         fill=col, radius=0.12)
-    card(s, 2.45, y, 10.3, 1.1,
-         [P([R(t, 17, True, col)], space_after=5), P([R(d, 13, False, INK)], line=1.2)],
-         fill=WHITE, line=LGRAY, radius=0.1, pad=0.22)
-    y += 1.25
-card(s, 0.6, 5.7, 12.15, 1.15,
-     [P([R("一施設で終わらせず、その影響を担当エリアへ広げる。", 21, True, YELL)],
-       align=PP_ALIGN.CENTER, space_after=6),
-      P([R("今日つくった「影響力の仮説」と「確認リスト」が、そのままIgA腎症を担当するときの準備になります。", 13, True, MINT)],
-        align=PP_ALIGN.CENTER)],
-     fill=DEEP, radius=0.1, pad=0.18)
-
-# ================================================================ 26 行動宣言
-s = add_slide()
-shape(s, 0, 0, 13.333, 7.5, fill=PALE2, kind=MSO_SHAPE.RECTANGLE)
-chip(s, 0.6, 0.34, 2.4, 0.42, "ACTION", fill=GREEN)
-txt(s, 0.6, 0.95, 12.2, 0.8, [P([R("行動宣言", 32, True, DEEP)])])
-card(s, 0.6, 1.95, 12.15, 1.1,
-     [P([R("Teamsチャットに、「今週、誰に・何を確認するか」を1行で", 24, True, INK)], align=PP_ALIGN.CENTER)],
-     fill=WHITE, line=GREEN, line_w=1.6, radius=0.06, pad=0.18)
-card(s, 2.6, 3.35, 8.15, 0.65, [P([R("記入形式", 14, True, WHITE)], align=PP_ALIGN.CENTER)],
-     fill=DEEP, radius=0.12)
-card(s, 2.6, 4.08, 8.15, 0.95,
-     [P([R("今週中に、", 19, False, INK), R("〇〇先生", 19, True, RED),
-         R(" へ ", 19, False, INK), R("△△", 19, True, RED), R(" を確認する。", 19, False, INK)],
-       align=PP_ALIGN.CENTER)],
-     fill=YELL, radius=0.1)
-card(s, 2.6, 5.35, 8.15, 0.85,
-     [P([R("ワーク②のQ4に書いたことを、そのまま投稿すればOKです", 15, True, DEEP)], align=PP_ALIGN.CENTER)],
-     fill=PALE, radius=0.12)
-card(s, 2.6, 6.3, 8.15, 0.68,
-     [P([R("「電話1本サイズ」に割ること。小さいほど、実行されます。", 13.5, True, GRAY)], align=PP_ALIGN.CENTER, space_after=3),
-      P([R("描いたマップは、営業所でも共有を（DAY3）", 12.5, True, DEEP)], align=PP_ALIGN.CENTER)],
-     fill=WHITE, line=LGRAY, radius=0.12, pad=0.1)
-footer(s)
-
-# ================================================================ 27 最終メッセージ
-s = add_slide()
-shape(s, 0, 0, 13.333, 7.5, fill=DEEP, kind=MSO_SHAPE.RECTANGLE)
-txt(s, 0.9, 1.05, 11.5, 0.5, [P([R("ありがとうございました", 19, True, MINT)])])
-steps4 = [("第1回", "見る力", GREEN2), ("第2回", "会う力", GREEN2),
-          ("第3回", "情報を取る力", GREEN2), ("第4回", "何のために使うかを決める", YELL)]
-for i, (d, t, col) in enumerate(steps4):
-    x = 0.9 + i * 2.95
-    card(s, x, 1.75, 2.75, 1.0,
-         [P([R(d, 12.5, True, DEEP if col == YELL else WHITE)], align=PP_ALIGN.CENTER, space_after=4),
-          P([R(t, 14, True, DEEP if col == YELL else WHITE)], align=PP_ALIGN.CENTER, line=1.15)],
-         fill=col if col == YELL else RGBColor(0x11, 0x63, 0x45), radius=0.1, pad=0.14)
-    if i < 3:
-        arrow(s, x + 2.78, 2.13, 0.14, 0.24, color=MINT)
-card(s, 0.9, 3.2, 11.5, 1.5,
-     [P([R("「このエリアは、自分に任せてください。", 25, True, DEEP)], align=PP_ALIGN.CENTER, space_after=6),
-      P([R("そのために、大学・基幹病院の力をこう組み合わせます」", 25, True, DEEP)], align=PP_ALIGN.CENTER)],
-     fill=YELL, radius=0.1)
-txt(s, 0.9, 5.0, 11.5, 0.5,
-    [P([R("そう言える担当者を目指しましょう。", 20, True, WHITE)], align=PP_ALIGN.CENTER)])
-items = [("今日中", "行動宣言をチャットへ"),
-         ("今週", "影響力マップを営業所で共有"),
-         ("これから", "困ったら、全国の仲間に相談を")]
-for i, (t, d) in enumerate(items):
-    x = 0.9 + i * 3.87
-    card(s, x, 5.7, 3.6, 1.0,
-         [P([R(t, 13, True, YELL)], align=PP_ALIGN.CENTER, space_after=4),
-          P([R(d, 12, False, WHITE)], align=PP_ALIGN.CENTER, line=1.2)],
-         fill=DEEP2, radius=0.1, pad=0.14)
-footer(s, dark=True)
-
-# ================================================================ 28 付録A ワークシート①
-s = add_slide()
-header(s, "APPENDIX A", "ワークシート① 影響力マップ", kcolor=GRAY)
-txt(s, 0.6, 1.62, 12.15, 0.32,
-    [P([R("担当エリア（　　　　　　　　　　　　）　　作成日（　　／　　）　　作成者（　　　　　　）", 12, False, INK)])])
-shape(s, 0.6, 2.0, 8.9, 4.3, fill=PALE2, line=GREEN, radius=0.02)
-txt(s, 0.85, 2.12, 8.4, 0.3,
-    [P([R("丸の大きさ＝その施設が動いたとき、他施設の診療がどれだけ変わるか", 11, False, GRAY)])])
-card(s, 9.75, 2.0, 3.0, 2.05,
-     [P([R("各施設に書くこと", 13.5, True, WHITE)], align=PP_ALIGN.CENTER, space_after=10),
-      P([R("□ 施設名", 12, False, WHITE)], space_after=8),
-      P([R("□ 誰か（氏名 or 役職）", 12, False, WHITE)], space_after=8),
-      P([R("□ 何を動かせるか", 12, False, WHITE)], space_after=8),
-      P([R("□ 分からないところは「？」", 12, True, MINT)], line=1.2)],
-     fill=DEEP, anchor=MSO_ANCHOR.TOP, radius=0.08, pad=0.18)
-card(s, 9.75, 4.2, 3.0, 2.1,
-     [P([R("役割の記号", 13, True, INK)], align=PP_ALIGN.CENTER, space_after=8),
-      P([R("◎　方針を決める", 12, False, INK)], space_after=7),
-      P([R("○　最初に試す", 12, False, INK)], space_after=7),
-      P([R("★　情報ハブ", 12, False, INK)], space_after=7),
-      P([R("◇　連携の要", 12, False, INK)], space_after=7),
-      P([R("□　対外の顔", 12, False, INK)])],
-     fill=YPALE, line=YELL, anchor=MSO_ANCHOR.TOP, radius=0.08, pad=0.18)
-card(s, 0.6, 6.42, 12.15, 0.52,
-     [P([R("完成条件：", 12, True, RED),
-         R("「最も影響力が大きいと考えるのは〇〇施設の△△先生。□□を動かせるから」と書けること", 12.5, True, DEEP)],
-       align=PP_ALIGN.CENTER, space_after=2),
-      P([R("動かせるもの：教育／研究／臨床／医局人事／医師派遣／情報発信／講演会・研究会　　※その他の医療機関は、背景となる患者動線として必要に応じて記載", 10, False, GRAY)],
-        align=PP_ALIGN.CENTER)],
-     fill=PALE, radius=0.12, pad=0.1)
-
-# ================================================================ 29 付録B ワークシート②
-s = add_slide()
-header(s, "APPENDIX B", "ワークシート② 大学・基幹病院の活かし方", kcolor=GRAY)
-txt(s, 0.6, 1.62, 12.15, 0.32,
-    [P([R("担当エリア（　　　　　　　　　　　　）　　作成日（　　／　　）　　作成者（　　　　　　）", 12, False, INK)])])
-tq = [(0.6, 1.98, "Q1 目指したい状態　—　どうなっていたら理想か", GREEN),
-      (6.75, 1.98, "Q2 使いたい影響力　—　誰の・どの影響力を活かすか", NAVY2),
-      (0.6, 3.5, "Q3 実現したいこと　—　先生・医局は何を実現したいか", GOLD),
-      (6.75, 3.5, "Q4 次の一手　—　今週、誰に・何を確認するか", RED)]
-for x, y, t, col in tq:
-    card(s, x, y, 6.0, 0.48, [P([R(t, 12, True, WHITE)])], fill=col, radius=0.1, pad=0.14)
-    card(s, x, y + 0.53, 6.0, 0.95, [P([R("", 10)])], fill=WHITE, line=col, radius=0.1)
-card(s, 0.6, 5.05, 12.15, 0.45,
-     [P([R("完成文（この4行が書けたら完成）", 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
-     fill=DEEP, radius=0.1)
-card(s, 0.6, 5.58, 12.15, 0.85,
-     [P([R("私が目指したい状態は〇〇。そのために△△先生の□□という影響力を活かしたい。", 13, False, INK)],
-       align=PP_ALIGN.CENTER, space_after=4),
-      P([R("先生・医局が実現したいのは◇◇だと考える（分からなければ、◇◇を確認する）。まず私は、今週☆☆を確認する。", 13, False, INK)],
-        align=PP_ALIGN.CENTER)],
-     fill=WHITE, line=DEEP, radius=0.1, pad=0.14)
-card(s, 0.6, 6.55, 12.15, 0.4,
-     [P([R("セルフチェック：　□ 目指したい状態を書けたか　　□ 使う影響力を決めたか　　□ 実現したいこと（or確認事項）を書けたか　　□ 今週の行動まで落ちたか", 11, True, DEEP)],
-       align=PP_ALIGN.CENTER)],
-     fill=PALE, radius=0.15)
-
-# ================================================================ 30 付録C 疾患別の例
-s = add_slide()
-header(s, "APPENDIX C", "参考：疾患が変わると、影響力の見え方も変わる（架空の例）", kcolor=GRAY)
-cases = [("C3腎症", GREEN,
-          "大学・主要基幹病院の間で、疑う患者像、病理・補体評価、専門医への相談経路について共通認識がある",
-          "病理や補体領域に詳しい大学医師から、関連基幹病院へ診断上の視点を発信する",
-          "大学の「研究」「情報発信」の輪が効きやすい。まず疑ってもらう段階から"),
-         ("IgA腎症", NAVY,
-          "主要な大学・基幹病院で、患者選択、治療導入、フォローに関する考え方が整理されている",
-          "診療経験を持つ基幹病院医師と大学医師が、施設間の治療課題を共有する",
-          "基幹病院の「臨床」の輪も大きい。大学と基幹病院を組み合わせる")]
-for i, (t, col, success, ring, note) in enumerate(cases):
-    x = 0.6 + i * 6.15
-    card(s, x, 1.9, 6.0, 0.6, [P([R(t, 17, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.12)
-    card(s, x, 2.6, 6.0, 0.42, [P([R("成功像", 12, True, WHITE)], align=PP_ALIGN.CENTER)], fill=GREEN, radius=0.1)
-    card(s, x, 3.07, 6.0, 1.0, [P([R(success, 12, False, INK)], line=1.3)],
-         fill=PALE, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.16)
-    card(s, x, 4.17, 6.0, 0.42, [P([R("影響の輪", 12, True, WHITE)], align=PP_ALIGN.CENTER)], fill=NAVY2, radius=0.1)
-    card(s, x, 4.64, 6.0, 0.9, [P([R(ring, 12, False, INK)], line=1.3)],
-         fill=PALEB, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.16)
-    card(s, x, 5.64, 6.0, 0.72, [P([R(note, 11.5, True, col)], line=1.25)],
-         fill=WHITE, line=col, radius=0.1, pad=0.15)
-card(s, 0.6, 6.48, 12.15, 0.45,
-     [P([R("本編では扱いません。時間が余った場合、または研修後の参考資料として。疾患が違えば、重要施設もキーパーソンも変わります。", 12, True, DEEP)],
-       align=PP_ALIGN.CENTER)],
-     fill=YPALE, radius=0.15)
-
-# ================================================================ 31 付録D DAY1-3総まとめ
-s = add_slide()
-header(s, "APPENDIX D", "DAY1〜3の学び 総まとめ", kcolor=GRAY)
+header(s, "APPENDIX E", "参考：DAY1〜3の学び 総まとめ", kcolor=GRAY)
 recap = [("DAY 1", "大学・基幹病院のイロハ", GREEN,
           ["大学の3使命：教育・研究・臨床。医師派遣で地域を支える",
            "影響力はテリトリーとニーズで決まる",
@@ -913,11 +807,11 @@ recap = [("DAY 1", "大学・基幹病院のイロハ", GREEN,
            "カレンダーで情報管理し、行動ログで検証",
            "会う理由を設計し次の約束を残す。My teacherをつくる"]),
          ("DAY 3", "やっぱりMRは情報が命", GOLD,
-          ["ドライ情報：HP・機関紙・掲示物・Veeva Link・講演内容",
-           "ウェット情報：面会・他Dr・社内他領域・MS・HCP・雑談",
-           "分からないことは small b として面会に持ち込む",
+          ["顧客理解を深める必要性",
+           "どこで、どの情報を取るか（ドライ×ウェット）",
+           "仮説を持ち、クローズドで聞ける状態にする",
            "顧客理解＝現状把握。何を・なぜ使い、患者をどうしたいのか",
-           "面会後は「なぜ」を分解し、仮説を立てて次へ"])]
+           "そして —— その情報を、どう活かすか"])]
 for i, (d, t, col, lines) in enumerate(recap):
     x = 0.6 + i * 4.09
     card(s, x, 1.75, 3.9, 0.7,
@@ -927,13 +821,13 @@ for i, (d, t, col, lines) in enumerate(recap):
          [P([R("・" + l, 11, False, INK)], line=1.25, space_after=10) for l in lines],
          fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.17)
 card(s, 0.6, 6.25, 12.15, 0.62,
-     [P([R("この3つが揃って初めて「影響力」が見え、「影響の輪」を設計できる。", 14.5, True, DEEP)],
+     [P([R("DAY4は、この3つを「エリアを見る力」に変える回でした。", 14.5, True, DEEP)],
        align=PP_ALIGN.CENTER)],
      fill=PALE, radius=0.12)
 
-# ================================================================ 32 付録E 肩書き
+# ================================================================ 33 付録F 肩書き早見表
 s = add_slide()
-header(s, "APPENDIX E", "大学の「肩書き」早見表", kcolor=GRAY)
+header(s, "APPENDIX F", "参考：大学の「肩書き」早見表", kcolor=GRAY)
 colA = [("教授（診療科長）", "方針・人事の最終決定者。多忙で現場の細部は下が握ることも"),
         ("准教授・講師", "実務の要であり次期教授候補。関係構築は先行投資"),
         ("医局長", "医局の雑務・人事、行事の窓口。教授の信頼が厚く影響力大"),
@@ -959,42 +853,69 @@ card(s, 0.6, 6.5, 12.15, 0.45,
        align=PP_ALIGN.CENTER)],
      fill=PALE, radius=0.15)
 
-# ================================================================ 33 付録F コンプラ
+# ================================================================ 34 付録G コンプラ
 s = add_slide()
-header(s, "APPENDIX F", "大学活動 コンプライアンスの5原則", kcolor=GRAY)
+header(s, "APPENDIX G", "参考：大学活動 コンプライアンスの5原則", kcolor=GRAY)
 pr = [("① 施設ルールが最優先", "訪問・面会・資材配布のルールは施設ごとに違う。迷ったら守りに倒す"),
       ("② その場で約束しない", "寄附金・広告協賛の依頼は即答せず、必ず社内の申請・審査手続きへ"),
       ("③ 現行の文書で確認", "「前任者がやっていた」は根拠にならない。薬審・採用は施設ごとに毎回確認"),
       ("④ 自己判断しない", "基準はプロモーションコードと社内SOP。迷ったら相談してから動く"),
       ("⑤ 記録を残す", "依頼・回答・手続きの経緯を記録に。先生と自分の両方を守る")]
-y = 2.05
+y = 2.0
 for t, d in pr:
-    card(s, 0.6, y, 3.6, 0.88, [P([R(t, 13, True, WHITE)])], fill=DEEP, radius=0.1, pad=0.18)
-    card(s, 4.35, y, 8.4, 0.88, [P([R(d, 12.5, False, INK)], line=1.2)],
+    card(s, 0.6, y, 3.6, 0.84, [P([R(t, 13, True, WHITE)])], fill=DEEP, radius=0.1, pad=0.18)
+    card(s, 4.35, y, 8.4, 0.84, [P([R(d, 12.5, False, INK)], line=1.2)],
          fill=WHITE, line=LGRAY, radius=0.1, pad=0.18)
-    y += 0.98
-txt(s, 4.35, 6.75, 8.4, 0.3,
+    y += 0.93
+txt(s, 4.35, 6.66, 8.4, 0.3,
     [P([R("※ 個別の案件は、必ず最新の社内規程と担当部門の指示に従ってください。", 11, False, GRAY)])])
 
-# ================================================================ 34 付録G ファシリテーター
+# ================================================================ 35 付録H 疾患別の参考例
 s = add_slide()
-header(s, "APPENDIX G", "ファシリテーター用メモ", kcolor=GRAY)
-tips = [("当日の投影",
+header(s, "APPENDIX H", "参考：疾患が変わると、影響力の見え方も変わる（架空の例）", kcolor=GRAY)
+cases = [("C3腎症", GREEN,
+          "大学・主要基幹病院の間で、疑う患者像、病理・補体評価、専門医への相談経路について共通認識がある",
+          "病理や補体領域に詳しい大学医師から、関連基幹病院へ診断上の視点を発信する",
+          "大学の「研究」「情報発信」の輪が効きやすい。まず疑ってもらう段階から"),
+         ("IgA腎症", NAVY,
+          "主要な大学・基幹病院で、患者選択、治療導入、フォローに関する考え方が整理されている",
+          "診療経験を持つ基幹病院医師と大学医師が、施設間の治療課題を共有する",
+          "基幹病院の「臨床」の輪も大きい。大学と基幹病院を組み合わせる")]
+for i, (t, col, success, ring, note) in enumerate(cases):
+    x = 0.6 + i * 6.15
+    card(s, x, 1.9, 6.0, 0.6, [P([R(t, 17, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.12)
+    card(s, x, 2.6, 6.0, 0.42, [P([R("目指したい状態", 12, True, WHITE)], align=PP_ALIGN.CENTER)], fill=GREEN, radius=0.1)
+    card(s, x, 3.07, 6.0, 1.0, [P([R(success, 12, False, INK)], line=1.3)],
+         fill=PALE, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.16)
+    card(s, x, 4.17, 6.0, 0.42, [P([R("影響力の広がり方", 12, True, WHITE)], align=PP_ALIGN.CENTER)], fill=NAVY2, radius=0.1)
+    card(s, x, 4.64, 6.0, 0.9, [P([R(ring, 12, False, INK)], line=1.3)],
+         fill=PALEB, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.16)
+    card(s, x, 5.64, 6.0, 0.72, [P([R(note, 11.5, True, col)], line=1.25)],
+         fill=WHITE, line=col, radius=0.1, pad=0.15)
+card(s, 0.6, 6.48, 12.15, 0.45,
+     [P([R("本編では扱いません。同じエリアでも、疾患が違えば重要施設もキーパーソンも変わります。", 12, True, DEEP)],
+       align=PP_ALIGN.CENTER)],
+     fill=YPALE, radius=0.15)
+
+# ================================================================ 36 付録I ファシリテーター
+s = add_slide()
+header(s, "APPENDIX I", "ファシリテーター用メモ", kcolor=GRAY)
+tips = [("当日の投影・時間",
          ["冒頭は タイトル → 4回のロードマップ → 本日のAgenda の3枚だけ使う",
-          "プロジェクト概要・メンバー紹介は開始前の待機画面／配布資料へ回す",
-          "テーマ① 講義7・ワーク8・共有5／テーマ② 講義8・ワーク10・ディスカッション12"]),
-        ("ワークの前提",
-         ["疾患・製品の戦略は作らせない。今分かっている情報で考えてもらう",
-          "「完成条件の一文」が書けたら完成、と最初に伝える",
-          "Q4が書けない人は「その情報は、誰から取れるか」のスライドに戻す"]),
-        ("共有・ディスカッション",
-         ["共有①は時計回りで1人60秒。質問は「その判断の根拠になった情報は？」",
-          "ディスカッションは1人3分×3人＋気づき3分。質問は「その情報が分かると、次の活動はどう変わる？」",
-          "情報収集で終わらせず、情報の使い道まで確かめる"]),
-        ("締め方",
-         ["まとめは3つのメッセージだけ。IgA腎症への接続は一文で言い切る",
-          "行動宣言はワーク②のQ4をそのまま投稿してもらう",
-          "DAY3のチーム展開（営業所で共有）への接続を一言添えて終える"])]
+          "0-9 オープニング／9-25 テーマ①／25-56 テーマ②／56-60 まとめ",
+          "レクチャーは合計6分。話しすぎないことが最大のポイント"]),
+        ("テーマ①のコツ",
+         ["正解を教えない。参加者の経験を引き出す時間と割り切る",
+          "3つの補助質問は画面に残したまま進める",
+          "最後の2分で「重要だったこと」を1つ決めさせ、全体共有につなげる"]),
+        ("藤さんの事例（10分）",
+         ["成功事例ではなく「どの情報からつながりを読み取ったか」に焦点を",
+          "③の図は、口頭説明よりも図を見せる時間を長く",
+          "最後に「自分のエリアを見るとき、最初にどこを確認するか」を必ず聞く"]),
+        ("テーマ②・締め方",
+         ["個人ワークは「正確な組織図ではない」と最初に伝える",
+          "全体共有は優れた戦略ではなく「視座が変わった点」を拾う",
+          "行動宣言まで必ず4分残す。DAY3のチーム展開（営業所で共有）も一言添える"])]
 for i, (t, lines) in enumerate(tips):
     x = 0.6 + (i % 2) * 6.15
     y = 1.9 + (i // 2) * 2.5
