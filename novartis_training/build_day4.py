@@ -8,9 +8,9 @@ DAY4_base_1-7.pptx の冒頭7枚を保持し（Agendaの文言のみ更新）、
 ■ 構成（計60分）
    ① 5分  振り返り
    ② 5分  Triple Win Beyond
-   ③10分  ワーク①：ウォンツ／ニーズの仕分け
+   ③10分  ワーク①：Wants／Needsの仕分け
    ④ 5分  仕分けの意義と仮説立て
-   ⑤10分  ワーク②：仮説立て（ウォンツをニーズへ）
+   ⑤10分  ワーク②：仮説立て（WantsをNeedsへ）
    ⑥ 5分  仮説立ての意義とエリアプラン・4S
    ⑦10分  インタビュー（エリア＋大学攻略事例）
    ⑧ 5分  まとめ（女子医大の活動）
@@ -18,14 +18,14 @@ DAY4_base_1-7.pptx の冒頭7枚を保持し（Agendaの文言のみ更新）、
 
 ■ 到達目標（プロジェクト公式・戦略的思考）
    収集した情報から、エリアの課題・原因・解決方法を可視化できる
-   本日の到達点：得た情報をFact・ウォンツ・ニーズに仕分け、そこから仮説を立てられる
+   本日の到達点：得た情報をFact・Wants・Needsに仕分け、そこから仮説を立てられる
 
 ■ 設計の柱
    - 中心は「仕分け → 仮説 → 4S／エリアプラン」の一本道
-   - ニーズ＝理想と現状のGap（状態）、ウォンツ＝Gapを埋める具体的な手段（ROTF3）
+   - Needs＝理想と現状のGap（状態）、Wants＝Gapを埋める具体的な手段（ROTF3）
    - ワーク①の題材は腎臓内科の医局から得た情報9件。製品には紐づけない
-   - Fact／ウォンツ／ニーズの3分類にすることで、DAY3で集めた情報がそのまま使える
-   - 4Sとの対応：ニーズ→成功像／Fact→現状／仮説→課題・原因／ウォンツ→解決策の入口
+   - Fact／Wants／Needsの3分類にすることで、DAY3で集めた情報がそのまま使える
+   - 4Sとの対応：Needs→成功像／Fact→現状／仮説→課題・原因／Wants→解決策の入口
    - Triple Win（患者・顧客・自社）を Beyond（エリア）まで広げる
    - まとめは女子医大の活動。大学を個で見ず、エリアの1施設として影響の輪を設計した事例
 """
@@ -81,8 +81,8 @@ if BLANK is None:
 
 # --- 冒頭2枚目のAgenda文言のみ更新（書式は維持） ---
 AGENDA_LINES = ["■振り返り／Triple Win Beyond　10分",
-                "■ワーク①「ウォンツとニーズの仕分け」　15分",
-                "■ワーク②「仮説立て」とエリアプラン・4S　15分",
+                "■ワーク①「Wants／Needs」　15分",
+                "■ワーク②「仮説立て」と4S　15分",
                 "■インタビュー／まとめ・総括　20分"]
 for sh in prs.slides[1].shapes:
     if sh.has_text_frame and "オープニング" in sh.text_frame.text:
@@ -245,9 +245,9 @@ def section(s, no, title, subtitle, question, bullets):
 # ================================================================ 8 Agenda
 s = add_slide()
 header(s, "AGENDA", "本日の進め方")
-blocks = [("振り返り ／ Triple Win Beyond", "10分", "3回の振り返り｜患者・顧客・自社、そしてエリアへ", GREEN),
-          ("ワーク①「ウォンツとニーズの仕分け」", "15分", "得た情報を3つに分ける｜仕分けの意義", NAVY),
-          ("ワーク②「仮説立て」とエリアプラン", "15分", "ウォンツをニーズへ｜4Sにつなげる", NAVY),
+blocks = [("振り返り ／ Triple Win Beyond", "10分", "3回の振り返り｜Winをエリアまで広げる", GREEN),
+          ("ワーク①「WantsとNeedsの仕分け」", "15分", "得た情報を3つに分ける｜仕分けの意義", NAVY),
+          ("ワーク②「仮説立て」とエリアプラン", "15分", "WantsをNeedsへ｜4Sにつなげる", NAVY),
           ("インタビュー ／ まとめ・総括", "20分", "エリア＋大学攻略事例｜女子医大の活動", GREEN)]
 y = 2.0
 for t, tm, d, col in blocks:
@@ -262,7 +262,7 @@ for t, tm, d, col in blocks:
 s = add_slide()
 header(s, "TODAY'S GOAL", "情報を「仕分ける」と、仮説が立つ")
 txt(s, 0.6, 1.58, 12.15, 0.4,
-    [P([R("― 得た情報をFact・ウォンツ・ニーズに分け、エリアの打ち手につなげる ―", 15, True, GRAY)],
+    [P([R("― 得た情報をFact・Wants・Needsに分け、エリアの打ち手につなげる ―", 15, True, GRAY)],
        align=PP_ALIGN.CENTER)])
 pillars = [("採用", "DAY 1", GREEN2), ("面会", "DAY 2", GREEN2),
            ("情報収集", "DAY 3", GREEN2), ("戦略的思考", "DAY 4", DEEP)]
@@ -366,28 +366,28 @@ card(s, 0.6, 5.45, 12.15, 1.35,
         align=PP_ALIGN.CENTER)],
      fill=DEEP, radius=0.1, pad=0.2)
 
-# ================================================================ 13 ③ ニーズとウォンツ
+# ================================================================ 13 ③ NeedsとWants
 s = add_slide()
-header(s, "③ NEEDS & WANTS", "ニーズは「状態」、ウォンツは「手段」", kcolor=NAVY)
+header(s, "③ NEEDS & WANTS", "Needsは「状態」、Wantsは「手段」", kcolor=NAVY)
 card(s, 0.6, 1.75, 3.5, 0.62, [P([R("理想の状態", 15, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=NAVY, radius=0.1)
 card(s, 0.6, 2.5, 3.5, 0.85,
-     [P([R("Gap ＝ ニーズ", 22, True, WHITE)], align=PP_ALIGN.CENTER)],
+     [P([R("Gap ＝ Needs", 22, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=RED, radius=0.1)
 card(s, 0.6, 3.48, 3.5, 0.62, [P([R("現状", 15, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=NAVY, radius=0.1)
 txt(s, 0.6, 4.2, 3.5, 0.36,
     [P([R("＝ 満たされていない状態", 13, True, DEEP)], align=PP_ALIGN.CENTER)])
 arrow(s, 4.3, 2.72, 0.6, 0.5, color=GREEN2)
-card(s, 5.1, 1.75, 7.65, 0.62, [P([R("Gapを埋める具体的なもの ＝ ウォンツ", 15, True, WHITE)], align=PP_ALIGN.CENTER)],
+card(s, 5.1, 1.75, 7.65, 0.62, [P([R("Gapを埋める具体的なもの ＝ Wants", 15, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=GREEN, radius=0.1)
 card(s, 5.1, 2.5, 7.65, 1.6,
-     [P([R("・顧客が口にするのは、ほとんどがウォンツ（やり方の指定）", 13.5, True, INK)], line=1.3, space_after=9),
-      P([R("・ウォンツに応えるだけでは、その手段が正しいか分からない", 13.5, False, INK)], line=1.3, space_after=9),
-      P([R("・ニーズが分かれば、手段は他にも選べる", 13.5, False, INK)], line=1.3)],
+     [P([R("・顧客が口にするのは、ほとんどがWants（やり方の指定）", 13.5, True, INK)], line=1.3, space_after=9),
+      P([R("・Wantsに応えるだけでは、その手段が正しいか分からない", 13.5, False, INK)], line=1.3, space_after=9),
+      P([R("・Needsが分かれば、手段は他にも選べる", 13.5, False, INK)], line=1.3)],
      fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.2)
-lat = [("顕在ニーズ", "顧客自身が気づいている", NAVY2),
-       ("潜在ニーズ", "顧客自身が気づいていない", GOLD)]
+lat = [("顕在Needs", "顧客自身が気づいている", NAVY2),
+       ("潜在Needs", "顧客自身が気づいていない", GOLD)]
 for i, (t, d, col) in enumerate(lat):
     x = 5.1 + i * 3.9
     card(s, x, 4.2, 3.75, 0.62, [P([R(t, 14, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
@@ -395,7 +395,7 @@ for i, (t, d, col) in enumerate(lat):
          fill=PALE2, radius=0.1, pad=0.1)
 card(s, 0.6, 5.75, 12.15, 1.05,
      [P([R("顕在化することは珍しい。", 15, False, WHITE)], align=PP_ALIGN.CENTER, space_after=6),
-      P([R("気づかれていないニーズを、競合より早く見つけられるかで差がつく。", 20, True, YELL)],
+      P([R("気づかれていないNeedsを、競合より早く見つけられるかで差がつく。", 20, True, YELL)],
         align=PP_ALIGN.CENTER)],
      fill=DEEP, radius=0.1, pad=0.18)
 
@@ -403,8 +403,8 @@ card(s, 0.6, 5.75, 12.15, 1.05,
 s = add_slide()
 header(s, "③ 仕分けの目安", "得た情報を、3つのどれかに置く", kcolor=NAVY)
 boxes = [("Fact（事実）", "観察できること", ["数字・出来事・体制", "願望が入っていない", "例：腎生検が半減している"], GRAY),
-         ("ウォンツ（手段）", "やり方の指定", ["「〜が欲しい」", "「〜してほしい」", "例：勉強会をやってほしい"], GREEN),
-         ("ニーズ（状態）", "満たされていないGap", ["「〜したい」", "「〜が足りない・困っている」", "例：若手を育てたい"], RED)]
+         ("Wants（手段）", "やり方の指定", ["「〜が欲しい」", "「〜してほしい」", "例：勉強会をやってほしい"], GREEN),
+         ("Needs（状態）", "満たされていないGap", ["「〜したい」", "「〜が足りない・困っている」", "例：若手を育てたい"], RED)]
 for i, (t, sub, lines, col) in enumerate(boxes):
     x = 0.6 + i * 4.09
     card(s, x, 1.85, 3.9, 0.85,
@@ -420,7 +420,7 @@ card(s, 0.6, 4.95, 12.15, 0.72,
          R("　願望が入っていなければ Fact", 14, False, INK)], align=PP_ALIGN.CENTER)],
      fill=YPALE, line=YELL, radius=0.1)
 card(s, 0.6, 5.9, 12.15, 0.9,
-     [P([R("Factは、仮説の材料。ウォンツは、入口。ニーズは、目指す状態。", 20, True, YELL)],
+     [P([R("Factは、仮説の材料。Wantsは、入口。Needsは、目指す状態。", 20, True, YELL)],
        align=PP_ALIGN.CENTER)],
      fill=DEEP, radius=0.1, pad=0.18)
 
@@ -428,7 +428,7 @@ card(s, 0.6, 5.9, 12.15, 0.9,
 s = add_slide()
 shape(s, 0, 0, 13.333, 7.5, fill=PALE2, kind=MSO_SHAPE.RECTANGLE)
 chip(s, 0.6, 0.34, chip_w("WORK ①-1　｜　4分"), 0.42, "WORK ①-1　｜　4分", fill=NAVY)
-txt(s, 0.6, 0.86, 12.2, 0.52, [P([R("例題を、Fact／ウォンツ／ニーズに仕分ける", 24, True, DEEP)])])
+txt(s, 0.6, 0.86, 12.2, 0.52, [P([R("例題を、Fact／Wants／Needsに仕分ける", 24, True, DEEP)])])
 txt(s, 0.6, 1.44, 12.2, 0.32,
     [P([R("腎臓内科の医局・先生から得た情報です。①〜⑨を、下の3つのどこに置くか決めてください。", 13.5, False, INK)])])
 items = ["① 関連病院の先生向けに、CKDの勉強会をやってほしい",
@@ -445,7 +445,7 @@ for i, it in enumerate(items):
     y = 1.85 + (i // 3) * 0.72
     card(s, x, y, 3.9, 0.62, [P([R(it, 12, True, INK)], line=1.2)],
          fill=WHITE, line=LGRAY, radius=0.1, pad=0.14)
-rows = [("Fact（事実）", GRAY), ("ウォンツ（手段）", GREEN), ("ニーズ（状態）", RED)]
+rows = [("Fact（事実）", GRAY), ("Wants（手段）", GREEN), ("Needs（状態）", RED)]
 y = 4.22
 for t, col in rows:
     card(s, 0.6, y, 2.6, 0.78, [P([R(t, 13.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
@@ -459,14 +459,14 @@ footer(s)
 s = add_slide()
 header(s, "WORK ①-2", "これまでの経験を共有する", "6分", kcolor=NAVY)
 card(s, 0.6, 1.85, 12.15, 0.95,
-     [P([R("これまでの活動で、先生のウォンツから", 18, False, INK),
-         R("ニーズを汲み取れた経験", 18, True, RED),
+     [P([R("これまでの活動で、先生のWantsから", 18, False, INK),
+         R("Needsを汲み取れた経験", 18, True, RED),
          R("はありますか？", 18, False, INK)], align=PP_ALIGN.CENTER)],
      fill=PALE, line=GREEN, radius=0.08, pad=0.16)
 card(s, 0.6, 3.05, 12.15, 0.48, [P([R("話を深めるヒント", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=NAVY, radius=0.12)
-hints = ["先生の、どんな言葉（ウォンツ）から始まりましたか？",
-         "その裏にあるニーズは、何だと考えましたか？",
+hints = ["先生の、どんな言葉（Wants）から始まりましたか？",
+         "その裏にあるNeedsは、何だと考えましたか？",
          "気づいたあと、活動や提案はどう変わりましたか？"]
 y = 3.68
 for i, h in enumerate(hints):
@@ -483,11 +483,11 @@ card(s, 0.6, 6.15, 12.15, 0.66,
 s = add_slide()
 shape(s, 0, 0, 13.333, 7.5, fill=WHITE, kind=MSO_SHAPE.RECTANGLE)
 chip(s, 0.6, 0.34, chip_w("記録用　｜　ワーク①"), 0.42, "記録用　｜　ワーク①", fill=NAVY2)
-txt(s, 0.6, 0.86, 12.2, 0.5, [P([R("ウォンツから、ニーズを汲み取った経験", 23, True, DEEP)])])
+txt(s, 0.6, 0.86, 12.2, 0.5, [P([R("Wantsから、Needsを汲み取った経験", 23, True, DEEP)])])
 txt(s, 0.6, 1.42, 12.2, 0.3,
     [P([R("書記の方は、出てきた発言をこの表に記録してください。", 12.5, False, GRAY)])])
-cols = [("出てきたウォンツ（言われた言葉）", 4.1, GREEN),
-        ("汲み取ったニーズ（状態）", 4.1, RED),
+cols = [("出てきたWants（言われた言葉）", 4.1, GREEN),
+        ("汲み取ったNeeds（状態）", 4.1, RED),
         ("活動・提案がどう変わったか", 3.95, NAVY)]
 x = 0.6
 for t, w, col in cols:
@@ -505,8 +505,8 @@ footer(s)
 s = add_slide()
 header(s, "④ なぜ仕分けるのか", "仕分けが終われば、仮説はほとんど出来ている", kcolor=GOLD)
 mean = [("Factだけでは動けない", "情報は「量」ではなく「意味」。並べただけでは打ち手にならない", GRAY),
-        ("ウォンツに応えるだけでは足りない", "その手段が最善か分からない。次の一手も出てこない", GREEN),
-        ("ニーズが分かれば手段を選べる", "同じニーズに対して、より効く手段を提案できる", RED)]
+        ("Wantsに応えるだけでは足りない", "その手段が最善か分からない。次の一手も出てこない", GREEN),
+        ("Needsが分かれば手段を選べる", "同じNeedsに対して、より効く手段を提案できる", RED)]
 y = 1.95
 for t, d, col in mean:
     card(s, 0.6, y, 4.5, 0.85, [P([R(t, 15, True, WHITE)], line=1.2)], fill=col, radius=0.1, pad=0.2)
@@ -514,24 +514,24 @@ for t, d, col in mean:
          fill=WHITE, line=LGRAY, radius=0.1, pad=0.2)
     y += 1.0
 card(s, 0.6, 5.05, 12.15, 0.6,
-     [P([R("御用聞きと提案の違いは、ニーズまで降りているかどうか。", 16, True, DEEP)],
+     [P([R("御用聞きと提案の違いは、Needsまで降りているかどうか。", 16, True, DEEP)],
        align=PP_ALIGN.CENTER)],
      fill=YPALE, line=YELL, radius=0.1)
 card(s, 0.6, 5.78, 12.15, 0.55,
-     [P([R("参考：付録B〜Dに、考えられるFact／ウォンツ／ニーズを掲載（ワーク②の題材にも使えます）", 13, True, DEEP)],
+     [P([R("参考：付録B〜Dに、考えられるFact／Wants／Needsを掲載（ワーク②の題材にも使えます）", 13, True, DEEP)],
        align=PP_ALIGN.CENTER)],
      fill=PALE, line=GREEN, radius=0.1)
 card(s, 0.6, 6.45, 12.15, 0.38,
      [P([R("仕分けは、仮説を立てるための下ごしらえ。", 16, True, YELL)], align=PP_ALIGN.CENTER)],
      fill=DEEP, radius=0.1, pad=0.06)
 
-# ================================================================ 19 ④ ウォンツをニーズへ
+# ================================================================ 19 ④ WantsをNeedsへ
 s = add_slide()
-header(s, "④ 仮説立て", "ウォンツに「なぜ？」を重ねて、ニーズへ降りる", kcolor=GOLD)
-steps = [("ウォンツ", "関連病院の先生向けに、勉強会をやってほしい", GREEN),
+header(s, "④ 仮説立て", "Wantsに「なぜ？」を重ねて、Needsへ降りる", kcolor=GOLD)
+steps = [("Wants", "関連病院の先生向けに、勉強会をやってほしい", GREEN),
          ("なぜ？", "関連病院から、進行してから紹介されることが多い", NAVY2),
          ("なぜ困る？", "早く紹介されれば、まだ治療の選択肢が残る", NAVY),
-         ("ニーズ", "地域で早く見つけ、適切なタイミングで紹介される状態にしたい", RED)]
+         ("Needs", "地域で早く見つけ、適切なタイミングで紹介される状態にしたい", RED)]
 y = 1.9
 for i, (t, d, col) in enumerate(steps):
     card(s, 0.6, y, 2.5, 0.72, [P([R(t, 14.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
@@ -548,7 +548,7 @@ card(s, 0.6, 6.1, 12.15, 0.75,
 # ================================================================ 20 ⑤ ワーク② 進め方
 s = add_slide()
 header(s, "WORK ②", "自分の担当施設で、仮説と解決策を考える", "10分", kcolor=NAVY)
-wsteps = [("1", "Fact・ウォンツ・ニーズを置く", GRAY),
+wsteps = [("1", "Fact・Wants・Needsを置く", GRAY),
           ("2", "仮説を1文にする", NAVY),
           ("3", "4Sに当てはめる", GOLD),
           ("4", "解決策を出す", GREEN)]
@@ -593,7 +593,7 @@ txt(s, 0.6, 0.78, 8.6, 0.46, [P([R("4S：エリア・施設の課題解決シー
 txt(s, 9.3, 0.86, 3.45, 0.3,
     [P([R("施設（　　　　　　　　　）", 12, False, GRAY)], align=PP_ALIGN.RIGHT)])
 # 成功像
-card(s, 0.6, 1.35, 12.15, 0.42, [P([R("【成功像】　← ニーズ", 13, True, WHITE)], align=PP_ALIGN.CENTER)],
+card(s, 0.6, 1.35, 12.15, 0.42, [P([R("【成功像】　← Needs", 13, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=RED, radius=0.06)
 shape(s, 0.6, 1.79, 12.15, 0.72, fill=WHITE, line=LGRAY, line_w=1.2, radius=0.02)
 # 中央の矢印帯
@@ -612,7 +612,7 @@ card(s, 0.6, 5.32, 6.0, 0.42, [P([R("【原因】　← 仮説", 13, True, WHITE
      fill=NAVY, radius=0.06)
 shape(s, 0.6, 5.76, 6.0, 1.05, fill=WHITE, line=LGRAY, line_w=1.2, radius=0.02)
 # 解決策
-card(s, 6.75, 3.05, 6.0, 0.42, [P([R("【解決策】　← 打ち手（ウォンツを手がかりに）", 13, True, WHITE)],
+card(s, 6.75, 3.05, 6.0, 0.42, [P([R("【解決策】　← 打ち手（Wantsを手がかりに）", 13, True, WHITE)],
                                   align=PP_ALIGN.CENTER)],
      fill=GREEN, radius=0.06)
 shape(s, 6.75, 3.49, 6.0, 3.32, fill=WHITE, line=LGRAY, line_w=1.2, radius=0.02)
@@ -622,7 +622,7 @@ footer(s)
 # ================================================================ 22 ⑥ 4S記入例
 s = add_slide()
 header(s, "⑥ 記入例", "仕分けと仮説が、そのまま4Sに入る", kcolor=GREEN)
-card(s, 0.6, 1.72, 12.15, 0.4, [P([R("【成功像】　← ニーズ", 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+card(s, 0.6, 1.72, 12.15, 0.4, [P([R("【成功像】　← Needs", 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=RED, radius=0.06)
 card(s, 0.6, 2.14, 12.15, 0.6,
      [P([R("地域で早く見つかり、適切なタイミングで紹介される状態になっている", 15, True, INK)],
@@ -651,7 +651,7 @@ card(s, 6.75, 3.37, 6.0, 2.82,
       P([R("・学会長の年に合わせ、医局の症例発信の場も設計", 12.5, False, INK)], line=1.3)],
      fill=PALE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.02, pad=0.16)
 card(s, 0.6, 6.35, 12.15, 0.48,
-     [P([R("ウォンツ（勉強会をやってほしい）は解決策の入口。ニーズまで降りたから、エリアの形になった。", 13.5, True, DEEP)],
+     [P([R("Wants（勉強会をやってほしい）は解決策の入口。Needsまで降りたから、エリアの形になった。", 13.5, True, DEEP)],
        align=PP_ALIGN.CENTER)],
      fill=YPALE, line=YELL, radius=0.1)
 
@@ -661,7 +661,7 @@ s = add_slide()
 section(s, "⑦", "エリア＋大学攻略事例", "インタビュー　｜　10分",
         "どの情報から、その仮説にたどり着いたのか？",
         ["大学1施設で終わらせず、エリアにどう広げたか",
-         "ウォンツのまま動いた時と、ニーズまで降りた時で、何が違ったか",
+         "Wantsのまま動いた時と、Needsまで降りた時で、何が違ったか",
          "最初に確かめるのは、どの情報か"])
 
 # ================================================================ 25 ⑦ 記録用
@@ -669,7 +669,7 @@ s = add_slide()
 shape(s, 0, 0, 13.333, 7.5, fill=WHITE, kind=MSO_SHAPE.RECTANGLE)
 chip(s, 0.6, 0.34, chip_w("記録用　｜　インタビュー"), 0.42, "記録用　｜　インタビュー", fill=GOLD)
 txt(s, 0.6, 0.86, 12.2, 0.5, [P([R("聞きながら、自分のエリアに置き換える", 23, True, DEEP)])])
-imemo = ["決め手になったFact", "先生のウォンツとニーズ",
+imemo = ["決め手になったFact", "先生のWantsとNeeds",
          "エリアの誰を、どの順番で巻き込んだか", "自分のエリアで確かめたいこと"]
 y = 1.55
 for t in imemo:
@@ -680,7 +680,7 @@ footer(s)
 
 # ================================================================ 26 ⑧ 女子医大①
 s = add_slide()
-header(s, "⑧ まとめ", "女子医大の活動 — 一言のウォンツから始まった", kcolor=GREEN)
+header(s, "⑧ まとめ", "女子医大の活動 — 一言のWantsから始まった", kcolor=GREEN)
 card(s, 0.6, 1.75, 12.15, 0.75,
      [P([R("初回面談の一言　", 13.5, True, GRAY),
          R("「女子医大腎臓内科を全国に売り出したい」", 20, True, RED)], align=PP_ALIGN.CENTER)],
@@ -688,13 +688,13 @@ card(s, 0.6, 1.75, 12.15, 0.75,
 card(s, 0.6, 2.7, 5.85, 0.58, [P([R("集まっていたFact", 14.5, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=GRAY, radius=0.1)
 f = ["女子医大では新機序薬の使用経験が複数例", "条件の近い近隣2大学では未使用",
-     "希少疾患のため「誰に使うべきか」の情報が全国的に不足", "院内の小児腎・移植でも適正使用の共有ニーズ",
+     "希少疾患のため「誰に使うべきか」の情報が全国的に不足", "院内の小児腎・移植でも適正使用の共有Needs",
      "近隣大学の先生は共同研究者・女子医大出身"]
 card(s, 0.6, 3.38, 5.85, 2.05,
      [P([R("・" + l, 12.5, False, INK)], line=1.25, space_after=7) for l in f],
      fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.18)
 arrow(s, 6.65, 3.9, 0.6, 0.55, color=GOLD)
-card(s, 7.5, 2.7, 5.25, 0.58, [P([R("降りた先のニーズ", 14.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+card(s, 7.5, 2.7, 5.25, 0.58, [P([R("降りた先のNeeds", 14.5, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=RED, radius=0.1)
 card(s, 7.5, 3.38, 5.25, 0.95,
      [P([R("実臨床の経験を、全国と地域に届ける場がない", 14, True, INK)], line=1.3)],
@@ -705,8 +705,8 @@ card(s, 7.5, 5.03, 5.25, 0.4,
      [P([R("女子医大をHUBにすれば、横展開が起こる", 13, True, DEEP)], align=PP_ALIGN.CENTER)],
      fill=PALEB, line=NAVY2, radius=0.1, pad=0.1)
 card(s, 0.6, 5.7, 12.15, 1.1,
-     [P([R("「売り出したい」はウォンツ。その裏の", 15, False, WHITE),
-         R("「発信する場がない」というニーズ", 17, True, YELL),
+     [P([R("「売り出したい」はWants。その裏の", 15, False, WHITE),
+         R("「発信する場がない」というNeeds", 17, True, YELL),
          R("まで降りたことが起点。", 15, False, WHITE)], align=PP_ALIGN.CENTER, line=1.3)],
      fill=DEEP, radius=0.1, pad=0.18)
 
@@ -744,9 +744,9 @@ card(s, 0.6, 5.85, 12.15, 0.95,
 s = add_slide()
 header(s, "⑧ まとめ", "本日の3つ")
 msgs = [("1", "情報は、仕分けた瞬間に意味を持つ",
-         "Fact・ウォンツ・ニーズ。どれかに置くだけで、次に何を聞くかが決まる。", NAVY),
-        ("2", "ニーズまで降りれば、手段は選べる",
-         "ウォンツに応えるのが仕事ではない。仮説を立てて、4Sで解決策を選ぶ。", GOLD),
+         "Fact・Wants・Needs。どれかに置くだけで、次に何を聞くかが決まる。", NAVY),
+        ("2", "Needsまで降りれば、手段は選べる",
+         "Wantsに応えるのが仕事ではない。仮説を立てて、4Sで解決策を選ぶ。", GOLD),
         ("3", "大学は、エリアの1施設",
          "Triple Winをエリアまで広げると、同じ打ち手でも残るものが変わる。", GREEN)]
 y = 1.95
@@ -818,12 +818,12 @@ ans = [("Fact（事実）", GRAY,
          "⑤ eGFRが20を切ってから紹介されることが多い",
          "⑧ 教授が来年、学会の会長を務める"],
         "→ 仮説の材料。単独では打ち手にならない"),
-       ("ウォンツ（手段）", GREEN,
+       ("Wants（手段）", GREEN,
         ["① 関連病院向けにCKDの勉強会をやってほしい",
          "④ 〇〇大学の△△先生を研究会に呼んでほしい",
          "⑦ 先月の学会のスライドが欲しい"],
-        "→ 「なぜ？」を重ねてニーズへ降りる"),
-       ("ニーズ（状態）", RED,
+        "→ 「なぜ？」を重ねてNeedsへ降りる"),
+       ("Needs（状態）", RED,
         ["③ 若手に、腎病理を読める医師を育てたい",
          "⑥ うちの医局を、もっと全国に知ってもらいたい",
          "⑨ 透析導入を、できるだけ遅らせたい"],
@@ -882,11 +882,11 @@ txt(s, 2.8, 6.85, 9.95, 0.28,
     [P([R("Factは単独では打ち手にならない。いくつかを線でつなぎ、仮説の材料にする。", 12, True, DEEP)],
        align=PP_ALIGN.CENTER)])
 
-# ================================================================ 32 付録C ウォンツ→複数のニーズ仮説→確認質問
+# ================================================================ 32 付録C Wants→複数のNeeds仮説→確認質問
 s = add_slide()
-header(s, "APPENDIX C", "参考：ウォンツ → 複数のニーズ仮説 → 確認したい質問", kcolor=GRAY)
+header(s, "APPENDIX C", "参考：Wants → 複数のNeeds仮説 → 確認したい質問", kcolor=GRAY)
 txt(s, 0.6, 1.56, 12.15, 0.3,
-    [P([R("一つのウォンツに、ニーズ仮説は複数あり得ます。決めつけず、質問で確かめる。", 12, False, GRAY)],
+    [P([R("一つのWantsに、Needs仮説は複数あり得ます。決めつけず、質問で確かめる。", 12, False, GRAY)],
        align=PP_ALIGN.CENTER)])
 wn = [("勉強会をやってほしい", "若手の診療力向上／接点の維持／紹介を早める／方針の浸透",
        "特に誰に、何を持ち帰ってほしいですか？"),
@@ -917,19 +917,19 @@ for c, data in enumerate([wn, wn2]):
     for r, (w, n, q) in enumerate(data):
         y = 1.95 + r * 0.815
         card(s, x, y, 6.05, 0.755,
-             [P([R("W ", 10, True, GREEN), R("「" + w + "」", 10.5, True, INK)], space_after=2),
-              P([R("仮説 ", 9.5, True, RED), R(n, 9.5, False, INK)], line=1.1, space_after=2),
+             [P([R("Wants ", 10, True, GREEN), R("「" + w + "」", 10.5, True, INK)], space_after=2),
+              P([R("Needs仮説 ", 9.5, True, RED), R(n, 9.5, False, INK)], line=1.1, space_after=2),
               P([R("質問 ", 9.5, True, NAVY2), R(q, 9.5, False, GRAY)], line=1.1)],
              fill=WHITE if r % 2 else PALE2, line=LGRAY, anchor=MSO_ANCHOR.MIDDLE,
              radius=0.06, pad=0.12)
 txt(s, 2.8, 6.85, 9.95, 0.28,
-    [P([R("同じウォンツでも、裏のニーズは施設によって違う。仮説が変われば、解決策も変わる。", 12, True, DEEP)],
+    [P([R("同じWantsでも、裏のNeedsは施設によって違う。仮説が変われば、解決策も変わる。", 12, True, DEEP)],
        align=PP_ALIGN.CENTER)])
 
-# ================================================================ 33 付録D ニーズの例と解決策の広がり
+# ================================================================ 33 付録D Needsの例と解決策の広がり
 s = add_slide()
-header(s, "APPENDIX D", "参考：考えられるニーズと、解決策の広がり", kcolor=GRAY)
-card(s, 0.6, 1.7, 6.0, 0.5, [P([R("大学・基幹病院に考えられるニーズ（状態）", 13.5, True, WHITE)],
+header(s, "APPENDIX D", "参考：考えられるNeedsと、解決策の広がり", kcolor=GRAY)
+card(s, 0.6, 1.7, 6.0, 0.5, [P([R("大学・基幹病院に考えられるNeeds（状態）", 13.5, True, WHITE)],
                                align=PP_ALIGN.CENTER)],
      fill=RED, radius=0.1)
 needs = ["診療の質を均一化したい", "適切なタイミングで専門医へつなぎたい",
@@ -945,7 +945,7 @@ txt(s, 0.6, 6.45, 6.0, 0.44,
     [P([R("「勉強会をしたい」のような手段ではなく、実現したい状態で書く。", 11, True, DEEP)], line=1.2)])
 card(s, 6.9, 1.7, 5.85, 0.5, [P([R("考える型", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=NAVY, radius=0.1)
-chain = [("ウォンツ", GREEN), ("複数のニーズ仮説", RED), ("確かめる質問", NAVY2), ("複数の解決策", GOLD)]
+chain = [("Wants", GREEN), ("複数のNeeds仮説", RED), ("確かめる質問", NAVY2), ("複数の解決策", GOLD)]
 y = 2.32
 for i, (t, col) in enumerate(chain):
     card(s, 6.9, y, 5.85, 0.42, [P([R(t, 12.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
@@ -972,9 +972,9 @@ for i, (t, col) in enumerate(ex_titles):
     card(s, 1.7 + i * 3.72, 1.88, 3.62, 0.36, [P([R(t, 11, True, WHITE)], align=PP_ALIGN.CENTER)],
          fill=col, radius=0.08)
 rows = [("起点", 0.66, GRAY,
-         ["F：進行後の紹介が多く、施設で時期に差\nW：関連病院向けに勉強会を",
-          "F：症例・研究実績はあるが発表は一部に限定\nW：医局の活動を全国へ",
-          "F：病理評価が少数医師に集中\nW：若手に腎病理を学ばせたい"]),
+         ["Fact：進行後の紹介が多く、施設で時期に差\nWants：関連病院向けに勉強会を",
+          "Fact：症例・研究実績はあるが発表は一部に限定\nWants：医局の活動を全国へ",
+          "Fact：病理評価が少数医師に集中\nWants：若手に腎病理を学ばせたい"]),
         ("仮説", 0.52, RED,
          ["紹介判断の考え方を共有し、適切な時期につなぎたい",
           "存在価値を高め、若手の成長機会と人脈を広げたい",
@@ -1017,7 +1017,7 @@ tips = [("当日の進行",
           "レクチャーは合計20分。ワークと共有に30分を残す"]),
         ("ワーク①・ワーク②",
          ["ワーク①前半4分：例題9件を仕分け（15枚目の欄に番号）",
-          "ワーク①後半6分：ウォンツからニーズを汲み取った経験を共有",
+          "ワーク①後半6分：WantsからNeedsを汲み取った経験を共有",
           "ワーク②：20枚目の例を残したまま、21枚目の4Sに書き切る"]),
         ("付録の使い方",
          ["付録A〜Dは、ワーク①の後に投影してよい（考える材料）",
@@ -1026,7 +1026,7 @@ tips = [("当日の進行",
           "「例が正しいのではなく、どのFactからどの仮説を立てたかを見る」"]),
         ("記録・書記",
          ["17・21・24枚目が記録用スライド（そのまま入力可）",
-          "ワーク①はウォンツ／ニーズ／変化の3列で拾う",
+          "ワーク①はWants／Needs／変化の3列で拾う",
           "終了後、記録用スライドをTeamsへ格納"])]
 for i, (t, lines) in enumerate(tips):
     x = 0.6 + (i % 2) * 6.15
