@@ -432,30 +432,41 @@ s = add_slide()
 shape(s, 0, 0, 13.333, 7.5, fill=WHITE, kind=MSO_SHAPE.RECTANGLE)
 chip(s, 0.6, 0.34, chip_w("記録用　｜　ワーク①"), 0.42, "記録用　｜　ワーク①", fill=NAVY2)
 txt(s, 0.6, 0.86, 12.2, 0.5, [P([R("Wantsから、Needsを汲み取った経験", 23, True, DEEP)])])
-cols = [("出てきた Wants（言われた言葉）", 4.1, GREEN),
-        ("汲み取った Needs（状態）", 4.1, RED),
-        ("活動・提案がどう変わったか", 3.95, NAVY)]
+txt(s, 0.6, 1.42, 12.2, 0.3,
+    [P([R("書記の方へ ─ 先生の言葉はそのまま、Needsは「状態」の形で書いてください。", 12, False, GRAY)])])
+cols = [("出てきた Wants", "先生が言った言葉のまま", 3.9, GREEN),
+        ("汲み取った Needs", "なぜ、そう言ったのか", 4.0, RED),
+        ("活動・提案がどう変わったか", "その後、何を変えたか", 4.15, NAVY)]
 x = 0.6
-for t, w, col in cols:
-    card(s, x, 1.55, w, 0.55, [P([R(t, 12.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.08)
+for t, sub, w, col in cols:
+    card(s, x, 1.75, w, 0.6,
+         [P([R(t, 13, True, WHITE)], align=PP_ALIGN.CENTER, space_after=2),
+          P([R(sub, 10, False, WHITE)], align=PP_ALIGN.CENTER)],
+         fill=col, radius=0.08)
     x += w + 0.05
-card(s, 0.6, 2.18, 12.15, 0.3,
+card(s, 0.6, 2.42, 12.15, 0.26,
      [P([R("記入例 ─ A病院の事例（17〜19枚目）", 10.5, True, DEEP)])],
-     fill=YPALE, radius=0.04, pad=0.1)
+     fill=YPALE, radius=0.04, pad=0.08)
 ex_row = ["「いつでもご紹介頂けますと幸いです」",
-          "地域の開業医との接点が薄く、患者が集まってこない",
+          "地域へ発信する接点が限られ、紹介が増えていない",
           "〇〇先生を演者にした地域向けの会を、病院と共同で企画"]
 x = 0.6
-for i2, (t, w, col) in enumerate(cols):
-    card(s, x, 2.52, w, 0.78, [P([R(ex_row[i2], 11, False, GRAY)], line=1.25)],
-         fill=YPALE, line=YELL, radius=0.02, pad=0.13)
+for i2, (t, sub, w, col) in enumerate(cols):
+    card(s, x, 2.72, w, 0.7, [P([R(ex_row[i2], 11, False, GRAY)], line=1.25)],
+         fill=YPALE, line=YELL, anchor=MSO_ANCHOR.MIDDLE, radius=0.02, pad=0.13)
     x += w + 0.05
 for r in range(3):
-    y = 3.44 + r * 1.1
+    y = 3.54 + r * 0.98
     x = 0.6
-    for t, w, col in cols:
-        shape(s, x, y, w, 1.02, fill=PALE2 if r % 2 else WHITE, line=LGRAY, line_w=1.0, radius=0.02)
+    for t, sub, w, col in cols:
+        card(s, x, y, w, 0.92, [P([R("", 12, False, INK)])],
+             fill=PALE2 if r % 2 else WHITE, line=LGRAY,
+             anchor=MSO_ANCHOR.TOP, radius=0.02, pad=0.14)
         x += w + 0.05
+card(s, 0.6, 6.55, 12.15, 0.4,
+     [P([R("全体共有では、この表から2〜3件を拾います。整った言葉にしなくて構いません。", 12.5, True, DEEP)],
+       align=PP_ALIGN.CENTER)],
+     fill=PALE, line=GREEN, radius=0.08)
 footer(s)
 
 # ================================================================ 16 ④ 仮説立て
