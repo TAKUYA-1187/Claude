@@ -471,6 +471,51 @@ card(s, 0.6, 6.25, 12.15, 0.58,
          R("　複数立てて、次の面談の質問で確かめる。", 19, True, YELL)], align=PP_ALIGN.CENTER)],
      fill=DEEP, radius=0.1, pad=0.14)
 
+# ================================================================ 17 ④ 事例：A病院①
+s = add_slide()
+header(s, "④ 事例", "A病院で、この2年に何が起きたのか", kcolor=GOLD)
+txt(s, 0.6, 1.68, 4.6, 0.3,
+    [P([R("腎生検数の推移（A病院 腎臓内科）", 12, True, GRAY)])])
+card(s, 5.46, 1.66, 7.29, 0.4,
+     [P([R("この年度に、〇〇先生が部長として着任", 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=RED, radius=0.1)
+bars = [("着任2年前", 28, GRAY), ("着任1年前", 36, GRAY), ("着任年度", 90, RED),
+        ("＋1年", 96, GREEN), ("＋2年", 99, GREEN)]
+base = 3.55
+for i, (lab, v, col) in enumerate(bars):
+    x = 0.6 + i * 2.43
+    h = v * 0.0101
+    shape(s, x + 0.47, base - h, 1.5, h, fill=col, kind=MSO_SHAPE.RECTANGLE)
+    txt(s, x, base - h - 0.32, 2.43, 0.3,
+        [P([R(str(v) + "件", 14.5, True, col)], align=PP_ALIGN.CENTER)])
+    txt(s, x, base + 0.05, 2.43, 0.28,
+        [P([R(lab, 11.5, i == 2, INK)], align=PP_ALIGN.CENTER)])
+conn(s, 0.6, base, 12.75, base, color=LGRAY, weight=1.2)
+cols3 = [("Fact（事実）", GRAY,
+          ["・着任年度に、腎生検が36件→90件",
+           "・その後も96件・99件で定着",
+           "・着任時、開業医向けの広報誌に寄稿"]),
+         ("Wants（広報誌の言葉）", GREEN,
+          ["「腎臓に問題がある患者様がいらっしゃいましたら、いつでもご紹介ください」"]),
+         ("Needs（その裏の状態）", RED,
+          ["「透析を導入する医療ではなく、透析になる患者さんを一人でも減らしたい」",
+           "→ 早く見つけ、確定診断までつなげたい"])]
+for i, (t, col, lines) in enumerate(cols3):
+    x = 0.6 + i * 4.09
+    card(s, x, 4.0, 3.9, 0.45, [P([R(t, 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+         fill=col, radius=0.1)
+    card(s, x, 4.5, 3.9, 1.3,
+         [P([R(l, 11, i > 0, INK)], line=1.25, space_after=7) for l in lines],
+         fill=PALE if i else WHITE, line=GREEN if i else LGRAY,
+         anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.15)
+card(s, 0.6, 5.95, 12.15, 0.9,
+     [P([R("仮説　", 13, True, MINT),
+         R("この病院は、地域の腎臓診療の入口を担おうとしている。", 18, True, YELL)],
+       align=PP_ALIGN.CENTER, space_after=5),
+      P([R("だから、まず院内の診断力を上げ、開業医に向けて発信した。", 14, False, WHITE)],
+        align=PP_ALIGN.CENTER)],
+     fill=DEEP, radius=0.1, pad=0.14)
+
 # ================================================================ 17 ⑤ ワーク② 進め方
 s = add_slide()
 header(s, "WORK ②", "自分の担当施設で、仮説と解決策を考える", "10分", kcolor=NAVY)
@@ -538,39 +583,50 @@ shape(s, 6.75, 3.49, 6.0, 3.32, fill=WHITE, line=LGRAY, line_w=1.2, radius=0.02)
 arrow(s, 6.28, 5.9, 0.4, 0.3, color=GREEN, direction="right")
 footer(s)
 
-# ================================================================ 19 ⑥ 4S記入例
+# ================================================================ 20 ⑥ 事例：A病院②
 s = add_slide()
-header(s, "⑥ 記入例", "仕分けと仮説が、そのまま4Sに入る", "5分", kcolor=GREEN)
-card(s, 0.6, 1.75, 12.15, 0.4, [P([R("【成功像】　← Needs", 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
-     fill=RED, radius=0.06)
-card(s, 0.6, 2.17, 12.15, 0.6,
-     [P([R("地域で早く見つかり、適切な時期に紹介される状態になっている", 15, True, INK)],
-       align=PP_ALIGN.CENTER)],
-     fill=PALE, line=LGRAY, radius=0.02, pad=0.14)
-card(s, 0.6, 2.98, 6.0, 0.4, [P([R("【現状・課題】　← Fact", 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
-     fill=GRAY, radius=0.06)
-card(s, 0.6, 3.4, 6.0, 1.25,
-     [P([R("・腎生検が3年前の半減", 12.5, False, INK)], line=1.25, space_after=7),
-      P([R("・進行してから紹介されることが多い", 12.5, False, INK)], line=1.25, space_after=7),
-      P([R("・教授が来年、学会の会長を務める", 12.5, False, INK)], line=1.25)],
-     fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.02, pad=0.16)
-card(s, 0.6, 4.75, 6.0, 0.4, [P([R("【原因】　← 仮説", 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
-     fill=NAVY, radius=0.06)
-card(s, 0.6, 5.17, 6.0, 1.0,
-     [P([R("地域の入口を担いたいが、関連病院との接点が薄く、紹介基準が共有されていない", 12.5, True, INK)],
-       line=1.3)],
-     fill=PALEB, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.02, pad=0.16)
-card(s, 6.75, 2.98, 6.0, 0.4, [P([R("【解決策】　← 打ち手", 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
-     fill=GREEN, radius=0.06)
-card(s, 6.75, 3.4, 6.0, 2.77,
-     [P([R("・関連病院＋近隣大学の合同勉強会を、医局と共同で企画", 12.5, True, INK)], line=1.3, space_after=10),
-      P([R("・テーマは「紹介基準の共通認識づくり」", 12.5, False, INK)], line=1.3, space_after=10),
-      P([R("・近隣大学のファカルティも登壇に入れる", 12.5, False, INK)], line=1.3, space_after=10),
-      P([R("・案内は医師から医師へ", 12.5, False, INK)], line=1.3, space_after=10),
-      P([R("・学会長の年に合わせ、医局の症例発信の場も設計", 12.5, False, INK)], line=1.3)],
-     fill=PALE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.02, pad=0.16)
-card(s, 0.6, 6.33, 12.15, 0.48,
-     [P([R("Wants（勉強会をやってほしい）は入口。Needsまで降りたから、エリアの形になった。", 14, True, DEEP)],
+header(s, "⑥ 事例", "A病院の仮説から、戦略を立てる", "5分", kcolor=GREEN)
+quad = [("【成功像】　← Needs", RED, 0.5,
+         ["地域の開業医から早期に紹介され、透析に至る患者さんが減っている"]),
+        ("【現状・課題】　← Fact", GRAY, 0.5,
+         ["腎生検は着任年度に2.5倍。ただし直近2年は96→99件で横ばい"]),
+        ("【原因】　← 仮説", NAVY, 0.62,
+         ["院内の診断力は上がったが、開業医側に「いつ紹介するか」の基準が",
+          "届いていない"]),
+        ("【解決策】　← 打ち手", GREEN, 1.05,
+         ["・開業医向けに「紹介のタイミング」をテーマにした地域連携の会",
+          "・確定診断がついた症例を、地域の会で共有",
+          "・同じ設計を、近隣の基幹病院・大学へ横展開"])]
+y = 1.72
+for t2, col, bh, lines in quad:
+    card(s, 0.6, y, 6.0, 0.36, [P([R(t2, 12, True, WHITE)], align=PP_ALIGN.CENTER)],
+         fill=col, radius=0.06)
+    card(s, 0.6, y + 0.39, 6.0, bh,
+         [P([R(l, 11, False, INK)], line=1.2, space_after=5) for l in lines],
+         fill=PALE if col == GREEN else WHITE, line=LGRAY,
+         anchor=MSO_ANCHOR.TOP, radius=0.02, pad=0.13)
+    y += 0.39 + bh + 0.11
+card(s, 6.9, 1.75, 5.85, 0.45,
+     [P([R("ノバルティスができること", 13.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=NAVY, radius=0.1)
+nvs = ["「紹介のタイミング」をテーマにした地域連携の会を企画・運営支援",
+       "確定診断がついた症例を共有する場をつくる",
+       "同じ設計を近隣施設・近隣大学へ広げる（エリアマッピング）"]
+card(s, 6.9, 2.25, 5.85, 1.35,
+     [P([R("・" + l, 11.5, False, INK)], line=1.25, space_after=8) for l in nvs],
+     fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.15)
+wins3 = [("患者 WIN", "早期に確定診断がつき、透析に至らない選択肢が残る", GREEN),
+         ("顧客 WIN", "紹介が増え、地域連携の窓口としての存在感が高まる", NAVY2),
+         ("ノバルティス WIN", "診断のついた患者さんに、適切な治療を届けられる", GOLD)]
+y = 3.78
+for t2, d, col in wins3:
+    card(s, 6.9, y, 2.35, 0.72, [P([R(t2, 12.5, True, WHITE)], align=PP_ALIGN.CENTER, line=1.15)],
+         fill=col, radius=0.08)
+    card(s, 9.4, y, 3.35, 0.72, [P([R(d, 11, False, INK)], line=1.25)],
+         fill=PALE2, line=LGRAY, radius=0.08, pad=0.13)
+    y += 0.8
+card(s, 0.6, 6.35, 12.15, 0.48,
+     [P([R("大学・基幹病院だけでなく、その先の開業医まで含めてWinを設計する。", 14, True, DEEP)],
        align=PP_ALIGN.CENTER)],
      fill=YPALE, line=YELL, radius=0.1)
 
@@ -860,17 +916,18 @@ tips = [("当日の進行",
          ["0-10 振り返り＋Triple Win Beyond／10-25 ワーク①",
           "25-40 ワーク②＋4S／40-50 インタビュー／50-60 まとめ・総括",
           "レクチャーは合計20分。ワークと共有に30分を残す"]),
-        ("ワーク①・②",
+        ("ワーク①・②と事例",
          ["①前半4分：例題9件を仕分け（13枚目の欄に番号）",
           "①後半6分：WantsからNeedsを汲み取った経験を共有",
-          "②：17枚目の例を残したまま、18枚目の4Sに書き切る"]),
+          "17枚目のA病院の事例で、Fact→Wants→Needs→仮説を実物で見せる",
+          "②：18枚目の例を残したまま、19枚目の4Sに書き切る"]),
         ("付録の使い方",
          ["A〜Cは、ワーク①の後に投影してよい（考える材料）",
           "D（4S参考例）はワーク前に投影しない — なぞってしまうため",
           "使うのは、ワーク②後の解説／議論が止まった時／研修後",
           "「例が正しいのではなく、どのFactからどの仮説を立てたかを見る」"]),
         ("記録・書記",
-         ["15・18・20枚目が記録用スライド（そのまま入力可）",
+         ["13・15・19・21枚目が記録用スライド（そのまま入力可）",
           "ワーク①はWants／Needs／変化の3列で拾う",
           "終了後、記録用スライドをTeamsへ格納"])]
 for i, (t, lines) in enumerate(tips):
