@@ -430,13 +430,13 @@ card(s, 0.6, 6.15, 12.15, 0.66,
        align=PP_ALIGN.CENTER)],
      fill=YPALE, radius=0.12)
 
-# ================================================================ 15 ③ 記録用（ワーク①）
+# ================================================================ 15 ③ 参考例（ワーク①）
 s = add_slide()
 shape(s, 0, 0, 13.333, 7.5, fill=WHITE, kind=MSO_SHAPE.RECTANGLE)
-chip(s, 0.6, 0.34, chip_w("記録用　｜　ワーク①"), 0.42, "記録用　｜　ワーク①", fill=NAVY2)
+chip(s, 0.6, 0.34, chip_w("参考例　｜　ワーク①"), 0.42, "参考例　｜　ワーク①", fill=NAVY2)
 txt(s, 0.6, 0.86, 12.2, 0.5, [P([R("Wantsから、Needsを汲み取った経験", 23, True, DEEP)])])
 txt(s, 0.6, 1.42, 12.2, 0.3,
-    [P([R("書記の方へ ─ 先生の言葉はそのまま、Needsは「状態」の形で書いてください。", 12, False, GRAY)])])
+    [P([R("A病院の〇〇先生との面談で、こう聞こえたら ─ 同じ先生でも、言葉ごとにNeedsは違う。", 12, False, GRAY)])])
 cols = [("出てきた Wants", "先生が言った言葉のまま", 3.9, GREEN),
         ("汲み取った Needs", "なぜ、そう言ったのか（＝そのときの仮説）", 4.0, RED),
         ("活動・提案がどう変わったか", "その後、何を変えたか", 4.15, NAVY)]
@@ -447,29 +447,30 @@ for t, sub, w, col in cols:
           P([R(sub, 10, False, WHITE)], align=PP_ALIGN.CENTER)],
          fill=col, radius=0.08)
     x += w + 0.05
-card(s, 0.6, 2.42, 12.15, 0.26,
-     [P([R("記入例 ─ 基幹病院 腎臓内科部長との面談から", 10.5, True, DEEP)])],
-     fill=YPALE, radius=0.04, pad=0.08)
-ex_row = ["「もっと早い段階で腎生検をして、診断をつけて治療に入りたいんだよね」",
-          "早期に生検・診断まで持っていける患者が、限られている",
-          "資料を渡すのをやめ、「腎生検のタイミング」の症例検討会を企画"]
-x = 0.6
-for i2, (t, sub, w, col) in enumerate(cols):
-    card(s, x, 2.72, w, 0.7, [P([R(ex_row[i2], 11, False, GRAY)], line=1.25)],
-         fill=YPALE, line=YELL, anchor=MSO_ANCHOR.MIDDLE, radius=0.02, pad=0.13)
-    x += w + 0.05
-for r in range(3):
-    y = 3.54 + r * 0.98
+rows = [("「もっと早い段階で腎生検をして、診断をつけて治療に入りたいんだよね」",
+         "早期に生検・診断まで持っていける患者が、限られている",
+         "資料を渡すのをやめ、「腎生検のタイミング」の症例検討会を企画"),
+        ("「腎臓に問題がある患者さんがいたら、いつでも紹介してほしい」",
+         "紹介の入口が限られ、エリアから患者が集まってこない",
+         "紹介元になり得る施設を一緒に洗い出し、先生を演者にした会を設計"),
+        ("「まず透析の話をせず、透析にならない方法を一緒に考えたい」",
+         "保存期で介入した成果を、院内外に示す場がない",
+         "保存期CKDの症例検討会を、先生を中心に設計"),
+        ("「前任地でやってきたことを、この病院でも生かしたい」",
+         "立ち上げた診療体制と実績が、この病院にはまだない",
+         "近隣の基幹病院・大学の腎臓内科医とつなぎ、体制づくりの土台に")]
+for r, cells in enumerate(rows):
+    y = 2.5 + r * 1.02
     x = 0.6
-    for t, sub, w, col in cols:
-        card(s, x, y, w, 0.92, [P([R("", 12, False, INK)])],
+    for i2, (t, sub, w, col) in enumerate(cols):
+        card(s, x, y, w, 0.95, [P([R(cells[i2], 11, i2 == 1, INK)], line=1.25)],
              fill=PALE2 if r % 2 else WHITE, line=LGRAY,
-             anchor=MSO_ANCHOR.TOP, radius=0.02, pad=0.14)
+             anchor=MSO_ANCHOR.MIDDLE, radius=0.02, pad=0.13)
         x += w + 0.05
-card(s, 0.6, 6.55, 12.15, 0.4,
-     [P([R("Needsは仮説です。ここで書いた読み方が、唯一の正解とは限りません。", 12.5, True, DEEP)],
+card(s, 0.6, 6.6, 12.15, 0.35,
+     [P([R("Needsは仮説です。ここで書いた読み方が、唯一の正解とは限りません。", 12, True, DEEP)],
        align=PP_ALIGN.CENTER)],
-     fill=PALE, line=GREEN, radius=0.08)
+     fill=PALE, line=GREEN, radius=0.06)
 footer(s)
 
 # ================================================================ 16 ④ 仮説立て
