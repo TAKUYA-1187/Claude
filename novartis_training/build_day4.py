@@ -471,7 +471,72 @@ card(s, 0.6, 6.25, 12.15, 0.58,
          R("　複数立てて、次の面談の質問で確かめる。", 19, True, YELL)], align=PP_ALIGN.CENTER)],
      fill=DEEP, radius=0.1, pad=0.14)
 
-# ================================================================ 17 ④ 事例：A病院①
+# ================================================================ 17 ④ 事例：公開情報
+s = add_slide()
+header(s, "④ 事例", "この事例は、実在する病院の公開情報です", kcolor=GOLD)
+# --- 左：病院ホームページの実績ページ
+card(s, 0.6, 1.72, 6.0, 0.42,
+     [P([R("病院ホームページ ＞ 腎臓内科 ＞ 実績", 12.5, True, WHITE)], align=PP_ALIGN.CENTER)],
+     fill=GRAY, radius=0.06)
+shape(s, 0.6, 2.2, 6.0, 3.1, fill=WHITE, line=LGRAY, line_w=1.2, radius=0.02)
+card(s, 0.75, 2.33, 5.7, 0.34,
+     [P([R("https://www.■■■■■■.or.jp/departments/nephrology/", 10, False, GRAY)])],
+     fill=PALE2, radius=0.05, pad=0.1)
+txt(s, 0.75, 2.76, 5.7, 0.28, [P([R("実績", 13, True, INK)])])
+hd = ["内容", "－2年", "－1年", "着任年", "＋1年", "＋2年"]
+vals = ["腎生検数", "28件", "36件", "90件", "96件", "99件"]
+cw = [1.35, 0.87, 0.87, 0.87, 0.87, 0.87]
+x = 0.75
+for i, (h_, v_) in enumerate(zip(hd, vals)):
+    shape(s, x, 3.12, cw[i], 0.4, fill=PALE2, line=LGRAY, line_w=0.8, radius=0.0)
+    txt(s, x, 3.17, cw[i], 0.3, [P([R(h_, 10.5, True, INK)], align=PP_ALIGN.CENTER)])
+    shape(s, x, 3.52, cw[i], 0.44, fill=WHITE, line=LGRAY, line_w=0.8, radius=0.0)
+    txt(s, x, 3.60, cw[i], 0.3,
+        [P([R(v_, 11.5, i == 3, RED if i == 3 else INK)], align=PP_ALIGN.CENTER)])
+    x += cw[i]
+txt(s, 0.75, 4.12, 5.7, 0.5,
+    [P([R("※ 実際のページは「2021年度〜2025年度」の年度表記。ここでは施設が特定できないよう、", 9.5, False, GRAY)],
+       line=1.25),
+     P([R("　 部長の着任年を基準にした相対表記に置き換えています。", 9.5, False, GRAY)], line=1.25)])
+card(s, 0.75, 4.72, 5.7, 0.42,
+     [P([R("誰でも見られるページに、年次の推移がそのまま載っている", 11, True, DEEP)],
+       align=PP_ALIGN.CENTER)],
+     fill=PALE, radius=0.06)
+# --- 右：地域連携の広報誌
+card(s, 6.75, 1.72, 6.0, 0.42,
+     [P([R("地域連携の広報誌（開業医向け）｜部長 着任のごあいさつ", 12.5, True, WHITE)],
+       align=PP_ALIGN.CENTER)],
+     fill=GRAY, radius=0.06)
+shape(s, 6.75, 2.2, 6.0, 3.1, fill=WHITE, line=LGRAY, line_w=1.2, radius=0.02)
+txt(s, 6.9, 2.33, 5.7, 0.3, [P([R("広報誌より抜粋（原文ママ・施設名と氏名は伏せています）", 9.5, False, GRAY)])])
+quotes = [("「◯年4月1日付けで、当院腎臓内科部長に着任しました」", False),
+          ("「今後は、透析を導入する医療ではなく、透析患者さんを一人でも減らすことが極めて重要と考えています」", True),
+          ("「もし腎臓についてなにか問題がある患者様がいらっしゃいましたら、いつでもご紹介頂けますと幸いです」", True)]
+y = 2.68
+for q, em in quotes:
+    card(s, 6.9, y, 5.7, 0.62, [P([R(q, 10.5, em, INK)], line=1.25)],
+         fill=PALE if em else PALE2, line=GREEN if em else LGRAY, radius=0.06, pad=0.12)
+    y += 0.7
+txt(s, 6.9, 4.82, 5.7, 0.3,
+    [P([R("■■病院　腎臓内科部長　◯◯", 10, True, GRAY)], align=PP_ALIGN.RIGHT)])
+card(s, 6.9, 4.72, 5.7, 0.0, [P([R("", 8, False, WHITE)])], fill=WHITE, radius=0.0)
+conn(s, 6.9, 4.68, 12.6, 4.68, color=LGRAY, weight=1.0)
+card(s, 6.9, 5.42, 0.0, 0.0, [P([R("", 8, False, WHITE)])], fill=WHITE, radius=0.0)
+# --- 読み取れること
+card(s, 0.6, 5.42, 6.0, 0.5,
+     [P([R("→ 腎生検数が、いつ・どれだけ動いたか", 12.5, True, INK)], align=PP_ALIGN.CENTER)],
+     fill=PALE2, line=LGRAY, radius=0.08)
+card(s, 6.75, 5.42, 6.0, 0.5,
+     [P([R("→ 着任の時期と、紹介を受け入れる意思", 12.5, True, INK)], align=PP_ALIGN.CENTER)],
+     fill=PALE2, line=LGRAY, radius=0.08)
+card(s, 0.6, 6.02, 12.15, 0.83,
+     [P([R("面会の前に、公開情報だけでここまで分かる。", 19, True, YELL)],
+       align=PP_ALIGN.CENTER, space_after=5),
+      P([R("出典：病院ホームページ「実績」ページ／地域連携の広報誌（いずれも一般公開・研修用に施設名は伏せています）", 10, False, WHITE)],
+        align=PP_ALIGN.CENTER)],
+     fill=DEEP, radius=0.1, pad=0.14)
+
+# ================================================================ 18 ④ 事例：A病院の読み解き
 s = add_slide()
 header(s, "④ 事例", "A病院で、この2年に何が起きたのか", kcolor=GOLD)
 txt(s, 0.6, 1.68, 4.6, 0.3,
@@ -919,15 +984,15 @@ tips = [("当日の進行",
         ("ワーク①・②と事例",
          ["①前半4分：例題9件を仕分け（13枚目の欄に番号）",
           "①後半6分：WantsからNeedsを汲み取った経験を共有",
-          "17枚目のA病院の事例で、Fact→Wants→Needs→仮説を実物で見せる",
-          "②：18枚目の例を残したまま、19枚目の4Sに書き切る"]),
+          "17-18枚目：公開情報の実物 → Fact/Wants/Needs → 仮説の読み解き",
+          "②：19枚目の例を残したまま、20枚目の4Sに書き切る"]),
         ("付録の使い方",
          ["A〜Cは、ワーク①の後に投影してよい（考える材料）",
           "D（4S参考例）はワーク前に投影しない — なぞってしまうため",
           "使うのは、ワーク②後の解説／議論が止まった時／研修後",
           "「例が正しいのではなく、どのFactからどの仮説を立てたかを見る」"]),
         ("記録・書記",
-         ["13・15・19・21枚目が記録用スライド（そのまま入力可）",
+         ["13・15・20・22枚目が記録用スライド（そのまま入力可）",
           "ワーク①はWants／Needs／変化の3列で拾う",
           "終了後、記録用スライドをTeamsへ格納"])]
 for i, (t, lines) in enumerate(tips):
