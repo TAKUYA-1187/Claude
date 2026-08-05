@@ -439,11 +439,22 @@ x = 0.6
 for t, w, col in cols:
     card(s, x, 1.55, w, 0.55, [P([R(t, 12.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.08)
     x += w + 0.05
-for r in range(4):
-    y = 2.18 + r * 1.16
+card(s, 0.6, 2.18, 12.15, 0.3,
+     [P([R("記入例 ─ A病院の事例（17〜19枚目）", 10.5, True, DEEP)])],
+     fill=YPALE, radius=0.04, pad=0.1)
+ex_row = ["「いつでもご紹介頂けますと幸いです」",
+          "地域の開業医との接点が薄く、患者が集まってこない",
+          "紹介のタイミングを共有する会を、開業医向けに提案"]
+x = 0.6
+for i2, (t, w, col) in enumerate(cols):
+    card(s, x, 2.52, w, 0.78, [P([R(ex_row[i2], 11, False, GRAY)], line=1.25)],
+         fill=YPALE, line=YELL, radius=0.02, pad=0.13)
+    x += w + 0.05
+for r in range(3):
+    y = 3.44 + r * 1.1
     x = 0.6
     for t, w, col in cols:
-        shape(s, x, y, w, 1.08, fill=PALE2 if r % 2 else WHITE, line=LGRAY, line_w=1.0, radius=0.02)
+        shape(s, x, y, w, 1.02, fill=PALE2 if r % 2 else WHITE, line=LGRAY, line_w=1.0, radius=0.02)
         x += w + 0.05
 footer(s)
 
@@ -633,21 +644,21 @@ for i, (no, t, col) in enumerate(wsteps):
          [P([R(no + "　" + t, 13.5, True, WHITE)], align=PP_ALIGN.CENTER)], fill=col, radius=0.1)
     if i < 3:
         arrow(s, x + 2.99, 1.94, 0.14, 0.28, color=GREEN2)
-card(s, 0.6, 2.58, 6.0, 0.55, [P([R("仮説の例", 14, True, WHITE)], align=PP_ALIGN.CENTER)],
+card(s, 0.6, 2.58, 6.0, 0.55, [P([R("仮説の例（A病院の事例より）", 14, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=NAVY, radius=0.1)
-hyp = ["「地域の腎臓診療の入口」を担いたいのではないか",
-       "学会長の年に、医局の実績を外に出したいのではないか",
-       "若手が育っていないことが、腎生検の減少の原因ではないか",
+hyp = ["A：「地域の腎臓診療の入口」を担いたいのではないか",
+       "B：透析を回避した成果を、示す場がないのではないか",
+       "C：前任地で立ち上げた体制を、再現したいのではないか",
        "紹介基準が、地域の先生に伝わっていないのではないか",
        "全国発信の場を求めていて、近隣大学とも組めるのではないか"]
 card(s, 0.6, 3.2, 6.0, 2.55,
      [P([R("・" + l, 12.5, False, INK)], line=1.3, space_after=11) for l in hyp],
      fill=WHITE, line=LGRAY, anchor=MSO_ANCHOR.TOP, radius=0.1, pad=0.18)
-card(s, 6.75, 2.58, 6.0, 0.55, [P([R("解決策の例", 14, True, WHITE)], align=PP_ALIGN.CENTER)],
+card(s, 6.75, 2.58, 6.0, 0.55, [P([R("解決策の例（仮説に対応）", 14, True, WHITE)], align=PP_ALIGN.CENTER)],
      fill=GREEN, radius=0.1)
-sol = ["関連病院＋近隣大学の合同勉強会を、医局と共同で企画する",
-       "紹介基準を、研究会や連携パスで地域と共有する",
-       "若手向けの症例検討会を、医局の教育実績として残す",
+sol = ["A：開業医向けに「紹介のタイミング」を共有する会／連携パス",
+       "B：保存期CKDの症例検討会／療養を支える情報提供",
+       "C：体制づくりの棚卸し → 近隣施設・大学を巻き込んだ設計",
        "医局の症例を、エリア・全国の講演会で発信する",
        "案内を医師から医師へ回してもらい、参加の角度を上げる"]
 card(s, 6.75, 3.2, 6.0, 2.55,
