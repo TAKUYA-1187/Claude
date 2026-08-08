@@ -1,0 +1,175 @@
+{
+  "total_seconds": 8640,
+  "tracks": [
+    {
+      "slug": "01_lofi_rainy_study",
+      "title": "Rainy Lofi Beats to Study & Relax 🌧️ 2 Hours of Chill Hip Hop",
+      "bpm": 78.0,
+      "bars": 468,
+      "lufs": -14.000000460103626,
+      "true_peak_db": -2.8265939678675025,
+      "loop_seam_db": -36.73673681213888,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/01_lofi_rainy_study.mp4",
+      "probe": {
+        "size_mb": 809.42393,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 481
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 263
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 749
+      },
+      "elapsed_s": 650.8
+    },
+    {
+      "slug": "02_deep_sleep_ambient",
+      "title": "Deep Sleep Music 😴 Fall Asleep Fast — 2 Hours of Calm Ambient & Rain",
+      "bpm": 52.0,
+      "bars": 312,
+      "lufs": -13.999999727683187,
+      "true_peak_db": -1.0883842632469403,
+      "loop_seam_db": -31.066450040229462,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/02_deep_sleep_ambient.mp4",
+      "probe": {
+        "size_mb": 783.330223,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 465
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 256
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 725
+      },
+      "elapsed_s": 683.4
+    },
+    {
+      "slug": "03_piano_and_rain",
+      "title": "Relaxing Piano & Rain Sounds 🎹🌧️ 2 Hours for Sleep, Study & Stress Relief",
+      "bpm": 62.0,
+      "bars": 372,
+      "lufs": -14.000000038405737,
+      "true_peak_db": -2.1700811406176905,
+      "loop_seam_db": -27.932627881426107,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/03_piano_and_rain.mp4",
+      "probe": {
+        "size_mb": 800.978145,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 481
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 256
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 741
+      },
+      "elapsed_s": 634.2
+    },
+    {
+      "slug": "04_cozy_coffee_jazz",
+      "title": "Cozy Coffee Shop Jazz ☕ 2 Hours of Warm Jazz Piano for Work & Study",
+      "bpm": 96.0,
+      "bars": 576,
+      "lufs": -13.999999742275953,
+      "true_peak_db": -2.094638671712728,
+      "loop_seam_db": -18.405269598030593,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/04_cozy_coffee_jazz.mp4",
+      "probe": {
+        "size_mb": 753.294758,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 435
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 257
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 697
+      },
+      "elapsed_s": 600.9
+    },
+    {
+      "slug": "05_bossa_nova_cafe",
+      "title": "Bossa Nova Cafe 🌿 2 Hours of Smooth Brazilian Jazz for a Good Mood",
+      "bpm": 124.0,
+      "bars": 744,
+      "lufs": -14.00005451307209,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -32.3133658781811,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/05_bossa_nova_cafe.mp4",
+      "probe": {
+        "size_mb": 721.720147,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 396
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 267
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 668
+      },
+      "elapsed_s": 580.0
+    }
+  ]
+}

@@ -537,11 +537,18 @@ def thumbnail(scene_name: str, title_lines: list[str], seed: int = 0,
     make = SCENES[scene_name]
     img = np.clip(make(seed=seed)(0.25), 0, 255).astype(np.uint8)
     im = Image.fromarray(img).resize(size, Image.LANCZOS)
-    d = ImageDraw.Draw(im, "RGBA")
     w, h = size
 
-    # 文字の可読性を上げる暗幕
-    d.rectangle([0, int(h * 0.52), w, h], fill=(0, 0, 0, 110))
+    # 文字の可読性を上げる暗幕。
+    # 単色の矩形だと境界に直線が出て安っぽく見えるので、
+    # 上端から徐々に濃くなるグラデーションにする。
+    y0 = int(h * 0.42)
+    ramp = np.zeros((h, w, 4), dtype=np.uint8)
+    t = np.clip((np.arange(h) - y0) / (h - y0), 0.0, 1.0) ** 1.4
+    ramp[:, :, 3] = (t[:, None] * 165).astype(np.uint8)
+    im = Image.alpha_composite(im.convert("RGBA"), Image.fromarray(ramp)).convert("RGB")
+
+    d = ImageDraw.Draw(im, "RGBA")
 
     from PIL import ImageFont
     y = int(h * 0.58)
