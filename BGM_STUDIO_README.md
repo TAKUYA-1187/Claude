@@ -42,6 +42,10 @@
 | [docs/02_genre_strategy.md](docs/02_genre_strategy.md) | **どのジャンルが効くか。** 飽和度の分析、動画尺の設計、10本の選定理由 |
 | [docs/03_production_spec.md](docs/03_production_spec.md) | **制作仕様。** ループを継ぎ目なく作る仕組み、モジュール構成 |
 | [docs/04_upload_playbook.md](docs/04_upload_playbook.md) | **運用。** タイトル/サムネ/説明文の型、投稿時刻、90日プラン |
+| [docs/05_launch_runbook.md](docs/05_launch_runbook.md) | **ゼロから収益化までの完全手順書。** アカウント開設・電話確認・AdSense・米国税務情報・振込まで |
+
+> 🚀 **これから始める方は [docs/05_launch_runbook.md](docs/05_launch_runbook.md) から読んでください。**
+> 「今日やること」から順に並べてあります。
 
 ### 3行でまとめると
 
