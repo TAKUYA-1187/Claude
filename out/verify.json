@@ -1,0 +1,265 @@
+{
+  "min_seconds": 7200,
+  "tracks": [
+    {
+      "slug": "01_lofi_rainy_study",
+      "lufs": -14.000001450440179,
+      "true_peak_db": -2.8265946847106314,
+      "loop_seam_db": -36.73673754058908,
+      "seam_dbfs": -40.78400810883984,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 809.42393,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 481
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 263
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "02_deep_sleep_ambient",
+      "lufs": -14.000000723280833,
+      "true_peak_db": -1.0883854369105772,
+      "loop_seam_db": -31.066492185305297,
+      "seam_dbfs": -34.73687410920864,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 783.330223,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 465
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 256
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "03_piano_and_rain",
+      "lufs": -14.000001032007118,
+      "true_peak_db": -2.170082469934501,
+      "loop_seam_db": -27.932599043147274,
+      "seam_dbfs": -31.783114633248232,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 800.978145,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 481
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 256
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "04_cozy_coffee_jazz",
+      "lufs": -14.00000073439467,
+      "true_peak_db": -2.094639989533574,
+      "loop_seam_db": -18.405263389848084,
+      "seam_dbfs": -22.371042507680485,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 753.294758,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 435
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 257
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "05_bossa_nova_cafe",
+      "lufs": -14.000055508246994,
+      "true_peak_db": -1.0000008709134622,
+      "loop_seam_db": -32.31340271767296,
+      "seam_dbfs": -34.820484343058084,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 721.720147,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 396
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 267
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "06_healing_meditation_432",
+      "lufs": -14.001518232355814,
+      "true_peak_db": -1.0000008709134622,
+      "loop_seam_db": -28.750273471021433,
+      "seam_dbfs": -33.09662450554862,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 776.61278,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 459
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 255
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "07_fireplace_winter_jazz",
+      "lufs": -14.000000883783986,
+      "true_peak_db": -1.3435315950473634,
+      "loop_seam_db": -36.759909612050194,
+      "seam_dbfs": -42.54425408970006,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 798.995742,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 474
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 262
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "08_ocean_waves_ambient",
+      "lufs": -14.470015712349143,
+      "true_peak_db": -1.0000008709134622,
+      "loop_seam_db": -32.444288316439426,
+      "seam_dbfs": -35.92807287238769,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 774.6996,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 457
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 256
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "09_fantasy_tavern",
+      "lufs": -14.00737474022527,
+      "true_peak_db": -1.0000008709134622,
+      "loop_seam_db": -31.098503920692444,
+      "seam_dbfs": -33.089378374831135,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 797.473978,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 476
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 258
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "10_deep_focus_flow",
+      "lufs": -14.020545941868297,
+      "true_peak_db": -1.0000008709134622,
+      "loop_seam_db": -45.60578049825507,
+      "seam_dbfs": -53.61254070933522,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 774.487866,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 464
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 249
+        }
+      ],
+      "problems": []
+    }
+  ]
+}
