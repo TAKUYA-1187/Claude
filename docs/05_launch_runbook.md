@@ -185,6 +185,96 @@ New mixes every Tuesday, Thursday and Saturday.
 
 ---
 
+## フェーズ2.5: 動画ファイルを自分のPCで作る
+
+アップロードする MP4（10本・合計7.3GB）は、**ご自身のPCで生成**します。
+リポジトリには入っていません（GitHubの100MB制限を超えるため）。
+
+シードが固定されているので、**何度実行しても全く同じ音源・同じ映像**ができます。
+
+### 必要なもの
+
+| | |
+|---|---|
+| ディスク空き | **15GB以上** |
+| 所要時間 | **1〜2時間**（放置でOK） |
+| Python | 3.9以上 |
+
+### Windows の場合
+
+- [ ] https://www.python.org/downloads/ から Python をインストール
+      （インストーラの最初の画面で **「Add python.exe to PATH」に必ずチェック**）
+- [ ] スタートメニューで `PowerShell` を検索して起動
+- [ ] 以下を1行ずつコピーして貼り付け、Enter
+
+```powershell
+cd $HOME\Desktop
+git clone https://github.com/TAKUYA-1187/Claude.git bgm
+cd bgm
+git checkout claude/youtube-bgm-marketing-strategy-7yy7kq
+py -m pip install numpy pillow imageio-ffmpeg
+py render_bgm.py
+```
+
+> `git` が無いと言われたら https://git-scm.com/download/win からインストールしてください。
+
+### Mac の場合
+
+- [ ] `ターミナル`（アプリケーション → ユーティリティ）を起動
+- [ ] 以下を1行ずつコピーして貼り付け、Enter
+
+```bash
+cd ~/Desktop
+git clone https://github.com/TAKUYA-1187/Claude.git bgm
+cd bgm
+git checkout claude/youtube-bgm-marketing-strategy-7yy7kq
+python3 -m pip install numpy pillow imageio-ffmpeg
+python3 render_bgm.py
+```
+
+> `git` が無いと言われたら、表示されるダイアログで「インストール」を押せば入ります。
+
+### 実行中の様子
+
+1本ずつ進みます。全部で1〜2時間かかるので、放置して構いません。
+
+```
+▸ 01_lofi_rainy_study  (ローファイ・ヒップホップ（雨の窓辺）)
+  音源を合成中...
+    BPM 78.00 / 468 小節 / -14.00 LUFS / TP -2.83 dB / 継ぎ目 -36.7 dB   (283s)
+  映像ループを描画中...
+    [████████████░░░░░░░░]  60%  rainy_window
+```
+
+### 半分ずつ作りたい場合
+
+一度に全部作らず、5本ずつに分けることもできます。
+
+```bash
+python3 render_bgm.py --tracks 01_lofi_rainy_study 02_deep_sleep_ambient 03_piano_and_rain 04_cozy_coffee_jazz 05_bossa_nova_cafe
+```
+
+### できあがるもの
+
+デスクトップの `bgm/out/` の中に:
+
+| フォルダ | 中身 |
+|---|---|
+| `video/` | **アップロードする本編（各2時間24分）** |
+| `thumbnail/` | サムネイル画像 |
+| `metadata/` | タイトル・説明文・タグ（JSON） |
+| `preview/` | 90秒の試聴用 |
+
+### 最後に検証する
+
+```bash
+python3 verify_output.py
+```
+
+`判定: 全て合格` と出れば、10本すべてがYouTubeの規格を満たしています。
+
+---
+
 ## フェーズ3: 初回アップロード（Day 2〜3）
 
 ### 3-1. アップロード前の確認
