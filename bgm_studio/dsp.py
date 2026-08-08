@@ -610,13 +610,24 @@ def reverb(x: np.ndarray, ir: np.ndarray, mix: float = 0.3,
     """
     畳み込みリバーブ。tail=True なら残響ぶんだけ長い信号を返す
     (fold_tail() でループ先頭へ折り返すため)。
+
+    24 分の素材では 1 本の配列だけで 500MB を超えるため、
+    dry 用の配列を別に作らず wet に直接足し込む。
+    式で書くと巨大なテンポラリが 2 本できてしまうので、
+    チャンクに切って in-place で処理している。
     """
     x = to_stereo(x)
     wet = convolve_stereo(x, ir)
-    n = x.shape[0] if not tail else wet.shape[0]
-    dry = np.zeros((n, 2), dtype=np.float32)
-    dry[:x.shape[0]] = x
-    return (dry * (1.0 - mix) + wet[:n] * mix).astype(np.float32)
+    if not tail:
+        wet = wet[:x.shape[0]]
+    np.multiply(wet, np.float32(mix), out=wet)
+    g = np.float32(1.0 - mix)
+    n_dry = min(x.shape[0], wet.shape[0])
+    step = 1 << 22
+    for s in range(0, n_dry, step):
+        e = min(s + step, n_dry)
+        wet[s:e] += x[s:e] * g
+    return wet
 
 
 def delay(x: np.ndarray, time: float, feedback: float = 0.35, mix: float = 0.25,
