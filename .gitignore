@@ -1,2 +1,9 @@
 __pycache__/
 *.pyc
+
+# BGM Studio の生成物。本編MP4とWAVマスターは巨大なのでコミットしない。
+# `python3 render_bgm.py` で再生成できる (シード固定なので完全に再現される)。
+out/audio/
+out/video/
+out/visual/
+out/tmp/
