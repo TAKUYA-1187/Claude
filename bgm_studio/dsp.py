@@ -532,6 +532,22 @@ def loop_lfo(n: int, cycles: float, phase: float = 0.0,
 # エフェクト
 # ──────────────────────────────────────────────────────────────
 
+def lerp_read(x: np.ndarray, pos: np.ndarray) -> np.ndarray:
+    """
+    小数位置 pos から線形補間で読み出す。
+
+    np.interp(pos, np.arange(n), x) と同じ結果だが、
+    長さ n の座標配列 (24分なら 500MB) を作らずに済む。
+    可変ディレイ系はこれを何度も呼ぶので効果が大きい。
+    """
+    x = np.asarray(x, dtype=np.float32)
+    n = x.shape[0]
+    base = np.floor(pos).astype(np.int64)
+    np.clip(base, 0, n - 2, out=base)
+    frac = (pos - base).astype(np.float32)
+    return (x[base] + frac * (x[base + 1] - x[base])).astype(np.float32)
+
+
 def make_reverb_ir(seconds: float = 3.0, rt60: float = 2.6, predelay: float = 0.02,
                    damp: float = 0.55, width: float = 1.0, seed: int = 0,
                    sr: int = SR) -> np.ndarray:
@@ -659,7 +675,7 @@ def chorus(x: np.ndarray, depth_ms: float = 6.0, rate: float = 0.25,
         for c in range(2):
             # 声部ごとに L/R の重みを変えて広がりを作る
             w = 0.5 + 0.5 * np.cos(ph + (0.0 if c == 0 else np.pi))
-            acc[:, c] += np.interp(pos, idx, x[:, c]).astype(np.float32) * w
+            acc[:, c] += lerp_read(x[:, c], pos) * w
     acc /= max(voices * 0.5, 1.0)
     return (x * (1.0 - mix) + acc * mix).astype(np.float32)
 
@@ -700,7 +716,7 @@ def wow_flutter(x: np.ndarray, depth: float = 0.0025, rate: float = 0.7,
         pos = np.clip(idx + warp, 0, n - 1)
     out = np.empty_like(x)
     for c in range(2):
-        out[:, c] = np.interp(pos, idx, x[:, c]).astype(np.float32)
+        out[:, c] = lerp_read(x[:, c], pos)
     return out
 
 
@@ -755,11 +771,15 @@ def lufs_integrated(x: np.ndarray, sr: int = SR) -> float:
     if n_blocks < 1:
         return -70.0
 
-    # 各ブロックの平均二乗 (L,R 等重み)
-    powers = np.empty(n_blocks)
-    for i in range(n_blocks):
-        seg = y[i * hop: i * hop + block]
-        powers[i] = np.mean(seg[:, 0] ** 2) + np.mean(seg[:, 1] ** 2)
+    # 各ブロックの平均二乗 (L,R 等重み)。
+    # ブロックごとに mean を取ると 24 分では 14000 回ループすることになるので、
+    # 二乗和の累積和を 1 回作って差分で求める。
+    sq = (y[:, 0] ** 2 + y[:, 1] ** 2)
+    csum = np.empty(sq.shape[0] + 1, dtype=np.float64)
+    csum[0] = 0.0
+    np.cumsum(sq, out=csum[1:])
+    starts = np.arange(n_blocks) * hop
+    powers = (csum[starts + block] - csum[starts]) / block
 
     ll = -0.691 + 10.0 * np.log10(np.maximum(powers, 1e-15))
     # 絶対ゲート -70 LUFS
@@ -774,15 +794,34 @@ def lufs_integrated(x: np.ndarray, sr: int = SR) -> float:
     return float(-0.691 + 10.0 * np.log10(np.mean(powers[keep2])))
 
 
-def true_peak_db(x: np.ndarray, oversample: int = 4) -> float:
-    """4x オーバーサンプリングで真のピークを推定"""
+def true_peak_db(x: np.ndarray, oversample: int = 4,
+                 max_candidates: int = 40000) -> float:
+    """
+    4x オーバーサンプリングで真のピークを推定する。
+
+    全サンプルを 4 倍に補間すると 24 分で 2.5 億点になるため、
+    「生ピークに近いところ」だけを候補にして、その周辺のみ細かく見る。
+    サンプル間に隠れたピークは必ず生ピークの近傍にあるので、これで十分。
+    """
     x = to_stereo(x)
     n = x.shape[0]
-    idx = np.arange(n, dtype=np.float64)
-    fine = np.arange(0, n - 1, 1.0 / oversample)
+    if n < 4:
+        return float(lin2db(np.max(np.abs(x)) if x.size else 0.0))
+
+    offs = np.arange(-2.0, 2.0, 1.0 / oversample)
     pk = 0.0
     for c in range(2):
-        pk = max(pk, float(np.max(np.abs(np.interp(fine, idx, x[:, c])))))
+        ch = x[:, c]
+        absch = np.abs(ch)
+        raw = float(absch.max())
+        if raw <= 0.0:
+            continue
+        idx = np.flatnonzero(absch >= raw * 0.85)
+        if idx.size > max_candidates:      # 天井に張り付いた信号への保険
+            idx = idx[np.argsort(absch[idx])[-max_candidates:]]
+        pos = (idx[:, None].astype(np.float64) + offs[None, :]).ravel()
+        np.clip(pos, 0, n - 1, out=pos)
+        pk = max(pk, raw, float(np.max(np.abs(lerp_read(ch, pos)))))
     return float(lin2db(pk))
 
 

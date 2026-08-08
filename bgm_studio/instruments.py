@@ -267,6 +267,7 @@ def pad_voice(m: int, dur: float, sr: int = SR, brightness: float = 1.0,
     t = np.arange(n, dtype=np.float32) / sr
     nyq = sr * 0.45
     out = np.zeros(n, dtype=np.float32)
+    exp = 1.35 / max(brightness, 0.3)
 
     for v in range(n_detune):
         cents = (v - (n_detune - 1) / 2.0) * 7.0 + rng.uniform(-2.0, 2.0)
@@ -274,7 +275,11 @@ def pad_voice(m: int, dur: float, sr: int = SR, brightness: float = 1.0,
         # 帯域制限ノコギリ波 (加算合成なのでエイリアシングが出ない)
         k = 1
         while f * k < nyq and k <= 40:
-            a = 1.0 / (k ** (1.35 / max(brightness, 0.3)))
+            a = 1.0 / (k ** exp)
+            # -54dB より小さい倍音は聞こえないので打ち切る。
+            # 暗いパッドでは 40 本のうち 15 本ほどで足りるため効果が大きい。
+            if a < 0.002:
+                break
             out += (a * np.sin(TWO_PI * f * k * t + rng.uniform(0, TWO_PI))
                     ).astype(np.float32)
             k += 1
@@ -502,15 +507,34 @@ class SampleBank:
             self._cache[key] = s
         return s
 
-    def sustained(self, kind: str, midi: int, dur: float, **kw) -> np.ndarray:
+    def sustained(self, kind: str, midi: int, dur: float,
+                  variant: int | None = None, **kw) -> np.ndarray:
         """
-        パッド/ドローンは長さがまちまちなのでキャッシュせず都度生成する
-        (回数自体が少ないので問題にならない)。
+        パッド / ドローン。
+
+        パッドは全トラック中で最も重い処理 (1 声部あたり数十本の倍音 × 数秒)。
+        しかし実際には「同じ音程・同じ長さ」の組み合わせが何百回も出てくるので、
+        キャッシュすると劇的に速くなる (24分のトラックで 1800 回 → 30 回程度)。
+
+        位相まで完全に同じだと機械的に聞こえるため、バリエーションを
+        複数持たせて順に使い回す。
         """
-        rng = np.random.default_rng((midi * 7919 + int(dur * 100)) ^ self.seed)
-        if kind == "pad":
-            return pad_voice(midi, dur, rng=rng, **kw)
-        return drone(midi, dur, rng=rng, **kw)
+        if kind == "drone":
+            # ドローンは 1 トラックに 1 回しか呼ばれないのでキャッシュ不要
+            rng = np.random.default_rng((midi * 7919 + int(dur * 100)) ^ self.seed)
+            return drone(midi, dur, rng=rng, **kw)
+
+        if variant is None:
+            variant = int(self._rng.integers(0, self.n_variants))
+        key = ("PAD", int(midi), round(float(dur), 2), variant,
+               tuple(sorted(kw.items())))
+        s = self._cache.get(key)
+        if s is None:
+            rng = np.random.default_rng(
+                (hash(key) & 0xFFFFFFFF) ^ (self.seed * 22695477 & 0xFFFFFFFF))
+            s = pad_voice(midi, dur, rng=rng, **kw)
+            self._cache[key] = s
+        return s
 
     @property
     def size(self) -> int:
