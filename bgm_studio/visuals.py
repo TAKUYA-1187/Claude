@@ -502,7 +502,83 @@ def scene_minimal_gradient(seed: int = 10):
     return frame
 
 
+def scene_night_skyline(seed: int = 11):
+    """
+    夜の街のスカイライン。
+    無数の窓明かりと、中央にそびえる電波塔のシルエット。
+
+    実在の写真は使えない (著作権) ので、矩形とグローだけで組み立てている。
+    そのぶん完全にオリジナルで、ぼかせば「どこかの街の夜」に見える。
+    """
+    rng = np.random.default_rng(seed)
+    bg = vgrad([(6, 9, 22), (12, 17, 38), (26, 28, 52), (44, 36, 48)])
+
+    city = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(city)
+    horizon = int(H * 0.72)
+
+    # ビル群 (奥から手前へ3層。奥ほど暗く小さく)
+    for layer, (dark, hmax, wmin, wmax) in enumerate(
+            [(0.35, 0.30, 60, 130), (0.6, 0.42, 80, 170), (1.0, 0.26, 110, 240)]):
+        x = -60
+        while x < W + 60:
+            bw = int(rng.integers(wmin, wmax))
+            bh = int(rng.uniform(0.35, 1.0) * hmax * H)
+            top = horizon - bh + layer * 26
+            col = tuple(int(v * dark) for v in (18, 22, 34))
+            d.rectangle([x, top, x + bw, H], fill=col)
+            # 窓明かり
+            for wy in range(top + 12, H, 22):
+                for wx in range(x + 10, x + bw - 8, 18):
+                    if rng.random() < 0.28 - 0.08 * layer:
+                        warm = rng.random() < 0.75
+                        c = (255, 208, 130) if warm else (170, 205, 255)
+                        c = tuple(int(v * (0.5 + 0.5 * dark)) for v in c)
+                        d.rectangle([wx, wy, wx + 7, wy + 9], fill=c)
+            x += bw + int(rng.integers(4, 18))
+
+    # 電波塔 (中央やや右)
+    tx = int(W * 0.56)
+    base_y, top_y = horizon + 10, int(H * 0.14)
+    for i in range(60):
+        t = i / 59.0
+        y0 = base_y + (top_y - base_y) * t
+        y1 = base_y + (top_y - base_y) * (t + 1 / 59.0)
+        half = int(96 * (1.0 - t) ** 1.8) + 4
+        d.polygon([(tx - half, y0), (tx + half, y0),
+                   (tx + max(half - 3, 3), y1), (tx - max(half - 3, 3), y1)],
+                  fill=(30, 24, 30))
+    # 塔の灯り
+    for t, r in ((0.30, 9), (0.55, 7), (0.78, 6), (0.94, 5)):
+        y = base_y + (top_y - base_y) * t
+        d.ellipse([tx - r, y - r, tx + r, y + r], fill=(255, 140, 80))
+    d.line([(tx, top_y), (tx, top_y - 70)], fill=(40, 32, 38), width=5)
+
+    city_a = np.asarray(city, dtype=np.float32)
+    base = np.clip(screen(bg, city_a * 0.0) , 0, 255)
+    mask = (city_a.sum(axis=2) > 1)[:, :, None]
+    base = np.where(mask, city_a, bg)
+    # 街の光が空へにじむ
+    base = screen(base, blur(np.where(city_a > 90, city_a, 0.0), 34.0) * 0.55)
+    base = vignette(base, 0.5) + static_grain(seed=seed, amount=2.0)
+
+    def frame(t01):
+        img = base.copy()
+        # 塔の赤灯がゆっくり明滅する
+        pulse = 0.5 + 0.5 * np.sin(TWO_PI * t01)
+        img = screen(img, radial_glow(0.56, 0.30, 0.05, (255, 120, 60),
+                                      0.25 + 0.25 * pulse, res_div=3))
+        # 空気のゆらぎ
+        h = periodic_noise(t01, scale=1.2, cycles=1, seed=seed + 3, n_waves=3)
+        y, _ = _yx()
+        haze = np.clip((0.78 - y) / 0.5, 0, 1) * (0.5 + 0.5 * h) * 0.10
+        img = screen(img, haze[:, :, None] * np.array([90, 110, 160], dtype=np.float32))
+        return img
+    return frame
+
+
 SCENES = {
+    "night_skyline": scene_night_skyline,
     "rainy_window": scene_rainy_window,
     "starry_night": scene_starry_night,
     "rain_street": scene_rain_street,

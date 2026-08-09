@@ -66,15 +66,18 @@ def _fit_text(draw: ImageDraw.ImageDraw, text: str, font_path: str,
 # ──────────────────────────────────────────────────────────────
 
 def channel_icon(name: str, scene: str = "coffee_shop", seed: int = 42,
-                 accent: tuple[int, int, int] = (255, 198, 122)) -> Image.Image:
+                 accent: tuple[int, int, int] = (255, 198, 122),
+                 lines: list[str] | None = None, blur_px: float = 14.0,
+                 line_scale: list[float] | None = None) -> Image.Image:
     """
     チャンネルアイコン 800×800。
 
-    小さく表示されたときに何が書いてあるか読めることが全て。
-    フルネームは入れず、頭文字1〜2字だけを大きく置く。
+    小さく表示されたときに読めることが全て。既定では頭文字だけを大きく置く。
+    lines を渡すと任意の行構成にできるが、
+    行数が増えるほど 32px 表示での可読性は落ちる。
     """
     im = _scene_image(scene, seed, ICON_SIZE, ICON_SIZE, t01=0.3)
-    im = im.filter(ImageFilter.GaussianBlur(14))
+    im = im.filter(ImageFilter.GaussianBlur(blur_px))
 
     a = np.asarray(im, dtype=np.float32)
     # 中心を明るく、周辺を暗くして文字を浮かせる
@@ -84,17 +87,36 @@ def channel_icon(name: str, scene: str = "coffee_shop", seed: int = 42,
     im = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
 
     d2 = ImageDraw.Draw(im)
-    # 頭文字 (単語の頭を最大2文字)
-    words = [w for w in name.replace("-", " ").split() if w]
-    mark = "".join(w[0] for w in words[:2]).upper() or name[:2].upper()
 
-    f = _fit_text(d2, mark, FONT_BOLD, int(ICON_SIZE * 0.62), 480)
-    bb = d2.textbbox((0, 0), mark, font=f)
-    tx = (ICON_SIZE - (bb[2] - bb[0])) // 2 - bb[0]
-    ty = (ICON_SIZE - (bb[3] - bb[1])) // 2 - bb[1]
-    for ox, oy in ((-6, 0), (6, 0), (0, -6), (0, 6), (-4, -4), (4, 4)):
-        d2.text((tx + ox, ty + oy), mark, font=f, fill=(0, 0, 0, 210))
-    d2.text((tx, ty), mark, font=f, fill=accent)
+    if lines is None:
+        words = [w for w in name.replace("-", " ").split() if w]
+        lines = ["".join(w[0] for w in words[:2]).upper() or name[:2].upper()]
+    if line_scale is None:
+        line_scale = [1.0] * len(lines)
+
+    # 各行のフォントを決めてから、全体を縦中央に置く
+    fonts, heights = [], []
+    n = len(lines)
+    base_h = int(ICON_SIZE * (0.60 if n == 1 else 0.72 / n))
+    for text, sc in zip(lines, line_scale):
+        f = _fit_text(d2, text, FONT_BOLD, int(ICON_SIZE * 0.84),
+                      int(base_h * sc))
+        fonts.append(f)
+        bb = d2.textbbox((0, 0), text, font=f)
+        heights.append(bb[3] - bb[1])
+
+    gap = int(ICON_SIZE * 0.035)
+    total = sum(heights) + gap * (n - 1)
+    cy = (ICON_SIZE - total) // 2
+
+    for text, f, h in zip(lines, fonts, heights):
+        bb = d2.textbbox((0, 0), text, font=f)
+        tx = (ICON_SIZE - (bb[2] - bb[0])) // 2 - bb[0]
+        ty = cy - bb[1]
+        for ox, oy in ((-6, 0), (6, 0), (0, -6), (0, 6), (-4, -4), (4, 4)):
+            d2.text((tx + ox, ty + oy), text, font=f, fill=(0, 0, 0, 215))
+        d2.text((tx, ty), text, font=f, fill=accent)
+        cy += h + gap
 
     # 円形に切り抜く (YouTube 側で丸くされるので、角の情報を捨てておく)
     mask = Image.new("L", (ICON_SIZE, ICON_SIZE), 0)

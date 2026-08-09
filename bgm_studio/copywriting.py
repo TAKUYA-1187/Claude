@@ -254,3 +254,75 @@ def get(slug: str, duration: str) -> str | None:
     if key is None:
         return None
     return DESCRIPTIONS[key].format(duration=duration)
+
+
+# ──────────────────────────────────────────────────────────────
+# Shorts 用のフック文言
+#
+# BGMチャンネル最大のボトルネックは登録者1,000人であり、
+# それを突破する現実的な手段は Shorts しかない。
+# Shorts は最初の2秒で「何の音か」が分からないと即スワイプされるので、
+# 画面に出す文字は短く、用途を名詞で言い切る。
+# ──────────────────────────────────────────────────────────────
+
+SHORT_HOOKS: dict[str, list[str]] = {
+    "01_lofi_rainy_study": [
+        "rain on the window\nand a rhodes piano",
+        "lo-fi for the\nlast hour of studying",
+        "the drums are late\non purpose",
+    ],
+    "02_deep_sleep_ambient": [
+        "no melody.\nnothing to follow.",
+        "everything above 7kHz\nis gone. that's the trick.",
+        "for the nights\nyou can't switch off",
+    ],
+    "03_piano_and_rain": [
+        "piano, and rain\nlouder than the piano",
+        "for reading\non a wet evening",
+        "there's thunder\nif you wait for it",
+    ],
+    "04_cozy_coffee_jazz": [
+        "a café that never\ncloses",
+        "piano, upright bass,\nbrushes. that's all.",
+        "you can hear people.\nyou can't hear words.",
+    ],
+    "05_bossa_nova_cafe": [
+        "bossa nova for\nslow mornings",
+        "nylon guitar\nand a shaker",
+        "cheerful without\nbeing loud",
+    ],
+    "06_healing_meditation_432": [
+        "singing bowls,\ntuned to 432 Hz",
+        "that shimmer is two\nnotes beating together",
+        "for lying down\nin a dark room",
+    ],
+    "07_fireplace_winter_jazz": [
+        "a fire, and a jazz trio\nacross the room",
+        "december evenings",
+        "the fire is doing\nhalf the work",
+    ],
+    "08_ocean_waves_ambient": [
+        "waves every\n8.5 seconds",
+        "play it quietly,\novernight",
+        "one chord.\nhalf a minute to change.",
+    ],
+    "09_fantasy_tavern": [
+        "a hearth, and a harp\nin the corner",
+        "for tabletop nights",
+        "open fifths.\nno thirds. medieval.",
+    ],
+    "10_deep_focus_flow": [
+        "no melody, on purpose",
+        "nothing arrives.\nnothing resolves.",
+        "for the long\nrevision sessions",
+    ],
+}
+
+# Shorts の説明文。長尺へ誘導するのが唯一の目的なので短くする。
+SHORT_DESCRIPTION = """\
+{hook}
+
+Full {duration} version on the channel — no ads mid-track, seamless loop.
+
+#{tag1} #{tag2} #shorts
+"""
