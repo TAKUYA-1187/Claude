@@ -25,8 +25,8 @@
     "total_seconds": 8640,
     "total_hhmmss": "2:24:00",
     "lufs": -14.0,
-    "true_peak_db": -1.0,
-    "loop_seam_db": -34.03,
+    "true_peak_db": -1.33,
+    "loop_seam_db": -36.58,
     "visual": "zen_water"
   }
 }
