@@ -1,63 +1,39 @@
 {
-  "total_seconds": 8640,
+  "total_seconds": 28800,
   "tracks": [
     {
-      "slug": "01_lofi_rainy_study",
-      "video": "out/video/01_lofi_rainy_study.mp4",
+      "slug": "11_sleep_city_8h",
+      "title": "8 Hour Sleep Music 🌃 Deep Ambient for a Full Night's Rest",
+      "bpm": 46.0,
+      "bars": 276,
+      "lufs": -14.000041833430505,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -30.283061990006917,
+      "loop_seconds": 1440,
+      "total_seconds": 28800,
+      "total_hhmmss": "8:00:00",
+      "video": "out/video/11_sleep_city_8h.mp4",
       "probe": {
-        "size_mb": 805.703546,
+        "size_mb": 2586.330093,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "15",
-            "kbps": 477
+            "kbps": 458
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
-            "kbps": 263
+            "kbps": 256
           }
         ],
-        "duration_s": 8640.0,
-        "bitrate_kbps": 746
+        "duration_s": 28800.0,
+        "bitrate_kbps": 718
       },
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "lufs": -14.0,
-      "loop_seam_db": 0.0,
-      "elapsed_s": 266.8
-    },
-    {
-      "slug": "10_deep_focus_flow",
-      "video": "out/video/10_deep_focus_flow.mp4",
-      "probe": {
-        "size_mb": 759.423162,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "15",
-            "kbps": 450
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "kbps": 249
-          }
-        ],
-        "duration_s": 8640.0,
-        "bitrate_kbps": 703
-      },
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "lufs": -14.0,
-      "loop_seam_db": 0.0,
-      "elapsed_s": 262.8
+      "elapsed_s": 1034.3
     }
   ]
 }
