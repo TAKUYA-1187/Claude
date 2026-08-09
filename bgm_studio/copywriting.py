@@ -242,6 +242,48 @@ notice the time passing.
 
 — Written and produced from scratch for this channel.
 """,
+    "12_anime_piano_emotional": """\
+{duration} of piano written the way anime themes are written.
+
+The feeling in those songs isn't an accident of production — it comes
+from the chord movement. Two progressions do most of the work here. The
+first is the one Japanese songwriters call the ōdō, the "royal road":
+IV–V–iii–vi. The move from the third chord to the fourth is where the
+ache lives. The second is the Canon progression, where the bass walks
+down step by step and the melody is free to drift over the top of it.
+
+So this is built on those, in C major, and then left mostly alone. Piano
+carries the melody, a soft string pad sits underneath, celesta adds a
+little light in the high register, and nothing else gets in the way.
+There are no drums and no rain — atmosphere would only blunt it.
+
+76 BPM · C major · piano, strings, celesta, sub bass.
+
+For studying, drawing, writing, long train rides, and the particular kind
+of evening where you want to feel something quietly.
+
+— Written and produced from scratch for this channel.
+""",
+    "13_fresh_morning_acoustic": """\
+{duration} of acoustic music for the first part of the day.
+
+Bright music goes wrong in a predictable way: it gets heavy. Pile on low
+end and busy parts and "cheerful" turns into tiring by the second hour.
+So the arrangement here stays deliberately thin. Nylon-string guitar
+holds the chords, a marimba takes the melody, and there's a shaker
+keeping a walking pace underneath. Everything below 55 Hz is cut, and the
+mix is tilted slightly toward the top end to keep air in it.
+
+The chords are built on add9 and maj9 shapes rather than plain triads —
+open-sounding, unresolved, easy to leave running. The key is D major.
+
+104 BPM · D major · nylon guitar, marimba, upright bass, shaker.
+
+For mornings, commutes, cleaning the flat, opening a café, and work that
+you'd rather not feel serious about.
+
+— Written and produced from scratch for this channel.
+""",
 }
 
 
@@ -356,4 +398,16 @@ SHORT_HOOKS["11_sleep_city_8h"] = [
     "eight hours.\nenough for a whole night.",
     "most sleep mixes leave you\nin silence at 4am",
     "46 BPM. nothing\nabove 7 kilohertz.",
+]
+
+SHORT_HOOKS["12_anime_piano_emotional"] = [
+    "the chord that makes\nanime openings hurt",
+    "IV–V–iii–vi.\nthat's the whole feeling.",
+    "piano, strings,\nand nothing else",
+]
+
+SHORT_HOOKS["13_fresh_morning_acoustic"] = [
+    "music for the first\nhour of the day",
+    "nylon guitar\nand a marimba",
+    "bright without\ngetting heavy",
 ]

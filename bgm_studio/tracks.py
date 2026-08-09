@@ -520,6 +520,118 @@ def build_deep_focus(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
 
 
 # ──────────────────────────────────────────────────────────────
+# 12. Emotional Anime Piano  (アニソン風・情感のあるピアノ)
+# ──────────────────────────────────────────────────────────────
+
+def build_anime_piano(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    「アニソンのような、心に響く」インスト。
+
+    他の曲と設計思想がはっきり違う。既存 10 本は「意識に上らないこと」が
+    目的だったが、この曲は逆で、聴いた人に何かを思い出させるのが目的。
+    だから BGM の定石をいくつか意図的に破っている:
+
+      - メロディをはっきり立てる (density を上げ、休符を減らす)
+      - コード進行を動かす (王道進行・カノン進行)
+      - 環境音をほぼ入れない。情感の邪魔になる
+
+    ただし作業用として何時間も流せる範囲は守る。ドラムは入れない。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=4)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=20.0)
+
+    # ストリングス代わりの厚いパッド。主役ではないが情感の土台になる
+    A.play_pad(buf, spans, clock, bank, gain=0.13, brightness=0.72,
+               attack=2.2, release=4.0, rng=rng, n_voices=5, low=48, high=84)
+    # ピアノの伴奏。close voicing でポップスらしく
+    A.play_comp(buf, spans, clock, bank, inst="piano", style="ballad",
+                gain=0.26, voicing="close", center=57, rng=rng, spread_ms=32.0)
+    # 主旋律。ここがこの曲の全て。休符を減らして歌わせる
+    A.play_melody(buf, spans, clock, bank, inst="piano", gain=0.34,
+                  scale_root=spec.key_root, scale=spec.scale,
+                  lo=67, hi=91, density=0.62, rng=rng, rest_prob=0.22)
+    # 高音のきらめき。サビの解放感を補強する
+    A.play_arp(buf, spans, clock, bank, inst="celesta", gain=0.08, rate=0.5,
+               octaves=2, center=81, direction="updown", rng=rng, pan=0.15)
+    A.play_bass(buf, spans, clock, bank, inst="subbass", style="root",
+                gain=0.17, octave=-2, rng=rng)
+
+    ir = dsp.make_reverb_ir(3.8, rt60=3.4, damp=0.5, predelay=0.025,
+                            seed=spec.seed)
+    n = clock.n_samples
+    # 環境音は「部屋の気配」だけ。雨も波も入れない
+    beds = [(lambda: NT.room_tone(n, seed=spec.seed + 1), -34.0)]
+
+    def master(x):
+        # 情感系はこもらせない。高域を残して抜けを作る
+        x = dsp.tilt_eq(x, pivot=900.0, gain_db=-1.5)
+        x = dsp.shelf(x, 140.0, 1.2, kind="low")
+        x = dsp.lowpass(x, 16000.0, order=2)
+        return dsp.saturate(x, drive=1.12, mix=0.22)
+
+    return _finish(buf, clock, spec, ir, 0.30, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 13. Fresh Morning Acoustic  (爽やかな朝のアコースティック)
+# ──────────────────────────────────────────────────────────────
+
+def build_fresh_morning(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    爽やか系。
+
+    「爽やかさ」は明るいコードを置けば出るものではなく、
+      - 低域を膨らませない (もたつくと途端に重くなる)
+      - 高域に空気を残す
+      - 音数を詰めない
+    の 3 つで決まる。マスタリングもその方向に振っている。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=4)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=12.0)
+
+    # ナイロン弦のギターが主役。爽やかさはこの音色に依るところが大きい
+    A.play_comp(buf, spans, clock, bank, inst="nylon", style="bossa",
+                gain=0.24, voicing="close", center=59, rng=rng, spread_ms=40.0)
+    # マリンバの軽いメロディ。木の音は朝によく合う
+    A.play_melody(buf, spans, clock, bank, inst="marimba", gain=0.22,
+                  scale_root=spec.key_root, scale=spec.scale,
+                  lo=69, hi=91, density=0.45, rng=rng, rest_prob=0.40)
+    # 薄いパッドで空気感。厚くすると途端に眠くなるので控えめに
+    A.play_pad(buf, spans, clock, bank, gain=0.07, brightness=0.85,
+               attack=2.0, release=3.0, rng=rng, n_voices=4, low=55, high=86)
+    A.play_arp(buf, spans, clock, bank, inst="celesta", gain=0.06, rate=1.0,
+               octaves=2, center=84, direction="up", rng=rng, pan=-0.15)
+    A.play_bass(buf, spans, clock, bank, inst="upright", style="bossa",
+                gain=0.18, octave=-1, rng=rng)
+    # シェイカー中心の軽い打楽器。歩くようなテンポ感を作る
+    A.play_bossa_perc(buf, spans, clock, bank, gain=0.12, rng=rng)
+
+    ir = dsp.make_reverb_ir(1.9, rt60=1.4, damp=0.4, predelay=0.012,
+                            seed=spec.seed)
+    n = clock.n_samples
+    # 朝の外の気配。ごく薄く風だけ
+    beds = [
+        (lambda: NT.wind(n, seed=spec.seed + 1), -28.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 2), -34.0),
+    ]
+
+    def master(x):
+        # 低域を持ち上げない。むしろ削って軽くする
+        x = dsp.highpass(x, 55.0, order=2)
+        x = dsp.tilt_eq(x, pivot=1100.0, gain_db=+1.5)   # 高域寄りに傾ける
+        x = dsp.lowpass(x, 17000.0, order=2)
+        return dsp.saturate(x, drive=1.1, mix=0.18)
+
+    return _finish(buf, clock, spec, ir, 0.22, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
 # トラック一覧
 # ──────────────────────────────────────────────────────────────
 
@@ -668,6 +780,35 @@ TRACKS: list[TrackSpec] = [
             title="8 Hour Sleep Music 🌃 Deep Ambient for a Full Night's Rest",
             keywords=["8 hour sleep music", "sleep music", "deep sleep",
                       "ambient", "insomnia", "relaxing music", "night"],
+        ),
+    ),
+    TrackSpec(
+        slug="12_anime_piano_emotional",
+        title_en="Emotional Anime Piano",
+        genre_ja="アニソン風・情感のあるピアノ",
+        use_case="relax", bpm=76.0, key="C", key_root=0, scale="major",
+        prog_key="anime", visual="anime_dusk", seed=1212 + 77,
+        build=build_anime_piano,
+        seo=dict(
+            title="Emotional Anime Piano 🌸 Beautiful Japanese Melodies "
+                  "for Study & Relaxing",
+            keywords=["anime piano", "emotional piano", "japanese music",
+                      "anime ost", "sad piano", "study music",
+                      "relaxing piano", "anime bgm"],
+        ),
+    ),
+    TrackSpec(
+        slug="13_fresh_morning_acoustic",
+        title_en="Fresh Morning Acoustic",
+        genre_ja="爽やかな朝のアコースティック",
+        use_case="work", bpm=104.0, key="D", key_root=2, scale="major",
+        prog_key="fresh", visual="morning_meadow", seed=1313,
+        build=build_fresh_morning,
+        seo=dict(
+            title="Fresh Morning Music ☀️ Uplifting Acoustic for a Good Day",
+            keywords=["morning music", "fresh music", "acoustic",
+                      "positive music", "good morning", "happy music",
+                      "work music", "cafe acoustic"],
         ),
     ),
 ]

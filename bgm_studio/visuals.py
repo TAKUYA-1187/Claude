@@ -802,7 +802,180 @@ def scene_night_drive(seed: int = 31):
     return frame
 
 
+def scene_anime_dusk(seed: int = 41):
+    """
+    夕暮れの空。アニメの「あの感じ」を写真を使わず幾何形状だけで作る。
+
+    情感の出どころは空の色そのものなので、そこに手をかける。
+    藍→紫→桃→橙→淡黄を縦に重ね、地平線近くに強い光を置いて逆光にする。
+    手前を暗いシルエットで抜くと一気に奥行きが出る。
+
+    動きは「雲が流れる・花びらが舞う」だけ。
+    雲は静的な場を整数ピクセルずつ横にずらすので完全にループする。
+    """
+    rng = np.random.default_rng(seed)
+    horizon = int(H * 0.70)
+    y, x = _yx()
+
+    sky = vgrad([(34, 42, 88), (72, 66, 122), (140, 92, 130),
+                 (206, 126, 118), (242, 158, 108), (252, 206, 150)],
+                stops=[0.0, 0.20, 0.38, 0.52, 0.63, 0.72])
+    base = np.clip(screen(sky, radial_glow(0.50, 0.70, 0.46, (255, 186, 118),
+                                           0.85, falloff=1.6)), 0, 255)
+
+    # 雲。低周波の場を薄く伸ばして、空の上側だけに置く
+    field = periodic_noise(0.0, scale=2.1, cycles=1, seed=seed + 1, n_waves=7)
+    cloud = np.clip(field * 1.7 - 0.10, 0, 1) * np.clip((0.66 - y) / 0.52, 0, 1) ** 1.2
+    clouds = blur(cloud[:, :, None] * np.array([255, 200, 176], dtype=np.float32), 9.0)
+
+    # 遠景の丘と、手前の丘。2 枚重ねると空気遠近が出る
+    silhouette = Image.new("RGB", (W, H), (0, 0, 0))
+    ds = ImageDraw.Draw(silhouette)
+    far = [(0, horizon + 40)]
+    for i in range(13):
+        far.append((int(W * i / 12), horizon + 18 - int(46 * np.sin(i * 0.9 + 1.2))))
+    far += [(W, horizon + 40), (W, H), (0, H)]
+    ds.polygon(far, fill=(58, 44, 68))
+    near = [(0, horizon + 150)]
+    for i in range(11):
+        near.append((int(W * i / 10), horizon + 130 - int(58 * np.sin(i * 0.7))))
+    near += [(W, horizon + 150), (W, H), (0, H)]
+    ds.polygon(near, fill=(26, 20, 34))
+    # 電柱と電線。アニメの夕景でいちばん効く小道具。
+    # 腕木を 2 段にして電線を張る。1 段だと十字架に見えてしまう。
+    poles = [int(W * 0.17), int(W * 0.62), int(W * 1.02)]
+    tops = []
+    for px in poles:
+        top = horizon - 250
+        ds.rectangle([px - 6, top, px + 6, H], fill=(20, 15, 26))
+        for dy, half in ((30, 52), (66, 40)):
+            ds.rectangle([px - half, top + dy, px + half, top + dy + 7],
+                         fill=(20, 15, 26))
+        tops.append((px, top))
+    # 電線をたるませて張る (放物線)
+    for k, off in enumerate((-44, -30, 32, 46)):
+        for (x0, t0), (x1, t1) in zip(tops, tops[1:]):
+            sag = 34 + 8 * k
+            pts = []
+            for i in range(25):
+                u = i / 24
+                xx = x0 + (x1 - x0) * u
+                yy = (t0 + 33) + (t1 - t0) * u + sag * 4 * u * (1 - u)
+                pts.append((xx, yy + off * 0.35))
+            ds.line(pts, fill=(24, 18, 30), width=3)
+    sil = np.asarray(silhouette, dtype=np.float32)
+    smask = (sil.sum(axis=2) > 1)[:, :, None]
+
+    base = vignette(base, 0.34) + static_grain(seed=seed, amount=2.0)
+
+    def frame(t01):
+        img = base.copy()
+        # 雲は整数ピクセルで巡回させる
+        img = screen(img, np.roll(clouds, int(round(t01 * W)), axis=1) * 0.55)
+        img = np.where(smask, sil, img)
+        # 舞う花びらと逆光の玉ボケ。
+        # 数を入れすぎると雪に見えて、情感ではなく賑やかさになる。
+        # 「言われないと気付かないが、無いと寂しい」量に留める。
+        img = screen(img, _particle_layer(
+            t01, 26, seed + 2, H, W, length=0.0, thickness=4.0,
+            color=(236, 176, 190), speed=1.0, drift=0.5, size_var=1.3) * 0.55)
+        img = screen(img, _particle_layer(
+            t01, 11, seed + 3, H, W, length=0.0, thickness=10.0,
+            color=(255, 222, 168), speed=1.0, drift=0.3, size_var=1.6,
+            glow=True) * 0.30)
+        return img
+    return frame
+
+
+def scene_morning_meadow(seed: int = 42):
+    """
+    朝の草原。爽やか系はとにかく「軽さ」が命なので、
+    色を濁らせないことと、動きを増やしすぎないことだけを守る。
+    """
+    rng = np.random.default_rng(seed)
+    hz = 0.60                       # 地平線 (0..1)
+    y, x = _yx()
+
+    # 空。地平線に近づくほど白く霞ませると奥行きが出る
+    sky = vgrad([(52, 112, 170), (94, 152, 196), (146, 186, 210),
+                 (196, 212, 206)],
+                stops=[0.0, 0.28, 0.48, hz])
+    base = np.clip(screen(sky, radial_glow(0.24, 0.17, 0.36, (255, 248, 214),
+                                           0.50, falloff=1.8)), 0, 255)
+
+    # 雲。朝なので白く、控えめに
+    field = periodic_noise(0.0, scale=2.6, cycles=1, seed=seed + 1, n_waves=8)
+    cloud = (np.clip(field * 1.9 - 0.32, 0, 1)
+             * np.clip((hz - 0.05 - y) / 0.44, 0, 1) ** 1.1)
+    clouds = blur(cloud[:, :, None] * np.array([255, 255, 252], dtype=np.float32), 12.0)
+
+    # 草原。べた塗りにすると人工芝に見えるので、縦グラデーションで
+    # 「奥は霞んで明るく、手前は濃い」を作る
+    # 階調は地面の範囲 [hz, 1] の中に置く。全画面基準で作ると
+    # 地面には暗い側しか出てこず、結局べた塗りに見えてしまう。
+    ground = vgrad([(190, 206, 166), (150, 178, 112), (112, 148, 76),
+                    (80, 118, 54), (56, 92, 40)],
+                   stops=[hz, hz + 0.03, hz + 0.12, hz + 0.26, 1.0])
+    gmask = np.clip((y - hz) / 0.010, 0, 1)[:, :, None]
+
+    # 地平線の木立。小さく散らすだけで一気に「広さ」が出る
+    # 白黒で描いてから alpha として使う。ぼかした画像をそのまま
+    # 閾値で切り抜くと、半端に暗い縁が黒い輪郭になって漫画みたいになる。
+    tree_a = Image.new("L", (W, H), 0)
+    dt = ImageDraw.Draw(tree_a)
+    for _ in range(30):
+        tx = rng.random() * W
+        th = rng.uniform(20, 52)
+        tw = th * rng.uniform(0.55, 0.95)
+        ty = hz * H + rng.uniform(-3, 6)
+        for j in range(int(rng.integers(1, 4))):     # 少し塊にする
+            ox = (j - 0.5) * tw * 0.8
+            hh = th * rng.uniform(0.7, 1.0)
+            dt.ellipse([tx + ox - tw * 0.7, ty - hh,
+                        tx + ox + tw * 0.7, ty + hh * 0.2], fill=255)
+    ta = (np.asarray(blur(np.asarray(tree_a, dtype=np.float32)[:, :, None]
+                          .repeat(3, axis=2), 2.5), dtype=np.float32)[:, :, :1] / 255.0)
+    # 遠くのものほど空の色に寄せる (空気遠近)。手前の草と同じ緑だと距離が出ない。
+    tree_col = np.array([124, 152, 128], dtype=np.float32)
+
+    # 手前の草。細く多く、画面下だけ。3 層に分けて視差で揺らす
+    blades = []
+    for k in range(3):
+        im = Image.new("RGB", (W, H), (0, 0, 0))
+        d = ImageDraw.Draw(im)
+        shade = (44 + 14 * k, 74 + 16 * k, 36 + 12 * k)
+        for _ in range(260):
+            bx = rng.random() * W
+            bh = rng.uniform(46, 128) * (0.7 + 0.45 * k)
+            by = H + rng.uniform(-26, 10)
+            d.line([bx, by, bx + rng.uniform(-16, 16), by - bh],
+                   fill=shade, width=int(rng.uniform(2, 4)))
+        blades.append(np.asarray(im, dtype=np.float32))
+
+    base = vignette(base, 0.28) + static_grain(seed=seed, amount=2.0)
+
+    def frame(t01):
+        img = base.copy()
+        img = screen(img, np.roll(clouds, int(round(t01 * W * 0.5)), axis=1) * 0.7)
+        img = img * (1.0 - gmask) + ground * gmask
+        img = img * (1.0 - ta) + tree_col * ta
+        # 風で草が揺れる。sin なので必ずループする
+        for k, bl in enumerate(blades):
+            sh = int((5 + 4 * k) * np.sin(TWO_PI * (t01 + k * 0.3)))
+            m = np.roll(bl, sh, axis=1)
+            img = np.where((m.sum(axis=2) > 1)[:, :, None], m, img)
+        # 陽の当たる側にだけ、control された光の粒
+        img = screen(img, _particle_layer(
+            t01, 20, seed + 4, H, W, length=0.0, thickness=7.0,
+            color=(255, 250, 206), speed=1.0, drift=0.5, size_var=1.4,
+            glow=True) * 0.38)
+        return img
+    return frame
+
+
 SCENES = {
+    "anime_dusk": scene_anime_dusk,
+    "morning_meadow": scene_morning_meadow,
     "night_drive": scene_night_drive,
     "night_skyline": scene_night_skyline,
     "rainy_city": scene_rainy_city,

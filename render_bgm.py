@@ -310,6 +310,9 @@ def _thumb_lines(spec: TR.TrackSpec, total_seconds: float) -> list[str]:
         "08_ocean_waves_ambient": ["OCEAN WAVES", f"{hours} HOURS · SLEEP"],
         "09_fantasy_tavern": ["TAVERN AMBIENCE", f"{hours} HOURS"],
         "10_deep_focus_flow": ["DEEP FOCUS", f"{hours} HOURS · FLOW"],
+        "11_sleep_city_8h": ["SLEEP MUSIC", f"{hours} HOURS · ALL NIGHT"],
+        "12_anime_piano_emotional": ["ANIME PIANO", f"{hours} HOURS · EMOTIONAL"],
+        "13_fresh_morning_acoustic": ["MORNING MUSIC", f"{hours} HOURS · FRESH"],
     }
     return head.get(spec.slug, [spec.title_en.upper(), f"{hours} HOURS"])
 
