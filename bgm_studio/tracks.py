@@ -198,12 +198,14 @@ def build_deep_sleep(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
     buf = _new_buf(clock, tail=32.0)
 
     # 主役は分厚いパッド。アタック 6 秒でゆっくり立ち上げる
-    A.play_pad(buf, spans, clock, bank, gain=0.30, octave=0, brightness=0.55,
-               attack=6.0, release=7.0, rng=rng, n_voices=5, low=40, high=76)
+    A.play_pad(buf, spans, clock, bank, gain=0.30, octave=0, brightness=0.78,
+               attack=6.0, release=7.0, rng=rng, n_voices=5, low=40, high=82)
     A.play_drone(buf, T.note("A", 2) + spec.key_root, clock, bank,
                  gain=0.16, partials=9)
     A.play_sparse_bells(buf, spans, clock, bank, inst="bowl", gain=0.10,
                         every_bars=6.0, center=60, rng=rng)
+    A.play_arp(buf, spans, clock, bank, inst="celesta", gain=0.07, rate=2.0,
+               octaves=2, center=78, direction="up", rng=rng)
 
     ir = dsp.make_reverb_ir(5.0, rt60=6.5, damp=0.75, predelay=0.05,
                             width=0.55, seed=spec.seed)
@@ -214,8 +216,8 @@ def build_deep_sleep(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
     ]
 
     def master(x):
-        x = dsp.tilt_eq(x, pivot=650.0, gain_db=-5.5)
-        x = dsp.lowpass(x, 9500.0, order=2)     # 高域を落として覚醒させない (削りすぎない範囲で)
+        x = dsp.tilt_eq(x, pivot=800.0, gain_db=-2.5)
+        x = dsp.lowpass(x, 14500.0, order=2)
         x = dsp.highpass(x, 32.0, order=2)
         return dsp.saturate(x, drive=1.1, mix=0.3)
 
