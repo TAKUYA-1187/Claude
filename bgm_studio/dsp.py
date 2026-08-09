@@ -354,6 +354,27 @@ def circular_filter(x: np.ndarray, kind: str, *args, taps: int = 513,
     return fir_circular(x, h)
 
 
+def periodic_highpass(x: np.ndarray, cutoff: float, sr: int = SR) -> np.ndarray:
+    """
+    周期信号 (ループタイル) 専用のハイパス。
+
+    FIR では低い遮断周波数を実現できない。44.1kHz / 513 タップだと
+    周波数分解能が 86Hz しかなく、30Hz のハイパスはまったく効かない
+    (実際これに気付かず、超低域が残ったまま出荷しかけた)。
+
+    タイルは厳密な周期信号なので、周波数領域で該当ビンを直接落とすのが
+    正しい。数学的に正確で、ループの連続性も完全に保たれる。
+    """
+    x = np.asarray(x, dtype=np.float32)
+    n = x.shape[0]
+    F = np.fft.rfft(x, axis=0)
+    f = np.fft.rfftfreq(n, 1.0 / sr)
+    # 遮断周波数の半分から下を落とす。垂直に切ると不自然なので直線で繋ぐ。
+    w = np.clip((f - cutoff * 0.5) / (cutoff * 0.5), 0.0, 1.0)
+    F *= (w[:, None] if F.ndim == 2 else w)
+    return np.fft.irfft(F, n, axis=0).astype(np.float32)
+
+
 def tile_to(x: np.ndarray, n: int) -> np.ndarray:
     """
     巡回素材 x を長さ n まで敷き詰める。

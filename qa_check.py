@@ -36,7 +36,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent))
-from bgm_studio import dsp, video as VID  # noqa: E402
+from bgm_studio import dsp, nature as NT, video as VID  # noqa: E402
 
 OUT = Path("out")
 
@@ -48,6 +48,11 @@ SEAM_ABS_MAX = -40.0        # dBFS。どちらかを満たせば可
 DC_MAX_DBFS = -60.0
 CREST_MIN_DB = 6.0          # これ未満は潰しすぎ
 MONO_CORR_MIN = 0.20        # これ未満は位相打ち消しの疑い
+
+# 環境音タイルの反復。視聴者が 1 本目を消した原因がこれなので必ず見る。
+# 同じノイズがそのまま繰り返されると相関 1.0 になる。
+# タイルを 3 枚重ねた設計では 0.33 前後に収まる。
+TILE_REPEAT_MAX = 0.45
 
 # オクターブバンドの許容範囲 (250-500Hz を 0dB とした相対値)
 # 実在のリラクゼーション音源を参考にした窓。
@@ -94,6 +99,93 @@ def octave_bands(mono: np.ndarray) -> dict[int, float]:
     return out
 
 
+def corr_at_lag(x: np.ndarray, lag: int, win_s: float = 60.0) -> float:
+    """x[t] と x[t+lag] の正規化相関。1.0 ならタイルがそのまま繰り返されている"""
+    x = np.asarray(x, np.float64).ravel()
+    w = min(len(x) - lag, int(win_s * dsp.SR))
+    if w <= 0:
+        return 0.0
+    a = x[:w] - x[:w].mean()
+    b = x[lag:lag + w] - x[lag:lag + w].mean()
+    d = np.sqrt((a ** 2).sum() * (b ** 2).sum())
+    return float((a * b).sum() / d) if d > 0 else 0.0
+
+
+def layer_qa() -> list[dict]:
+    """
+    環境音レイヤを単体で検査する。
+
+    完成した曲で測っても意味が薄い。環境音は音楽の下に敷くので、
+    タイルが完全反復していても相関 0.10 程度にしか出ず埋もれてしまう。
+    だが視聴者が 1 本目を消したときは、雨が音楽より +6.9dB 大きく、
+    その雨が完全反復していた。つまり「環境音が前に出た瞬間に
+    反復が丸見えになる」構造だった。
+
+    だから素の層で見る。ここが 1.0 に近ければ設計が壊れている。
+    """
+    N = int(300 * dsp.SR)
+    tests = [
+        ("rain (窓越し)", lambda: NT.rain(N, seed=5001, intensity=0.7), 55.0),
+        ("rain (屋外)", lambda: NT.rain(N, seed=11, intensity=0.5,
+                                        window=False), 55.0),
+        ("ocean", lambda: NT.ocean(N, seed=8008), 55.0),
+        ("fireplace", lambda: NT.fireplace(N, seed=7007), 50.0),
+        ("cafe", lambda: NT.cafe_ambience(N, seed=4004), 60.0),
+        ("wind", lambda: NT.wind(N, seed=22), 50.0),
+        ("room_tone", lambda: NT.room_tone(N, seed=99), 45.0),
+        ("brown_noise", lambda: NT.brown_noise_bed(N, seed=33), 50.0),
+    ]
+    out = []
+    for name, make, tsec in tests:
+        m = dsp.mono(make())
+        worst, worst_lag = 0.0, 0.0
+        for L in NT._tile_set(N, tsec, count=3):
+            c = abs(corr_at_lag(m, L))
+            if c > worst:
+                worst, worst_lag = c, L / dsp.SR
+        base = abs(corr_at_lag(m, int(7.3 * dsp.SR)))
+        r = {"layer": name, "lag_s": worst_lag, "corr": worst, "baseline": base,
+             "issues": []}
+        if worst > TILE_REPEAT_MAX:
+            r["issues"].append(f"★{worst_lag:.1f}s周期で反復({worst:.2f})")
+        out.append(r)
+        del m
+    return out
+
+
+def tile_repeat(x: np.ndarray, lo_s: float = 5.0, hi_s: float = 200.0,
+                hp_hz: float = 200.0) -> tuple[float, float]:
+    """
+    環境音タイルがそのまま繰り返されていないか調べる。
+
+    高域だけ残して自己相関を取る (音楽は高域が疎で、ノイズ床が支配的な帯域)。
+    同じタイルを敷いていれば、タイル長ぶんずらした波形と完全に一致するので
+    相関が 1.0 に張り付く。無関係な位置なら 0 付近。
+
+    戻り値: (最も相関が高かったラグ[秒], そのときの相関)
+    """
+    m = dsp.mono(x)
+    N = min(len(m), int(300 * dsp.SR))
+    y = dsp.highpass(m[:N].astype(np.float32), hp_hz, order=2,
+                     taps=513).astype(np.float64)
+    y -= y.mean()
+
+    nfft = 1 << int(np.ceil(np.log2(2 * N)))
+    F = np.fft.rfft(y, nfft)
+    ac = np.fft.irfft(F * np.conj(F))[:N]
+    # 重なるサンプル数で割って不偏化する。これをやらないと
+    # 「探索下限のラグが常に最大」になり、測定が嘘をつく。
+    ac /= np.arange(N, 0, -1, dtype=np.float64)
+    ac /= (ac[0] + 1e-20)
+
+    lo, hi = int(lo_s * dsp.SR), min(int(hi_s * dsp.SR), N - 1)
+    if hi <= lo:
+        return 0.0, 0.0
+    seg = ac[lo:hi]
+    k = int(np.argmax(seg))
+    return (lo + k) / dsp.SR, float(seg[k])
+
+
 def audio_qa(slug: str) -> dict:
     wav = OUT / "audio" / f"{slug}.wav"
     if not wav.exists():
@@ -123,6 +215,11 @@ def audio_qa(slug: str) -> dict:
     mid = read_wav(wav, seconds=120.0, offset=max(len(m) / dsp.SR * 0.35, 0))
     r["bands"] = {k: round(v, 1) for k, v in octave_bands(dsp.mono(mid)).items()}
 
+    # タイル反復 (中盤 300 秒で見る)
+    rep = read_wav(wav, seconds=300.0, offset=max(len(m) / dsp.SR * 0.30, 0))
+    r["repeat_lag_s"], r["repeat_corr"] = tile_repeat(rep)
+    del rep
+
     # ── 判定 ──────────────────────────────────────────────
     if abs(r["lufs"] - LUFS_TARGET) > LUFS_TOL:
         issues.append(f"LUFS {r['lufs']:.1f}")
@@ -138,6 +235,9 @@ def audio_qa(slug: str) -> dict:
         issues.append(f"潰しすぎ crest {r['crest_db']:.1f}dB")
     if r["mono_corr"] < MONO_CORR_MIN:
         issues.append(f"位相 {r['mono_corr']:.2f}")
+    if r["repeat_corr"] > TILE_REPEAT_MAX:
+        issues.append(f"★{r['repeat_lag_s']:.1f}s周期でノイズが反復"
+                      f"({r['repeat_corr']:.2f})")
     for lo, (mn, mx) in BAND_WINDOW.items():
         v = r["bands"][lo]
         if v < mn:
@@ -199,7 +299,7 @@ def main() -> int:
     print("音声の検査")
     print("═" * 108)
     print(f"{'track':26s} {'LUFS':>6s} {'TP':>6s} {'継ぎ目':>7s} {'crest':>6s} "
-          f"{'相関':>5s} {'1k':>5s} {'2k':>5s} {'4k':>5s} {'8k':>6s}  判定")
+          f"{'相関':>5s} {'反復':>5s} {'1k':>5s} {'2k':>5s} {'4k':>5s} {'8k':>6s}  判定")
     print("─" * 108)
 
     audio, visual, ok_all = [], [], True
@@ -215,6 +315,7 @@ def main() -> int:
         ok_all &= ok
         print(f"{s:26s} {r['lufs']:6.2f} {r['true_peak_db']:6.2f} "
               f"{r['seam_rel_db']:+6.1f} {r['crest_db']:6.1f} {r['mono_corr']:5.2f} "
+              f"{r['repeat_corr']:5.2f} "
               f"{b[1000]:5.1f} {b[2000]:5.1f} {b[4000]:5.1f} {b[8000]:6.1f}  "
               f"{'OK' if ok else '⚠ ' + ' / '.join(r['issues'])}")
 
@@ -236,13 +337,28 @@ def main() -> int:
               f"{r['loop_jump']:10.4f}  {'OK' if ok else '⚠ ' + ' / '.join(r['issues'])}")
 
     print()
-    n_issue = sum(1 for r in audio + visual if r.get("issues"))
+    print("═" * 108)
+    print("環境音レイヤの反復検査 (1本目を消された原因。ここは単体で見る)")
+    print("═" * 108)
+    print(f"{'layer':26s} {'反復周期':>10s} {'相関':>7s} {'無関係な位置':>12s}  判定")
+    print("─" * 108)
+    layers = layer_qa()
+    for r in layers:
+        ok = not r["issues"]
+        ok_all &= ok
+        print(f"{r['layer']:26s} {r['lag_s']:9.1f}s {r['corr']:7.3f} "
+              f"{r['baseline']:12.3f}  "
+              f"{'OK' if ok else '⚠ ' + ' / '.join(r['issues'])}")
+
+    print()
+    n_issue = sum(1 for r in audio + visual + layers if r.get("issues"))
     print(f"{len(slugs)} 本を検査 / 指摘 {n_issue} 件")
     print(f"総合判定: {'全て合格 — アップロード可' if ok_all else '要修正あり'}")
 
     (OUT / "qa.json").write_text(
-        json.dumps({"audio": audio, "visual": visual}, ensure_ascii=False,
-                   indent=2, default=float), encoding="utf-8")
+        json.dumps({"audio": audio, "visual": visual, "layers": layers},
+                   ensure_ascii=False, indent=2, default=float),
+        encoding="utf-8")
     print(f"詳細を {OUT / 'qa.json'} に書き出しました。")
     return 0 if ok_all else 1
 
