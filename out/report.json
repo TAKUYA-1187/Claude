@@ -6,15 +6,15 @@
       "title": "8 Hour Sleep Music 🌃 Deep Ambient for a Full Night's Rest",
       "bpm": 46.0,
       "bars": 276,
-      "lufs": -14.000041833430505,
+      "lufs": -14.000505360085526,
       "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -30.283061990006917,
+      "loop_seam_db": -40.24278719283152,
       "loop_seconds": 1440,
       "total_seconds": 28800,
       "total_hhmmss": "8:00:00",
       "video": "out/video/11_sleep_city_8h.mp4",
       "probe": {
-        "size_mb": 2586.330093,
+        "size_mb": 2583.354971,
         "streams": [
           {
             "type": "video",
@@ -27,13 +27,13 @@
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
-            "kbps": 256
+            "kbps": 255
           }
         ],
         "duration_s": 28800.0,
-        "bitrate_kbps": 718
+        "bitrate_kbps": 717
       },
-      "elapsed_s": 1034.3
+      "elapsed_s": 998.9
     }
   ]
 }

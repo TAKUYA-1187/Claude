@@ -26,7 +26,7 @@
     "total_hhmmss": "2:24:00",
     "lufs": -14.0,
     "true_peak_db": -1.0,
-    "loop_seam_db": 0.0,
-    "visual": "minimal_gradient"
+    "loop_seam_db": -47.86,
+    "visual": "night_skyline"
   }
 }
