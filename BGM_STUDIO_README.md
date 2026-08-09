@@ -43,6 +43,7 @@
 | [docs/03_production_spec.md](docs/03_production_spec.md) | **制作仕様。** ループを継ぎ目なく作る仕組み、モジュール構成 |
 | [docs/04_upload_playbook.md](docs/04_upload_playbook.md) | **運用。** タイトル/サムネ/説明文の型、投稿時刻、90日プラン |
 | [docs/05_launch_runbook.md](docs/05_launch_runbook.md) | **ゼロから収益化までの完全手順書。** アカウント開設・電話確認・AdSense・米国税務情報・振込まで |
+| [docs/06_channel_setup_pack.md](docs/06_channel_setup_pack.md) | **貼り付けパック。** チャンネル説明・キーワード・再生リスト・動画10本のタイトル/説明/タグ |
 
 > 🚀 **これから始める方は [docs/05_launch_runbook.md](docs/05_launch_runbook.md) から読んでください。**
 > 「今日やること」から順に並べてあります。
