@@ -67,8 +67,26 @@ def additive(f0: float, dur: float, ratios, amps, taus,
     return out
 
 
-def _harm_taus(tau0: float, ratios, slope: float = 0.75) -> list[float]:
-    """高い部分音ほど速く減衰する (実際の弦/板の物理挙動)"""
+def _n_partials(f0: float, top_hz: float, cap: int, floor: int = 6) -> int:
+    """
+    top_hz まで倍音を伸ばすのに必要な本数を返す。
+
+    本数を固定にすると低音ほど倍音が足りなくなる。
+    実測では E2 (82Hz) のウッドベースが 12 本しか無く、
+    988Hz より上が空になっていた (本物は 3-4kHz まで鳴る)。
+    """
+    return int(np.clip(round(top_hz / max(f0, 1.0)), floor, cap))
+
+
+def _harm_taus(tau0: float, ratios, slope: float = 0.30) -> list[float]:
+    """
+    高い部分音ほど速く減衰する (実際の弦/板の物理挙動)。
+
+    slope を大きくしすぎると高次倍音が一瞬で消え、
+    音が「毛布越し」になる。実測では slope=0.75 のとき
+    2-4kHz が 250-500Hz より 17dB も低くなっていた
+    (本物のピアノは -8〜-12dB)。0.30 前後が実測に近い。
+    """
     return [tau0 / (1.0 + slope * (r - 1.0)) for r in ratios]
 
 
@@ -86,12 +104,12 @@ def rhodes(m: int, vel: float = 0.8, sr: int = SR,
     f0 = midi2hz(m)
     dur = float(np.clip(6.0 - (m - 48) * 0.045, 1.6, 6.5))
 
-    ratios = [1, 2, 3, 4, 5, 6, 8, 10]
+    ratios = [1, 2, 3, 4, 5, 6, 8, 10, 13, 16]
     # ベロシティが高いほど倍音が明るくなる
-    b = 1.55 - 0.55 * vel
-    amps = [1.0, 0.42, 0.10, 0.20, 0.045, 0.085, 0.05, 0.022]
+    b = 1.32 - 0.42 * vel
+    amps = [1.0, 0.42, 0.10, 0.20, 0.045, 0.085, 0.05, 0.030, 0.016, 0.009]
     amps = [a / (r ** (b - 1.0)) for a, r in zip(amps, ratios)]
-    taus = _harm_taus(dur * 0.42, ratios, slope=0.9)
+    taus = _harm_taus(dur * 0.42, ratios, slope=0.30)
 
     y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.003, rng=rng)
 
@@ -118,18 +136,18 @@ def piano(m: int, vel: float = 0.8, sr: int = SR,
 
     # インハーモニシティ係数: 低音弦ほど大きい
     B = 0.0004 * (2.0 ** ((60 - m) / 24.0))
-    n_part = int(np.clip(24 - (m - 48) * 0.22, 6, 26))
+    n_part = _n_partials(f0, 9000.0, cap=44, floor=10)
     ks = np.arange(1, n_part + 1)
     ratios = (ks * np.sqrt(1.0 + B * ks * ks)).tolist()
 
-    b = 1.45 - 0.45 * vel
+    b = 1.22 - 0.35 * vel
     amps = [(1.0 / (k ** b)) * (1.0 + 0.22 * rng.standard_normal()) for k in ks]
     amps = [max(a, 0.0) for a in amps]
     # 実際のピアノは 1 倍音より 2〜3 倍音のほうが強いことも多い
     if len(amps) > 2:
         amps[1] *= 1.25
         amps[2] *= 1.1
-    taus = [dur * 0.35 / (1.0 + 0.55 * (k - 1)) for k in ks]
+    taus = [dur * 0.35 / (1.0 + 0.16 * (k - 1)) for k in ks]
 
     y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.002, rng=rng)
 
@@ -148,11 +166,11 @@ def nylon_guitar(m: int, vel: float = 0.8, sr: int = SR,
     rng = rng or np.random.default_rng(m + 2000)
     f0 = midi2hz(m)
     dur = float(np.clip(4.5 - (m - 45) * 0.03, 1.2, 4.5))
-    ks = np.arange(1, 15)
+    ks = np.arange(1, _n_partials(f0, 8000.0, cap=26, floor=10) + 1)
     ratios = (ks * np.sqrt(1.0 + 0.00012 * ks * ks)).tolist()
-    b = 1.5 - 0.4 * vel
+    b = 1.28 - 0.34 * vel
     amps = [(1.0 / (k ** b)) * (1.18 if k % 2 == 1 else 0.82) for k in ks]
-    taus = _harm_taus(dur * 0.40, ratios, slope=1.1)
+    taus = _harm_taus(dur * 0.40, ratios, slope=0.40)
     y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.004, rng=rng)
 
     # 指が弦に触れる音
@@ -169,10 +187,10 @@ def harp(m: int, vel: float = 0.8, sr: int = SR,
     rng = rng or np.random.default_rng(m + 3000)
     f0 = midi2hz(m)
     dur = float(np.clip(7.0 - (m - 50) * 0.05, 1.8, 7.0))
-    ks = np.arange(1, 17)
+    ks = np.arange(1, _n_partials(f0, 10000.0, cap=30, floor=12) + 1)
     ratios = (ks * np.sqrt(1.0 + 0.00008 * ks * ks)).tolist()
-    amps = [1.0 / (k ** (1.25 - 0.3 * vel)) for k in ks]
-    taus = _harm_taus(dur * 0.45, ratios, slope=0.8)
+    amps = [1.0 / (k ** (1.08 - 0.26 * vel)) for k in ks]
+    taus = _harm_taus(dur * 0.45, ratios, slope=0.30)
     y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.003, rng=rng)
     return (y * (0.35 + 0.65 * vel)).astype(np.float32)
 
@@ -183,9 +201,9 @@ def celesta(m: int, vel: float = 0.8, sr: int = SR,
     rng = rng or np.random.default_rng(m + 4000)
     f0 = midi2hz(m)
     dur = float(np.clip(4.5 - (m - 60) * 0.03, 1.2, 4.5))
-    ratios = [1, 2.0, 3.01, 4.2, 5.4, 6.8, 9.2]
-    amps = [1.0, 0.55, 0.28, 0.16, 0.10, 0.06, 0.03]
-    taus = [dur * 0.45, dur * 0.30, dur * 0.20, 0.35, 0.22, 0.15, 0.09]
+    ratios = [1, 2.0, 3.01, 4.2, 5.4, 6.8, 9.2, 12.1, 15.4]
+    amps = [1.0, 0.55, 0.28, 0.16, 0.10, 0.06, 0.035, 0.020, 0.011]
+    taus = [dur * 0.45, dur * 0.34, dur * 0.26, 0.75, 0.52, 0.36, 0.24, 0.16, 0.11]
     y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.002, rng=rng)
     return (y * (0.3 + 0.7 * vel)).astype(np.float32)
 
@@ -227,10 +245,10 @@ def upright_bass(m: int, vel: float = 0.8, sr: int = SR,
     rng = rng or np.random.default_rng(m + 7000)
     f0 = midi2hz(m)
     dur = 2.6
-    ks = np.arange(1, 13)
+    ks = np.arange(1, _n_partials(f0, 3500.0, cap=34, floor=14) + 1)
     ratios = ks.tolist()
-    amps = [1.0 / (k ** 1.35) for k in ks]
-    taus = [0.85 / (1.0 + 0.65 * (k - 1)) for k in ks]
+    amps = [1.0 / (k ** 1.20) for k in ks]
+    taus = [0.85 / (1.0 + 0.28 * (k - 1)) for k in ks]
     y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.006, rng=rng)
     # 胴鳴りを足す
     y = dsp.peak_eq(y, 110.0, 3.0, q=1.2)
