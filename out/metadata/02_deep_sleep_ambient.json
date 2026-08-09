@@ -25,8 +25,8 @@
     "total_seconds": 8640,
     "total_hhmmss": "2:24:00",
     "lufs": -14.0,
-    "true_peak_db": -1.09,
-    "loop_seam_db": -31.07,
+    "true_peak_db": -1.54,
+    "loop_seam_db": -29.99,
     "visual": "starry_night"
   }
 }
