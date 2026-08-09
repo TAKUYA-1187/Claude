@@ -802,6 +802,30 @@ def scene_night_drive(seed: int = 31):
     return frame
 
 
+def _cloud_field(seed: int, kx_max: int = 3, ky_scale: float = 2.2,
+                 n_waves: int = 8, h: int = H, w: int = W,
+                 res_div: int = 3) -> np.ndarray:
+    """
+    横方向に厳密に周期的なノイズ場。
+
+    雲は np.roll で横に流すので、場そのものが左右で連続していないと
+    継ぎ目が縦の筋になって出る。periodic_noise() は横の周波数に
+    非整数を使っているため、これに使うと必ず筋が見える
+    (実際にサムネイルで四角い継ぎ目として出た)。
+    横の波数を整数に限れば x=0 と x=1 が一致して筋が消える。
+    """
+    hh, ww = max(h // res_div, 8), max(w // res_div, 8)
+    rng = np.random.default_rng(seed)
+    y, x = _yx(hh, ww)
+    acc = np.zeros((hh, ww), dtype=np.float32)
+    for _ in range(n_waves):
+        kx = float(rng.integers(1, kx_max + 1))     # 整数 → 横に周期的
+        ky = rng.uniform(-ky_scale, ky_scale)
+        ph = rng.uniform(0, TWO_PI)
+        acc += np.sin(TWO_PI * (kx * x + ky * y) + ph)
+    return _upscale(acc / n_waves, h, w)
+
+
 def scene_anime_dusk(seed: int = 41):
     """
     夕暮れの空。アニメの「あの感じ」を写真を使わず幾何形状だけで作る。
@@ -824,7 +848,7 @@ def scene_anime_dusk(seed: int = 41):
                                            0.85, falloff=1.6)), 0, 255)
 
     # 雲。低周波の場を薄く伸ばして、空の上側だけに置く
-    field = periodic_noise(0.0, scale=2.1, cycles=1, seed=seed + 1, n_waves=7)
+    field = _cloud_field(seed + 1, kx_max=3, ky_scale=2.1, n_waves=7)
     cloud = np.clip(field * 1.7 - 0.10, 0, 1) * np.clip((0.66 - y) / 0.52, 0, 1) ** 1.2
     clouds = blur(cloud[:, :, None] * np.array([255, 200, 176], dtype=np.float32), 9.0)
 
@@ -904,7 +928,7 @@ def scene_morning_meadow(seed: int = 42):
                                            0.50, falloff=1.8)), 0, 255)
 
     # 雲。朝なので白く、控えめに
-    field = periodic_noise(0.0, scale=2.6, cycles=1, seed=seed + 1, n_waves=8)
+    field = _cloud_field(seed + 1, kx_max=4, ky_scale=2.6, n_waves=8)
     cloud = (np.clip(field * 1.9 - 0.32, 0, 1)
              * np.clip((hz - 0.05 - y) / 0.44, 0, 1) ** 1.1)
     clouds = blur(cloud[:, :, None] * np.array([255, 255, 252], dtype=np.float32), 12.0)
