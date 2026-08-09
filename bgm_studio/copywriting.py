@@ -411,3 +411,114 @@ SHORT_HOOKS["13_fresh_morning_acoustic"] = [
     "nylon guitar\nand a marimba",
     "bright without\ngetting heavy",
 ]
+
+DESCRIPTIONS["14_japanese_lofi_koto"] = """\
+{duration} of lo-fi built around a koto.
+
+The koto is tuned to hirajōshi, the five-note scale that makes Japanese
+music sound Japanese — leave that scale and you just have lo-fi with an
+unusual guitar. Under it: a slow boom-bap beat with the drums dragged
+behind the click, sub bass, tape flutter, vinyl crackle, and rain against
+a window somewhere behind everything.
+
+The pitch of the koto bends slightly upward at each pluck and settles,
+the way a real string does under a plectrum. That detail is most of the
+instrument's character, so it's synthesised rather than faked with a
+sample.
+
+72 BPM · A hirajōshi · koto, sub bass, lo-fi kit, rain, vinyl.
+
+For studying, late trains, rainy evenings, and long focused work.
+
+— Composed and produced from scratch for this channel.
+"""
+
+DESCRIPTIONS["15_rain_thunder_night"] = """\
+{duration} of heavy rain on a window, with thunder far away.
+
+There is almost no music in this one, on purpose. A low chord drifts
+underneath — quiet enough that you will probably never notice it, present
+enough that the room never feels empty. Everything above 8 kHz is rolled
+off, because bright rain is what keeps light sleepers awake.
+
+The thunder never cracks. It stays distant, a few times an hour, more
+felt than heard.
+
+Rain, distant thunder, wind, and one very quiet chord.
+Mastered softly and evenly for overnight playback — it loops without a
+seam, so the storm never ends until you stop it.
+
+For sleeping, and for pretending you don't have to go outside.
+
+— The rain, thunder and wind are all synthesised for this video.
+"""
+
+DESCRIPTIONS["16_autumn_cafe_jazz"] = """\
+🍂 AUTUMN CAFÉ JAZZ — {duration}
+
+Slow jazz for the months when it gets dark early.
+
+▸ WHAT'S PLAYING
+Piano comping rootless voicings, a Rhodes taking the tunes, an upright
+bass walking underneath, and brushes keeping everything at a murmur.
+It swings, but at 80 BPM nothing is in a hurry. Wind moves outside;
+a café murmurs quietly behind the band.
+
+▸ SPECS
+80 BPM · B♭ major · piano, Rhodes, upright bass, brushes, wind, café room
+
+▸ GOOD FOR
+October afternoons, rainy commutes, essays, bookshops, and the first
+cold week where the coat comes out.
+
+Plays for {duration} and loops cleanly.
+
+— Original music, written and mixed for this channel.
+"""
+
+DESCRIPTIONS["17_christmas_jazz"] = """\
+🎄 CHRISTMAS JAZZ — {duration}
+
+Cozy holiday jazz by a synthesised fireplace.
+
+A note on what this is: there are no carols here. Every tune is original.
+What makes it sound like Christmas is the harmony — the maj6 chords and
+that one sweet dominant-with-a-flat-nine that every December record from
+the 1950s leans on — plus sleigh bells shaken softly on the off-beats and
+a celesta glittering over the top like tinsel.
+
+Piano, upright bass and brushes do the rest, the same warm trio sound as
+the café mixes on this channel, just pointed at the holidays.
+
+92 BPM · C major · piano, celesta, upright bass, brushes, sleigh bells,
+and a fire crackling in the corner.
+
+For wrapping presents, cooking too much food, reading by the tree, and
+keeping the house warm through December.
+
+— All original compositions. No licensed or traditional melodies.
+"""
+
+SHORT_HOOKS["14_japanese_lofi_koto"] = [
+    "a koto,\nand a beat that drags",
+    "five notes.\nthat's all japan needs.",
+    "lofi, but the strings\nare four centuries old",
+]
+
+SHORT_HOOKS["15_rain_thunder_night"] = [
+    "rain on the window.\nthunder far away.",
+    "the storm never ends\nuntil you stop it",
+    "no melody.\njust weather.",
+]
+
+SHORT_HOOKS["16_autumn_cafe_jazz"] = [
+    "jazz for the months\nthat get dark early",
+    "80 BPM.\nnothing is in a hurry.",
+    "the coat-weather\nplaylist",
+]
+
+SHORT_HOOKS["17_christmas_jazz"] = [
+    "christmas jazz,\nno carols needed",
+    "sleigh bells on\nthe off-beats",
+    "december, by\nthe fireplace",
+]

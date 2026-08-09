@@ -632,6 +632,199 @@ def build_fresh_morning(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, di
 
 
 # ──────────────────────────────────────────────────────────────
+# 14. Japanese Lofi  (和風ローファイ)
+# ──────────────────────────────────────────────────────────────
+
+def build_japanese_lofi(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    琴 × lofi ビート。
+
+    リサーチで「まだ飽和していない成長ジャンル」と出た組み合わせ。
+    琴の旋律は kumoi 音階に固定する。ここが平均律の 7 音階だと
+    ただの lofi に琴の音色が乗っただけになってしまい、和にならない。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=3)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=16.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.10, brightness=0.55,
+               attack=4.0, release=5.0, rng=rng, n_voices=4, low=45, high=76)
+    A.play_arp(buf, spans, clock, bank, inst="koto", gain=0.15, rate=1.0,
+               octaves=1, center=64, direction="updown", rng=rng, pan=-0.12)
+    # 旋律の音階は A を根にした平調子。進行 (wafu) は A センターで
+    # 書いてあるので、key_root ではなく A(=9) からの平調子に固定する。
+    A.play_melody(buf, spans, clock, bank, inst="koto", gain=0.30,
+                  scale_root=(spec.key_root + 9) % 12, scale=spec.scale,
+                  lo=64, hi=88, density=0.45, rng=rng, rest_prob=0.40)
+    A.play_bass(buf, spans, clock, bank, inst="subbass", style="pump",
+                gain=0.20, octave=-2, rng=rng)
+    A.play_lofi_drums(buf, spans, clock, bank, gain=0.24, swing=0.14,
+                      rng=rng, use_rim=True)
+
+    ir = dsp.make_reverb_ir(2.8, rt60=2.2, damp=0.6, predelay=0.02,
+                            seed=spec.seed)
+    n = clock.n_samples
+    warp = lambda x: dsp.wow_flutter(x, depth=0.0018, rate=0.6,
+                                     loop_n=n, seed=spec.seed)
+    beds = [
+        (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.35, window=True), -22.0),
+        (lambda: dsp.to_stereo(I.vinyl_crackle(n, np.random.default_rng(spec.seed + 2))), -27.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -34.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=800.0, gain_db=-4.0)
+        x = dsp.lowpass(x, 13000.0, order=2)
+        x = dsp.saturate(x, drive=1.3, mix=0.45)
+        return dsp.shelf(x, 120.0, 1.2, kind="low")
+
+    return _finish(buf, clock, spec, ir, 0.26, beds, master, warp=warp)
+
+
+# ──────────────────────────────────────────────────────────────
+# 15. Rain & Thunder Night  (雷雨の夜 — 環境音が主役)
+# ──────────────────────────────────────────────────────────────
+
+def build_rain_thunder(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    雨と遠雷。音楽はほぼ入れない。
+
+    リサーチの結論として、視聴回数の天井が最も高いのがこの
+    「純環境音の睡眠動画」(10M+ 再生が常態)。
+    音楽は 1 音を数十秒伸ばすパッドだけを、雨のはるか下に敷く。
+    完全な無音楽より「何かがいる」気配があるほうが不気味さが消える。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=2)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=30.0)
+
+    # 気配としてのパッドとドローンのみ。旋律なし
+    A.play_pad(buf, spans, clock, bank, gain=0.22, brightness=0.45,
+               attack=8.0, release=9.0, rng=rng, n_voices=4, low=40, high=64)
+    A.play_drone(buf, T.note("A", 1) + spec.key_root, clock, bank,
+                 gain=0.12, partials=6)
+
+    ir = dsp.make_reverb_ir(5.0, rt60=6.0, damp=0.8, predelay=0.05,
+                            seed=spec.seed)
+    n = clock.n_samples
+    # 雨が主役なので相対レベルは正の値 (音楽より上に置く)。
+    # 検索の定番も「rain on window」なので、屋外の雨ではなく
+    # 窓越し (高域を大きく削った雨) を使う。素の雨はスペクトルが
+    # 平坦すぎて、-14 LUFS まで上げると夜の耳には刺さる。
+    beds = [
+        (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.85, window=True), +5.0),
+        (lambda: NT.thunder(n, seed=spec.seed + 2, count=7), -4.0),
+        (lambda: NT.wind(n, seed=spec.seed + 3), -14.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 4), -30.0),
+    ]
+
+    def master(x):
+        # 雨の高域は耳に刺さりやすい。夜向けに大きく丸める
+        x = dsp.tilt_eq(x, pivot=450.0, gain_db=-7.5)
+        x = dsp.lowpass(x, 8000.0, order=2)
+        x = dsp.highpass(x, 36.0, order=2)
+        return x
+
+    return _finish(buf, clock, spec, ir, 0.40, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 16. Autumn Café Jazz  (秋のカフェジャズ — 9〜11月の季節枠)
+# ──────────────────────────────────────────────────────────────
+
+def build_autumn_jazz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    秋のジャズ。04 のカフェジャズより一段暗く、遅く、温かく。
+    「autumn jazz」「cozy fall」は 9 月に検索が跳ねる季節ジャンルで、
+    8 月のいま撮り溜めておくのが最も効率がいい。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=3)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=14.0)
+
+    A.play_comp(buf, spans, clock, bank, inst="piano", style="jazz",
+                gain=0.24, voicing="rootless", center=60, swing=0.55, rng=rng)
+    A.play_melody(buf, spans, clock, bank, inst="rhodes", gain=0.20,
+                  scale_root=spec.key_root, scale=spec.scale,
+                  lo=62, hi=84, density=0.42, rng=rng, rest_prob=0.45)
+    A.play_bass(buf, spans, clock, bank, inst="upright", style="walk",
+                gain=0.22, octave=-1, rng=rng,
+                scale_root=spec.key_root, scale=spec.scale)
+    A.play_jazz_brushes(buf, spans, clock, bank, gain=0.16, rng=rng,
+                        ride_prob=0.4)
+
+    ir = dsp.make_reverb_ir(2.4, rt60=1.8, damp=0.55, predelay=0.018,
+                            seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.wind(n, seed=spec.seed + 1), -20.0),
+        (lambda: NT.cafe_ambience(n, seed=spec.seed + 2), -22.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -33.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-3.5)
+        x = dsp.peak_eq(x, 240.0, 1.5, q=1.0)      # 木の温かさ
+        x = dsp.lowpass(x, 13500.0, order=2)
+        return dsp.saturate(x, drive=1.2, mix=0.3)
+
+    return _finish(buf, clock, spec, ir, 0.26, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 17. Christmas Jazz  (クリスマスジャズ — 11〜12月の季節枠)
+# ──────────────────────────────────────────────────────────────
+
+def build_christmas_jazz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    クリスマスのジャズ。12 月は 1 年で最も BGM 需要が跳ねる月で、
+    「christmas jazz」は毎年 10M+ 再生の動画が量産される。
+    定番曲の旋律は使わない (Content ID で収益が差し押さえられる)。
+    maj6 と dom7b9 の進行 + スレイベル + セレスタで
+    「あの頃のクリスマス」の匂いだけを原曲なしで作る。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=3)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=14.0)
+
+    A.play_comp(buf, spans, clock, bank, inst="piano", style="jazz",
+                gain=0.24, voicing="rootless", center=62, swing=0.55, rng=rng)
+    A.play_melody(buf, spans, clock, bank, inst="celesta", gain=0.18,
+                  scale_root=spec.key_root, scale=spec.scale,
+                  lo=72, hi=93, density=0.40, rng=rng, rest_prob=0.42)
+    A.play_bass(buf, spans, clock, bank, inst="upright", style="walk",
+                gain=0.22, octave=-1, rng=rng,
+                scale_root=spec.key_root, scale=spec.scale)
+    A.play_jazz_brushes(buf, spans, clock, bank, gain=0.15, rng=rng,
+                        ride_prob=0.35)
+    A.play_sleigh(buf, spans, clock, bank, gain=0.10, rng=rng)
+
+    ir = dsp.make_reverb_ir(2.6, rt60=2.0, damp=0.5, predelay=0.02,
+                            seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.fireplace(n, seed=spec.seed + 1), -18.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 2), -33.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=800.0, gain_db=-2.5)
+        x = dsp.peak_eq(x, 250.0, 1.2, q=1.0)
+        x = dsp.lowpass(x, 14500.0, order=2)
+        return dsp.saturate(x, drive=1.15, mix=0.28)
+
+    return _finish(buf, clock, spec, ir, 0.28, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
 # トラック一覧
 # ──────────────────────────────────────────────────────────────
 
@@ -809,6 +1002,62 @@ TRACKS: list[TrackSpec] = [
             keywords=["morning music", "fresh music", "acoustic",
                       "positive music", "good morning", "happy music",
                       "work music", "cafe acoustic"],
+        ),
+    ),
+    TrackSpec(
+        slug="14_japanese_lofi_koto",
+        title_en="Japanese Lofi (Koto & Beats)",
+        genre_ja="和風ローファイ（琴）",
+        use_case="study", bpm=72.0, key="Am", key_root=0, scale="hirajoshi",
+        prog_key="wafu", visual="lantern_street", seed=1414,
+        build=build_japanese_lofi,
+        seo=dict(
+            title="Japanese Lofi 🏮 Koto & Chill Beats for Study & Work",
+            keywords=["japanese lofi", "koto music", "lofi hip hop",
+                      "japan chill", "study music", "zen lofi",
+                      "asian lofi", "tokyo night"],
+        ),
+    ),
+    TrackSpec(
+        slug="15_rain_thunder_night",
+        title_en="Rain & Distant Thunder at Night",
+        genre_ja="雷雨の夜（環境音メイン）",
+        use_case="sleep", bpm=48.0, key="Am", key_root=0, scale="minor",
+        prog_key="ambient", visual="storm_window", seed=1515,
+        build=build_rain_thunder,
+        seo=dict(
+            title="Heavy Rain & Distant Thunder at Night 🌧️ for Deep Sleep",
+            keywords=["rain sounds", "thunder", "rain on window",
+                      "sleep sounds", "thunderstorm", "rain for sleeping",
+                      "insomnia relief", "night rain"],
+        ),
+    ),
+    TrackSpec(
+        slug="16_autumn_cafe_jazz",
+        title_en="Autumn Café Jazz",
+        genre_ja="秋のカフェジャズ（9〜11月の季節枠）",
+        use_case="work", bpm=80.0, key="Bb", key_root=10, scale="major",
+        prog_key="jazz", visual="autumn_leaves", seed=1616,
+        build=build_autumn_jazz,
+        seo=dict(
+            title="Autumn Jazz 🍂 Cozy Fall Café Music for Work & Study",
+            keywords=["autumn jazz", "fall music", "cozy jazz",
+                      "september jazz", "coffee jazz", "rainy autumn",
+                      "work music", "smooth jazz"],
+        ),
+    ),
+    TrackSpec(
+        slug="17_christmas_jazz",
+        title_en="Christmas Jazz",
+        genre_ja="クリスマスジャズ（11〜12月の季節枠）",
+        use_case="relax", bpm=92.0, key="C", key_root=0, scale="major",
+        prog_key="christmas", visual="christmas_window", seed=1717,
+        build=build_christmas_jazz,
+        seo=dict(
+            title="Christmas Jazz 🎄 Cozy Holiday Music by the Fireplace",
+            keywords=["christmas jazz", "christmas music", "holiday jazz",
+                      "winter jazz", "cozy christmas", "fireplace",
+                      "december", "holiday music instrumental"],
         ),
     ),
 ]

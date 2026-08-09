@@ -195,6 +195,42 @@ def harp(m: int, vel: float = 0.8, sr: int = SR,
     return (y * (0.35 + 0.65 * vel)).astype(np.float32)
 
 
+def koto(m: int, vel: float = 0.8, sr: int = SR,
+         rng: np.random.Generator | None = None) -> np.ndarray:
+    """
+    琴。和風ローファイの主役。
+
+    ナイロン弦との違いは 3 つ:
+      - アタックの「爪音」がはっきり聞こえる (義甲で弾くため)
+      - 高次倍音が最初の 0.1 秒で急速に消え、基音だけが残る
+      - ピッチが弾いた瞬間わずかに高く、すぐ戻る (弦の張りが緩むため)
+    """
+    rng = rng or np.random.default_rng(m + 6500)
+    f0 = midi2hz(m)
+    dur = float(np.clip(5.0 - (m - 50) * 0.04, 1.4, 5.0))
+    ks = np.arange(1, _n_partials(f0, 9000.0, cap=24, floor=10) + 1)
+    ratios = (ks * np.sqrt(1.0 + 0.00020 * ks * ks)).tolist()
+    b = 1.05 - 0.22 * vel
+    amps = [(1.0 / (k ** b)) * (1.25 if k % 2 == 1 else 0.75) for k in ks]
+    # 高次倍音ほど急速に減衰させる → 「ビン」と鳴ってすぐ丸くなる
+    taus = [max(dur * 0.42 / (r ** 0.62), 0.05) for r in ratios]
+    y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.002, rng=rng)
+
+    # ピッチの初期偏差 (+18 セントから 60ms で戻る) を可変遅延で近似
+    n = len(y)
+    t = np.arange(n, dtype=np.float64) / sr
+    dev = 0.0104 * np.exp(-t / 0.06)          # 18 cent ≈ 1.04%
+    pos = np.clip(np.cumsum(1.0 + dev) - 1.0, 0, n - 1)
+    y = np.interp(pos, np.arange(n), y.astype(np.float64)).astype(np.float32)
+
+    # 爪音
+    n_p = int(0.025 * sr)
+    pk = dsp.bandpass(rng.standard_normal(n_p).astype(np.float32), 2000, 8000, taps=257)
+    pk *= np.exp(-np.arange(n_p, dtype=np.float32) / (0.0025 * sr)) * 0.09 * vel
+    y[:n_p] += pk
+    return (y * (0.35 + 0.65 * vel)).astype(np.float32)
+
+
 def celesta(m: int, vel: float = 0.8, sr: int = SR,
             rng: np.random.Generator | None = None) -> np.ndarray:
     """チェレスタ/グロッケン。冬・クリスマス系のきらめき"""
@@ -432,6 +468,25 @@ def shaker(sr: int = SR, rng: np.random.Generator | None = None) -> np.ndarray:
     return dsp.fade((nz * env * 0.22).astype(np.float32), fade_out=0.02)
 
 
+def sleigh_bells(sr: int = SR, rng: np.random.Generator | None = None) -> np.ndarray:
+    """
+    スレイベル (クリスマスの鈴)。
+    小さな鈴が何十個も同時に鳴る音なので、単音ではなく
+    5-9kHz に共鳴の集まったノイズとして作るのが正しい。
+    """
+    rng = rng or np.random.default_rng(18000)
+    n = int(0.30 * sr)
+    t = np.arange(n, dtype=np.float32) / sr
+    nz = dsp.bandpass(rng.standard_normal(n).astype(np.float32), 4500, 10000, taps=257)
+    # 鈴の共鳴 (ばらばらの高い正弦波を薄く重ねる)
+    for _ in range(6):
+        f = rng.uniform(5200, 8800)
+        nz += (np.sin(2 * np.pi * f * t + rng.uniform(0, 6.28))
+               * np.exp(-t / 0.05) * 0.12).astype(np.float32)
+    env = np.exp(-t / 0.075)
+    return dsp.fade((nz * env * 0.20).astype(np.float32), fade_out=0.03)
+
+
 def vinyl_crackle(n: int, rng: np.random.Generator, density: float = 42.0,
                   sr: int = SR) -> np.ndarray:
     """
@@ -464,6 +519,7 @@ PITCHED = {
     "piano": piano,
     "nylon": nylon_guitar,
     "harp": harp,
+    "koto": koto,
     "celesta": celesta,
     "bowl": singing_bowl,
     "marimba": marimba,
@@ -479,6 +535,7 @@ PERC = {
     "brush": brush,
     "ride": ride,
     "shaker": shaker,
+    "sleigh": sleigh_bells,
 }
 
 

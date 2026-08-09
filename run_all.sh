@@ -31,12 +31,14 @@ echo "▶ [1/5] 必要なライブラリを確認しています..."
 echo "   OK"
 echo ""
 
-echo "▶ [2/5] 2時間24分の動画を 12 本作ります (いちばん時間がかかります)"
+echo "▶ [2/5] 2時間24分の動画を 16 本作ります (いちばん時間がかかります)"
 "$PY" render_bgm.py --tracks \
   01_lofi_rainy_study 02_deep_sleep_ambient 03_piano_and_rain \
   04_cozy_coffee_jazz 05_bossa_nova_cafe 06_healing_meditation_432 \
   07_fireplace_winter_jazz 08_ocean_waves_ambient 09_fantasy_tavern \
   10_deep_focus_flow 12_anime_piano_emotional 13_fresh_morning_acoustic \
+  14_japanese_lofi_koto 15_rain_thunder_night 16_autumn_cafe_jazz \
+  17_christmas_jazz \
   || { echo "エラーで止まりました。"; exit 1; }
 echo ""
 

@@ -997,7 +997,243 @@ def scene_morning_meadow(seed: int = 42):
     return frame
 
 
+def scene_lantern_street(seed: int = 51):
+    """
+    提灯の並ぶ夜の路地。和風ローファイ用。
+    構図は night_drive と同じ「奥へ引き込む一点透視」だが、
+    光源を提灯の暖色に置き換えるだけで日本の路地になる。
+    """
+    rng = np.random.default_rng(seed)
+    horizon = int(H * 0.52)
+    vpx = int(W * 0.5)
+
+    sky = vgrad([(10, 10, 24), (18, 16, 36), (30, 22, 44), (16, 14, 30)],
+                stops=[0.0, 0.35, 0.52, 1.0])
+    base = np.clip(screen(sky, radial_glow(0.5, 0.50, 0.5, (60, 36, 40),
+                                           0.5, falloff=1.6)), 0, 255)
+
+    im = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+    # 路面 (石畳風の台形)
+    d.polygon([(int(W * 0.30), horizon), (int(W * 0.70), horizon),
+               (W + 200, H), (-200, H)], fill=(26, 22, 26))
+    # 両側の建物シルエット
+    for side in (-1, 1):
+        for k in range(6):
+            u = k / 6.0
+            x0 = vpx + side * int((60 + 900 * u))
+            wdt = int(30 + 200 * u)
+            hgt = int(60 + 460 * u)
+            xa, xb = sorted((x0, x0 + side * wdt))
+            d.rectangle([xa, horizon - hgt, xb, horizon + int(180 * u) + 40],
+                        fill=(14, 12, 20))
+    stat = np.asarray(im, dtype=np.float32)
+    smask = (stat.sum(axis=2) > 1)[:, :, None]
+
+    # 提灯の位置 (両側に奥へ並べる)
+    lanterns = []
+    for side in (-1, 1):
+        for k in range(7):
+            u = (k + 0.5) / 7.0
+            lx = (vpx + side * (46 + 780 * u ** 1.25)) / W
+            ly = (horizon - 40 - 240 * u * 0.35 + 90 * u) / H
+            lanterns.append((lx, ly, 0.010 + 0.030 * u, k * 1.7 + (side + 1)))
+    base = vignette(base, 0.42) + static_grain(seed=seed, amount=2.2)
+
+    def frame(t01):
+        img = base.copy()
+        img = np.where(smask, stat, img)
+        for lx, ly, r, ph in lanterns:
+            # 提灯の揺れ (ごくわずかに左右へ)
+            sway = 0.004 * np.sin(TWO_PI * (t01 + ph * 0.13))
+            flicker = 0.82 + 0.18 * np.sin(TWO_PI * (2 * t01 + ph))
+            img = screen(img, radial_glow(lx + sway, ly, r * 3.2,
+                                          (255, 120, 40), 0.55 * flicker,
+                                          falloff=1.7, res_div=3))
+            img = screen(img, radial_glow(lx + sway, ly, r,
+                                          (255, 190, 110), 0.95 * flicker,
+                                          falloff=1.2, res_div=3))
+        # 蛍のような微光の粒
+        img = screen(img, _particle_layer(
+            t01, 14, seed + 2, H, W, length=0.0, thickness=5.0,
+            color=(180, 150, 80), speed=1.0, drift=0.6, size_var=1.3,
+            glow=True) * 0.35)
+        return img
+    return frame
+
+
+def scene_storm_window(seed: int = 52):
+    """
+    雷雨の夜の窓。rainy_window の強雨版 + 稲光。
+
+    稲光はループを壊しやすい要素なので、光る時刻を t01 上に
+    固定で埋め込む (乱数はシードで固定)。フレーム関数は t01 だけの
+    純関数のままなので、末尾→先頭は必ず連続する。
+    """
+    rng = np.random.default_rng(seed)
+    bg = vgrad([(7, 8, 17), (12, 14, 26), (18, 19, 33), (9, 10, 18)])
+    # 遠くの街灯のボケ玉 (嵐の夜なので数を減らし、寒色寄りに)
+    lights = np.zeros_like(bg)
+    for _ in range(16):
+        cx, cy = rng.uniform(0.05, 0.95), rng.uniform(0.35, 0.85)
+        r = rng.uniform(0.018, 0.06)
+        warm = rng.random() < 0.45
+        col = ((255, 180, 105) if warm else (120, 165, 235))
+        lights += radial_glow(cx, cy, r, col, rng.uniform(0.25, 0.7))
+    base = np.clip(screen(bg, blur(lights, 28.0)), 0, 255)
+    base = blur(base, 8.0)                    # ガラス越しのボケ
+    base = vignette(base, 0.5) + static_grain(seed=seed, amount=2.4)
+
+    # 窓枠
+    im = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+    for x in (int(W * 0.055), int(W * 0.492), int(W * 0.93)):
+        d.rectangle([x, 0, x + int(W * 0.014), H], fill=(15, 12, 11))
+    d.rectangle([0, int(H * 0.475), W, int(H * 0.507)], fill=(15, 12, 11))
+    frame_a = np.asarray(im, dtype=np.float32)
+    fmask = (frame_a.sum(axis=2) > 1)[:, :, None]
+
+    # 稲光のスケジュール: (発生時刻 t01, 強さ, 画面上の横位置)。
+    # 時刻を固定で埋め込むので、ループしても稲光の位置関係は保たれる
+    flashes = [(float(rng.uniform(0, 1)), float(rng.uniform(0.5, 1.0)),
+                float(rng.uniform(0.2, 0.8))) for _ in range(5)]
+
+    def frame(t01):
+        img = base.copy()
+        # 稲光: 一瞬立ち上がって数百 ms で減衰。空全体をわずかに明るくし、
+        # 発生位置の周りを強く光らせる
+        for ft, fs, fx in flashes:
+            dt = (t01 - ft) % 1.0
+            k = np.exp(-dt * 90.0) * fs
+            if k > 0.01:
+                img = img * (1.0 + 0.5 * k)
+                img = screen(img, radial_glow(fx, 0.15, 0.7,
+                                              (175, 185, 235), 1.2 * k,
+                                              falloff=1.5, res_div=3))
+        # ガラスを流れる雨。ほぼ垂直 (drift を大きくすると引っかき傷になる)
+        img = screen(img, _particle_layer(
+            t01, 230, seed + 1, H, W, length=0.06, thickness=2.0,
+            color=(140, 160, 200), speed=4.0, drift=0.02, glow=True) * 0.6)
+        img = screen(img, _particle_layer(
+            t01, 300, seed + 2, H, W, length=0.025, thickness=1.0,
+            color=(105, 125, 160), speed=7.0, drift=0.01) * 0.45)
+        img = np.where(fmask, frame_a, img)
+        return np.clip(img, 0, 255)
+    return frame
+
+
+def scene_autumn_leaves(seed: int = 53):
+    """
+    秋。夕方の琥珀色の光と、舞い落ちる葉。
+    """
+    rng = np.random.default_rng(seed)
+    y, x = _yx()
+    sky = vgrad([(96, 60, 40), (152, 92, 52), (198, 130, 66),
+                 (170, 104, 56), (92, 56, 36)],
+                stops=[0.0, 0.30, 0.55, 0.72, 1.0])
+    base = np.clip(screen(sky, radial_glow(0.32, 0.38, 0.40, (255, 200, 120),
+                                           0.65, falloff=1.7)), 0, 255)
+
+    # 紅葉の茂み (画面の上両隅から覆いかぶさる)。
+    # 枝を線で描くと棒にしか見えないので、葉の塊を楕円の集まりで作り、
+    # ぼかした白黒を alpha として使う (morning_meadow と同じ手法)
+    # 樹冠は「隅からの距離場 + ノイズで揺らした縁」で作る。
+    # 楕円をばら撒く方式は、密度が足りないと泥はねに見えてしまう
+    ar = W / H
+    edge = _cloud_field(seed + 7, kx_max=5, ky_scale=3.0, n_waves=8)
+    fa = np.zeros((H, W), dtype=np.float32)
+    for cx, cy, r0 in ((-0.10, -0.35, 0.72), (1.10, -0.30, 0.66)):
+        dd = np.sqrt(((x - cx) * ar) ** 2 + (y - cy) ** 2)
+        fa = np.maximum(fa, np.clip((r0 + 0.09 * edge - dd) / 0.05, 0, 1))
+    fa = fa[:, :, None]
+    # 逆光の紅葉なので暗い赤茶
+    fol_col = np.array([70, 34, 20], dtype=np.float32)
+
+    # 地面に積もった葉
+    ground = vgrad([(120, 70, 34), (86, 48, 26), (56, 32, 20)],
+                   stops=[0.80, 0.90, 1.0])
+    gmask = np.clip((y - 0.80) / 0.012, 0, 1)[:, :, None]
+    base = vignette(base, 0.36) + static_grain(seed=seed, amount=2.2)
+
+    def frame(t01):
+        img = base.copy()
+        img = img * (1.0 - gmask) + ground * gmask
+        img = img * (1.0 - fa) + fol_col * fa
+        # 舞い落ちる葉 (2 層: 大きくゆっくり / 小さく速く)。
+        # 短い斜めの線にすると「葉がひらひら落ちる」感じに寄る
+        img = screen(img, _particle_layer(
+            t01, 34, seed + 3, H, W, length=0.006, thickness=8.0,
+            color=(225, 118, 36), speed=1.0, drift=0.05, size_var=1.5) * 0.9)
+        img = screen(img, _particle_layer(
+            t01, 24, seed + 4, H, W, length=0.005, thickness=5.5,
+            color=(185, 84, 28), speed=2.0, drift=0.04, size_var=1.2) * 0.65)
+        return img
+    return frame
+
+
+def scene_christmas_window(seed: int = 54):
+    """
+    クリスマスの夜の窓辺。雪、ツリーの灯り、暖色の部屋。
+    """
+    rng = np.random.default_rng(seed)
+    # 夜の屋外 (窓の外) — 深い青
+    bg = vgrad([(10, 14, 34), (16, 22, 46), (24, 32, 60), (14, 18, 40)])
+    base = np.clip(screen(bg, radial_glow(0.30, 0.30, 0.34, (120, 140, 190),
+                                          0.4, falloff=1.9)), 0, 255)
+
+    # ツリーのシルエット (右手前) と灯り
+    im = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+    cx, cy = int(W * 0.78), int(H * 0.92)
+    for k in range(4):
+        wdt = 420 - 90 * k
+        top = cy - 240 - 150 * k
+        d.polygon([(cx - wdt // 2, top + 210), (cx + wdt // 2, top + 210),
+                   (cx, top)], fill=(10, 26, 16))
+    tree = np.asarray(im, dtype=np.float32)
+    tmask = (tree.sum(axis=2) > 1)[:, :, None]
+
+    # ツリーの電飾 (シルエット内にランダムに配置)
+    lights = []
+    for _ in range(46):
+        u = rng.random()
+        lvl = int(u * 3.999)
+        wdt = (420 - 90 * lvl) * 0.42
+        ly = cy - 130 - 150 * lvl - rng.random() * 130
+        lx = cx + (rng.random() * 2 - 1) * wdt * (1.0 - 0.3 * rng.random())
+        col = [(255, 90, 60), (255, 200, 90), (120, 200 , 255), (180, 255, 140)][
+            int(rng.integers(0, 4))]
+        lights.append((lx / W, ly / H, col, float(rng.uniform(0, 6.28))))
+
+    base = vignette(base, 0.42) + static_grain(seed=seed, amount=2.2)
+
+    def frame(t01):
+        img = base.copy()
+        img = np.where(tmask, tree, img)
+        # 電飾: それぞれ位相の違う 2 周期のまたたき
+        for lx, ly, col, ph in lights:
+            tw = 0.55 + 0.45 * np.sin(TWO_PI * (2 * t01) + ph)
+            img = screen(img, radial_glow(lx, ly, 0.012, col, 0.9 * tw,
+                                          falloff=1.2, res_div=3))
+        # 部屋の暖色の光が左から差す
+        img = screen(img, radial_glow(0.06, 0.72, 0.5, (200, 120, 50),
+                                      0.5, falloff=1.8, res_div=3))
+        # 雪 (2 層)
+        img = screen(img, _particle_layer(
+            t01, 90, seed + 2, H, W, length=0.0, thickness=4.4,
+            color=(235, 240, 250), speed=1.0, drift=0.7, size_var=1.3) * 0.8)
+        img = screen(img, _particle_layer(
+            t01, 50, seed + 3, H, W, length=0.0, thickness=7.0,
+            color=(255, 255, 255), speed=2.0, drift=0.5, size_var=1.5) * 0.55)
+        return img
+    return frame
+
+
 SCENES = {
+    "lantern_street": scene_lantern_street,
+    "storm_window": scene_storm_window,
+    "autumn_leaves": scene_autumn_leaves,
+    "christmas_window": scene_christmas_window,
     "anime_dusk": scene_anime_dusk,
     "morning_meadow": scene_morning_meadow,
     "night_drive": scene_night_drive,

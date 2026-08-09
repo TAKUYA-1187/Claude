@@ -514,6 +514,29 @@ def play_jazz_brushes(buf: np.ndarray, spans: list[Span], clock: Clock, bank,
                                g * 0.32, 0.25)
 
 
+def play_sleigh(buf: np.ndarray, spans: list[Span], clock: Clock, bank,
+                gain: float = 0.14, rng: np.random.Generator | None = None) -> None:
+    """
+    スレイベル。8分で振り続け、表拍にアクセント。
+    クリスマス感はほぼこれ 1 本で出る。音量を上げすぎると安っぽくなる。
+    """
+    rng = rng or np.random.default_rng(9)
+    bpb = clock.beats_per_bar
+    for b in range(clock.bars):
+        base_beat = b * bpb
+        sp = chord_at(spans, base_beat)
+        if sp.section.density < 0.5:
+            continue
+        g = gain * (0.6 + 0.5 * sp.section.density)
+        for i in range(bpb * 2):
+            off = i * 0.5
+            vel = 1.0 if i % 2 == 0 else 0.62
+            add_panned(buf, bank.hit("sleigh"),
+                       clock.at(base_beat + off) + humanize(rng, 9.0),
+                       g * vel * float(rng.uniform(0.8, 1.0)),
+                       float(rng.uniform(-0.1, 0.1)))
+
+
 def play_bossa_perc(buf: np.ndarray, spans: list[Span], clock: Clock, bank,
                     gain: float = 0.20, rng: np.random.Generator | None = None) -> None:
     """ボサノヴァのリズム。シェイカー + リム (クラーベ風)"""
