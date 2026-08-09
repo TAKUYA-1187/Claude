@@ -502,83 +502,189 @@ def scene_minimal_gradient(seed: int = 10):
     return frame
 
 
+def _city_layers(rng, w, h, horizon, tower_x=0.56):
+    """
+    夜のビル群と電波塔を描いた RGB 配列を返す。
+    写真は著作権上使えないので、矩形と光だけで街を組み立てる。
+    """
+    city = Image.new("RGB", (w, h), (0, 0, 0))
+    d = ImageDraw.Draw(city)
+
+    # 奥から手前へ3層。奥ほど暗く、低く、窓が少ない
+    for layer, (dark, hmax, wmin, wmax, dens) in enumerate([
+            (0.30, 0.26, 46, 110, 0.16),
+            (0.55, 0.34, 70, 150, 0.24),
+            (1.00, 0.22, 96, 210, 0.30)]):
+        x = -80
+        while x < w + 80:
+            bw = int(rng.integers(wmin, wmax))
+            # 1割ほどは飛び抜けて高いビルにして、平坦なスカイラインを避ける
+            tall = rng.random() < 0.10
+            bh = int(rng.uniform(0.30, 1.0) * hmax * h * (1.9 if tall else 1.0))
+            top = horizon - bh + layer * 22
+            col = tuple(int(v * dark) for v in (20, 24, 38))
+            d.rectangle([x, top, x + bw, h], fill=col)
+            # 屋上の航空障害灯
+            if rng.random() < 0.35:
+                d.ellipse([x + bw // 2 - 3, top - 3, x + bw // 2 + 3, top + 3],
+                          fill=(255, 90, 70))
+            # 窓
+            step_y, step_x = 20, 16
+            for wy in range(top + 10, h, step_y):
+                for wx in range(x + 8, x + bw - 7, step_x):
+                    if rng.random() < dens:
+                        warm = rng.random() < 0.78
+                        c = (255, 205, 128) if warm else (168, 205, 255)
+                        f = 0.45 + 0.55 * dark
+                        d.rectangle([wx, wy, wx + 6, wy + 8],
+                                    fill=tuple(int(v * f) for v in c))
+            x += bw + int(rng.integers(3, 16))
+
+    # 電波塔
+    tx = int(w * tower_x)
+    base_y, top_y = horizon + 6, int(h * 0.12)
+    seg = 70
+    for i in range(seg):
+        t0, t1 = i / seg, (i + 1) / seg
+        y0 = base_y + (top_y - base_y) * t0
+        y1 = base_y + (top_y - base_y) * t1
+        half0 = int(104 * (1.0 - t0) ** 1.9) + 4
+        half1 = int(104 * (1.0 - t1) ** 1.9) + 4
+        # 鉄骨のトラス感を出すため、明暗を交互に
+        c = (46, 34, 34) if i % 2 == 0 else (34, 26, 28)
+        d.polygon([(tx - half0, y0), (tx + half0, y0),
+                   (tx + half1, y1), (tx - half1, y1)], fill=c)
+    # 展望台
+    for t, hw, hh in ((0.42, 60, 16), (0.74, 34, 11)):
+        y = base_y + (top_y - base_y) * t
+        d.rectangle([tx - hw, y - hh, tx + hw, y + hh], fill=(58, 40, 36))
+    # ライトアップと頂部の灯り
+    for t, r, c in ((0.20, 7, (255, 168, 92)), (0.42, 10, (255, 186, 110)),
+                    (0.62, 7, (255, 168, 92)), (0.80, 6, (255, 150, 80)),
+                    (0.95, 5, (255, 90, 70))):
+        y = base_y + (top_y - base_y) * t
+        d.ellipse([tx - r, y - r, tx + r, y + r], fill=c)
+    d.line([(tx, top_y), (tx, top_y - 78)], fill=(44, 34, 38), width=4)
+    return np.asarray(city, dtype=np.float32)
+
+
 def scene_night_skyline(seed: int = 11):
     """
-    夜の街のスカイライン。
-    無数の窓明かりと、中央にそびえる電波塔のシルエット。
+    夜の街のスカイライン。手前に川、対岸にビル群、中央に電波塔。
 
-    実在の写真は使えない (著作権) ので、矩形とグローだけで組み立てている。
-    そのぶん完全にオリジナルで、ぼかせば「どこかの街の夜」に見える。
+    「綺麗な夜景」を成立させているのは主に3つ:
+      - 空を単色にせず、地平線近くを街の光で暖色に染める
+      - ビルの光を大きくぼかして空へ滲ませる (ブルーム)
+      - 水面に街を映し、横方向の波でゆっくり歪ませる
     """
     rng = np.random.default_rng(seed)
-    bg = vgrad([(6, 9, 22), (12, 17, 38), (26, 28, 52), (44, 36, 48)])
+    horizon = int(H * 0.62)
 
-    city = Image.new("RGB", (W, H), (0, 0, 0))
-    d = ImageDraw.Draw(city)
-    horizon = int(H * 0.72)
+    # 空 — 上は藍、地平線近くは街明かりで暖色に
+    sky = vgrad([(4, 7, 22), (9, 13, 34), (20, 22, 48),
+                 (52, 40, 58), (86, 60, 54)],
+                stops=[0.0, 0.28, 0.46, 0.56, 0.62])
+    # 星
+    n_star = 420
+    sx = rng.integers(0, W, n_star)
+    sy = (rng.random(n_star) ** 2.0 * horizon * 0.72).astype(int)
+    sv = rng.uniform(50, 190, n_star).astype(np.float32)
+    sky[sy, sx] += sv[:, None]
 
-    # ビル群 (奥から手前へ3層。奥ほど暗く小さく)
-    for layer, (dark, hmax, wmin, wmax) in enumerate(
-            [(0.35, 0.30, 60, 130), (0.6, 0.42, 80, 170), (1.0, 0.26, 110, 240)]):
-        x = -60
-        while x < W + 60:
-            bw = int(rng.integers(wmin, wmax))
-            bh = int(rng.uniform(0.35, 1.0) * hmax * H)
-            top = horizon - bh + layer * 26
-            col = tuple(int(v * dark) for v in (18, 22, 34))
-            d.rectangle([x, top, x + bw, H], fill=col)
-            # 窓明かり
-            for wy in range(top + 12, H, 22):
-                for wx in range(x + 10, x + bw - 8, 18):
-                    if rng.random() < 0.28 - 0.08 * layer:
-                        warm = rng.random() < 0.75
-                        c = (255, 208, 130) if warm else (170, 205, 255)
-                        c = tuple(int(v * (0.5 + 0.5 * dark)) for v in c)
-                        d.rectangle([wx, wy, wx + 7, wy + 9], fill=c)
-            x += bw + int(rng.integers(4, 18))
-
-    # 電波塔 (中央やや右)
-    tx = int(W * 0.56)
-    base_y, top_y = horizon + 10, int(H * 0.14)
-    for i in range(60):
-        t = i / 59.0
-        y0 = base_y + (top_y - base_y) * t
-        y1 = base_y + (top_y - base_y) * (t + 1 / 59.0)
-        half = int(96 * (1.0 - t) ** 1.8) + 4
-        d.polygon([(tx - half, y0), (tx + half, y0),
-                   (tx + max(half - 3, 3), y1), (tx - max(half - 3, 3), y1)],
-                  fill=(30, 24, 30))
-    # 塔の灯り
-    for t, r in ((0.30, 9), (0.55, 7), (0.78, 6), (0.94, 5)):
-        y = base_y + (top_y - base_y) * t
-        d.ellipse([tx - r, y - r, tx + r, y + r], fill=(255, 140, 80))
-    d.line([(tx, top_y), (tx, top_y - 70)], fill=(40, 32, 38), width=5)
-
-    city_a = np.asarray(city, dtype=np.float32)
-    base = np.clip(screen(bg, city_a * 0.0) , 0, 255)
+    city_a = _city_layers(rng, W, H, horizon)
     mask = (city_a.sum(axis=2) > 1)[:, :, None]
-    base = np.where(mask, city_a, bg)
-    # 街の光が空へにじむ
-    base = screen(base, blur(np.where(city_a > 90, city_a, 0.0), 34.0) * 0.55)
-    base = vignette(base, 0.5) + static_grain(seed=seed, amount=2.0)
+    base = np.where(mask, city_a, sky)
+
+    # 街の光を空へ滲ませる (ブルーム)。
+    # 小さな窓を大きくぼかすと値が一気に落ちるので、
+    # 半径の違う3段を強めに増幅して重ねる。これが「夜景らしさ」の正体。
+    lights = np.where(city_a > 100, city_a, 0.0)
+    base = screen(base, np.clip(blur(lights, 60.0) * 4.0, 0, 255) * 0.30)
+    base = screen(base, np.clip(blur(lights, 22.0) * 2.6, 0, 255) * 0.30)
+    base = screen(base, np.clip(blur(lights, 7.0) * 1.8, 0, 255) * 0.42)
+    # 街全体が空を染める光のドーム
+    base = screen(base, radial_glow(0.5, 0.63, 0.62, (150, 96, 70), 0.38,
+                                    falloff=1.5))
+    base = screen(base, radial_glow(0.56, 0.50, 0.26, (170, 110, 78), 0.35,
+                                    falloff=1.6))
+
+    # 川 — 街を上下反転して映し、暗く沈める
+    water_top = int(H * 0.78)
+    refl = base[:water_top][::-1]
+    wh = H - water_top
+    refl = refl[:wh] if refl.shape[0] >= wh else np.vstack(
+        [refl, np.zeros((wh - refl.shape[0], W, 3), np.float32)])
+    # 反射は縦に引き伸ばしてから軽くぼかすと、水面に光の筋が伸びる
+    refl_img = Image.fromarray(np.clip(refl, 0, 255).astype(np.uint8))
+    refl_img = refl_img.resize((W, wh), Image.BILINEAR)
+    refl = np.asarray(refl_img, dtype=np.float32)
+    streak = np.asarray(
+        Image.fromarray(np.clip(refl, 0, 255).astype(np.uint8))
+        .filter(ImageFilter.GaussianBlur(2)).resize((W // 6, wh), Image.BILINEAR)
+        .resize((W, wh), Image.BILINEAR), dtype=np.float32)
+    base[water_top:] = np.clip(blur(refl, 5.0) * 0.55 + streak * 0.35, 0, 255)
+    # 岸辺を暗く締める
+    base[water_top - 6:water_top + 4] *= 0.30
+
+    base = vignette(base, 0.48) + static_grain(seed=seed, amount=2.0)
+    y, x = _yx()
+    water_mask = np.clip((y - (water_top / H)) / 0.05, 0, 1)
 
     def frame(t01):
         img = base.copy()
-        # 塔の赤灯がゆっくり明滅する
+        # 水面のゆらぎ (縦方向に波打たせて反射を崩す)
+        wv = periodic_noise(t01, scale=2.0, cycles=1, seed=seed + 4, n_waves=4)
+        img += (water_mask * (0.5 + 0.5 * wv) * 16.0)[:, :, None] \
+            * np.array([0.55, 0.65, 1.0], dtype=np.float32)
+        # 塔の頂の赤灯が明滅
         pulse = 0.5 + 0.5 * np.sin(TWO_PI * t01)
-        img = screen(img, radial_glow(0.56, 0.30, 0.05, (255, 120, 60),
-                                      0.25 + 0.25 * pulse, res_div=3))
-        # 空気のゆらぎ
-        h = periodic_noise(t01, scale=1.2, cycles=1, seed=seed + 3, n_waves=3)
-        y, _ = _yx()
-        haze = np.clip((0.78 - y) / 0.5, 0, 1) * (0.5 + 0.5 * h) * 0.10
-        img = screen(img, haze[:, :, None] * np.array([90, 110, 160], dtype=np.float32))
+        img = screen(img, radial_glow(0.56, 0.135, 0.035, (255, 90, 70),
+                                      0.30 + 0.40 * pulse, res_div=3))
+        img = screen(img, radial_glow(0.56, 0.34, 0.10, (255, 170, 95),
+                                      0.10 + 0.06 * pulse, res_div=3))
+        # 空の薄雲がゆっくり流れる
+        hz = periodic_noise(t01, scale=0.9, cycles=1, seed=seed + 7, n_waves=3)
+        haze = np.clip((0.60 - y) / 0.55, 0, 1) * (0.5 + 0.5 * hz) * 0.13
+        img = screen(img, haze[:, :, None]
+                     * np.array([120, 110, 160], dtype=np.float32))
+        return img
+    return frame
+
+
+def scene_rainy_city(seed: int = 23):
+    """
+    雨の夜の街。スカイラインの上に雨を降らせ、ガラス越しにぼかす。
+    lofi の定番構図を、単なるボケ玉ではなく「街」として描く。
+    """
+    rng = np.random.default_rng(seed)
+    horizon = int(H * 0.68)
+    sky = vgrad([(6, 8, 20), (12, 14, 32), (26, 24, 44), (64, 46, 52)],
+                stops=[0.0, 0.34, 0.54, 0.68])
+    city_a = _city_layers(rng, W, H, horizon, tower_x=0.34)
+    mask = (city_a.sum(axis=2) > 1)[:, :, None]
+    base = np.where(mask, city_a, sky)
+    lights = np.where(city_a > 100, city_a, 0.0)
+    base = screen(base, blur(lights, 54.0) * 0.85)
+    base = blur(base, 9.0)                       # ガラス越し
+    base = vignette(base, 0.46) + static_grain(seed=seed)
+
+    def frame(t01):
+        img = base.copy()
+        img = screen(img, _particle_layer(t01, 200, seed + 1, H, W,
+                                          length=0.06, thickness=2,
+                                          color=(150, 175, 215), speed=3.0,
+                                          drift=0.02, glow=True) * 0.55)
+        img = screen(img, _particle_layer(t01, 280, seed + 2, H, W,
+                                          length=0.022, thickness=1,
+                                          color=(110, 132, 170), speed=6.0,
+                                          drift=0.01) * 0.42)
         return img
     return frame
 
 
 SCENES = {
     "night_skyline": scene_night_skyline,
+    "rainy_city": scene_rainy_city,
     "rainy_window": scene_rainy_window,
     "starry_night": scene_starry_night,
     "rain_street": scene_rain_street,

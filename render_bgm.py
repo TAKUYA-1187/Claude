@@ -168,6 +168,11 @@ def process(spec: TR.TrackSpec, args) -> dict:
     t_start = time.time()
     log(f"\n▸ {spec.slug}  ({spec.genre_ja})")
 
+    # 映像だけ作り直す場合は、時間のかかる音源合成を丸ごと飛ばす。
+    # 音は変えずに絵だけ差し替えたいときのための経路。
+    if args.visual_only:
+        return process_visual_only(spec, args, t_start)
+
     # ── 音源 ───────────────────────────────────────────────
     log("  音源を合成中...")
     t = time.time()
@@ -253,6 +258,44 @@ def process(spec: TR.TrackSpec, args) -> dict:
     return result
 
 
+def process_visual_only(spec: TR.TrackSpec, args, t_start: float) -> dict:
+    """既存の WAV を使い、映像・サムネ・本編だけ作り直す"""
+    wav = OUT / "audio" / f"{spec.slug}.wav"
+    if not wav.exists():
+        raise FileNotFoundError(f"{wav} がありません。先に通常のレンダリングが必要です。")
+
+    total_seconds = args.seconds * args.repeats
+    log("  映像ループを描画中...")
+    t = time.time()
+    vis = VID.encode_visual_loop(
+        spec.visual, OUT / "visual" / f"{spec.slug}.mp4", seed=spec.seed,
+        progress=lambda i, n: bar(i, n, spec.visual))
+    print()
+    log(f"    {spec.visual}  {vis.stat().st_size / 1e6:.1f} MB  ({time.time() - t:.0f}s)")
+
+    thumb_dir = OUT / "thumbnail"
+    thumb_dir.mkdir(parents=True, exist_ok=True)
+    VIS.thumbnail(spec.visual, _thumb_lines(spec, total_seconds),
+                  seed=spec.seed).save(thumb_dir / f"{spec.slug}.png")
+
+    log(f"  音声を {args.repeats} 回つないで AAC 化中...")
+    m4a = VID.loop_audio_to_aac(wav, OUT / "tmp" / f"{spec.slug}.m4a",
+                                repeats=args.repeats, bitrate=args.audio_bitrate)
+    log("  本編を書き出し中...")
+    out_mp4 = VID.mux_looped(vis, m4a, OUT / "video" / f"{spec.slug}.mp4",
+                             total_seconds=total_seconds)
+    pr = VID.probe(out_mp4)
+    log(f"    {out_mp4}  {VID.hhmmss(pr.get('duration_s', 0))}  "
+        f"{pr.get('size_mb', 0):.0f} MB")
+    if not args.keep_temp:
+        m4a.unlink(missing_ok=True)
+    return {"slug": spec.slug, "video": str(out_mp4), "probe": pr,
+            "total_seconds": total_seconds,
+            "total_hhmmss": VID.hhmmss(total_seconds),
+            "lufs": -14.0, "loop_seam_db": 0.0,
+            "elapsed_s": round(time.time() - t_start, 1)}
+
+
 def _thumb_lines(spec: TR.TrackSpec, total_seconds: float) -> list[str]:
     """サムネの文字。3〜4 語まで、用途が一目で分かること"""
     hours = int(total_seconds // 3600)
@@ -282,6 +325,8 @@ def main() -> int:
     ap.add_argument("--repeats", type=int, default=TR.LOOP_REPEATS,
                     help=f"ループ回数 (既定 {TR.LOOP_REPEATS})")
     ap.add_argument("--no-video", action="store_true", help="音源とメタだけ作る")
+    ap.add_argument("--visual-only", action="store_true",
+                    help="既存の音源を使い、映像とサムネだけ作り直して再多重化する")
     ap.add_argument("--audio-bitrate", default="256k")
     ap.add_argument("--keep-temp", action="store_true")
     args = ap.parse_args()

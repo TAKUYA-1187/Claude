@@ -326,3 +326,34 @@ Full {duration} version on the channel — no ads mid-track, seamless loop.
 
 #{tag1} #{tag2} #shorts
 """
+
+
+DESCRIPTIONS["11_sleep_city_8h"] = """\
+Eight hours. Enough for a whole night.
+
+This is the long one. Most sleep mixes stop after two or three hours and
+leave you in silence at 4am — this doesn't. Put it on when you get into
+bed and it will still be going when your alarm does.
+
+It's built the same way as the shorter sleep mix on this channel, but
+slower and in a different key: 46 BPM, D minor, and the chords hold for
+four bars at a time before they move. Wide pads, a drone underneath, and
+a singing bowl every few minutes. Nothing above 7 kHz, so there's no
+treble to keep you alert.
+
+The picture is a city at night from across the water, because that is
+what most of us actually fall asleep near.
+
+46 BPM · D minor · {duration} · seamless loop, no gaps.
+
+Not a medical treatment — just music designed to be easy to sleep through.
+
+— A different composition from the two-hour sleep mix on this channel.
+  Written and produced from scratch, like everything else here.
+"""
+
+SHORT_HOOKS["11_sleep_city_8h"] = [
+    "eight hours.\nenough for a whole night.",
+    "most sleep mixes leave you\nin silence at 4am",
+    "46 BPM. nothing\nabove 7 kilohertz.",
+]

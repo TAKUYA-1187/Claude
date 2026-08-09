@@ -510,7 +510,7 @@ TRACKS: list[TrackSpec] = [
         title_en="Rainy Lofi Study Beats",
         genre_ja="ローファイ・ヒップホップ（雨の窓辺）",
         use_case="study", bpm=78.0, key="Am", key_root=9, scale="minor",
-        prog_key="lofi", visual="rainy_window", seed=1011,
+        prog_key="lofi", visual="rainy_city", seed=1011,
         build=build_lofi_study,
         seo=dict(
             title="Rainy Lofi Beats to Study & Relax 🌧️ 2 Hours of Chill Hip Hop",
@@ -627,12 +627,28 @@ TRACKS: list[TrackSpec] = [
         title_en="Deep Focus Flow",
         genre_ja="ディープフォーカス（集中）",
         use_case="study", bpm=60.0, key="Am", key_root=9, scale="dorian",
-        prog_key="focus", visual="minimal_gradient", seed=1100,
+        prog_key="focus", visual="night_skyline", seed=1100,
         build=build_deep_focus,
         seo=dict(
             title="Deep Focus Music 🧠 2 Hours of Ambient Flow State Music for Studying & Work",
             keywords=["focus music", "concentration", "study music",
                       "deep work", "brown noise", "ambient", "productivity"],
+        ),
+    ),
+    # 再生時間の稼ぎ頭。8時間版として書き出す (--repeats 20)。
+    # 02 と同じジャンルだが seed も調も違うので完全に別の曲。
+    # 同じ音源を長さ違いで2本出すのはポリシー違反になるため、必ず別曲にする。
+    TrackSpec(
+        slug="11_sleep_city_8h",
+        title_en="All Night Sleep Ambient",
+        genre_ja="8時間睡眠アンビエント（夜の街）",
+        use_case="sleep", bpm=46.0, key="Dm", key_root=2, scale="minor",
+        prog_key="ambient", visual="night_skyline", seed=1212,
+        build=build_deep_sleep,
+        seo=dict(
+            title="8 Hour Sleep Music 🌃 Deep Ambient for a Full Night's Rest",
+            keywords=["8 hour sleep music", "sleep music", "deep sleep",
+                      "ambient", "insomnia", "relaxing music", "night"],
         ),
     ),
 ]
