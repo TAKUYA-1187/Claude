@@ -1,0 +1,33 @@
+{
+  "slug": "12_anime_piano_emotional",
+  "title": "Emotional Anime Piano 🌸 Beautiful Japanese Melodies for Study & Relaxing",
+  "description": "2:24:00 of piano written the way anime themes are written.\n\nThe feeling in those songs isn't an accident of production — it comes\nfrom the chord movement. Two progressions do most of the work here. The\nfirst is the one Japanese songwriters call the ōdō, the \"royal road\":\nIV–V–iii–vi. The move from the third chord to the fourth is where the\nache lives. The second is the Canon progression, where the bass walks\ndown step by step and the melody is free to drift over the top of it.\n\nSo this is built on those, in C major, and then left mostly alone. Piano\ncarries the melody, a soft string pad sits underneath, celesta adds a\nlittle light in the high register, and nothing else gets in the way.\nThere are no drums and no rain — atmosphere would only blunt it.\n\n76 BPM · C major · piano, strings, celesta, sub bass.\n\nFor studying, drawing, writing, long train rides, and the particular kind\nof evening where you want to feel something quietly.\n\n— Written and produced from scratch for this channel.\n",
+  "tags": [
+    "anime piano",
+    "emotional piano",
+    "japanese music",
+    "anime ost",
+    "sad piano",
+    "study music",
+    "relaxing piano",
+    "anime bgm"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "アニソン風・情感のあるピアノ",
+    "use_case": "relax",
+    "bpm": 76.0,
+    "key": "C",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.01,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -33.62,
+    "visual": "anime_dusk"
+  }
+}

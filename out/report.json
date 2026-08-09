@@ -1,27 +1,27 @@
 {
-  "total_seconds": 28800,
+  "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "11_sleep_city_8h",
-      "title": "8 Hour Sleep Music 🌃 Deep Ambient for a Full Night's Rest",
-      "bpm": 46.0,
-      "bars": 276,
-      "lufs": -13.99999992382867,
-      "true_peak_db": -1.0605286473732611,
-      "loop_seam_db": -43.25242231819337,
+      "slug": "12_anime_piano_emotional",
+      "title": "Emotional Anime Piano 🌸 Beautiful Japanese Melodies for Study & Relaxing",
+      "bpm": 76.0,
+      "bars": 456,
+      "lufs": -14.012137611120759,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -33.61571637526975,
       "loop_seconds": 1440,
-      "total_seconds": 28800,
-      "total_hhmmss": "8:00:00",
-      "video": "out/video/11_sleep_city_8h.mp4",
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/12_anime_piano_emotional.mp4",
       "probe": {
-        "size_mb": 2589.057559,
+        "size_mb": 773.125316,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "15",
-            "kbps": 459
+            "kbps": 455
           },
           {
             "type": "audio",
@@ -30,10 +30,44 @@
             "kbps": 256
           }
         ],
-        "duration_s": 28800.0,
-        "bitrate_kbps": 719
+        "duration_s": 8640.0,
+        "bitrate_kbps": 715
       },
-      "elapsed_s": 947.8
+      "elapsed_s": 595.8
+    },
+    {
+      "slug": "13_fresh_morning_acoustic",
+      "title": "Fresh Morning Music ☀️ Uplifting Acoustic for a Good Day",
+      "bpm": 104.0,
+      "bars": 624,
+      "lufs": -14.000000247440006,
+      "true_peak_db": -1.1963553430863452,
+      "loop_seam_db": -39.47830702786929,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/13_fresh_morning_acoustic.mp4",
+      "probe": {
+        "size_mb": 808.419057,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 476
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 268
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 748
+      },
+      "elapsed_s": 687.7
     }
   ]
 }

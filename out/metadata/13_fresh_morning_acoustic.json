@@ -1,0 +1,33 @@
+{
+  "slug": "13_fresh_morning_acoustic",
+  "title": "Fresh Morning Music ☀️ Uplifting Acoustic for a Good Day",
+  "description": "2:24:00 of acoustic music for the first part of the day.\n\nBright music goes wrong in a predictable way: it gets heavy. Pile on low\nend and busy parts and \"cheerful\" turns into tiring by the second hour.\nSo the arrangement here stays deliberately thin. Nylon-string guitar\nholds the chords, a marimba takes the melody, and there's a shaker\nkeeping a walking pace underneath. Everything below 55 Hz is cut, and the\nmix is tilted slightly toward the top end to keep air in it.\n\nThe chords are built on add9 and maj9 shapes rather than plain triads —\nopen-sounding, unresolved, easy to leave running. The key is D major.\n\n104 BPM · D major · nylon guitar, marimba, upright bass, shaker.\n\nFor mornings, commutes, cleaning the flat, opening a café, and work that\nyou'd rather not feel serious about.\n\n— Written and produced from scratch for this channel.\n",
+  "tags": [
+    "morning music",
+    "fresh music",
+    "acoustic",
+    "positive music",
+    "good morning",
+    "happy music",
+    "work music",
+    "cafe acoustic"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "爽やかな朝のアコースティック",
+    "use_case": "work",
+    "bpm": 104.0,
+    "key": "D",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.2,
+    "loop_seam_db": -39.48,
+    "visual": "morning_meadow"
+  }
+}
