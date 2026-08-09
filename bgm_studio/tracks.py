@@ -98,13 +98,29 @@ def _finish(buf: np.ndarray, clock: Clock, spec: TrackSpec,
     music = dsp.fold_tail(buf, n)
     del buf          # 500MB 級なので明示的に手放す
 
-    # beds は「呼ぶと環境音を返す関数」のリスト。
-    # 全部を先に作ると 24 分 × 3 レイヤーで 1.5GB 常駐してしまうので、
-    # 1 本ずつ生成して足したそばから捨てる。
+    # ── 環境音を「音楽に対する相対レベル」で混ぜる ──────────
+    #
+    # ここは一度、固定ゲインで作って失敗している。
+    # 雨が音楽より +6.9dB 大きくなり、「ノイズの下で楽器が鳴っている」
+    # 状態になった。環境音の音量を勘で決めてはいけない。
+    #
+    # 正しくは、音楽の RMS を測ってから、その何 dB 下に置くかを指定する。
+    # 目安:
+    #   -10 〜 -14 dB … その環境音が主役の曲 (波、雨とピアノ)
+    #   -16 〜 -20 dB … 情景として聞かせたい (焚き火、カフェ)
+    #   -22 〜 -26 dB … 質感として敷くだけ (レコードノイズ)
+    #   -30 dB 以下   … 無音を避けるためだけの床 (部屋鳴り)
+    music_rms = float(np.sqrt(np.mean(music.astype(np.float64) ** 2))) + 1e-9
+    bed_report = []
     if beds:
-        for make_bed in beds:
+        for item in beds:
+            make_bed, rel_db = item if isinstance(item, tuple) else (item, -20.0)
             b = make_bed() if callable(make_bed) else make_bed
-            music[:, :] += b[:n]
+            b = b[:n]
+            b_rms = float(np.sqrt(np.mean(b.astype(np.float64) ** 2))) + 1e-12
+            g = float(music_rms * dsp.db2lin(rel_db) / b_rms)
+            music[:, :] += (b * np.float32(g))
+            bed_report.append(round(rel_db, 1))
             del b
 
     # ワウフラッターは読み出し位置を巡回させる必要があるので、
@@ -119,6 +135,7 @@ def _finish(buf: np.ndarray, clock: Clock, spec: TrackSpec,
 
     out, info = dsp.normalize_lufs(music, target=spec.target_lufs,
                                    ceiling_db=-1.0, circular=True)
+    info["bed_levels_db"] = bed_report
     info["seam_db"] = dsp.check_loop_seam(out)
     info["seam_dbfs"] = dsp.seam_step_dbfs(out)
     info["bpm"] = round(clock.bpm, 2)
@@ -151,9 +168,9 @@ def build_lofi_study(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
     ir = dsp.make_reverb_ir(2.6, rt60=2.0, damp=0.65, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.45, window=True) * 0.32,
-        lambda: dsp.to_stereo(I.vinyl_crackle(n, np.random.default_rng(spec.seed + 2))) * 0.9,
-        lambda: NT.room_tone(n, seed=spec.seed + 3) * 0.5,
+        (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.45, window=True), -21.0),
+        (lambda: dsp.to_stereo(I.vinyl_crackle(n, np.random.default_rng(spec.seed + 2))), -26.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -34.0),
     ]
 
     def warp(x):
@@ -192,8 +209,8 @@ def build_deep_sleep(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
                             width=1.2, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.35, window=True) * 0.26,
-        lambda: NT.room_tone(n, seed=spec.seed + 2) * 0.8,
+        (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.35, window=True), -18.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 2), -32.0),
     ]
 
     def master(x):
@@ -231,9 +248,9 @@ def build_piano_rain(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
     ir = dsp.make_reverb_ir(4.0, rt60=3.6, damp=0.55, predelay=0.03, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.7, window=True) * 0.55,
-        lambda: NT.thunder(n, seed=spec.seed + 2, count=3) * 0.35,
-        lambda: NT.room_tone(n, seed=spec.seed + 3) * 0.6,
+        (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.7, window=True), -13.0),
+        (lambda: NT.thunder(n, seed=spec.seed + 2, count=3), -20.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -32.0),
     ]
 
     def master(x):
@@ -269,8 +286,8 @@ def build_cafe_jazz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
     ir = dsp.make_reverb_ir(2.2, rt60=1.5, damp=0.5, predelay=0.015, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        lambda: NT.cafe_ambience(n, seed=spec.seed + 1) * 0.30,
-        lambda: NT.room_tone(n, seed=spec.seed + 2) * 0.5,
+        (lambda: NT.cafe_ambience(n, seed=spec.seed + 1), -20.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 2), -32.0),
     ]
 
     def master(x):
@@ -305,8 +322,8 @@ def build_bossa(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
     ir = dsp.make_reverb_ir(2.0, rt60=1.3, damp=0.45, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        lambda: NT.cafe_ambience(n, seed=spec.seed + 1) * 0.20,
-        lambda: NT.room_tone(n, seed=spec.seed + 2) * 0.4,
+        (lambda: NT.cafe_ambience(n, seed=spec.seed + 1), -24.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 2), -34.0),
     ]
 
     def master(x):
@@ -339,7 +356,7 @@ def build_healing_432(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict
     ir = dsp.make_reverb_ir(6.0, rt60=8.0, damp=0.7, predelay=0.06,
                             width=1.3, seed=spec.seed)
     n = clock.n_samples
-    beds = [NT.room_tone(n, seed=spec.seed + 1) * 0.7]
+    beds = [(lambda: NT.room_tone(n, seed=spec.seed + 1), -32.0)]
 
     def master(x):
         x = dsp.tilt_eq(x, pivot=650.0, gain_db=-5.5)
@@ -377,8 +394,8 @@ def build_winter_fire(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict
     ir = dsp.make_reverb_ir(2.8, rt60=2.2, damp=0.6, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        lambda: NT.fireplace(n, seed=spec.seed + 1) * 0.42,
-        lambda: NT.room_tone(n, seed=spec.seed + 2) * 0.6,
+        (lambda: NT.fireplace(n, seed=spec.seed + 1), -16.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 2), -32.0),
     ]
 
     def master(x):
@@ -411,9 +428,9 @@ def build_ocean_ambient(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, di
     ir = dsp.make_reverb_ir(5.0, rt60=5.5, damp=0.68, width=1.25, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        lambda: NT.ocean(n, seed=spec.seed + 1, period=8.5) * 0.62,
-        lambda: NT.wind(n, seed=spec.seed + 2) * 0.12,
-        lambda: NT.room_tone(n, seed=spec.seed + 3) * 0.5,
+        (lambda: NT.ocean(n, seed=spec.seed + 1, period=8.5), -11.0),
+        (lambda: NT.wind(n, seed=spec.seed + 2), -26.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -32.0),
     ]
 
     def master(x):
@@ -450,9 +467,9 @@ def build_fantasy_tavern(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, d
     ir = dsp.make_reverb_ir(3.4, rt60=3.0, damp=0.5, predelay=0.025, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        lambda: NT.fireplace(n, seed=spec.seed + 1) * 0.40,
-        lambda: NT.cafe_ambience(n, seed=spec.seed + 2) * 0.14,   # 酒場のざわめき
-        lambda: NT.room_tone(n, seed=spec.seed + 3) * 0.6,
+        (lambda: NT.fireplace(n, seed=spec.seed + 1), -17.0),
+        (lambda: NT.cafe_ambience(n, seed=spec.seed + 2), -26.0),   # 酒場のざわめき
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -32.0),
     ]
 
     def master(x):
@@ -487,8 +504,8 @@ def build_deep_focus(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
     ir = dsp.make_reverb_ir(3.6, rt60=3.2, damp=0.62, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        lambda: NT.brown_noise_bed(n, seed=spec.seed + 1, tilt_hz=420.0) * 0.30,
-        lambda: NT.room_tone(n, seed=spec.seed + 2) * 0.5,
+        (lambda: NT.brown_noise_bed(n, seed=spec.seed + 1, tilt_hz=420.0), -22.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 2), -34.0),
     ]
 
     def master(x):
