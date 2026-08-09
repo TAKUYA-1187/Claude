@@ -682,7 +682,128 @@ def scene_rainy_city(seed: int = 23):
     return frame
 
 
+def scene_night_drive(seed: int = 31):
+    """
+    夜景の中をドライブしている映像。
+
+    「走っている」と感じさせるのは、細かい要素を足すことではなく、
+    長時間露光の光跡のように「光が尾を引いて流れる」ことだった。
+    最初は雨も街灯も細かく描いたが、引っかき傷のように見えたので削った。
+
+      - 街の光が消失点から外へ、太く柔らかい尾を引いて流れる
+      - 濡れた路面が前方の光を縦に反射する
+      - 先行車のテールランプが揺れながら遠ざかる
+      - 雨は控えめに。多いと視界の邪魔になり、就寝用に使えない
+
+    完全ループにするため、光跡は 1 周でちょうど画面外へ抜ける位相で動かす。
+    """
+    rng = np.random.default_rng(seed)
+    horizon = int(H * 0.50)
+    vpx, vpy = int(W * 0.50), horizon
+
+    # 空 — 上は藍、地平線近くは街明かりで暖色に
+    sky = vgrad([(4, 6, 18), (9, 12, 30), (24, 24, 46), (78, 52, 52)],
+                stops=[0.0, 0.24, 0.42, 0.50])
+
+    # 遠景のビル。主役ではないので暗く、密度も落とす
+    far = _city_layers(np.random.default_rng(seed + 1), W, H, horizon,
+                       tower_x=0.66)
+    mask = (far.sum(axis=2) > 1)[:, :, None]
+    base = np.where(mask, far * 0.42, sky)
+    lights = np.where(far > 100, far, 0.0)
+    base = screen(base, np.clip(blur(lights, 58.0) * 3.0, 0, 255) * 0.36)
+    base = screen(base, np.clip(blur(lights, 18.0) * 2.0, 0, 255) * 0.26)
+
+    # 路面
+    road = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(road)
+    d.polygon([(-int(W * 0.35), H), (int(W * 1.35), H),
+               (vpx + 46, vpy), (vpx - 46, vpy)], fill=(22, 20, 26))
+    # 車線 (実線2本 + 中央の破線)
+    for lx in (-0.34, 0.34):
+        d.polygon([(int(W * (0.5 + lx * 2.1)), H),
+                   (int(W * (0.5 + lx * 2.1)) + 26, H),
+                   (vpx + int(46 * lx * 2), vpy)], fill=(78, 74, 82))
+    for k in range(7):
+        t0 = (k / 7.0) ** 2.1
+        t1 = ((k + 0.45) / 7.0) ** 2.1
+        y0, y1 = vpy + (H - vpy) * t0, vpy + (H - vpy) * t1
+        w0, w1 = 3 + 26 * t0, 3 + 26 * t1
+        d.polygon([(vpx - w0, y0), (vpx + w0, y0),
+                   (vpx + w1, y1), (vpx - w1, y1)], fill=(96, 92, 100))
+    road_a = np.asarray(road, dtype=np.float32)
+    rmask = (road_a.sum(axis=2) > 1)[:, :, None]
+    base = np.where(rmask, road_a, base)
+    # 地平線の光の帯
+    base = screen(base, radial_glow(0.5, horizon / H, 0.55, (150, 96, 74),
+                                    0.42, falloff=1.4))
+
+    base = vignette(base, 0.50) + static_grain(seed=seed, amount=2.0)
+    y, x = _yx()
+    road_zone = np.clip((y - horizon / H) / 0.14, 0, 1)
+
+    # 光跡。少なく、太く、明るく
+    n_streak = 16
+    ang = rng.uniform(0, TWO_PI, n_streak)
+    ph0 = rng.random(n_streak)
+    warm = rng.random(n_streak) < 0.70
+    size = rng.uniform(0.7, 1.5, n_streak)
+
+    def frame(t01):
+        img = base.copy()
+
+        streaks = Image.new("RGB", (W, H), (0, 0, 0))
+        sd = ImageDraw.Draw(streaks)
+        for i in range(n_streak):
+            ph = (ph0[i] + t01) % 1.0
+            # 手前ほど加速し、尾も長くなる
+            r0 = 0.05 + ph ** 2.3 * 1.25
+            r1 = 0.05 + min(ph + 0.10 + 0.16 * ph, 1.25) ** 2.3 * 1.25
+            fade = min(ph * 5.0, 1.0) * (1.0 - ph * 0.55)
+            c0 = (255, 198, 120) if warm[i] else (146, 194, 255)
+            c = tuple(int(v * fade) for v in c0)
+            ca, sa_ = np.cos(ang[i]), np.sin(ang[i])
+            sd.line([vpx + ca * r0 * W * 0.9, vpy + sa_ * r0 * H * 0.9,
+                     vpx + ca * r1 * W * 0.9, vpy + sa_ * r1 * H * 0.9],
+                    fill=c, width=max(int(3 + 12 * ph * size[i]), 2))
+        sa = np.asarray(streaks, dtype=np.float32)
+        img = screen(img, sa * 0.55 + blur(sa, 20.0) * 1.6)
+
+        # 先行車のテールランプ
+        ty = horizon / H + 0.115 + 0.030 * np.sin(TWO_PI * t01)
+        for dx in (-0.026, 0.026):
+            img = screen(img, radial_glow(0.50 + dx, ty, 0.014,
+                                          (255, 66, 48), 0.95, res_div=3))
+        img = screen(img, radial_glow(0.50, ty, 0.085, (170, 44, 34),
+                                      0.26, res_div=3))
+        # 濡れた路面に落ちる縦の反射
+        img = screen(img, radial_glow(0.50, ty + 0.20, 0.05, (150, 40, 32),
+                                      0.20, falloff=1.2, res_div=3))
+
+        # 対向車が左から手前へ抜ける
+        hp = (t01 + 0.5) % 1.0
+        hx = 0.36 - 0.34 * hp ** 1.9
+        hy = horizon / H + 0.05 + 0.34 * hp ** 2.5
+        img = screen(img, radial_glow(hx, hy, 0.013 + 0.085 * hp ** 2.1,
+                                      (220, 234, 255), 0.22 + 0.80 * hp,
+                                      res_div=3))
+
+        # 路面の濡れた光沢
+        shine = periodic_noise(t01, scale=2.4, cycles=2, seed=seed + 5, n_waves=4)
+        img += (road_zone * (0.5 + 0.5 * shine) * 15.0)[:, :, None] \
+            * np.array([1.0, 0.80, 0.60], dtype=np.float32)
+
+        # 雨は控えめに。画面下半分だけ
+        rain = _particle_layer(t01, 45, seed + 9, H, W,
+                               length=0.030, thickness=2,
+                               color=(140, 162, 196), speed=5.0, drift=0.10)
+        img = screen(img, rain * np.clip((y - 0.30) / 0.35, 0, 1)[:, :, None] * 0.34)
+        return img
+    return frame
+
+
 SCENES = {
+    "night_drive": scene_night_drive,
     "night_skyline": scene_night_skyline,
     "rainy_city": scene_rainy_city,
     "rainy_window": scene_rainy_window,

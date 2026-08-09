@@ -527,7 +527,7 @@ TRACKS: list[TrackSpec] = [
         title_en="Rainy Lofi Study Beats",
         genre_ja="ローファイ・ヒップホップ（雨の窓辺）",
         use_case="study", bpm=78.0, key="Am", key_root=9, scale="minor",
-        prog_key="lofi", visual="rainy_city", seed=1011,
+        prog_key="lofi", visual="night_drive", seed=1011,
         build=build_lofi_study,
         seo=dict(
             title="Rainy Lofi Beats to Study & Relax 🌧️ 2 Hours of Chill Hip Hop",
