@@ -81,7 +81,7 @@ def _scatter(dst: np.ndarray, sample: np.ndarray, positions, gains) -> None:
             dst[:wrap] += sample[first:first + wrap] * g
 
 
-def _width(x: np.ndarray, w: float = 1.15) -> np.ndarray:
+def _width(x: np.ndarray, w: float = 0.6) -> np.ndarray:
     """ループを壊さない簡易ステレオ幅 (M/S を単純にスケールするだけ)"""
     m = (x[:, 0] + x[:, 1]) * 0.5
     s = (x[:, 0] - x[:, 1]) * 0.5 * w
@@ -124,7 +124,7 @@ def rain(n: int, seed: int = 0, intensity: float = 0.6,
         _scatter(out[:, c], drop, pos, gains)
 
     out *= 0.5 * (0.55 + 0.75 * intensity)
-    return _width(out, 1.15)
+    return _width(out, 0.6)
 
 
 def thunder(n: int, seed: int = 0, count: int = 2, sr: int = SR) -> np.ndarray:
@@ -171,7 +171,7 @@ def fireplace(n: int, seed: int = 0, sr: int = SR) -> np.ndarray:
         gains = (rng.random(n_pop) ** 2.2).astype(np.float32) * 0.55
         _scatter(out[:, c], pop, pos, gains)
 
-    return _width(out * 0.55, 1.05)
+    return _width(out * 0.55, 0.6)
 
 
 # ──────────────────────────────────────────────────────────────
@@ -197,7 +197,7 @@ def ocean(n: int, seed: int = 0, period: float = 9.0, sr: int = SR) -> np.ndarra
 
         out[:, c] = low * swell * 0.9 + high * crash * 0.55
 
-    return _width(out * 0.5, 1.25)
+    return _width(out * 0.5, 0.55)
 
 
 # ──────────────────────────────────────────────────────────────
@@ -214,7 +214,7 @@ def wind(n: int, seed: int = 0, sr: int = SR) -> np.ndarray:
         m = 0.5 + 0.5 * (dsp.loop_lfo(n, 2 + c, phase=c * 1.3) * 0.6
                          + dsp.loop_lfo(n, 7, phase=c * 0.4) * 0.4)
         out[:, c] = b1 * (1 - m) ** 2 + b2 * (2 * m * (1 - m)) + b3 * m ** 2
-    return _width(out * 0.4, 1.3)
+    return _width(out * 0.4, 0.55)
 
 
 def night_ambience(n: int, seed: int = 0, sr: int = SR) -> np.ndarray:
@@ -303,7 +303,7 @@ def cafe_ambience(n: int, seed: int = 0, sr: int = SR) -> np.ndarray:
         gains = (rng.random(n_cl) ** 2.0).astype(np.float32) * 0.05
         _scatter(out[:, c], clink, pos, gains)
 
-    return _width(out * 0.5, 1.2)
+    return _width(out * 0.5, 0.6)
 
 
 def room_tone(n: int, seed: int = 0, sr: int = SR) -> np.ndarray:
@@ -314,7 +314,7 @@ def room_tone(n: int, seed: int = 0, sr: int = SR) -> np.ndarray:
     out = np.zeros((n, 2), dtype=np.float32)
     for c in range(2):
         out[:, c] = _bed(n, seed * 29 + c + 1, "brown", lp=320.0, tile_sec=9.0) * 0.35
-    return (out * 0.12).astype(np.float32)
+    return _width(out * 0.12, 0.6).astype(np.float32)
 
 
 def brown_noise_bed(n: int, seed: int = 0, tilt_hz: float = 500.0,
@@ -324,7 +324,7 @@ def brown_noise_bed(n: int, seed: int = 0, tilt_hz: float = 500.0,
     for c in range(2):
         out[:, c] = _bed(n, seed * 31 + c + 1, "brown", lp=tilt_hz,
                          tile_sec=10.0, order=1.0)
-    return _width(out * 0.5, 1.1)
+    return _width(out * 0.5, 0.65)
 
 
 LAYERS = {

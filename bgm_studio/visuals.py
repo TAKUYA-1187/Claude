@@ -326,9 +326,9 @@ def scene_coffee_shop(seed: int = 4):
 def scene_seaside_cafe(seed: int = 5):
     """海辺のカフェ。明るいターコイズ + 葉のシルエットが揺れる"""
     rng = np.random.default_rng(seed)
-    bg = vgrad([(120, 200, 205), (168, 222, 218), (226, 231, 214), (198, 186, 156)])
-    base = np.clip(screen(bg, radial_glow(0.78, 0.20, 0.30, (255, 244, 210), 0.6)), 0, 255)
-    base = vignette(base, 0.30) + static_grain(seed=seed, amount=2.0)
+    bg = vgrad([(88, 152, 158), (128, 172, 170), (176, 182, 168), (156, 146, 122)])
+    base = np.clip(screen(bg, radial_glow(0.78, 0.20, 0.30, (255, 244, 210), 0.35)), 0, 255)
+    base = vignette(base, 0.42) + static_grain(seed=seed, amount=2.0)
 
     # 葉のシルエットを何枚か用意して揺らす
     leaves = []

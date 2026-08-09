@@ -549,7 +549,7 @@ def lerp_read(x: np.ndarray, pos: np.ndarray) -> np.ndarray:
 
 
 def make_reverb_ir(seconds: float = 3.0, rt60: float = 2.6, predelay: float = 0.02,
-                   damp: float = 0.55, width: float = 1.0, seed: int = 0,
+                   damp: float = 0.55, width: float = 0.55, seed: int = 0,
                    sr: int = SR) -> np.ndarray:
     """
     合成リバーブ IR (n,2)。

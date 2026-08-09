@@ -206,7 +206,7 @@ def build_deep_sleep(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
                         every_bars=6.0, center=60, rng=rng)
 
     ir = dsp.make_reverb_ir(5.0, rt60=6.5, damp=0.75, predelay=0.05,
-                            width=1.2, seed=spec.seed)
+                            width=0.55, seed=spec.seed)
     n = clock.n_samples
     beds = [
         (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.35, window=True), -18.0),
@@ -214,8 +214,8 @@ def build_deep_sleep(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
     ]
 
     def master(x):
-        x = dsp.tilt_eq(x, pivot=600.0, gain_db=-7.0)
-        x = dsp.lowpass(x, 7200.0, order=2)     # 高域を大きく削る = 覚醒させない
+        x = dsp.tilt_eq(x, pivot=650.0, gain_db=-5.5)
+        x = dsp.lowpass(x, 9500.0, order=2)     # 高域を落として覚醒させない (削りすぎない範囲で)
         x = dsp.highpass(x, 32.0, order=2)
         return dsp.saturate(x, drive=1.1, mix=0.3)
 
@@ -354,7 +354,7 @@ def build_healing_432(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict
                octaves=2, center=72, direction="up", rng=rng, pan=0.0)
 
     ir = dsp.make_reverb_ir(6.0, rt60=8.0, damp=0.7, predelay=0.06,
-                            width=1.3, seed=spec.seed)
+                            width=0.55, seed=spec.seed)
     n = clock.n_samples
     beds = [(lambda: NT.room_tone(n, seed=spec.seed + 1), -32.0)]
 
@@ -425,7 +425,7 @@ def build_ocean_ambient(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, di
     A.play_bass(buf, spans, clock, bank, inst="subbass", style="root",
                 gain=0.14, octave=-2, rng=rng)
 
-    ir = dsp.make_reverb_ir(5.0, rt60=5.5, damp=0.68, width=1.25, seed=spec.seed)
+    ir = dsp.make_reverb_ir(5.0, rt60=5.5, damp=0.68, width=0.55, seed=spec.seed)
     n = clock.n_samples
     beds = [
         (lambda: NT.ocean(n, seed=spec.seed + 1, period=8.5), -11.0),
