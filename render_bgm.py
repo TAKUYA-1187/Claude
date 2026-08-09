@@ -36,6 +36,7 @@ from pathlib import Path
 
 import numpy as np
 
+from bgm_studio import copywriting as COPY
 from bgm_studio import tracks as TR
 from bgm_studio import video as VID
 from bgm_studio import visuals as VIS
@@ -63,6 +64,22 @@ def build_metadata(spec: TR.TrackSpec, info: dict, total_seconds: float) -> dict
     seo = spec.seo
     dur = VID.hhmmss(total_seconds)
     hours = total_seconds / 3600.0
+
+    # 10本すべてを同じテンプレートで書くと、外形が「テンプレート量産」に
+    # なってしまう。1本ずつ書き下ろした説明文があればそちらを使う。
+    written = COPY.get(spec.slug, dur)
+    if written:
+        return {
+            "slug": spec.slug,
+            "title": seo.get("title", spec.title_en),
+            "description": written,
+            "tags": seo.get("keywords", []),
+            "category": "Music",
+            "language": "en",
+            "visibility": "public",
+            "made_for_kids": False,
+            "specs": _specs(spec, info, total_seconds, dur),
+        }
 
     description = f"""{seo.get('title', spec.title_en)}
 
@@ -108,20 +125,24 @@ All music and visuals in this video were created from scratch for this channel.
         "language": "en",
         "visibility": "public",
         "made_for_kids": False,
-        "specs": {
-            "genre_ja": spec.genre_ja,
-            "use_case": spec.use_case,
-            "bpm": round(info.get("bpm", spec.bpm), 2),
-            "key": spec.key,
-            "a4_hz": spec.a4,
-            "loop_seconds": info.get("seconds"),
-            "total_seconds": total_seconds,
-            "total_hhmmss": dur,
-            "lufs": round(info.get("lufs_after", 0.0), 2),
-            "true_peak_db": round(info.get("true_peak_db", 0.0), 2),
-            "loop_seam_db": round(info.get("seam_db", 0.0), 2),
-            "visual": spec.visual,
-        },
+        "specs": _specs(spec, info, total_seconds, dur),
+    }
+
+
+def _specs(spec: TR.TrackSpec, info: dict, total_seconds: float, dur: str) -> dict:
+    return {
+        "genre_ja": spec.genre_ja,
+        "use_case": spec.use_case,
+        "bpm": round(info.get("bpm", spec.bpm), 2),
+        "key": spec.key,
+        "a4_hz": spec.a4,
+        "loop_seconds": info.get("seconds"),
+        "total_seconds": total_seconds,
+        "total_hhmmss": dur,
+        "lufs": round(info.get("lufs_after", 0.0), 2),
+        "true_peak_db": round(info.get("true_peak_db", 0.0), 2),
+        "loop_seam_db": round(info.get("seam_db", 0.0), 2),
+        "visual": spec.visual,
     }
 
 
