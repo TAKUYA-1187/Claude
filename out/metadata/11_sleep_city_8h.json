@@ -1,0 +1,32 @@
+{
+  "slug": "11_sleep_city_8h",
+  "title": "8 Hour Sleep Music 🌃 Deep Ambient for a Full Night's Rest",
+  "description": "Eight hours. Enough for a whole night.\n\nThis is the long one. Most sleep mixes stop after two or three hours and\nleave you in silence at 4am — this doesn't. Put it on when you get into\nbed and it will still be going when your alarm does.\n\nIt's built the same way as the shorter sleep mix on this channel, but\nslower and in a different key: 46 BPM, D minor, and the chords hold for\nfour bars at a time before they move. Wide pads, a drone underneath, and\na singing bowl every few minutes. Nothing above 7 kHz, so there's no\ntreble to keep you alert.\n\nThe picture is a city at night from across the water, because that is\nwhat most of us actually fall asleep near.\n\n46 BPM · D minor · 8:00:00 · seamless loop, no gaps.\n\nNot a medical treatment — just music designed to be easy to sleep through.\n\n— A different composition from the two-hour sleep mix on this channel.\n  Written and produced from scratch, like everything else here.\n",
+  "tags": [
+    "8 hour sleep music",
+    "sleep music",
+    "deep sleep",
+    "ambient",
+    "insomnia",
+    "relaxing music",
+    "night"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "8時間睡眠アンビエント（夜の街）",
+    "use_case": "sleep",
+    "bpm": 46.0,
+    "key": "Dm",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 28800,
+    "total_hhmmss": "8:00:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -30.28,
+    "visual": "night_skyline"
+  }
+}
