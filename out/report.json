@@ -2,26 +2,60 @@
   "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "12_anime_piano_emotional",
-      "title": "Emotional Anime Piano 🌸 Beautiful Japanese Melodies for Study & Relaxing",
-      "bpm": 76.0,
-      "bars": 456,
-      "lufs": -14.012137611120759,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -33.61571637526975,
+      "slug": "01_lofi_rainy_study",
+      "title": "Rainy Lofi Beats to Study & Relax 🌧️ 2 Hours of Chill Hip Hop",
+      "bpm": 78.0,
+      "bars": 468,
+      "lufs": -14.000000270919731,
+      "true_peak_db": -2.4615505138483025,
+      "loop_seam_db": -48.60109921731778,
       "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
-      "video": "out/video/12_anime_piano_emotional.mp4",
+      "video": "out/video/01_lofi_rainy_study.mp4",
       "probe": {
-        "size_mb": 773.125316,
+        "size_mb": 796.826005,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "15",
-            "kbps": 455
+            "kbps": 473
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 259
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 737
+      },
+      "elapsed_s": 744.8
+    },
+    {
+      "slug": "02_deep_sleep_ambient",
+      "title": "Deep Sleep Music 😴 Fall Asleep Fast — 2 Hours of Calm Ambient & Rain",
+      "bpm": 52.0,
+      "bars": 312,
+      "lufs": -14.00023309591383,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -32.55906031173207,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/02_deep_sleep_ambient.mp4",
+      "probe": {
+        "size_mb": 783.162327,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 465
           },
           {
             "type": "audio",
@@ -31,43 +65,281 @@
           }
         ],
         "duration_s": 8640.0,
-        "bitrate_kbps": 715
+        "bitrate_kbps": 725
       },
-      "elapsed_s": 595.8
+      "elapsed_s": 714.0
     },
     {
-      "slug": "13_fresh_morning_acoustic",
-      "title": "Fresh Morning Music ☀️ Uplifting Acoustic for a Good Day",
-      "bpm": 104.0,
-      "bars": 624,
-      "lufs": -14.000000247440006,
-      "true_peak_db": -1.1963553430863452,
-      "loop_seam_db": -39.47830702786929,
+      "slug": "03_piano_and_rain",
+      "title": "Relaxing Piano & Rain Sounds 🎹🌧️ 2 Hours for Sleep, Study & Stress Relief",
+      "bpm": 62.0,
+      "bars": 372,
+      "lufs": -14.001186302253736,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -44.953793641789716,
       "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
-      "video": "out/video/13_fresh_morning_acoustic.mp4",
+      "video": "out/video/03_piano_and_rain.mp4",
       "probe": {
-        "size_mb": 808.419057,
+        "size_mb": 800.619845,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "15",
-            "kbps": 476
+            "kbps": 480
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
-            "kbps": 268
+            "kbps": 256
           }
         ],
         "duration_s": 8640.0,
-        "bitrate_kbps": 748
+        "bitrate_kbps": 741
       },
-      "elapsed_s": 687.7
+      "elapsed_s": 563.3
+    },
+    {
+      "slug": "04_cozy_coffee_jazz",
+      "title": "Cozy Coffee Shop Jazz ☕ 2 Hours of Warm Jazz Piano for Work & Study",
+      "bpm": 96.0,
+      "bars": 576,
+      "lufs": -13.999999855309154,
+      "true_peak_db": -2.125631058283289,
+      "loop_seam_db": -51.67823243044032,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/04_cozy_coffee_jazz.mp4",
+      "probe": {
+        "size_mb": 752.174252,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 433
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 259
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 696
+      },
+      "elapsed_s": 571.8
+    },
+    {
+      "slug": "05_bossa_nova_cafe",
+      "title": "Bossa Nova Cafe 🌿 2 Hours of Smooth Brazilian Jazz for a Good Mood",
+      "bpm": 124.0,
+      "bars": 744,
+      "lufs": -13.9999998254775,
+      "true_peak_db": -1.6993757581590412,
+      "loop_seam_db": -42.45535242431197,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/05_bossa_nova_cafe.mp4",
+      "probe": {
+        "size_mb": 709.322025,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 382
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 269
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 656
+      },
+      "elapsed_s": 553.8
+    },
+    {
+      "slug": "06_healing_meditation_432",
+      "title": "432Hz Healing Meditation Music 🧘 2 Hours of Singing Bowls for Deep Relaxation",
+      "bpm": 48.0,
+      "bars": 288,
+      "lufs": -14.000000101078795,
+      "true_peak_db": -1.386264460573213,
+      "loop_seam_db": -27.02512150216316,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/06_healing_meditation_432.mp4",
+      "probe": {
+        "size_mb": 776.116894,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 460
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 254
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 718
+      },
+      "elapsed_s": 598.8
+    },
+    {
+      "slug": "07_fireplace_winter_jazz",
+      "title": "Fireplace Jazz 🔥 2 Hours of Warm Winter Jazz & Crackling Fire",
+      "bpm": 88.0,
+      "bars": 528,
+      "lufs": -13.999999868225332,
+      "true_peak_db": -2.600557357336195,
+      "loop_seam_db": -27.635022260655777,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/07_fireplace_winter_jazz.mp4",
+      "probe": {
+        "size_mb": 795.278009,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 473
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 259
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 736
+      },
+      "elapsed_s": 682.0
+    },
+    {
+      "slug": "08_ocean_waves_ambient",
+      "title": "Ocean Waves & Ambient Music 🌊 2 Hours of Calm Sea Sounds for Sleep",
+      "bpm": 50.0,
+      "bars": 300,
+      "lufs": -14.000220619749811,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -32.96600035887853,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/08_ocean_waves_ambient.mp4",
+      "probe": {
+        "size_mb": 774.672993,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 456
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 257
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 717
+      },
+      "elapsed_s": 600.0
+    },
+    {
+      "slug": "09_fantasy_tavern",
+      "title": "Medieval Tavern Ambience 🍺 2 Hours of Fantasy Music & Crackling Fire",
+      "bpm": 84.0,
+      "bars": 504,
+      "lufs": -13.999999927156534,
+      "true_peak_db": -1.0245106697258093,
+      "loop_seam_db": -21.872668434144646,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/09_fantasy_tavern.mp4",
+      "probe": {
+        "size_mb": 795.602686,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 477
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 255
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 736
+      },
+      "elapsed_s": 567.6
+    },
+    {
+      "slug": "10_deep_focus_flow",
+      "title": "Deep Focus Music 🧠 2 Hours of Ambient Flow State Music for Studying & Work",
+      "bpm": 60.0,
+      "bars": 360,
+      "lufs": -14.000256603810923,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -41.09469293253528,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/10_deep_focus_flow.mp4",
+      "probe": {
+        "size_mb": 758.846076,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 450
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 248
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 702
+      },
+      "elapsed_s": 631.3
     }
   ]
 }
