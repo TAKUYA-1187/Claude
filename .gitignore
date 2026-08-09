@@ -7,3 +7,6 @@ out/audio/
 out/video/
 out/visual/
 out/tmp/
+
+# Shorts 生成中の一時オーバーレイ画像
+out/shorts/.overlay_*.png
