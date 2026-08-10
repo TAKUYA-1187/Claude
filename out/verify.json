@@ -338,6 +338,110 @@
         }
       ],
       "problems": []
+    },
+    {
+      "slug": "14_japanese_lofi_koto",
+      "lufs": -14.001531091626948,
+      "true_peak_db": -1.0000008709134622,
+      "loop_seam_db": -42.75391666225264,
+      "seam_dbfs": -45.88051016542026,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 652.842841,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 339
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 260
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "15_rain_thunder_night",
+      "lufs": -14.02786470880444,
+      "true_peak_db": -1.0000008709134622,
+      "loop_seam_db": -26.59260100366957,
+      "seam_dbfs": -31.165685787741737,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 794.716941,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 475
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 256
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "16_autumn_cafe_jazz",
+      "lufs": -14.000001175736285,
+      "true_peak_db": -2.083216725604294,
+      "loop_seam_db": -28.659071882879452,
+      "seam_dbfs": -32.263245345996395,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 782.99004,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 462
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 258
+        }
+      ],
+      "problems": []
+    },
+    {
+      "slug": "17_christmas_jazz",
+      "lufs": -14.00000126982305,
+      "true_peak_db": -1.7304212368629321,
+      "loop_seam_db": -24.82238134368826,
+      "seam_dbfs": -28.19812974973427,
+      "loop_seconds": 1440.0,
+      "duration_s": 8640.0,
+      "size_mb": 802.683768,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "rate": "1920x1080",
+          "fps": "15",
+          "kbps": 479
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "rate": "48000",
+          "kbps": 260
+        }
+      ],
+      "problems": []
     }
   ]
 }
