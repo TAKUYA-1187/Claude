@@ -1,0 +1,33 @@
+{
+  "slug": "16_autumn_cafe_jazz",
+  "title": "Autumn Jazz 🍂 Cozy Fall Café Music for Work & Study",
+  "description": "🍂 AUTUMN CAFÉ JAZZ — 2:24:00\n\nSlow jazz for the months when it gets dark early.\n\n▸ WHAT'S PLAYING\nPiano comping rootless voicings, a Rhodes taking the tunes, an upright\nbass walking underneath, and brushes keeping everything at a murmur.\nIt swings, but at 80 BPM nothing is in a hurry. Wind moves outside;\na café murmurs quietly behind the band.\n\n▸ SPECS\n80 BPM · B♭ major · piano, Rhodes, upright bass, brushes, wind, café room\n\n▸ GOOD FOR\nOctober afternoons, rainy commutes, essays, bookshops, and the first\ncold week where the coat comes out.\n\nPlays for 2:24:00 and loops cleanly.\n\n— Original music, written and mixed for this channel.\n",
+  "tags": [
+    "autumn jazz",
+    "fall music",
+    "cozy jazz",
+    "september jazz",
+    "coffee jazz",
+    "rainy autumn",
+    "work music",
+    "smooth jazz"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "秋のカフェジャズ（9〜11月の季節枠）",
+    "use_case": "work",
+    "bpm": 80.0,
+    "key": "Bb",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -2.08,
+    "loop_seam_db": -28.66,
+    "visual": "autumn_leaves"
+  }
+}

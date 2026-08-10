@@ -1,0 +1,33 @@
+{
+  "slug": "17_christmas_jazz",
+  "title": "Christmas Jazz 🎄 Cozy Holiday Music by the Fireplace",
+  "description": "🎄 CHRISTMAS JAZZ — 2:24:00\n\nCozy holiday jazz by a synthesised fireplace.\n\nA note on what this is: there are no carols here. Every tune is original.\nWhat makes it sound like Christmas is the harmony — the maj6 chords and\nthat one sweet dominant-with-a-flat-nine that every December record from\nthe 1950s leans on — plus sleigh bells shaken softly on the off-beats and\na celesta glittering over the top like tinsel.\n\nPiano, upright bass and brushes do the rest, the same warm trio sound as\nthe café mixes on this channel, just pointed at the holidays.\n\n92 BPM · C major · piano, celesta, upright bass, brushes, sleigh bells,\nand a fire crackling in the corner.\n\nFor wrapping presents, cooking too much food, reading by the tree, and\nkeeping the house warm through December.\n\n— All original compositions. No licensed or traditional melodies.\n",
+  "tags": [
+    "christmas jazz",
+    "christmas music",
+    "holiday jazz",
+    "winter jazz",
+    "cozy christmas",
+    "fireplace",
+    "december",
+    "holiday music instrumental"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "クリスマスジャズ（11〜12月の季節枠）",
+    "use_case": "relax",
+    "bpm": 92.0,
+    "key": "C",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.73,
+    "loop_seam_db": -24.82,
+    "visual": "christmas_window"
+  }
+}

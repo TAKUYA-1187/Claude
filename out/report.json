@@ -1,27 +1,61 @@
 {
-  "total_seconds": 28800,
+  "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "11_sleep_city_8h",
-      "title": "8 Hour Sleep Music 🌃 Deep Ambient for a Full Night's Rest",
-      "bpm": 46.0,
-      "bars": 276,
-      "lufs": -13.999999805044373,
-      "true_peak_db": -1.2897833274154502,
-      "loop_seam_db": -43.351896974554194,
+      "slug": "14_japanese_lofi_koto",
+      "title": "Japanese Lofi 🏮 Koto & Chill Beats for Study & Work",
+      "bpm": 72.0,
+      "bars": 432,
+      "lufs": -14.001530094548167,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -42.75393685618507,
       "loop_seconds": 1440,
-      "total_seconds": 28800,
-      "total_hhmmss": "8:00:00",
-      "video": "out/video/11_sleep_city_8h.mp4",
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/14_japanese_lofi_koto.mp4",
       "probe": {
-        "size_mb": 2589.359136,
+        "size_mb": 652.842841,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "15",
-            "kbps": 459
+            "kbps": 339
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 260
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 604
+      },
+      "elapsed_s": 996.9
+    },
+    {
+      "slug": "15_rain_thunder_night",
+      "title": "Heavy Rain & Distant Thunder at Night 🌧️ for Deep Sleep",
+      "bpm": 48.0,
+      "bars": 288,
+      "lufs": -14.027863712783509,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -26.592612084267465,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/15_rain_thunder_night.mp4",
+      "probe": {
+        "size_mb": 794.716941,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 475
           },
           {
             "type": "audio",
@@ -30,10 +64,78 @@
             "kbps": 256
           }
         ],
-        "duration_s": 28800.0,
-        "bitrate_kbps": 719
+        "duration_s": 8640.0,
+        "bitrate_kbps": 735
       },
-      "elapsed_s": 1534.4
+      "elapsed_s": 796.7
+    },
+    {
+      "slug": "16_autumn_cafe_jazz",
+      "title": "Autumn Jazz 🍂 Cozy Fall Café Music for Work & Study",
+      "bpm": 80.0,
+      "bars": 480,
+      "lufs": -14.000000183201957,
+      "true_peak_db": -2.083216067559844,
+      "loop_seam_db": -28.659053533670406,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/16_autumn_cafe_jazz.mp4",
+      "probe": {
+        "size_mb": 782.99004,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 462
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 258
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 724
+      },
+      "elapsed_s": 586.5
+    },
+    {
+      "slug": "17_christmas_jazz",
+      "title": "Christmas Jazz 🎄 Cozy Holiday Music by the Fireplace",
+      "bpm": 92.0,
+      "bars": 552,
+      "lufs": -14.000000274484092,
+      "true_peak_db": -1.7304199731587087,
+      "loop_seam_db": -24.822399161287517,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/17_christmas_jazz.mp4",
+      "probe": {
+        "size_mb": 802.683768,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "15",
+            "kbps": 479
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 260
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 743
+      },
+      "elapsed_s": 1181.4
     }
   ]
 }
