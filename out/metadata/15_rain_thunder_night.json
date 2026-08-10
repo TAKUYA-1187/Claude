@@ -1,0 +1,33 @@
+{
+  "slug": "15_rain_thunder_night",
+  "title": "Heavy Rain & Distant Thunder at Night 🌧️ for Deep Sleep",
+  "description": "2:24:00 of heavy rain on a window, with thunder far away.\n\nThere is almost no music in this one, on purpose. A low chord drifts\nunderneath — quiet enough that you will probably never notice it, present\nenough that the room never feels empty. Everything above 8 kHz is rolled\noff, because bright rain is what keeps light sleepers awake.\n\nThe thunder never cracks. It stays distant, a few times an hour, more\nfelt than heard.\n\nRain, distant thunder, wind, and one very quiet chord.\nMastered softly and evenly for overnight playback — it loops without a\nseam, so the storm never ends until you stop it.\n\nFor sleeping, and for pretending you don't have to go outside.\n\n— The rain, thunder and wind are all synthesised for this video.\n",
+  "tags": [
+    "rain sounds",
+    "thunder",
+    "rain on window",
+    "sleep sounds",
+    "thunderstorm",
+    "rain for sleeping",
+    "insomnia relief",
+    "night rain"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "雷雨の夜（環境音メイン）",
+    "use_case": "sleep",
+    "bpm": 48.0,
+    "key": "Am",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.03,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -26.59,
+    "visual": "storm_window"
+  }
+}

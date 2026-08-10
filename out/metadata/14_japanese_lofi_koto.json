@@ -1,0 +1,33 @@
+{
+  "slug": "14_japanese_lofi_koto",
+  "title": "Japanese Lofi 🏮 Koto & Chill Beats for Study & Work",
+  "description": "2:24:00 of lo-fi built around a koto.\n\nThe koto is tuned to hirajōshi, the five-note scale that makes Japanese\nmusic sound Japanese — leave that scale and you just have lo-fi with an\nunusual guitar. Under it: a slow boom-bap beat with the drums dragged\nbehind the click, sub bass, tape flutter, vinyl crackle, and rain against\na window somewhere behind everything.\n\nThe pitch of the koto bends slightly upward at each pluck and settles,\nthe way a real string does under a plectrum. That detail is most of the\ninstrument's character, so it's synthesised rather than faked with a\nsample.\n\n72 BPM · A hirajōshi · koto, sub bass, lo-fi kit, rain, vinyl.\n\nFor studying, late trains, rainy evenings, and long focused work.\n\n— Composed and produced from scratch for this channel.\n",
+  "tags": [
+    "japanese lofi",
+    "koto music",
+    "lofi hip hop",
+    "japan chill",
+    "study music",
+    "zen lofi",
+    "asian lofi",
+    "tokyo night"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "和風ローファイ（琴）",
+    "use_case": "study",
+    "bpm": 72.0,
+    "key": "Am",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -42.75,
+    "visual": "lantern_street"
+  }
+}
