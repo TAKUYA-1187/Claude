@@ -153,6 +153,36 @@ def layer_qa() -> list[dict]:
     return out
 
 
+def env_repeat(x: np.ndarray, lo_s: float = 5.0, hi_s: float = 200.0,
+               hp_hz: float = 200.0, fps: int = 200) -> tuple[float, float]:
+    """
+    「模様の繰り返し」を包絡の自己相関で探す。
+
+    戻り値: (最も反復が強いラグ [秒], そのときの相関)。
+    不偏化 (重なるフレーム数で割る) しないと、探索下限のラグが
+    常に最大になって測定が嘘をつくので注意。
+    """
+    m = dsp.mono(x)
+    N = min(len(m), int(300 * dsp.SR))
+    y = dsp.highpass(m[:N].astype(np.float32), hp_hz, order=2,
+                     taps=513).astype(np.float64)
+    hop = dsp.SR // fps
+    env = np.abs(y)[:N // hop * hop].reshape(-1, hop).mean(axis=1)
+    env -= env.mean()
+    n = len(env)
+    nfft = 1 << int(np.ceil(np.log2(2 * n)))
+    F = np.fft.rfft(env, nfft)
+    ac = np.fft.irfft(F * np.conj(F))[:n]
+    ac /= np.arange(n, 0, -1, dtype=np.float64)      # 不偏化
+    ac /= (ac[0] + 1e-20)
+    lo, hi = int(lo_s * fps), min(int(hi_s * fps), n - 1)
+    if hi <= lo:
+        return 0.0, 0.0
+    seg = ac[lo:hi]
+    k = int(np.argmax(seg))
+    return (lo + k) / fps, float(seg[k])
+
+
 def tile_repeat(x: np.ndarray, lo_s: float = 5.0, hi_s: float = 200.0,
                 hp_hz: float = 200.0) -> tuple[float, float]:
     """
@@ -215,9 +245,13 @@ def audio_qa(slug: str) -> dict:
     mid = read_wav(wav, seconds=120.0, offset=max(len(m) / dsp.SR * 0.35, 0))
     r["bands"] = {k: round(v, 1) for k, v in octave_bands(dsp.mono(mid)).items()}
 
-    # タイル反復 (中盤 300 秒で見る)
+    # タイル反復 (中盤 300 秒で見る)。
+    # 波形の相関で測ると、定常的なドローン (持続音) が
+    # 「常に自分自身と似ている」ために誤検出される (18/19/24 で実際に起きた)。
+    # 耳につく反復は「ノイズの模様の繰り返し」で、それは振幅包絡に現れる。
+    # ドローンの包絡は平坦なので、包絡の自己相関なら誤検出しない。
     rep = read_wav(wav, seconds=300.0, offset=max(len(m) / dsp.SR * 0.30, 0))
-    r["repeat_lag_s"], r["repeat_corr"] = tile_repeat(rep)
+    r["repeat_lag_s"], r["repeat_corr"] = env_repeat(rep)
     del rep
 
     # ── 判定 ──────────────────────────────────────────────

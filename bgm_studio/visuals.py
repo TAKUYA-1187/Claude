@@ -1494,14 +1494,14 @@ def scene_nebula(seed: int = 67):
     def frame(t01):
         img = base.copy()
         img = screen(img, st)
-        c1 = np.clip(np.roll(f1, int(round(t01 * W)), axis=1) * 1.1, 0, 1)
-        c2 = np.clip(np.roll(f2, -int(round(t01 * W)), axis=1) * 1.1, 0, 1)
+        c1 = np.clip(np.roll(f1, int(round(t01 * W)), axis=1) * 0.9, 0, 1)
+        c2 = np.clip(np.roll(f2, -int(round(t01 * W)), axis=1) * 0.9, 0, 1)
         img = screen(img, blur(c1[:, :, None] * np.array([70, 30, 90],
-                                                         dtype=np.float32), 22.0))
+                                                         dtype=np.float32), 30.0))
         img = screen(img, blur(c2[:, :, None] * np.array([20, 50, 90],
-                                                         dtype=np.float32), 22.0))
+                                                         dtype=np.float32), 30.0))
         img = screen(img, radial_glow(0.62, 0.40, 0.16, (180, 120, 200),
-                                      0.5 + 0.1 * np.sin(TWO_PI * t01),
+                                      0.5 + 0.06 * np.sin(TWO_PI * t01),
                                       falloff=1.6, res_div=3))
         return img
     return frame

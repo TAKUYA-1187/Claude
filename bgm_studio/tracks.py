@@ -923,12 +923,14 @@ def build_focus_40hz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
     spans = _timeline(spec, clock, rng)
     buf = _new_buf(clock, tail=20.0)
 
-    A.play_pad(buf, spans, clock, bank, gain=0.22, brightness=0.55,
-               attack=5.0, release=6.0, rng=rng, n_voices=4, low=45, high=76)
+    # 高域の空気を残す (02/20 で「こもり」を出した教訓。パッドを明るく、
+    # マリンバを上の音域で鳴らす)
+    A.play_pad(buf, spans, clock, bank, gain=0.22, brightness=0.78,
+               attack=5.0, release=6.0, rng=rng, n_voices=4, low=45, high=81)
     A.play_drone(buf, T.note("A", 2) + spec.key_root, clock, bank,
                  gain=0.16, partials=8)
-    A.play_arp(buf, spans, clock, bank, inst="marimba", gain=0.07, rate=1.0,
-               octaves=1, center=69, direction="up", rng=rng)
+    A.play_arp(buf, spans, clock, bank, inst="marimba", gain=0.11, rate=1.0,
+               octaves=2, center=76, direction="up", rng=rng)
 
     ir = dsp.make_reverb_ir(3.0, rt60=2.8, damp=0.6, seed=spec.seed)
     n = clock.n_samples
@@ -943,8 +945,8 @@ def build_focus_40hz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
         pulse = (1.0 - 0.25 * 0.5 * (1.0 + np.sin(2 * np.pi * 40.0 * t))
                  ).astype(np.float32)
         x = x * pulse[:, None]
-        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-4.0)
-        x = dsp.lowpass(x, 11000.0, order=2)
+        x = dsp.tilt_eq(x, pivot=800.0, gain_db=-2.5)
+        x = dsp.lowpass(x, 13000.0, order=2)
         x = dsp.highpass(x, 30.0, order=2)
         return x
 
@@ -968,10 +970,11 @@ def build_halloween(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
 
     A.play_pad(buf, spans, clock, bank, gain=0.16, brightness=0.45,
                attack=5.0, release=6.0, rng=rng, n_voices=4, low=41, high=67)
-    # オルゴールが半音ずれたような celesta。ハロウィンの音はほぼこれ
-    A.play_melody(buf, spans, clock, bank, inst="celesta", gain=0.20,
+    # オルゴールが半音ずれたような celesta。ハロウィンの音はほぼこれ。
+    # ゲインを上げすぎると 1-2kHz が突き出て耳障りになる (QA で実測済み)
+    A.play_melody(buf, spans, clock, bank, inst="celesta", gain=0.13,
                   scale_root=(spec.key_root + 9) % 12, scale="harmonic_minor",
-                  lo=69, hi=88, density=0.35, rng=rng, rest_prob=0.5)
+                  lo=67, hi=85, density=0.35, rng=rng, rest_prob=0.5)
     A.play_bass(buf, spans, clock, bank, inst="subbass", style="root",
                 gain=0.16, octave=-2, rng=rng)
     A.play_sparse_bells(buf, spans, clock, bank, inst="bowl", gain=0.10,
@@ -988,8 +991,10 @@ def build_halloween(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
     ]
 
     def master(x):
-        x = dsp.tilt_eq(x, pivot=650.0, gain_db=-4.0)
-        x = dsp.lowpass(x, 12000.0, order=2)
+        x = dsp.tilt_eq(x, pivot=550.0, gain_db=-5.0)
+        # 1-2kHz を抑えた分、6kHz 以上の空気だけ棚で戻す
+        x = dsp.shelf(x, 6000.0, 3.5, kind="high")
+        x = dsp.lowpass(x, 12500.0, order=2)
         return dsp.saturate(x, drive=1.1, mix=0.2)
 
     return _finish(buf, clock, spec, ir, 0.34, beds, master)
@@ -1010,11 +1015,14 @@ def build_snowstorm(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
     spans = _timeline(spec, clock, rng)
     buf = _new_buf(clock, tail=26.0)
 
-    A.play_pad(buf, spans, clock, bank, gain=0.18, brightness=0.5,
-               attack=7.0, release=8.0, rng=rng, n_voices=4, low=43, high=69)
+    A.play_pad(buf, spans, clock, bank, gain=0.18, brightness=0.7,
+               attack=7.0, release=8.0, rng=rng, n_voices=4, low=43, high=76)
     # 進行は A センターで書いてあるので、ドローンも A + key_root に合わせる
     A.play_drone(buf, T.note("A", 2) + spec.key_root, clock, bank,
                  gain=0.12, partials=6)
+    # 高域の空気 (こもり対策)。鐘は遠く小さく
+    A.play_sparse_bells(buf, spans, clock, bank, inst="celesta", gain=0.07,
+                        every_bars=6.0, center=76, rng=rng)
 
     ir = dsp.make_reverb_ir(4.5, rt60=5.0, damp=0.75, predelay=0.04,
                             seed=spec.seed)
@@ -1027,8 +1035,8 @@ def build_snowstorm(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
     ]
 
     def master(x):
-        x = dsp.tilt_eq(x, pivot=500.0, gain_db=-5.5)
-        x = dsp.lowpass(x, 8500.0, order=2)
+        x = dsp.tilt_eq(x, pivot=600.0, gain_db=-4.0)
+        x = dsp.lowpass(x, 10000.0, order=2)
         x = dsp.highpass(x, 34.0, order=2)
         return x
 
@@ -1154,8 +1162,11 @@ def build_cyberpunk(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
     ]
 
     def master(x):
-        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-3.0)
-        x = dsp.lowpass(x, 14000.0, order=2)
+        # シンセと雨の高域が重なると 4-8kHz が突き出る (QA で実測)。
+        # 傾斜 + 4kHz のディップでプレゼンス帯を落ち着かせる
+        x = dsp.tilt_eq(x, pivot=600.0, gain_db=-5.0)
+        x = dsp.peak_eq(x, 4000.0, -2.5, q=1.1)
+        x = dsp.lowpass(x, 11000.0, order=2)
         return dsp.saturate(x, drive=1.25, mix=0.35)
 
     return _finish(buf, clock, spec, ir, 0.28, beds, master, warp=warp)
