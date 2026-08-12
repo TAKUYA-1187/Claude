@@ -2,38 +2,33 @@
   "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "06_healing_meditation_432",
-      "title": "432Hz Healing Meditation Music 🧘 2 Hours of Singing Bowls for Deep Relaxation",
-      "bpm": 48.0,
-      "bars": 288,
-      "lufs": -14.000440975236003,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -27.699666652681536,
-      "loop_seconds": 1440,
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "video": "out/video/06_healing_meditation_432.mp4",
+      "slug": "24_deep_space_drone",
+      "video": "out/video/24_deep_space_drone.mp4",
       "probe": {
-        "size_mb": 787.209106,
+        "size_mb": 792.944541,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "24",
-            "kbps": 469
+            "kbps": 473
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
-            "kbps": 254
+            "kbps": 256
           }
         ],
         "duration_s": 8640.0,
-        "bitrate_kbps": 728
+        "bitrate_kbps": 734
       },
-      "elapsed_s": 715.4
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 505.7
     }
   ]
 }
