@@ -1,0 +1,14 @@
+{
+  "slug": "s07_closing_time",
+  "title": "Closing Time — Original Song (Synthesized Vocals)",
+  "description": "Jazz for an emptying library: brushes, upright bass, and a voice that hums more than it sings.\n\nA note on the voice: this is a fully synthesized vocalise — a wordless voice built from sine harmonics and formant resonances, singing vowels rather than lyrics. No vocal sample libraries were used; the voice, like every instrument here, is generated from scratch.\n\n66 BPM · original composition · synthesized voice & instruments.\n\n— Written, sung (synthetically) and mixed for this channel.",
+  "duration_s": 178.5,
+  "qa": {
+    "lufs": -13.999999834946442,
+    "tp": -1.3312392497119785,
+    "clicks": 0,
+    "corr": 0.7738696244197213,
+    "crest": 15.234661256345357
+  },
+  "issues": []
+}

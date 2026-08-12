@@ -1,0 +1,14 @@
+{
+  "slug": "s05_golden_hour",
+  "title": "Golden Hour — Original Song (Synthesized Vocals)",
+  "description": "Nylon guitar and a bright voice for the hour before sunset. Light as a walk home.\n\nA note on the voice: this is a fully synthesized vocalise — a wordless voice built from sine harmonics and formant resonances, singing vowels rather than lyrics. No vocal sample libraries were used; the voice, like every instrument here, is generated from scratch.\n\n104 BPM · original composition · synthesized voice & instruments.\n\n— Written, sung (synthetically) and mixed for this channel.",
+  "duration_s": 114.8,
+  "qa": {
+    "lufs": -13.999999845101472,
+    "tp": -2.8702754958122476,
+    "clicks": 0,
+    "corr": 0.8699937712124391,
+    "crest": 13.885459921513238
+  },
+  "issues": []
+}
