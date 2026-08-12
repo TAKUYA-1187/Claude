@@ -1,0 +1,33 @@
+{
+  "slug": "27_rain_black_screen",
+  "title": "Rain Sounds for Sleep 🌧️ BLACK SCREEN · 10 Hours of Gentle Night Rain",
+  "description": "10:00:00 of gentle night rain. The screen stays black.\n\nNo visuals, no logo, no brightness in a dark bedroom — the video is a\nblack frame from the first second to the last, which is the point.\nPhone face-down not required.\n\nThe rain itself is soft: window-filtered, no thunder, with the barest\nlow chord underneath so the room never feels empty. Mastered quietly\nand evenly, with everything above 8 kHz rolled away.\n\nPut it on, screen off or on — the room stays dark either way.\n\nFor sleep. That's it. Good night.\n\n— The rain is synthesised, original, and loops without a seam.\n",
+  "tags": [
+    "rain black screen",
+    "black screen sleep",
+    "rain sounds 10 hours",
+    "dark screen rain",
+    "sleep sounds",
+    "rain no music",
+    "insomnia",
+    "rain all night"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "黒画面の雨（10時間）",
+    "use_case": "sleep",
+    "bpm": 46.0,
+    "key": "Am",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 36000,
+    "total_hhmmss": "10:00:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -39.73,
+    "visual": "black_screen"
+  }
+}
