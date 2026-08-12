@@ -317,6 +317,16 @@ def _thumb_lines(spec: TR.TrackSpec, total_seconds: float) -> list[str]:
         "15_rain_thunder_night": ["RAIN & THUNDER", f"{hours} HOURS · SLEEP"],
         "16_autumn_cafe_jazz": ["AUTUMN JAZZ", f"{hours} HOURS · COZY"],
         "17_christmas_jazz": ["CHRISTMAS JAZZ", f"{hours} HOURS · HOLIDAY"],
+        "18_starship_sleep": ["STARSHIP SLEEP", f"{hours} HOURS · SPACE HUM"],
+        "19_528hz_love_frequency": ["528 Hz", f"{hours} HOURS · HEALING"],
+        "20_focus_40hz": ["40Hz FOCUS", f"{hours} HOURS · DEEP WORK"],
+        "21_halloween_night": ["HALLOWEEN", f"{hours} HOURS · SPOOKY"],
+        "22_snowstorm_fireplace": ["SNOWSTORM", f"{hours} HOURS · FIREPLACE"],
+        "23_forest_night_camp": ["NIGHT CAMPFIRE", f"{hours} HOURS · FOREST"],
+        "24_deep_space_drone": ["DEEP SPACE", f"{hours} HOURS · DARK AMBIENT"],
+        "25_cyberpunk_rain": ["CYBERPUNK RAIN", f"{hours} HOURS · NEON"],
+        "26_dark_academia_library": ["DARK ACADEMIA", f"{hours} HOURS · STUDY"],
+        "27_rain_black_screen": ["RAIN · BLACK SCREEN", f"{hours} HOURS"],
     }
     return head.get(spec.slug, [spec.title_en.upper(), f"{hours} HOURS"])
 

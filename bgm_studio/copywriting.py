@@ -522,3 +522,239 @@ SHORT_HOOKS["17_christmas_jazz"] = [
     "sleigh bells on\nthe off-beats",
     "december, by\nthe fireplace",
 ]
+
+DESCRIPTIONS["18_starship_sleep"] = """\
+{duration} inside the sleeping quarters of a starship.
+
+The engine is somewhere below deck — a deep, steady hum you feel more
+than hear. Air moves through the vents. Nothing beeps. Nothing changes.
+That's the entire point: the most reliable sleep sounds are the ones a
+building (or a ship) makes on its own.
+
+Under the hull noise there are two very low drones, slightly detuned so
+they beat against each other about once every few seconds, like the
+engines are breathing. Everything above 6.5 kHz is removed.
+
+For sleeping, night shifts, long-haul flights, and imagining you are
+somewhere between two stars.
+
+— The engine, the air and the hum are all synthesised for this video.
+"""
+
+DESCRIPTIONS["19_528hz_love_frequency"] = """\
+{duration} tuned so that C is exactly 528.0 Hz.
+
+A note on honesty, because this genre has a problem with it: many
+"528Hz" videos are ordinary music with a label on it. This one is
+actually tuned — the whole piece is played at A = 444 Hz, which places
+C5 at precisely 528.0 Hz, and a soft drone holds that C through the
+entire runtime. If you check it with a spectrum analyser, you will find
+the peak where the title says it is.
+
+What you'll hear: slow golden pads, singing bowls a few minutes apart,
+and that steady 528 Hz centre. No melody, no percussion.
+
+We make no medical claims about tuning frequencies. Some people find
+this pitch particularly warm to rest inside — that's all, and it's enough.
+
+For meditation, massage, reading, and falling asleep.
+
+— Composed and synthesised for this channel, at pitch.
+"""
+
+DESCRIPTIONS["20_focus_40hz"] = """\
+{duration} of ambient with a 40 Hz pulse folded into it.
+
+Gamma-band stimulation is an area of active research, and this video
+makes no health claims. What it offers is simpler: a very steady,
+featureless soundscape whose loudness ripples 40 times per second —
+deep enough to be present, shallow enough that most people stop
+noticing it within a minute. Unlike binaural beats, an amplitude pulse
+survives speakers, mono phones, and cheap earbuds.
+
+Underneath: slow dorian pads, a drone, a marimba note here and there,
+and a brown-noise floor. No melody to follow, nothing to wait for.
+
+60 BPM · A dorian · pads, drone, marimba, brown noise, 40 Hz pulse.
+
+For deep work, long reading, and code that refuses to compile.
+
+— Original composition, synthesised for this channel.
+"""
+
+DESCRIPTIONS["21_halloween_night"] = """\
+🎃 HALLOWEEN NIGHT AMBIENCE — {duration}
+
+An October night on a hill: wind in the dead leaves, crickets that
+haven't noticed the cold yet, a far-off roll of thunder once or twice,
+and a music box playing something in a minor key that never quite
+resolves.
+
+This is spooky, not scary — made to sit under a Halloween party, a
+carving session, or an evening of horror reading without ever jump-scaring
+anyone. The dissonances are gentle and the wind does most of the work.
+
+66 BPM · A harmonic minor · music-box celesta, low pads, distant bell,
+wind, night insects, far thunder.
+
+Runs {duration} and loops seamlessly — set it playing at dusk and forget it.
+
+— All sounds synthesised for this video. No sound-effect libraries.
+"""
+
+DESCRIPTIONS["22_snowstorm_fireplace"] = """\
+Outside: a blizzard. Inside: a fire. {duration} of both.
+
+The pleasure of a snowstorm video is the contrast — the louder the wind
+howls, the warmer the room feels. So the wind here is layered twice
+(a far roar and a near gust against the window) and the fireplace sits
+just underneath it, popping now and then to remind you it's still lit.
+A quiet chord drifts below everything, more felt than heard.
+
+Everything above 8.5 kHz is rolled off, so the storm never hisses.
+
+For sleeping through winter nights, reading under a blanket, and
+being smug about not being outside.
+
+— Wind, fire and music all synthesised for this channel.
+"""
+
+DESCRIPTIONS["23_forest_night_camp"] = """\
+A campfire in a dark forest, {duration} long.
+
+Crickets on all sides, wood crackling at your feet, wind high in the
+trees, and — every few minutes — a few notes from a harp, as if someone
+across the fire is half-playing, half-dozing. That's the whole scene.
+
+Built to serve two audiences at once: tabletop parties who need a
+wilderness camp that runs all session, and people who simply fall
+asleep faster outdoors than indoors.
+
+50 BPM · D dorian · harp, soft pads, campfire, crickets, wind.
+
+For D&D rests, reading fantasy, and sleeping under imaginary stars.
+
+— Every sound synthesised from scratch. No field recordings.
+"""
+
+DESCRIPTIONS["24_deep_space_drone"] = """\
+{duration} of dark ambient for the middle of nowhere.
+
+Vast, slow, and mostly empty. A drone at the bottom of the range, pads
+that take ten seconds to arrive and twelve to leave, a bowl struck
+somewhere far away every minute or so, and a shimmer of high harmonics
+so the darkness never turns to mud. The reverb is tuned to be
+implausibly large — about ten seconds of tail — because the size of the
+space is the instrument here.
+
+Nothing threatening happens. Dark ambient for sleeping, not for horror.
+
+40 BPM · E minor · drones, pads, bowls, celesta, deep-space reverb.
+
+For sleep, night trains, long flights, and staring out of windows.
+
+— Composed and synthesised for this channel.
+"""
+
+DESCRIPTIONS["25_cyberpunk_rain"] = """\
+Rain on neon, {duration}.
+
+A synth arpeggio that never hurries, two chords that never resolve, a
+sub-bass pulse, and rain that isn't sad — just weather in a city that
+stopped sleeping years ago. There's tape wobble on everything, because
+the future imagined in 1982 sounds better than the real one.
+
+86 BPM · A minor · analog-style synths, sub bass, rain, distant thunder.
+
+For coding, night shifts, driving after midnight, and open-world games
+with the game music turned off.
+
+— All synths programmed and rendered for this video.
+"""
+
+DESCRIPTIONS["26_dark_academia_library"] = """\
+🕯️ DARK ACADEMIA LIBRARY — {duration}
+
+An old reading room after hours. A grandfather clock ticks once per
+second — exactly; the piece is written at 60 BPM so the clock and the
+music share a pulse. A melancholy piano works through minor-key
+changes, rain streaks the tall windows, and a fire settles in the
+grate. Every hour or so you may notice the clock's tick land a little
+heavier; that's the only event in the entire video.
+
+60 BPM · A minor · piano, upright bass, string pad, clock, rain, fire.
+
+For essays, thesis chapters, translation, and reading dead languages
+by candlelight.
+
+— Original music, synthesised and mixed for this channel.
+"""
+
+DESCRIPTIONS["27_rain_black_screen"] = """\
+{duration} of gentle night rain. The screen stays black.
+
+No visuals, no logo, no brightness in a dark bedroom — the video is a
+black frame from the first second to the last, which is the point.
+Phone face-down not required.
+
+The rain itself is soft: window-filtered, no thunder, with the barest
+low chord underneath so the room never feels empty. Mastered quietly
+and evenly, with everything above 8 kHz rolled away.
+
+Put it on, screen off or on — the room stays dark either way.
+
+For sleep. That's it. Good night.
+
+— The rain is synthesised, original, and loops without a seam.
+"""
+
+SHORT_HOOKS["18_starship_sleep"] = [
+    "sleep like you're\nbetween two stars",
+    "the engine hum\nis the lullaby",
+    "night shift?\nthis is your bunk.",
+]
+SHORT_HOOKS["19_528hz_love_frequency"] = [
+    "check it with a\nspectrum app. it's real.",
+    "C = exactly 528.0 Hz\nnot just the title",
+    "tuned to A = 444,\nso C lands on 528",
+]
+SHORT_HOOKS["20_focus_40hz"] = [
+    "40 pulses per second.\nyou'll stop hearing them.",
+    "works on speakers,\nunlike binaural beats",
+    "nothing to follow.\nthat's the feature.",
+]
+SHORT_HOOKS["21_halloween_night"] = [
+    "spooky,\nnot scary",
+    "a music box\nthat never resolves",
+    "october,\nbottled",
+]
+SHORT_HOOKS["22_snowstorm_fireplace"] = [
+    "the louder the wind,\nthe warmer the room",
+    "blizzard outside.\nyou're not in it.",
+    "winter, from\nthe right side of glass",
+]
+SHORT_HOOKS["23_forest_night_camp"] = [
+    "your party rests\nhere tonight",
+    "crickets, fire,\nand a lazy harp",
+    "fall asleep\noutdoors, indoors",
+]
+SHORT_HOOKS["24_deep_space_drone"] = [
+    "dark ambient,\nnot horror",
+    "a reverb the size\nof a nebula",
+    "for the middle\nof nowhere",
+]
+SHORT_HOOKS["25_cyberpunk_rain"] = [
+    "rain on neon,\ntwo chords, no hurry",
+    "the future from 1982\nsounds better",
+    "for coding\nafter midnight",
+]
+SHORT_HOOKS["26_dark_academia_library"] = [
+    "the clock ticks\nexactly on the beat",
+    "60 BPM. one tick\nper second. on purpose.",
+    "essays due?\nlight the candle.",
+]
+SHORT_HOOKS["27_rain_black_screen"] = [
+    "black screen.\nrain. that's it.",
+    "your room\nstays dark",
+    "no logo, no light,\njust rain",
+]

@@ -277,6 +277,11 @@ def visual_qa(slug: str) -> dict:
     r["loop_jump"] = float(np.abs(f[-1] - f[0]).mean() / 255.0)
 
     issues = []
+    # black screen は「画面が完全に暗い」ことが商品価値の確立フォーマット。
+    # 意図した黒なので輝度の下限検査から除外する
+    if "black_screen" in slug:
+        r["issues"] = []
+        return r
     if r["brightness"] < 0.04:
         issues.append(f"暗すぎ {r['brightness']:.3f}")
     if r["brightness"] > 0.55:

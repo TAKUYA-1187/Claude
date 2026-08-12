@@ -161,7 +161,8 @@ def main() -> int:
                     help="1本の長さ [秒] (Shorts は60秒未満)")
     args = ap.parse_args()
 
-    specs = TR.TRACKS
+    # black screen は映像が無いので Shorts にしても意味がない
+    specs = [s for s in TR.TRACKS if "black_screen" not in s.slug]
     if args.tracks:
         missing = [s for s in args.tracks if s not in TR.BY_SLUG]
         if missing:

@@ -36,8 +36,28 @@ def lin2db(x: float | np.ndarray) -> float | np.ndarray:
     return 20.0 * np.log10(np.maximum(np.abs(x), 1e-12))
 
 
-def midi2hz(m: float | np.ndarray, a4: float = 440.0) -> float | np.ndarray:
-    """MIDI ノート番号 → 周波数 (Hz)。a4 を変えると 432Hz チューニングにできる"""
+_TUNING_A4 = 440.0
+
+
+def set_tuning(a4: float) -> None:
+    """
+    セッション全体の基準ピッチを変える。
+
+    以前は TrackSpec.a4 がメタデータ (説明文の表記) にしか使われておらず、
+    「432Hz チューニング」を謳う動画の実音が 440Hz のままだった。
+    周波数系の視聴者はスペクトラムアプリで実際に確かめるので、
+    表記と実音がズレていると一発で信頼を失う。
+    楽器側の midi2hz() 呼び出しは全てデフォルト引数なので、
+    ここを差し替えれば全音源に効く。
+    """
+    global _TUNING_A4
+    _TUNING_A4 = float(a4)
+
+
+def midi2hz(m: float | np.ndarray, a4: float | None = None) -> float | np.ndarray:
+    """MIDI ノート番号 → 周波数 (Hz)。a4 未指定なら set_tuning() の値を使う"""
+    if a4 is None:
+        a4 = _TUNING_A4
     return a4 * 2.0 ** ((np.asarray(m, dtype=np.float64) - 69.0) / 12.0)
 
 

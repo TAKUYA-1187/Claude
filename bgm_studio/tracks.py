@@ -825,6 +825,430 @@ def build_christmas_jazz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, d
 
 
 # ──────────────────────────────────────────────────────────────
+# 18. Starship Sleeping Quarters  (宇宙船の寝室 — 睡眠用ハム音)
+# ──────────────────────────────────────────────────────────────
+
+def build_spaceship(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    宇宙船のエンジン音。実体は「非常に低いドローン + 整形したノイズ床」で、
+    このジャンルの定番動画も中身はほぼ同じ。合成との相性が全ジャンルで最も良い。
+    覚醒させる成分 (旋律・急な変化・高域) を全部抜くのが正解。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=2)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=24.0)
+
+    # エンジンの唸り: 2 本の低いドローンをわずかにデチューンして
+    # ゆっくりしたうなり (ビート) を作る
+    A.play_drone(buf, T.note("A", 1) + spec.key_root, clock, bank,
+                 gain=0.30, partials=7)
+    A.play_drone(buf, T.note("E", 2) + spec.key_root, clock, bank,
+                 gain=0.14, partials=5)
+    # 空調のような薄いパッド
+    A.play_pad(buf, spans, clock, bank, gain=0.14, brightness=0.4,
+               attack=9.0, release=10.0, rng=rng, n_voices=3, low=40, high=59)
+
+    ir = dsp.make_reverb_ir(4.0, rt60=4.5, damp=0.85, predelay=0.04,
+                            seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.brown_noise_bed(n, seed=spec.seed + 1, tilt_hz=350.0), +2.0),
+        (lambda: NT.wind(n, seed=spec.seed + 2), -16.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -26.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=400.0, gain_db=-6.0)
+        x = dsp.lowpass(x, 6500.0, order=2)
+        x = dsp.highpass(x, 34.0, order=2)
+        return x
+
+    return _finish(buf, clock, spec, ir, 0.30, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 19. 528Hz Love Frequency  (528Hz — 実音もちゃんと 528Hz)
+# ──────────────────────────────────────────────────────────────
+
+def build_528(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    528Hz 系。A=444Hz に調律すると C5 がちょうど 528.0Hz になる。
+    この層の視聴者はスペクトラムアプリで実際に確かめるので、
+    表記だけでなく実音を合わせることが信頼に直結する。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=2)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=36.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.24, brightness=0.6,
+               attack=7.0, release=8.0, rng=rng, n_voices=5, low=48, high=84)
+    # C5 = 528Hz のドローンを中心に据える
+    A.play_drone(buf, T.note("C", 5), clock, bank, gain=0.10, partials=4)
+    A.play_drone(buf, T.note("C", 3), clock, bank, gain=0.14, partials=7)
+    A.play_sparse_bells(buf, spans, clock, bank, inst="bowl", gain=0.16,
+                        every_bars=5.0, center=60, rng=rng)
+
+    ir = dsp.make_reverb_ir(6.0, rt60=7.5, damp=0.7, predelay=0.05,
+                            seed=spec.seed)
+    n = clock.n_samples
+    beds = [(lambda: NT.room_tone(n, seed=spec.seed + 1), -32.0)]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=800.0, gain_db=-3.0)
+        x = dsp.lowpass(x, 13000.0, order=2)
+        x = dsp.highpass(x, 40.0, order=2)
+        return x
+
+    return _finish(buf, clock, spec, ir, 0.42, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 20. 40Hz Focus  (ガンマ波リズムの集中用ドローン)
+# ──────────────────────────────────────────────────────────────
+
+def build_focus_40hz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    40Hz の振幅パルスを敷いた集中用。
+    バイノーラル (L/R別周波数) はスピーカーで無効になる上に
+    モノ互換検査も通らないので、モノラルでも効く振幅変調にする。
+    40Hz はループ長 1440 秒に対して整数周期 (57600 回) なので継ぎ目も出ない。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=2)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=20.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.22, brightness=0.55,
+               attack=5.0, release=6.0, rng=rng, n_voices=4, low=45, high=76)
+    A.play_drone(buf, T.note("A", 2) + spec.key_root, clock, bank,
+                 gain=0.16, partials=8)
+    A.play_arp(buf, spans, clock, bank, inst="marimba", gain=0.07, rate=1.0,
+               octaves=1, center=69, direction="up", rng=rng)
+
+    ir = dsp.make_reverb_ir(3.0, rt60=2.8, damp=0.6, seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.brown_noise_bed(n, seed=spec.seed + 1, tilt_hz=420.0), -18.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 2), -32.0),
+    ]
+
+    def master(x):
+        # 40Hz の振幅パルス (深さ 25%)。深すぎると耳障りになる
+        t = np.arange(x.shape[0], dtype=np.float64) / dsp.SR
+        pulse = (1.0 - 0.25 * 0.5 * (1.0 + np.sin(2 * np.pi * 40.0 * t))
+                 ).astype(np.float32)
+        x = x * pulse[:, None]
+        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-4.0)
+        x = dsp.lowpass(x, 11000.0, order=2)
+        x = dsp.highpass(x, 30.0, order=2)
+        return x
+
+    return _finish(buf, clock, spec, ir, 0.30, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 21. Halloween Ambience  (ハロウィン — 9〜10月の季節枠)
+# ──────────────────────────────────────────────────────────────
+
+def build_halloween(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    ハロウィンの夜。不穏だが「怖すぎない」線を守る。
+    (作業/パーティ用 BGM なので、ホラー効果音で驚かせてはいけない)
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=3)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=18.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.16, brightness=0.45,
+               attack=5.0, release=6.0, rng=rng, n_voices=4, low=41, high=67)
+    # オルゴールが半音ずれたような celesta。ハロウィンの音はほぼこれ
+    A.play_melody(buf, spans, clock, bank, inst="celesta", gain=0.20,
+                  scale_root=(spec.key_root + 9) % 12, scale="harmonic_minor",
+                  lo=69, hi=88, density=0.35, rng=rng, rest_prob=0.5)
+    A.play_bass(buf, spans, clock, bank, inst="subbass", style="root",
+                gain=0.16, octave=-2, rng=rng)
+    A.play_sparse_bells(buf, spans, clock, bank, inst="bowl", gain=0.10,
+                        every_bars=9.0, center=48, rng=rng)   # 遠い鐘
+
+    ir = dsp.make_reverb_ir(4.5, rt60=5.0, damp=0.55, predelay=0.04,
+                            seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.wind(n, seed=spec.seed + 1), -13.0),
+        (lambda: NT.night_ambience(n, seed=spec.seed + 2), -22.0),
+        (lambda: NT.thunder(n, seed=spec.seed + 3, count=2), -18.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 4), -32.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=650.0, gain_db=-4.0)
+        x = dsp.lowpass(x, 12000.0, order=2)
+        return dsp.saturate(x, drive=1.1, mix=0.2)
+
+    return _finish(buf, clock, spec, ir, 0.34, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 22. Snowstorm & Fireplace  (吹雪と暖炉 — 12〜2月の季節枠)
+# ──────────────────────────────────────────────────────────────
+
+def build_snowstorm(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    外は吹雪、中は暖炉。「守られている感じ」がこのジャンルの快感の正体。
+    風は 2 系統 (遠くの唸り + 窓に当たる近い風) 重ねると吹雪になる。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=2)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=26.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.18, brightness=0.5,
+               attack=7.0, release=8.0, rng=rng, n_voices=4, low=43, high=69)
+    # 進行は A センターで書いてあるので、ドローンも A + key_root に合わせる
+    A.play_drone(buf, T.note("A", 2) + spec.key_root, clock, bank,
+                 gain=0.12, partials=6)
+
+    ir = dsp.make_reverb_ir(4.5, rt60=5.0, damp=0.75, predelay=0.04,
+                            seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.wind(n, seed=spec.seed + 1), +2.0),
+        (lambda: NT.wind(n, seed=spec.seed + 11), -6.0),
+        (lambda: NT.fireplace(n, seed=spec.seed + 2), -8.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -30.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=500.0, gain_db=-5.5)
+        x = dsp.lowpass(x, 8500.0, order=2)
+        x = dsp.highpass(x, 34.0, order=2)
+        return x
+
+    return _finish(buf, clock, spec, ir, 0.34, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 23. Forest Night Camp  (夜の森の野営 — TTRPG/睡眠クロスオーバー)
+# ──────────────────────────────────────────────────────────────
+
+def build_forest_camp(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    夜の森の焚き火。TTRPG (D&D) のセッション用と睡眠用の両方に刺さる。
+    ハープは「たまにしか弾かれない」ことが大事。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=2)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=20.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.12, brightness=0.5,
+               attack=6.0, release=7.0, rng=rng, n_voices=4, low=45, high=72)
+    A.play_arp(buf, spans, clock, bank, inst="harp", gain=0.08, rate=2.0,
+               octaves=2, center=69, direction="up", rng=rng)
+    A.play_sparse_bells(buf, spans, clock, bank, inst="harp", gain=0.09,
+                        every_bars=7.0, center=64, rng=rng)
+
+    ir = dsp.make_reverb_ir(3.5, rt60=3.5, damp=0.6, predelay=0.03,
+                            seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.night_ambience(n, seed=spec.seed + 1), -10.0),
+        (lambda: NT.fireplace(n, seed=spec.seed + 2), -12.0),
+        (lambda: NT.wind(n, seed=spec.seed + 3), -20.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 4), -32.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=650.0, gain_db=-4.5)
+        x = dsp.lowpass(x, 11000.0, order=2)
+        return x
+
+    return _finish(buf, clock, spec, ir, 0.32, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 24. Deep Space Drone  (ダークアンビエント / 星雲)
+# ──────────────────────────────────────────────────────────────
+
+def build_dark_ambient(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    ダークアンビエント。巨大な空間の低いドローン。
+    ただし「こもり」検査に落ちない程度の高域の空気
+    (ボウルの倍音) を必ず残す。02 で学んだ教訓。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=2)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=40.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.24, brightness=0.62,
+               attack=10.0, release=12.0, rng=rng, n_voices=5, low=38, high=78)
+    A.play_drone(buf, T.note("A", 1) + spec.key_root, clock, bank,
+                 gain=0.20, partials=6)
+    A.play_sparse_bells(buf, spans, clock, bank, inst="bowl", gain=0.13,
+                        every_bars=8.0, center=64, rng=rng)
+    A.play_arp(buf, spans, clock, bank, inst="celesta", gain=0.05, rate=3.0,
+               octaves=2, center=81, direction="up", rng=rng)
+
+    ir = dsp.make_reverb_ir(8.0, rt60=10.0, damp=0.6, predelay=0.08,
+                            width=0.55, seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.wind(n, seed=spec.seed + 1), -16.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 2), -30.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=800.0, gain_db=-3.5)
+        x = dsp.lowpass(x, 12000.0, order=2)
+        x = dsp.highpass(x, 30.0, order=2)
+        return x
+
+    return _finish(buf, clock, spec, ir, 0.46, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 25. Cyberpunk Rain  (サイバーパンクの雨の夜)
+# ──────────────────────────────────────────────────────────────
+
+def build_cyberpunk(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    ネオンの雨。シンセのアルペジオ + 短調のヴァンプ + 雨。
+    ゲーマー/作業用の需要。動かないコード進行が「未来の倦怠感」を作る。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=3)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=14.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.16, brightness=0.7,
+               attack=3.0, release=4.5, rng=rng, n_voices=5, low=45, high=79)
+    A.play_arp(buf, spans, clock, bank, inst="synth", gain=0.15, rate=0.5,
+               octaves=2, center=64, direction="up", rng=rng, pan=0.1)
+    A.play_melody(buf, spans, clock, bank, inst="synth", gain=0.16,
+                  scale_root=(spec.key_root + 9) % 12, scale="minor",
+                  lo=69, hi=88, density=0.35, rng=rng, rest_prob=0.5)
+    A.play_bass(buf, spans, clock, bank, inst="subbass", style="pump",
+                gain=0.22, octave=-2, rng=rng)
+
+    ir = dsp.make_reverb_ir(3.2, rt60=2.8, damp=0.5, predelay=0.03,
+                            seed=spec.seed)
+    n = clock.n_samples
+    warp = lambda x: dsp.wow_flutter(x, depth=0.0012, rate=0.5,
+                                     loop_n=n, seed=spec.seed)
+    beds = [
+        (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.55, window=False), -15.0),
+        (lambda: NT.thunder(n, seed=spec.seed + 2, count=2), -22.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -32.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-3.0)
+        x = dsp.lowpass(x, 14000.0, order=2)
+        return dsp.saturate(x, drive=1.25, mix=0.35)
+
+    return _finish(buf, clock, spec, ir, 0.28, beds, master, warp=warp)
+
+
+# ──────────────────────────────────────────────────────────────
+# 26. Dark Academia Library  (古い図書室 — 勉強用)
+# ──────────────────────────────────────────────────────────────
+
+def build_academia(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    古い図書室。物憂げなピアノ + 柱時計 + 暖炉 + 窓の外の雨。
+    BPM を 60 にすると柱時計 (毎拍のチック) が正確に 1 秒刻みになる。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=3)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=14.0)
+
+    A.play_comp(buf, spans, clock, bank, inst="piano", style="ballad",
+                gain=0.24, voicing="close", center=55, rng=rng, spread_ms=40.0)
+    A.play_melody(buf, spans, clock, bank, inst="piano", gain=0.24,
+                  scale_root=(spec.key_root + 9) % 12, scale="minor",
+                  lo=62, hi=84, density=0.42, rng=rng, rest_prob=0.45)
+    A.play_pad(buf, spans, clock, bank, gain=0.08, brightness=0.5,
+               attack=4.0, release=5.0, rng=rng, n_voices=4, low=48, high=74)
+    A.play_bass(buf, spans, clock, bank, inst="upright", style="root",
+                gain=0.14, octave=-1, rng=rng)
+
+    # 柱時計。毎拍 (=1 秒) の小さなチック。60 拍ごとにわずかに強く
+    for b in range(int(clock.total_beats)):
+        g = 0.050 if b % 60 else 0.075
+        A.add_panned(buf, bank.hit("rim"), clock.at(float(b)), g, -0.3)
+
+    ir = dsp.make_reverb_ir(2.6, rt60=2.2, damp=0.5, predelay=0.02,
+                            seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.fireplace(n, seed=spec.seed + 1), -17.0),
+        (lambda: NT.rain(n, seed=spec.seed + 2, intensity=0.45, window=True), -20.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -32.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-3.5)
+        x = dsp.peak_eq(x, 250.0, 1.2, q=1.0)
+        x = dsp.lowpass(x, 13000.0, order=2)
+        return dsp.saturate(x, drive=1.15, mix=0.25)
+
+    return _finish(buf, clock, spec, ir, 0.28, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
+# 27. Rain — Black Screen  (黒画面の雨 10時間)
+# ──────────────────────────────────────────────────────────────
+
+def build_rain_black(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    黒画面 + 雨だけ。睡眠系で確立された定番フォーマット
+    (画面の光がゼロ = 部屋が真っ暗のまま)。
+    15 とは別の雨 (穏やかで雷なし) をシードから合成する。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=2)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=24.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.16, brightness=0.4,
+               attack=9.0, release=10.0, rng=rng, n_voices=3, low=40, high=62)
+    A.play_drone(buf, T.note("A", 1) + spec.key_root, clock, bank,
+                 gain=0.10, partials=5)
+
+    ir = dsp.make_reverb_ir(5.0, rt60=6.0, damp=0.8, predelay=0.05,
+                            seed=spec.seed)
+    n = clock.n_samples
+    beds = [
+        (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.6, window=True), +6.0),
+        (lambda: NT.wind(n, seed=spec.seed + 2), -18.0),
+        (lambda: NT.room_tone(n, seed=spec.seed + 3), -30.0),
+    ]
+
+    def master(x):
+        x = dsp.tilt_eq(x, pivot=450.0, gain_db=-7.0)
+        x = dsp.lowpass(x, 8000.0, order=2)
+        x = dsp.highpass(x, 36.0, order=2)
+        return x
+
+    return _finish(buf, clock, spec, ir, 0.36, beds, master)
+
+
+# ──────────────────────────────────────────────────────────────
 # トラック一覧
 # ──────────────────────────────────────────────────────────────
 
@@ -1060,6 +1484,147 @@ TRACKS: list[TrackSpec] = [
                       "december", "holiday music instrumental"],
         ),
     ),
+    TrackSpec(
+        slug="18_starship_sleep",
+        title_en="Starship Sleeping Quarters",
+        genre_ja="宇宙船の寝室（睡眠用ハム音）",
+        use_case="sleep", bpm=45.0, key="Am", key_root=0, scale="minor",
+        prog_key="ambient", visual="spaceship_window", seed=1818,
+        build=build_spaceship,
+        seo=dict(
+            title="Starship Sleeping Quarters 🚀 Deep Space White Noise for Sleep",
+            keywords=["spaceship white noise", "starship ambience",
+                      "space sounds", "sleep sounds", "sci-fi ambience",
+                      "deep bass sleep", "white noise", "engine hum"],
+        ),
+    ),
+    TrackSpec(
+        slug="19_528hz_love_frequency",
+        title_en="528Hz Healing Frequency",
+        genre_ja="528Hz ヒーリング（A=444Hz実調律）",
+        use_case="relax", bpm=50.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="golden_light", seed=1919, a4=444.0,
+        build=build_528,
+        seo=dict(
+            title="528Hz Healing Frequency ✨ Pure Tone Meditation & Deep Sleep",
+            keywords=["528hz", "healing frequency", "love frequency",
+                      "meditation music", "sleep music", "solfeggio",
+                      "positive energy", "relaxation"],
+        ),
+    ),
+    TrackSpec(
+        slug="20_focus_40hz",
+        title_en="40Hz Deep Focus",
+        genre_ja="40Hz集中ドローン（ガンマ波リズム）",
+        use_case="study", bpm=60.0, key="Am", key_root=0, scale="dorian",
+        prog_key="focus", visual="focus_depths", seed=2020,
+        build=build_focus_40hz,
+        seo=dict(
+            title="40Hz Focus Music 🧠 Gamma Rhythm Ambient for Deep Work",
+            keywords=["40hz", "gamma waves", "focus music", "study music",
+                      "concentration", "deep work", "adhd focus",
+                      "brain music"],
+        ),
+    ),
+    TrackSpec(
+        slug="21_halloween_night",
+        title_en="Halloween Night Ambience",
+        genre_ja="ハロウィンの夜（9〜10月の季節枠）",
+        use_case="relax", bpm=66.0, key="Am", key_root=0, scale="harmonic_minor",
+        prog_key="halloween", visual="halloween_manor", seed=2121,
+        build=build_halloween,
+        seo=dict(
+            title="Halloween Ambience 🎃 Spooky Night Music & Autumn Wind",
+            keywords=["halloween ambience", "spooky music", "halloween music",
+                      "october", "autumn night", "haunted", "halloween party",
+                      "trick or treat"],
+        ),
+    ),
+    TrackSpec(
+        slug="22_snowstorm_fireplace",
+        title_en="Snowstorm & Fireplace",
+        genre_ja="吹雪と暖炉（12〜2月の季節枠）",
+        use_case="sleep", bpm=48.0, key="Dm", key_root=5, scale="minor",
+        prog_key="ambient", visual="snow_cabin", seed=2222,
+        build=build_snowstorm,
+        seo=dict(
+            title="Blizzard & Crackling Fireplace ❄️ Cozy Snowstorm for Sleep",
+            keywords=["blizzard sounds", "snowstorm", "fireplace",
+                      "winter sounds", "sleep sounds", "howling wind",
+                      "cozy cabin", "snow storm sleep"],
+        ),
+    ),
+    TrackSpec(
+        slug="23_forest_night_camp",
+        title_en="Forest Night Campfire",
+        genre_ja="夜の森の野営（TTRPG/睡眠）",
+        use_case="sleep", bpm=50.0, key="D", key_root=0, scale="dorian",
+        prog_key="healing", visual="forest_camp", seed=2323,
+        build=build_forest_camp,
+        seo=dict(
+            title="Forest Night Campfire 🏕️ Crickets & Crackling Fire for Sleep",
+            keywords=["campfire sounds", "forest night", "crickets",
+                      "camping ambience", "dnd ambience", "nature sounds",
+                      "night forest", "sleep sounds"],
+        ),
+    ),
+    TrackSpec(
+        slug="24_deep_space_drone",
+        title_en="Deep Space Drone",
+        genre_ja="ダークアンビエント（星雲）",
+        use_case="sleep", bpm=40.0, key="Em", key_root=7, scale="minor",
+        prog_key="ambient", visual="nebula", seed=2424,
+        build=build_dark_ambient,
+        seo=dict(
+            title="Deep Space Ambient 🌌 Dark Drone Music for Sleep & Cosmic Calm",
+            keywords=["dark ambient", "space ambient", "drone music",
+                      "cosmic", "nebula", "deep sleep", "interstellar",
+                      "space music"],
+        ),
+    ),
+    TrackSpec(
+        slug="25_cyberpunk_rain",
+        title_en="Cyberpunk Rain",
+        genre_ja="サイバーパンクの雨の夜",
+        use_case="work", bpm=86.0, key="Am", key_root=0, scale="minor",
+        prog_key="cyber", visual="neon_rain", seed=2525,
+        build=build_cyberpunk,
+        seo=dict(
+            title="Cyberpunk Rain 🌃 Neon Night Synth Ambient for Work & Focus",
+            keywords=["cyberpunk music", "synthwave ambient", "neon rain",
+                      "night city", "futuristic", "blade runner vibes",
+                      "work music", "coding music"],
+        ),
+    ),
+    TrackSpec(
+        slug="26_dark_academia_library",
+        title_en="Dark Academia Library",
+        genre_ja="古い図書室（ダークアカデミア）",
+        use_case="study", bpm=60.0, key="Am", key_root=0, scale="minor",
+        prog_key="academia", visual="old_library", seed=2626,
+        build=build_academia,
+        seo=dict(
+            title="Dark Academia Library 🕯️ Melancholy Piano, Rain & a Ticking Clock",
+            keywords=["dark academia", "library ambience", "study music",
+                      "melancholy piano", "rainy library", "old books",
+                      "classical study", "writing music"],
+        ),
+    ),
+    TrackSpec(
+        slug="27_rain_black_screen",
+        title_en="Rain — Black Screen",
+        genre_ja="黒画面の雨（10時間）",
+        use_case="sleep", bpm=46.0, key="Am", key_root=0, scale="minor",
+        prog_key="ambient", visual="black_screen", seed=2727,
+        build=build_rain_black,
+        seo=dict(
+            title="Rain Sounds for Sleep 🌧️ BLACK SCREEN · 10 Hours of Gentle Night Rain",
+            keywords=["rain black screen", "black screen sleep",
+                      "rain sounds 10 hours", "dark screen rain",
+                      "sleep sounds", "rain no music", "insomnia",
+                      "rain all night"],
+        ),
+    ),
 ]
 
 BY_SLUG = {t.slug: t for t in TRACKS}
@@ -1069,7 +1634,13 @@ def render(spec: TrackSpec, seconds: float = LOOP_SECONDS) -> tuple[np.ndarray, 
     """1 トラックをレンダリングして (stereo float32, 情報 dict) を返す"""
     if spec.build is None:
         raise ValueError(f"no builder for {spec.slug}")
-    audio, info = spec.build(spec, seconds)
+    # 基準ピッチを実際の合成に反映する (432Hz / 444Hz チューニング)
+    dsp.set_tuning(spec.a4)
+    try:
+        audio, info = spec.build(spec, seconds)
+    finally:
+        dsp.set_tuning(440.0)
     info["slug"] = spec.slug
     info["seconds"] = seconds
+    info["a4_hz"] = spec.a4
     return audio, info

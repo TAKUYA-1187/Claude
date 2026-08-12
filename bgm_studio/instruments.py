@@ -195,6 +195,35 @@ def harp(m: int, vel: float = 0.8, sr: int = SR,
     return (y * (0.35 + 0.65 * vel)).astype(np.float32)
 
 
+def synth_pluck(m: int, vel: float = 0.8, sr: int = SR,
+                rng: np.random.Generator | None = None) -> np.ndarray:
+    """
+    アナログ風シンセのプラック。サイバーパンク/シンセウェイヴ用。
+    帯域制限ノコギリ波をローパスの「開いて閉じる」動きで整形する。
+    """
+    rng = rng or np.random.default_rng(m + 6800)
+    f0 = midi2hz(m)
+    dur = 1.6
+    n = int(dur * sr)
+    t = np.arange(n, dtype=np.float32) / sr
+    nyq = sr * 0.45
+    out = np.zeros(n, dtype=np.float32)
+    for v in range(2):                       # 2声デチューン
+        cents = (v - 0.5) * 9.0
+        f = f0 * (2.0 ** (cents / 1200.0))
+        k = 1
+        while f * k < nyq and k <= 32:
+            # フィルタの閉じを倍音ごとの減衰の速さで表す
+            tau = 0.55 / (1.0 + 0.30 * k)
+            out += ((1.0 / k) * np.exp(-t / tau)
+                    * np.sin(TWO_PI * f * k * t + rng.uniform(0, TWO_PI))
+                    ).astype(np.float32)
+            k += 1
+    out *= np.exp(-t / 0.9)
+    out[:int(0.003 * sr)] *= np.linspace(0, 1, int(0.003 * sr), dtype=np.float32)
+    return (out * 0.5 * (0.35 + 0.65 * vel)).astype(np.float32)
+
+
 def koto(m: int, vel: float = 0.8, sr: int = SR,
          rng: np.random.Generator | None = None) -> np.ndarray:
     """
@@ -520,6 +549,7 @@ PITCHED = {
     "nylon": nylon_guitar,
     "harp": harp,
     "koto": koto,
+    "synth": synth_pluck,
     "celesta": celesta,
     "bowl": singing_bowl,
     "marimba": marimba,

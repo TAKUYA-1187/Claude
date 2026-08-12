@@ -1229,7 +1229,386 @@ def scene_christmas_window(seed: int = 54):
     return frame
 
 
+def scene_spaceship_window(seed: int = 61):
+    """宇宙船の窓。流れる星 + 船体のフレーム + 計器の淡い光"""
+    rng = np.random.default_rng(seed)
+    bg = vgrad([(2, 3, 8), (4, 6, 14), (8, 10, 20), (3, 4, 10)])
+    base = np.clip(screen(bg, radial_glow(0.5, 0.5, 0.55, (30, 40, 70),
+                                          0.5, falloff=2.0)), 0, 255)
+    # 船体フレーム (窓の縁)
+    im = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, 0, W, int(H * 0.09)], fill=(12, 13, 16))
+    d.rectangle([0, int(H * 0.91), W, H], fill=(12, 13, 16))
+    d.rectangle([0, 0, int(W * 0.05), H], fill=(10, 11, 14))
+    d.rectangle([int(W * 0.95), 0, W, H], fill=(10, 11, 14))
+    # 計器のランプ
+    for k in range(7):
+        x0 = int(W * (0.12 + 0.11 * k))
+        col = [(60, 180, 120), (200, 150, 60), (80, 130, 200)][k % 3]
+        d.rectangle([x0, int(H * 0.945), x0 + 26, int(H * 0.955)], fill=col)
+    hull = np.asarray(im, dtype=np.float32)
+    hmask = (hull.sum(axis=2) > 1)[:, :, None]
+
+    # 星: 3 層の視差。横に整数回流れる
+    star_layers = []
+    for k, (n_s, sp, size) in enumerate(((90, 1, 1.4), (50, 2, 2.0), (22, 3, 2.8))):
+        xs, ys = rng.random(n_s), rng.random(n_s) * 0.8 + 0.1
+        br = 0.4 + 0.6 * rng.random(n_s)
+        star_layers.append((xs, ys, br, sp, size))
+
+    base = vignette(base, 0.4) + static_grain(seed=seed, amount=1.8)
+
+    def frame(t01):
+        img = base.copy()
+        im2 = Image.new("RGB", (W, H), (0, 0, 0))
+        d2 = ImageDraw.Draw(im2)
+        for xs, ys, br, sp, size in star_layers:
+            xx = (xs - sp * t01) % 1.0
+            for i in range(len(xs)):
+                c = int(140 + 100 * br[i])
+                d2.ellipse([xx[i] * W - size, ys[i] * H - size,
+                            xx[i] * W + size, ys[i] * H + size],
+                           fill=(c, c, min(255, c + 20)))
+        img = screen(img, np.asarray(im2, dtype=np.float32))
+        img = np.where(hmask, hull, img)
+        return img
+    return frame
+
+
+def scene_golden_light(seed: int = 62):
+    """528Hz 用。呼吸する金色の光。動きは呼吸のリズム (約6秒周期) だけ"""
+    bg = vgrad([(20, 12, 6), (36, 22, 10), (54, 34, 14), (26, 16, 8)])
+    base = vignette(bg, 0.4) + static_grain(seed=seed, amount=2.0)
+    breaths = 3   # 20秒の映像ループ中に 3 回 → 1 周期 6.7 秒
+
+    def frame(t01):
+        img = base.copy()
+        b = 0.5 + 0.5 * np.sin(TWO_PI * breaths * t01 - np.pi / 2)
+        s = 0.55 + 0.30 * b
+        img = screen(img, radial_glow(0.5, 0.52, 0.30 + 0.05 * b,
+                                      (255, 190, 90), s, falloff=1.6, res_div=3))
+        img = screen(img, radial_glow(0.5, 0.52, 0.62,
+                                      (200, 130, 50), 0.35 * s, falloff=1.9, res_div=3))
+        img = screen(img, _particle_layer(
+            t01, 24, seed + 1, H, W, length=0.0, thickness=5.0,
+            color=(255, 214, 130), speed=1.0, drift=0.4, size_var=1.4,
+            glow=True) * 0.4)
+        return img
+    return frame
+
+
+def scene_focus_depths(seed: int = 63):
+    """40Hz 集中用。深い青の空間をごく遅い光の帯が漂う"""
+    bg = vgrad([(6, 10, 22), (10, 18, 34), (14, 26, 44), (8, 12, 26)])
+    base = np.clip(screen(bg, radial_glow(0.5, 0.42, 0.5, (40, 80, 130),
+                                          0.5, falloff=1.9)), 0, 255)
+    base = vignette(base, 0.42) + static_grain(seed=seed, amount=2.0)
+
+    def frame(t01):
+        img = base.copy()
+        f1 = periodic_noise(t01, scale=1.6, cycles=1, seed=seed + 1, n_waves=5)
+        band = np.clip(f1 * 1.3, 0, 1)[:, :, None] * np.array(
+            [30, 70, 110], dtype=np.float32)
+        img = screen(img, band * 0.7)
+        img = screen(img, _particle_layer(
+            t01, 30, seed + 2, H, W, length=0.0, thickness=4.0,
+            color=(120, 190, 235), speed=1.0, drift=0.3, size_var=1.3,
+            glow=True) * 0.35)
+        return img
+    return frame
+
+
+def scene_halloween_manor(seed: int = 64):
+    """ハロウィン。丘の上の館 + 雲間の月 + カボチャ提灯"""
+    rng = np.random.default_rng(seed)
+    y, x = _yx()
+    bg = vgrad([(14, 10, 26), (26, 18, 42), (44, 30, 56), (20, 14, 30)],
+               stops=[0.0, 0.35, 0.62, 1.0])
+    base = np.clip(screen(bg, radial_glow(0.72, 0.20, 0.10,
+                                          (230, 226, 200), 1.0, falloff=1.2)), 0, 255)
+    base = np.clip(screen(base, radial_glow(0.72, 0.20, 0.30,
+                                            (140, 130, 110), 0.4, falloff=1.8)), 0, 255)
+    # 丘と館のシルエット
+    im = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+    hill = [(0, int(H * 0.78))]
+    for i in range(13):
+        hill.append((int(W * i / 12),
+                     int(H * 0.74 + 40 * np.sin(i * 0.8 + 2.0))))
+    hill += [(W, int(H * 0.80)), (W, H), (0, H)]
+    d.polygon(hill, fill=(10, 7, 16))
+    mx, mh = int(W * 0.30), int(H * 0.72)
+    d.rectangle([mx - 130, mh - 180, mx + 130, mh + 60], fill=(8, 6, 13))
+    d.polygon([(mx - 150, mh - 180), (mx + 150, mh - 180), (mx, mh - 260)],
+              fill=(8, 6, 13))
+    for tx in (mx - 100, mx + 100):
+        d.rectangle([tx - 26, mh - 240, tx + 26, mh - 60], fill=(8, 6, 13))
+        d.polygon([(tx - 34, mh - 240), (tx + 34, mh - 240), (tx, mh - 300)],
+                  fill=(8, 6, 13))
+    manor = np.asarray(im, dtype=np.float32)
+    mmask = (manor.sum(axis=2) > 1)[:, :, None]
+    # 窓の灯り (2つだけ。多いと怖さが消える)
+    wins = [(mx - 40, mh - 120), (mx + 55, mh - 90)]
+    # カボチャ (手前の丘に 3 つ)
+    pumps = [(0.62, 0.84, 0.020), (0.70, 0.88, 0.026), (0.55, 0.90, 0.016)]
+
+    base = vignette(base, 0.46) + static_grain(seed=seed, amount=2.4)
+
+    def frame(t01):
+        img = base.copy()
+        # 月の前を雲が流れる
+        cf = _cloud_field(seed + 3, kx_max=2, ky_scale=1.4, n_waves=6)
+        cl = np.clip(np.roll(cf, int(round(t01 * W)), axis=1) * 1.6 - 0.2, 0, 1)
+        cl *= np.clip((0.45 - y) / 0.40, 0, 1)
+        img = img * (1.0 - 0.55 * cl[:, :, None])
+        img = np.where(mmask, manor, img)
+        for wx, wy in wins:
+            flick = 0.7 + 0.3 * np.sin(TWO_PI * (3 * t01 + wx * 0.01))
+            img = screen(img, radial_glow(wx / W, wy / H, 0.014,
+                                          (255, 170, 60), 0.9 * flick,
+                                          falloff=1.2, res_div=3))
+        for px, py, pr in pumps:
+            flick = 0.75 + 0.25 * np.sin(TWO_PI * (5 * t01 + px * 40))
+            img = screen(img, radial_glow(px, py, pr * 2.6, (255, 110, 20),
+                                          0.6 * flick, falloff=1.6, res_div=3))
+            img = screen(img, radial_glow(px, py, pr, (255, 190, 80),
+                                          1.0 * flick, falloff=1.1, res_div=3))
+        # 舞う落ち葉
+        img = screen(img, _particle_layer(
+            t01, 26, seed + 4, H, W, length=0.008, thickness=4.0,
+            color=(150, 80, 30), speed=2.0, drift=0.06, size_var=1.3) * 0.6)
+        return img
+    return frame
+
+
+def scene_snow_cabin(seed: int = 65):
+    """吹雪の窓。storm_window の雪版 + 部屋の暖色"""
+    rng = np.random.default_rng(seed)
+    bg = vgrad([(10, 12, 22), (16, 20, 32), (24, 28, 40), (12, 14, 24)])
+    lights = np.zeros_like(bg)
+    for _ in range(8):
+        cx, cy = rng.uniform(0.1, 0.9), rng.uniform(0.4, 0.8)
+        lights += radial_glow(cx, cy, rng.uniform(0.02, 0.05),
+                              (255, 190, 120), rng.uniform(0.2, 0.5))
+    base = np.clip(screen(bg, blur(lights, 30.0)), 0, 255)
+    base = blur(base, 9.0)
+    base = np.clip(screen(base, radial_glow(0.08, 0.75, 0.45, (210, 130, 60),
+                                            0.55, falloff=1.9)), 0, 255)
+    base = vignette(base, 0.48) + static_grain(seed=seed, amount=2.4)
+
+    im = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+    for xx in (int(W * 0.055), int(W * 0.492), int(W * 0.93)):
+        d.rectangle([xx, 0, xx + int(W * 0.014), H], fill=(26, 18, 13))
+    d.rectangle([0, int(H * 0.475), W, int(H * 0.507)], fill=(26, 18, 13))
+    fr = np.asarray(im, dtype=np.float32)
+    fmask = (fr.sum(axis=2) > 1)[:, :, None]
+
+    def frame(t01):
+        img = base.copy()
+        # 吹雪: 斜めに流れる雪 3 層 (速いほど斜めに)
+        img = screen(img, _particle_layer(
+            t01, 160, seed + 1, H, W, length=0.015, thickness=2.6,
+            color=(220, 228, 240), speed=3.0, drift=0.05, size_var=1.2) * 0.75)
+        img = screen(img, _particle_layer(
+            t01, 90, seed + 2, H, W, length=0.008, thickness=4.0,
+            color=(240, 245, 252), speed=2.0, drift=0.07, size_var=1.5) * 0.8)
+        img = screen(img, _particle_layer(
+            t01, 40, seed + 3, H, W, length=0.0, thickness=6.0,
+            color=(255, 255, 255), speed=1.0, drift=0.09, size_var=1.6) * 0.6)
+        img = np.where(fmask, fr, img)
+        return img
+    return frame
+
+
+def scene_forest_camp(seed: int = 66):
+    """夜の森の焚き火。木々のシルエット + 火の明滅 + 蛍"""
+    rng = np.random.default_rng(seed)
+    y, x = _yx()
+    bg = vgrad([(6, 10, 18), (10, 16, 26), (16, 24, 30), (8, 12, 16)])
+    base = np.clip(screen(bg, radial_glow(0.60, 0.16, 0.12, (200, 210, 230),
+                                          0.55, falloff=1.4)), 0, 255)
+    # 木々 (両側から)
+    im = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+    for tx in [0.06, 0.16, 0.86, 0.94, 0.26, 0.76]:
+        tw = rng.uniform(26, 50)
+        d.rectangle([int(tx * W - tw / 2), 0, int(tx * W + tw / 2), H],
+                    fill=(4, 6, 8))
+        for k in range(5):
+            by = int(H * (0.1 + 0.15 * k))
+            bl = rng.uniform(60, 130)
+            sgn = -1 if tx > 0.5 else 1
+            d.line([int(tx * W), by, int(tx * W + sgn * bl), by + 40],
+                   fill=(4, 6, 8), width=14)
+    trees = np.asarray(im, dtype=np.float32)
+    tmask = (trees.sum(axis=2) > 1)[:, :, None]
+    # 地面
+    gmask = np.clip((y - 0.82) / 0.01, 0, 1)[:, :, None]
+    ground = np.array([8, 10, 9], dtype=np.float32)
+
+    base = vignette(base, 0.5) + static_grain(seed=seed, amount=2.2)
+
+    def frame(t01):
+        img = base.copy()
+        img = img * (1.0 - gmask) + ground * gmask
+        img = np.where(tmask, trees, img)
+        # 焚き火の明滅 (画面下中央)
+        f = periodic_noise(t01, scale=6.0, cycles=4, seed=seed + 1, n_waves=5)
+        pul = 0.75 + 0.25 * float(f[f.shape[0] // 2, f.shape[1] // 2] * 0.5 + 0.5)
+        img = screen(img, radial_glow(0.46, 0.93, 0.30, (255, 120, 30),
+                                      0.85 * pul, falloff=1.7, res_div=3))
+        img = screen(img, radial_glow(0.46, 0.96, 0.10, (255, 200, 90),
+                                      1.1 * pul, falloff=1.2, res_div=3))
+        # 火の粉
+        img = screen(img, _particle_layer(
+            t01, 22, seed + 2, H, W, length=0.006, thickness=2.6,
+            color=(255, 150, 50), speed=2.0, drift=0.10, size_var=1.2) * 0.5)
+        # 蛍
+        img = screen(img, _particle_layer(
+            t01, 12, seed + 3, H, W, length=0.0, thickness=4.0,
+            color=(160, 220, 90), speed=1.0, drift=0.7, size_var=1.3,
+            glow=True) * 0.4)
+        return img
+    return frame
+
+
+def scene_nebula(seed: int = 67):
+    """星雲。色の違う雲を 2 層重ね、ゆっくり流す"""
+    rng = np.random.default_rng(seed)
+    bg = vgrad([(4, 3, 10), (8, 6, 18), (12, 8, 24), (5, 4, 12)])
+    # 星 (静止)
+    stars = Image.new("RGB", (W, H), (0, 0, 0))
+    ds = ImageDraw.Draw(stars)
+    for _ in range(240):
+        sx, sy = rng.random() * W, rng.random() * H
+        r = rng.uniform(0.6, 2.0)
+        c = int(rng.uniform(90, 230))
+        ds.ellipse([sx - r, sy - r, sx + r, sy + r], fill=(c, c, min(255, c + 25)))
+    st = np.asarray(stars, dtype=np.float32)
+    f1 = _cloud_field(seed + 1, kx_max=2, ky_scale=1.6, n_waves=7)
+    f2 = _cloud_field(seed + 2, kx_max=3, ky_scale=2.0, n_waves=7)
+    base = vignette(bg, 0.4) + static_grain(seed=seed, amount=2.0)
+
+    def frame(t01):
+        img = base.copy()
+        img = screen(img, st)
+        c1 = np.clip(np.roll(f1, int(round(t01 * W)), axis=1) * 1.1, 0, 1)
+        c2 = np.clip(np.roll(f2, -int(round(t01 * W)), axis=1) * 1.1, 0, 1)
+        img = screen(img, blur(c1[:, :, None] * np.array([70, 30, 90],
+                                                         dtype=np.float32), 22.0))
+        img = screen(img, blur(c2[:, :, None] * np.array([20, 50, 90],
+                                                         dtype=np.float32), 22.0))
+        img = screen(img, radial_glow(0.62, 0.40, 0.16, (180, 120, 200),
+                                      0.5 + 0.1 * np.sin(TWO_PI * t01),
+                                      falloff=1.6, res_div=3))
+        return img
+    return frame
+
+
+def scene_neon_rain(seed: int = 68):
+    """サイバーパンク。night_skyline の構図をネオン配色にして雨を足す"""
+    rng = np.random.default_rng(seed)
+    horizon = int(H * 0.55)
+    sky = vgrad([(6, 4, 16), (14, 8, 30), (30, 12, 44), (10, 6, 20)],
+                stops=[0.0, 0.35, 0.60, 1.0])
+    base = np.clip(screen(sky, radial_glow(0.5, 0.58, 0.6, (120, 30, 90),
+                                           0.5, falloff=1.7)), 0, 255)
+    layers = _city_layers(rng, W, H, horizon, tower_x=0.62)
+    base = np.where((layers.sum(axis=2) > 1)[:, :, None], layers, base)
+    # ネオンの光源
+    neons = [(0.18, 0.50, (255, 40, 120)), (0.34, 0.44, (40, 220, 255)),
+             (0.62, 0.30, (255, 60, 180)), (0.80, 0.52, (60, 120, 255)),
+             (0.48, 0.56, (200, 80, 255))]
+    base = vignette(base, 0.44) + static_grain(seed=seed, amount=2.4)
+
+    def frame(t01):
+        img = base.copy()
+        for nx, ny, col in neons:
+            fl = 0.7 + 0.3 * np.sin(TWO_PI * (2 * t01 + nx * 17))
+            img = screen(img, radial_glow(nx, ny, 0.06, col, 0.7 * fl,
+                                          falloff=1.5, res_div=3))
+        # 濡れた路面の反射
+        img = screen(img, radial_glow(0.5, 0.86, 0.5, (90, 30, 90),
+                                      0.35, falloff=2.0, res_div=3))
+        # 雨 (ほぼ垂直)
+        img = screen(img, _particle_layer(
+            t01, 210, seed + 1, H, W, length=0.05, thickness=1.8,
+            color=(150, 170, 220), speed=4.0, drift=0.02) * 0.55)
+        return img
+    return frame
+
+
+def scene_old_library(seed: int = 69):
+    """古い図書室。本棚のシルエット + 蝋燭 + 埃の粒"""
+    rng = np.random.default_rng(seed)
+    y, x = _yx()
+    bg = vgrad([(22, 14, 8), (34, 22, 12), (46, 30, 16), (24, 16, 10)])
+    base = np.clip(screen(bg, radial_glow(0.30, 0.55, 0.35, (255, 170, 70),
+                                          0.7, falloff=1.7)), 0, 255)
+    # 本棚 (左右) — 棚板と本の背表紙
+    im = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+    for side_x0, side_x1 in ((0, int(W * 0.20)), (int(W * 0.80), W)):
+        d.rectangle([side_x0, 0, side_x1, H], fill=(16, 10, 6))
+        for shelf in range(5):
+            sy = int(H * (0.08 + 0.19 * shelf))
+            d.rectangle([side_x0, sy + 96, side_x1, sy + 104], fill=(28, 18, 10))
+            bx = side_x0 + 8
+            while bx < side_x1 - 14:
+                bw = int(rng.uniform(10, 22))
+                bh = int(rng.uniform(66, 92))
+                shade = int(rng.uniform(20, 44))
+                d.rectangle([bx, sy + 96 - bh, bx + bw, sy + 96],
+                            fill=(shade, int(shade * 0.7), int(shade * 0.45)))
+                bx += bw + 3
+    shelves = np.asarray(im, dtype=np.float32)
+    smask = (shelves.sum(axis=2) > 1)[:, :, None]
+    base = vignette(base, 0.5) + static_grain(seed=seed, amount=2.4)
+
+    def frame(t01):
+        img = base.copy()
+        img = np.where(smask, shelves, img)
+        # 蝋燭の炎のゆらぎ
+        fl = (0.75 + 0.18 * np.sin(TWO_PI * 5 * t01)
+              + 0.07 * np.sin(TWO_PI * 11 * t01 + 1.3))
+        img = screen(img, radial_glow(0.30, 0.62, 0.05, (255, 200, 100),
+                                      1.1 * fl, falloff=1.1, res_div=3))
+        img = screen(img, radial_glow(0.30, 0.60, 0.22, (255, 150, 50),
+                                      0.5 * fl, falloff=1.8, res_div=3))
+        # 光の中を漂う埃
+        img = screen(img, _particle_layer(
+            t01, 26, seed + 1, H, W, length=0.0, thickness=2.6,
+            color=(255, 220, 150), speed=1.0, drift=0.8, size_var=1.4) * 0.35)
+        return img
+    return frame
+
+
+def scene_black_screen(seed: int = 70):
+    """
+    完全な黒。睡眠系の確立フォーマット「black screen」。
+    画面の光をゼロにする (部屋が暗いまま) ことが価値なので、
+    洒落た演出を足してはいけない。
+    """
+    blank = np.zeros((H, W, 3), dtype=np.float32)
+
+    def frame(t01):
+        return blank
+    return frame
+
+
 SCENES = {
+    "spaceship_window": scene_spaceship_window,
+    "golden_light": scene_golden_light,
+    "focus_depths": scene_focus_depths,
+    "halloween_manor": scene_halloween_manor,
+    "snow_cabin": scene_snow_cabin,
+    "forest_camp": scene_forest_camp,
+    "nebula": scene_nebula,
+    "neon_rain": scene_neon_rain,
+    "old_library": scene_old_library,
+    "black_screen": scene_black_screen,
     "lantern_street": scene_lantern_street,
     "storm_window": scene_storm_window,
     "autumn_leaves": scene_autumn_leaves,
