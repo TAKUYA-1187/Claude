@@ -21,7 +21,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
 W, H = 1920, 1080
-FPS = 15
+FPS = 24     # 15 だと速い粒子 (雨・雪) が 1 フレームで 20px 以上跳び、カクついて見える
 LOOP_SECONDS = 20
 TWO_PI = 2.0 * np.pi
 
