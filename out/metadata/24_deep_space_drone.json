@@ -1,0 +1,33 @@
+{
+  "slug": "24_deep_space_drone",
+  "title": "Deep Space Ambient 🌌 Dark Drone Music for Sleep & Cosmic Calm",
+  "description": "2:24:00 of dark ambient for the middle of nowhere.\n\nVast, slow, and mostly empty. A drone at the bottom of the range, pads\nthat take ten seconds to arrive and twelve to leave, a bowl struck\nsomewhere far away every minute or so, and a shimmer of high harmonics\nso the darkness never turns to mud. The reverb is tuned to be\nimplausibly large — about ten seconds of tail — because the size of the\nspace is the instrument here.\n\nNothing threatening happens. Dark ambient for sleeping, not for horror.\n\n40 BPM · E minor · drones, pads, bowls, celesta, deep-space reverb.\n\nFor sleep, night trains, long flights, and staring out of windows.\n\n— Composed and synthesised for this channel.\n",
+  "tags": [
+    "dark ambient",
+    "space ambient",
+    "drone music",
+    "cosmic",
+    "nebula",
+    "deep sleep",
+    "interstellar",
+    "space music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "ダークアンビエント（星雲）",
+    "use_case": "sleep",
+    "bpm": 40.0,
+    "key": "Em",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -2.01,
+    "loop_seam_db": -33.83,
+    "visual": "nebula"
+  }
+}

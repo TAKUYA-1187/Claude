@@ -1,0 +1,33 @@
+{
+  "slug": "23_forest_night_camp",
+  "title": "Forest Night Campfire 🏕️ Crickets & Crackling Fire for Sleep",
+  "description": "A campfire in a dark forest, 2:24:00 long.\n\nCrickets on all sides, wood crackling at your feet, wind high in the\ntrees, and — every few minutes — a few notes from a harp, as if someone\nacross the fire is half-playing, half-dozing. That's the whole scene.\n\nBuilt to serve two audiences at once: tabletop parties who need a\nwilderness camp that runs all session, and people who simply fall\nasleep faster outdoors than indoors.\n\n50 BPM · D dorian · harp, soft pads, campfire, crickets, wind.\n\nFor D&D rests, reading fantasy, and sleeping under imaginary stars.\n\n— Every sound synthesised from scratch. No field recordings.\n",
+  "tags": [
+    "campfire sounds",
+    "forest night",
+    "crickets",
+    "camping ambience",
+    "dnd ambience",
+    "nature sounds",
+    "night forest",
+    "sleep sounds"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "夜の森の野営（TTRPG/睡眠）",
+    "use_case": "sleep",
+    "bpm": 50.0,
+    "key": "D",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.02,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -52.32,
+    "visual": "forest_camp"
+  }
+}
