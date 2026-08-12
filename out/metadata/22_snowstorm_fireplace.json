@@ -1,0 +1,33 @@
+{
+  "slug": "22_snowstorm_fireplace",
+  "title": "Blizzard & Crackling Fireplace ❄️ Cozy Snowstorm for Sleep",
+  "description": "Outside: a blizzard. Inside: a fire. 2:24:00 of both.\n\nThe pleasure of a snowstorm video is the contrast — the louder the wind\nhowls, the warmer the room feels. So the wind here is layered twice\n(a far roar and a near gust against the window) and the fireplace sits\njust underneath it, popping now and then to remind you it's still lit.\nA quiet chord drifts below everything, more felt than heard.\n\nEverything above 8.5 kHz is rolled off, so the storm never hisses.\n\nFor sleeping through winter nights, reading under a blanket, and\nbeing smug about not being outside.\n\n— Wind, fire and music all synthesised for this channel.\n",
+  "tags": [
+    "blizzard sounds",
+    "snowstorm",
+    "fireplace",
+    "winter sounds",
+    "sleep sounds",
+    "howling wind",
+    "cozy cabin",
+    "snow storm sleep"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "吹雪と暖炉（12〜2月の季節枠）",
+    "use_case": "sleep",
+    "bpm": 48.0,
+    "key": "Dm",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -50.81,
+    "visual": "snow_cabin"
+  }
+}

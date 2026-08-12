@@ -1,0 +1,33 @@
+{
+  "slug": "21_halloween_night",
+  "title": "Halloween Ambience 🎃 Spooky Night Music & Autumn Wind",
+  "description": "🎃 HALLOWEEN NIGHT AMBIENCE — 2:24:00\n\nAn October night on a hill: wind in the dead leaves, crickets that\nhaven't noticed the cold yet, a far-off roll of thunder once or twice,\nand a music box playing something in a minor key that never quite\nresolves.\n\nThis is spooky, not scary — made to sit under a Halloween party, a\ncarving session, or an evening of horror reading without ever jump-scaring\nanyone. The dissonances are gentle and the wind does most of the work.\n\n66 BPM · A harmonic minor · music-box celesta, low pads, distant bell,\nwind, night insects, far thunder.\n\nRuns 2:24:00 and loops seamlessly — set it playing at dusk and forget it.\n\n— All sounds synthesised for this video. No sound-effect libraries.\n",
+  "tags": [
+    "halloween ambience",
+    "spooky music",
+    "halloween music",
+    "october",
+    "autumn night",
+    "haunted",
+    "halloween party",
+    "trick or treat"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "ハロウィンの夜（9〜10月の季節枠）",
+    "use_case": "relax",
+    "bpm": 66.0,
+    "key": "Am",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.03,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -43.46,
+    "visual": "halloween_manor"
+  }
+}
