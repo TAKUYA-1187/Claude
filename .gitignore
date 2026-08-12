@@ -10,3 +10,7 @@ out/tmp/
 
 # Shorts 生成中の一時オーバーレイ画像
 out/shorts/.overlay_*.png
+# 歌もの。WAV/MP4 は巨大なのでコミットしない (render_songs.py で再現できる)
+out/songs/*.wav
+out/songs/*.mp4
+out/songs/tmp/
