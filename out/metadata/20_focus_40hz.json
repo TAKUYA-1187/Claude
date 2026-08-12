@@ -1,0 +1,33 @@
+{
+  "slug": "20_focus_40hz",
+  "title": "40Hz Focus Music 🧠 Gamma Rhythm Ambient for Deep Work",
+  "description": "2:24:00 of ambient with a 40 Hz pulse folded into it.\n\nGamma-band stimulation is an area of active research, and this video\nmakes no health claims. What it offers is simpler: a very steady,\nfeatureless soundscape whose loudness ripples 40 times per second —\ndeep enough to be present, shallow enough that most people stop\nnoticing it within a minute. Unlike binaural beats, an amplitude pulse\nsurvives speakers, mono phones, and cheap earbuds.\n\nUnderneath: slow dorian pads, a drone, a marimba note here and there,\nand a brown-noise floor. No melody to follow, nothing to wait for.\n\n60 BPM · A dorian · pads, drone, marimba, brown noise, 40 Hz pulse.\n\nFor deep work, long reading, and code that refuses to compile.\n\n— Original composition, synthesised for this channel.\n",
+  "tags": [
+    "40hz",
+    "gamma waves",
+    "focus music",
+    "study music",
+    "concentration",
+    "deep work",
+    "adhd focus",
+    "brain music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "40Hz集中ドローン（ガンマ波リズム）",
+    "use_case": "study",
+    "bpm": 60.0,
+    "key": "Am",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.05,
+    "loop_seam_db": -31.95,
+    "visual": "focus_depths"
+  }
+}

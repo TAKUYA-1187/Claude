@@ -1,0 +1,33 @@
+{
+  "slug": "19_528hz_love_frequency",
+  "title": "528Hz Healing Frequency ✨ Pure Tone Meditation & Deep Sleep",
+  "description": "2:24:00 tuned so that C is exactly 528.0 Hz.\n\nA note on honesty, because this genre has a problem with it: many\n\"528Hz\" videos are ordinary music with a label on it. This one is\nactually tuned — the whole piece is played at A = 444 Hz, which places\nC5 at precisely 528.0 Hz, and a soft drone holds that C through the\nentire runtime. If you check it with a spectrum analyser, you will find\nthe peak where the title says it is.\n\nWhat you'll hear: slow golden pads, singing bowls a few minutes apart,\nand that steady 528 Hz centre. No melody, no percussion.\n\nWe make no medical claims about tuning frequencies. Some people find\nthis pitch particularly warm to rest inside — that's all, and it's enough.\n\nFor meditation, massage, reading, and falling asleep.\n\n— Composed and synthesised for this channel, at pitch.\n",
+  "tags": [
+    "528hz",
+    "healing frequency",
+    "love frequency",
+    "meditation music",
+    "sleep music",
+    "solfeggio",
+    "positive energy",
+    "relaxation"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "528Hz ヒーリング（A=444Hz実調律）",
+    "use_case": "relax",
+    "bpm": 50.0,
+    "key": "C",
+    "a4_hz": 444.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -26.98,
+    "visual": "golden_light"
+  }
+}

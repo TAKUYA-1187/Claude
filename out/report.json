@@ -2,60 +2,46 @@
   "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "14_japanese_lofi_koto",
-      "title": "Japanese Lofi 🏮 Koto & Chill Beats for Study & Work",
-      "bpm": 72.0,
-      "bars": 432,
-      "lufs": -14.001530094548167,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -42.75393685618507,
-      "loop_seconds": 1440,
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "video": "out/video/14_japanese_lofi_koto.mp4",
+      "slug": "01_lofi_rainy_study",
+      "video": "out/video/01_lofi_rainy_study.mp4",
       "probe": {
-        "size_mb": 652.842841,
+        "size_mb": 801.892913,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
-            "fps": "15",
-            "kbps": 339
+            "fps": "24",
+            "kbps": 477
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
-            "kbps": 260
+            "kbps": 259
           }
         ],
         "duration_s": 8640.0,
-        "bitrate_kbps": 604
+        "bitrate_kbps": 742
       },
-      "elapsed_s": 996.9
-    },
-    {
-      "slug": "15_rain_thunder_night",
-      "title": "Heavy Rain & Distant Thunder at Night 🌧️ for Deep Sleep",
-      "bpm": 48.0,
-      "bars": 288,
-      "lufs": -14.027863712783509,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -26.592612084267465,
-      "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
-      "video": "out/video/15_rain_thunder_night.mp4",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 676.2
+    },
+    {
+      "slug": "02_deep_sleep_ambient",
+      "video": "out/video/02_deep_sleep_ambient.mp4",
       "probe": {
-        "size_mb": 794.716941,
+        "size_mb": 787.473243,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
-            "fps": "15",
-            "kbps": 475
+            "fps": "24",
+            "kbps": 468
           },
           {
             "type": "audio",
@@ -65,65 +51,316 @@
           }
         ],
         "duration_s": 8640.0,
-        "bitrate_kbps": 735
+        "bitrate_kbps": 729
       },
-      "elapsed_s": 796.7
-    },
-    {
-      "slug": "16_autumn_cafe_jazz",
-      "title": "Autumn Jazz 🍂 Cozy Fall Café Music for Work & Study",
-      "bpm": 80.0,
-      "bars": 480,
-      "lufs": -14.000000183201957,
-      "true_peak_db": -2.083216067559844,
-      "loop_seam_db": -28.659053533670406,
-      "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
-      "video": "out/video/16_autumn_cafe_jazz.mp4",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 483.3
+    },
+    {
+      "slug": "03_piano_and_rain",
+      "video": "out/video/03_piano_and_rain.mp4",
       "probe": {
-        "size_mb": 782.99004,
+        "size_mb": 800.900633,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
-            "fps": "15",
-            "kbps": 462
+            "fps": "24",
+            "kbps": 479
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
-            "kbps": 258
+            "kbps": 256
           }
         ],
         "duration_s": 8640.0,
-        "bitrate_kbps": 724
+        "bitrate_kbps": 741
       },
-      "elapsed_s": 586.5
-    },
-    {
-      "slug": "17_christmas_jazz",
-      "title": "Christmas Jazz 🎄 Cozy Holiday Music by the Fireplace",
-      "bpm": 92.0,
-      "bars": 552,
-      "lufs": -14.000000274484092,
-      "true_peak_db": -1.7304199731587087,
-      "loop_seam_db": -24.822399161287517,
-      "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
-      "video": "out/video/17_christmas_jazz.mp4",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 455.7
+    },
+    {
+      "slug": "04_cozy_coffee_jazz",
+      "video": "out/video/04_cozy_coffee_jazz.mp4",
       "probe": {
-        "size_mb": 802.683768,
+        "size_mb": 750.86916,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
-            "fps": "15",
-            "kbps": 479
+            "fps": "24",
+            "kbps": 430
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 259
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 695
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 451.0
+    },
+    {
+      "slug": "05_bossa_nova_cafe",
+      "video": "out/video/05_bossa_nova_cafe.mp4",
+      "probe": {
+        "size_mb": 684.713989,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 358
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 269
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 633
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 485.0
+    },
+    {
+      "slug": "06_healing_meditation_432",
+      "video": "out/video/06_healing_meditation_432.mp4",
+      "probe": {
+        "size_mb": 786.195002,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 468
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 254
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 727
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 477.6
+    },
+    {
+      "slug": "07_fireplace_winter_jazz",
+      "video": "out/video/07_fireplace_winter_jazz.mp4",
+      "probe": {
+        "size_mb": 798.009101,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 475
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 259
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 738
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 623.4
+    },
+    {
+      "slug": "08_ocean_waves_ambient",
+      "video": "out/video/08_ocean_waves_ambient.mp4",
+      "probe": {
+        "size_mb": 779.307909,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 460
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 257
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 721
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 414.1
+    },
+    {
+      "slug": "09_fantasy_tavern",
+      "video": "out/video/09_fantasy_tavern.mp4",
+      "probe": {
+        "size_mb": 793.364906,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 473
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 255
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 734
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 393.0
+    },
+    {
+      "slug": "10_deep_focus_flow",
+      "video": "out/video/10_deep_focus_flow.mp4",
+      "probe": {
+        "size_mb": 776.965872,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 466
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 248
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 719
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 430.0
+    },
+    {
+      "slug": "12_anime_piano_emotional",
+      "video": "out/video/12_anime_piano_emotional.mp4",
+      "probe": {
+        "size_mb": 790.145232,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 469
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 256
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 731
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 482.0
+    },
+    {
+      "slug": "13_fresh_morning_acoustic",
+      "video": "out/video/13_fresh_morning_acoustic.mp4",
+      "probe": {
+        "size_mb": 809.492133,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 475
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 268
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 749
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 594.6
+    },
+    {
+      "slug": "14_japanese_lofi_koto",
+      "video": "out/video/14_japanese_lofi_koto.mp4",
+      "probe": {
+        "size_mb": 683.543781,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 367
           },
           {
             "type": "audio",
@@ -133,9 +370,100 @@
           }
         ],
         "duration_s": 8640.0,
-        "bitrate_kbps": 743
+        "bitrate_kbps": 632
       },
-      "elapsed_s": 1181.4
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 1498.9
+    },
+    {
+      "slug": "15_rain_thunder_night",
+      "video": "out/video/15_rain_thunder_night.mp4",
+      "probe": {
+        "size_mb": 801.555929,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 480
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 256
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 742
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 558.3
+    },
+    {
+      "slug": "16_autumn_cafe_jazz",
+      "video": "out/video/16_autumn_cafe_jazz.mp4",
+      "probe": {
+        "size_mb": 791.568676,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 469
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 258
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 732
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 422.9
+    },
+    {
+      "slug": "17_christmas_jazz",
+      "video": "out/video/17_christmas_jazz.mp4",
+      "probe": {
+        "size_mb": 803.705004,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24",
+            "kbps": 480
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "kbps": 260
+          }
+        ],
+        "duration_s": 8640.0,
+        "bitrate_kbps": 744
+      },
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "lufs": -14.0,
+      "loop_seam_db": 0.0,
+      "elapsed_s": 2490.6
     }
   ]
 }

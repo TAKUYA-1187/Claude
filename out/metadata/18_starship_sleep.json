@@ -1,0 +1,33 @@
+{
+  "slug": "18_starship_sleep",
+  "title": "Starship Sleeping Quarters 🚀 Deep Space White Noise for Sleep",
+  "description": "2:24:00 inside the sleeping quarters of a starship.\n\nThe engine is somewhere below deck — a deep, steady hum you feel more\nthan hear. Air moves through the vents. Nothing beeps. Nothing changes.\nThat's the entire point: the most reliable sleep sounds are the ones a\nbuilding (or a ship) makes on its own.\n\nUnder the hull noise there are two very low drones, slightly detuned so\nthey beat against each other about once every few seconds, like the\nengines are breathing. Everything above 6.5 kHz is removed.\n\nFor sleeping, night shifts, long-haul flights, and imagining you are\nsomewhere between two stars.\n\n— The engine, the air and the hum are all synthesised for this video.\n",
+  "tags": [
+    "spaceship white noise",
+    "starship ambience",
+    "space sounds",
+    "sleep sounds",
+    "sci-fi ambience",
+    "deep bass sleep",
+    "white noise",
+    "engine hum"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "宇宙船の寝室（睡眠用ハム音）",
+    "use_case": "sleep",
+    "bpm": 45.0,
+    "key": "Am",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -42.61,
+    "visual": "spaceship_window"
+  }
+}
