@@ -25,9 +25,9 @@
     "loop_seconds": 1440,
     "total_seconds": 8640,
     "total_hhmmss": "2:24:00",
-    "lufs": -14.03,
+    "lufs": -14.01,
     "true_peak_db": -1.0,
-    "loop_seam_db": -43.46,
+    "loop_seam_db": -41.66,
     "visual": "halloween_manor"
   }
 }
