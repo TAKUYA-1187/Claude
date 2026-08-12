@@ -2,140 +2,38 @@
   "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "23_forest_night_camp",
-      "title": "Forest Night Campfire 🏕️ Crickets & Crackling Fire for Sleep",
-      "bpm": 50.0,
-      "bars": 300,
-      "lufs": -14.026905733079726,
+      "slug": "06_healing_meditation_432",
+      "title": "432Hz Healing Meditation Music 🧘 2 Hours of Singing Bowls for Deep Relaxation",
+      "bpm": 48.0,
+      "bars": 288,
+      "lufs": -14.000440975236003,
       "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -16.526790437085964,
+      "loop_seam_db": -27.699666652681536,
       "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
-      "video": "out/video/23_forest_night_camp.mp4",
+      "video": "out/video/06_healing_meditation_432.mp4",
       "probe": {
-        "size_mb": 797.833997,
+        "size_mb": 787.209106,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "24",
-            "kbps": 476
+            "kbps": 469
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
-            "kbps": 257
+            "kbps": 254
           }
         ],
         "duration_s": 8640.0,
-        "bitrate_kbps": 738
+        "bitrate_kbps": 728
       },
-      "elapsed_s": 678.4
-    },
-    {
-      "slug": "24_deep_space_drone",
-      "title": "Deep Space Ambient 🌌 Dark Drone Music for Sleep & Cosmic Calm",
-      "bpm": 40.0,
-      "bars": 240,
-      "lufs": -14.000000283953169,
-      "true_peak_db": -1.7953848187901338,
-      "loop_seam_db": -35.19731149435643,
-      "loop_seconds": 1440,
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "video": "out/video/24_deep_space_drone.mp4",
-      "probe": {
-        "size_mb": 792.588141,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24",
-            "kbps": 473
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "kbps": 256
-          }
-        ],
-        "duration_s": 8640.0,
-        "bitrate_kbps": 733
-      },
-      "elapsed_s": 690.3
-    },
-    {
-      "slug": "25_cyberpunk_rain",
-      "title": "Cyberpunk Rain 🌃 Neon Night Synth Ambient for Work & Focus",
-      "bpm": 86.0,
-      "bars": 516,
-      "lufs": -14.00002193685029,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -26.38953257409074,
-      "loop_seconds": 1440,
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "video": "out/video/25_cyberpunk_rain.mp4",
-      "probe": {
-        "size_mb": 799.948619,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24",
-            "kbps": 478
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "kbps": 256
-          }
-        ],
-        "duration_s": 8640.0,
-        "bitrate_kbps": 740
-      },
-      "elapsed_s": 724.3
-    },
-    {
-      "slug": "26_dark_academia_library",
-      "title": "Dark Academia Library 🕯️ Melancholy Piano, Rain & a Ticking Clock",
-      "bpm": 60.0,
-      "bars": 360,
-      "lufs": -14.023476871772703,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -36.2114590720997,
-      "loop_seconds": 1440,
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "video": "out/video/26_dark_academia_library.mp4",
-      "probe": {
-        "size_mb": 781.830716,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24",
-            "kbps": 461
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "kbps": 257
-          }
-        ],
-        "duration_s": 8640.0,
-        "bitrate_kbps": 723
-      },
-      "elapsed_s": 637.8
+      "elapsed_s": 715.4
     }
   ]
 }
