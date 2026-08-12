@@ -25,9 +25,9 @@
     "loop_seconds": 1440,
     "total_seconds": 8640,
     "total_hhmmss": "2:24:00",
-    "lufs": -14.02,
+    "lufs": -14.03,
     "true_peak_db": -1.0,
-    "loop_seam_db": -52.32,
+    "loop_seam_db": -16.53,
     "visual": "forest_camp"
   }
 }

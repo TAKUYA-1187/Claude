@@ -1,0 +1,33 @@
+{
+  "slug": "26_dark_academia_library",
+  "title": "Dark Academia Library 🕯️ Melancholy Piano, Rain & a Ticking Clock",
+  "description": "🕯️ DARK ACADEMIA LIBRARY — 2:24:00\n\nAn old reading room after hours. A grandfather clock ticks once per\nsecond — exactly; the piece is written at 60 BPM so the clock and the\nmusic share a pulse. A melancholy piano works through minor-key\nchanges, rain streaks the tall windows, and a fire settles in the\ngrate. Every hour or so you may notice the clock's tick land a little\nheavier; that's the only event in the entire video.\n\n60 BPM · A minor · piano, upright bass, string pad, clock, rain, fire.\n\nFor essays, thesis chapters, translation, and reading dead languages\nby candlelight.\n\n— Original music, synthesised and mixed for this channel.\n",
+  "tags": [
+    "dark academia",
+    "library ambience",
+    "study music",
+    "melancholy piano",
+    "rainy library",
+    "old books",
+    "classical study",
+    "writing music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "古い図書室（ダークアカデミア）",
+    "use_case": "study",
+    "bpm": 60.0,
+    "key": "Am",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.02,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -49.54,
+    "visual": "old_library"
+  }
+}

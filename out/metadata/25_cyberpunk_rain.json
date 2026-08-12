@@ -1,0 +1,33 @@
+{
+  "slug": "25_cyberpunk_rain",
+  "title": "Cyberpunk Rain 🌃 Neon Night Synth Ambient for Work & Focus",
+  "description": "Rain on neon, 2:24:00.\n\nA synth arpeggio that never hurries, two chords that never resolve, a\nsub-bass pulse, and rain that isn't sad — just weather in a city that\nstopped sleeping years ago. There's tape wobble on everything, because\nthe future imagined in 1982 sounds better than the real one.\n\n86 BPM · A minor · analog-style synths, sub bass, rain, distant thunder.\n\nFor coding, night shifts, driving after midnight, and open-world games\nwith the game music turned off.\n\n— All synths programmed and rendered for this video.\n",
+  "tags": [
+    "cyberpunk music",
+    "synthwave ambient",
+    "neon rain",
+    "night city",
+    "futuristic",
+    "blade runner vibes",
+    "work music",
+    "coding music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "サイバーパンクの雨の夜",
+    "use_case": "work",
+    "bpm": 86.0,
+    "key": "Am",
+    "a4_hz": 440.0,
+    "loop_seconds": 1440,
+    "total_seconds": 8640,
+    "total_hhmmss": "2:24:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -26.39,
+    "visual": "neon_rain"
+  }
+}
