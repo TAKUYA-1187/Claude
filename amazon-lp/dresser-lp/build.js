@@ -3,6 +3,7 @@ const path = require('path');
 const { chromium } = require('playwright');
 const A = require('./src/pages.js');
 const B = require('./src/pages2.js');
+const { SLOTS, has, DIR } = require('./src/photo.js');
 
 const PAGES = [
   ['01_main_white',        A.p01, 'メイン画像（白背景・商品単体）'],
@@ -18,6 +19,14 @@ const PAGES = [
   const outDir = path.join(__dirname, 'dist');
   const htmlDir = path.join(outDir, 'html');
   fs.mkdirSync(htmlDir, { recursive: true });
+
+  const filled = SLOTS.filter(([n]) => has(n));
+  console.log(`\n写真スロット: ${filled.length} / ${SLOTS.length} 枚配置済み  (${DIR})`);
+  if (filled.length < SLOTS.length) {
+    console.log('未配置（イラストで代替中）:');
+    for (const [n, img, desc] of SLOTS) if (!has(n)) console.log(`  photos/${n}.jpg  — ${img} ${desc}`);
+  }
+  console.log('');
 
   const browser = await chromium.launch({
     executablePath: '/opt/pw-browsers/chromium',

@@ -1,7 +1,9 @@
 const { P, dresserSVG } = require('./parts.js');
+const { slot, PHOTO_CSS } = require('./photo.js');
 
 // =============================== 共通CSS ===============================
 const CSS = `
+${PHOTO_CSS}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:2000px;height:2000px;background:#fff}
 .stage{width:2000px;height:2000px;position:relative;overflow:hidden;
@@ -45,7 +47,9 @@ const page = (title, bodyCSS, body) => `<!doctype html><html lang="ja"><head>
 const p01 = () => page('01 メイン画像', `
 .stage{background:#fff;display:flex;align-items:center;justify-content:center}
 .wrap{width:1340px;height:1983px}
-`, `<div class="wrap">${dresserSVG({ id:'m1', mirror:'right', stool:true, glow:'neutral', items:true })}</div>`);
+`, `<div class="wrap">${slot('main',
+    dresserSVG({ id:'m1', mirror:'right', stool:true, glow:'neutral', items:true }),
+    { fit:'contain' })}</div>`);
 
 // ============================================================
 // 02  3大特徴ヒーロー
@@ -83,7 +87,8 @@ const p02 = () => {
   <div class="h1">朝の支度が、<br>ここで<span class="hl">完結</span>する。</div>
   <div class="lead">鏡・照明・収納をひとつに。<span class="mark">幅80cmのコンパクト設計</span>だから、<br>ワンルームでも“自分だけの場所”がつくれます。</div>
 </div>
-<div class="pic">${dresserSVG({ id:'m2', mirror:'right', glow:'warm', items:true })}</div>
+<div class="pic">${slot('hero',
+    dresserSVG({ id:'m2', mirror:'right', glow:'warm', items:true }), { fit:'contain' })}</div>
 <div class="feats">
   ${feat('01','3色調光LEDミラー','電球色・昼白色・昼光色を切替。<br>朝も夜も、顔色が正しく見える。')}
   ${feat('02','スライドミラー','鏡を横にスライドすれば<br>収納が全開。デスクにも早変わり。')}
@@ -119,9 +124,9 @@ const p03 = () => {
     <circle cx="50" cy="110" r="3.4" fill="#fff" stroke="${P.line}" stroke-width="1"/>
     <circle cx="50" cy="110" r="1.2" fill="${P.goldLt}"/>
   </svg>`;
-  const card = (id, col, op, k, t, s) => `
+  const card = (id, col, op, k, t, s, ph) => `
    <div class="c">
-     <div class="mw">${mirror(id, col, op)}</div>
+     <div class="mw">${slot(ph, mirror(id, col, op), { fit:'cover', radius:22 })}</div>
      <div class="k">${k}</div>
      <b>${t}</b>
      <p>${s}</p>
@@ -156,9 +161,9 @@ const p03 = () => {
   <div class="lead">シーンに合わせて選べる<span class="hl">3色の光</span>。タッチひとつで切り替わります。</div>
 </div>
 <div class="cards">
-  ${card('a','#FFC069','.55','電球色 3000K','くつろぐ夜に','やわらかな暖色。<br>就寝前のスキンケアに。')}
-  ${card('b','#FFE7BC','.75','昼白色 4500K','ふだんのメイクに','自然光に近い明るさ。<br>色ムラのない仕上がりに。')}
-  ${card('c','#CFE4FF','.60','昼光色 6000K','細部チェックに','クリアな白色光。<br>アイメイクや眉の確認に。')}
+  ${card('a','#FFC069','.55','電球色 3000K','くつろぐ夜に','やわらかな暖色。<br>就寝前のスキンケアに。','led_warm')}
+  ${card('b','#FFE7BC','.75','昼白色 4500K','ふだんのメイクに','自然光に近い明るさ。<br>色ムラのない仕上がりに。','led_neutral')}
+  ${card('c','#CFE4FF','.60','昼光色 6000K','細部チェックに','クリアな白色光。<br>アイメイクや眉の確認に。','led_cool')}
 </div>
 <div class="dim">
   <div class="bt">明るさ 無段階調光</div>
@@ -175,10 +180,10 @@ const p03 = () => {
 // 04  スライドミラー 2WAY
 // ============================================================
 const p04 = () => {
-  const panel = (tag, title, sub, svg, accent) => `
+  const panel = (tag, title, sub, svg, accent, ph) => `
   <div class="pn">
     <div class="tag" style="background:${accent}">${tag}</div>
-    <div class="pv">${svg}</div>
+    <div class="pv">${slot(ph, svg, { fit:'contain' })}</div>
     <b>${title}</b>
     <p>${sub}</p>
   </div>`;
@@ -210,7 +215,7 @@ const p04 = () => {
 </div>
 <div class="pair">
   ${panel('ドレッサーとして','鏡を中央へ','正面に鏡がくる位置に。<br>座ったままメイクが完結します。',
-    dresserSVG({ id:'m4a', mirror:'right', glow:'warm', stool:true, items:true }), P.gold)}
+    dresserSVG({ id:'m4a', mirror:'right', glow:'warm', stool:true, items:true }), P.gold, 'mirror_closed')}
   <div class="arrow">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <circle cx="50" cy="50" r="46" fill="#fff" stroke="${P.line}" stroke-width="3"/>
@@ -222,7 +227,7 @@ const p04 = () => {
     </svg>
   </div>
   ${panel('デスクとして','鏡を左へスライド','鏡が隠れて集中モードに。<br>PC作業や勉強机としても。',
-    dresserSVG({ id:'m4b', mirror:'left', glow:null, stool:true, items:true }), P.ink)}
+    dresserSVG({ id:'m4b', mirror:'left', glow:null, stool:true, items:true }), P.ink, 'mirror_open')}
 </div>
 <div class="foot">
   <div class="fx"><b>指1本で軽く動く</b><span>スムーズなスライドレール</span></div>

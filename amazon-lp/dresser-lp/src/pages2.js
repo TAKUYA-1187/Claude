@@ -1,10 +1,11 @@
 const { P, dresserSVG } = require('./parts.js');
 const { page } = require('./pages.js');
+const { slot, has } = require('./photo.js');
 
 // ============================================================
 // 05  大容量収納（引き出し線つきコールアウト）
 // ============================================================
-const p05 = () => {
+const p05illust = () => {
   // ドレッサー配置：viewBox 100x148 を 7.6px/単位 で描画
   const L = 620, T = 500, S = 7.6;
   const mx = c => L + c * S, my = c => T + c * S;
@@ -65,6 +66,55 @@ ${card('4','スツールも収納','使わないときは足元へ。<br>床が�
   <span>鍵付き</span><i></i><span>天板耐荷重 約15kg</span>
 </div>`);
 };
+
+// ---- 05 写真版（storage_1〜4 がそろったら自動でこちらを使用）----
+const p05photo = () => {
+  const cell = (n, ph, t, sub) => `
+    <div class="g">
+      <div class="gp">${slot(ph, '', { fit:'cover' })}<div class="gn">${n}</div></div>
+      <div class="gc"><b>${t}</b><p>${sub}</p></div>
+    </div>`;
+  return page('05 大容量収納', `
+.stage{background:linear-gradient(168deg,#FFFFFF 0%, ${P.cream} 55%, ${P.cream2} 100%)}
+.top{position:absolute;left:0;right:0;top:96px;text-align:center}
+.top .eyebrow{margin-bottom:22px}
+.top .h2{margin-bottom:24px}
+.top .lead{font-size:37px}
+.grid{position:absolute;left:96px;right:96px;top:572px;
+  display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.g{background:#fff;border-radius:32px;overflow:hidden;
+   border:3px solid rgba(228,218,206,.9);box-shadow:0 16px 38px rgba(120,100,74,.10)}
+.gp{position:relative;height:372px;background:${P.cream2}}
+.gp .phbox{width:100%;height:100%}
+.gn{position:absolute;left:22px;top:22px;width:62px;height:62px;border-radius:50%;
+    background:${P.gold};color:#fff;font-size:32px;font-weight:900;
+    display:flex;align-items:center;justify-content:center}
+.gc{padding:24px 34px 28px}
+.gc b{display:block;font-size:42px;font-weight:900;margin-bottom:10px}
+.gc p{font-size:28px;font-weight:500;color:${P.inkSoft};line-height:1.5}
+.nt{position:absolute;left:0;right:0;bottom:196px;text-align:center}
+`, `
+<div class="top">
+  <div class="eyebrow">PLENTY  OF  STORAGE</div>
+  <div class="h2">コスメも、ドライヤーも。<br>“出しっぱなし”がなくなる。</div>
+  <div class="lead">計<span class="hl">4杯の引き出し</span>と<span class="hl">3段のオープンラック</span>。使う順に、しまえます。</div>
+</div>
+<div class="grid">
+  ${cell('1','storage_1','オープンラック3段','高さのある香水・化粧水も立てたまま。')}
+  ${cell('2','storage_2','鍵付き引き出し','幅いっぱいのワイド設計。ロックできて安心。')}
+  ${cell('3','storage_3','引き出し3杯','コスメ・アクセサリー・ヘアケアを種類ごとに。')}
+  ${cell('4','storage_4','スツールも収納','使わないときは足元へ。床が広く使えます。')}
+</div>
+<div class="nt"><p class="note">※小物は収納イメージです。商品には含まれません。</p></div>
+<div class="specbar">
+  <b>引き出し 計4杯</b><i></i><span>オープンラック 3段</span><i></i>
+  <span>鍵付き</span><i></i><span>天板耐荷重 約15kg</span>
+</div>`);
+};
+
+// 写真がそろっていれば写真版、なければイラスト版
+const STORAGE_PHOTOS = ['storage_1','storage_2','storage_3','storage_4'];
+const p05 = () => (STORAGE_PHOTOS.every(has) ? p05photo() : p05illust());
 
 // ============================================================
 // 06  寸法図
