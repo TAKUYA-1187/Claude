@@ -1,0 +1,268 @@
+<!doctype html><html lang="ja"><head>
+<meta charset="utf-8"><title>06 寸法図</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:2000px;height:2000px;background:#fff}
+.stage{width:2000px;height:2000px;position:relative;overflow:hidden;
+  font-family:'Noto Sans JP',sans-serif;color:#2F2A25;
+  -webkit-font-smoothing:antialiased}
+.dresser{display:block;width:100%;height:100%}
+
+/* --- テキスト系 --- */
+.eyebrow{font-size:40px;font-weight:700;letter-spacing:.18em;color:#B8935E}
+.h1{font-size:132px;font-weight:900;line-height:1.13;letter-spacing:-.015em}
+.h2{font-size:96px;font-weight:900;line-height:1.18;letter-spacing:-.01em}
+.lead{font-size:40px;font-weight:500;line-height:1.62;color:#6B6156}
+.hl{color:#B8935E}
+.mark{background:linear-gradient(transparent 62%, #F2E7D5 62%)}
+
+/* --- 帯・囲み --- */
+.rule{height:5px;width:120px;background:#B8935E;border-radius:3px}
+.chip{display:inline-flex;align-items:center;gap:16px;background:#2F2A25;color:#fff;
+  border-radius:999px;padding:18px 44px;font-size:38px;font-weight:700;letter-spacing:.04em}
+.chip.g{background:#B8935E}
+.chip.o{background:#fff;color:#2F2A25;border:4px solid #E4DACE}
+.card{background:#fff;border:4px solid #E4DACE;border-radius:36px}
+.num{font-family:'Noto Serif JP',serif;font-weight:900;color:#D9BC8E;line-height:.82}
+
+/* --- 下部スペックバー --- */
+.specbar{position:absolute;left:0;right:0;bottom:0;height:132px;background:#2F2A25;
+  display:flex;align-items:center;justify-content:center;gap:70px;color:#fff}
+.specbar b{font-size:44px;font-weight:900;letter-spacing:.02em}
+.specbar span{font-size:34px;font-weight:500;opacity:.72}
+.specbar i{width:3px;height:52px;background:rgba(255,255,255,.26);display:block}
+.note{font-size:26px;color:#9C9186;line-height:1.6}
+
+.stage{background:#fff}
+.grid{position:absolute;inset:0;
+  background-image:linear-gradient(#F3ECE3 1px, transparent 1px),
+                   linear-gradient(90deg, #F3ECE3 1px, transparent 1px);
+  background-size:50px 50px;opacity:.55}
+.top{position:absolute;left:0;right:0;top:76px;text-align:center}
+.top .eyebrow{margin-bottom:18px}
+.top .h2{font-size:82px}
+.pic{position:absolute;left:380px;top:360px;width:760px;height:1124.8px}
+.ov{position:absolute;left:0;top:0;width:2000px;height:2000px;pointer-events:none}
+.chips{position:absolute;left:96px;right:96px;bottom:296px;display:flex;gap:22px}
+.dc{flex:1;background:#FBF7F2;border:3px solid #E4DACE;border-radius:22px;
+    padding:26px 16px;text-align:center;font-size:28px;font-weight:700;color:#2F2A25;line-height:1.44}
+.nt{position:absolute;left:0;right:0;bottom:216px;text-align:center}
+</style></head>
+<body><div class="stage">
+<div class="grid"></div>
+<div class="top">
+  <div class="eyebrow">SIZE  &amp;  DIMENSIONS</div>
+  <div class="h2">置ける場所が、きっとある。</div>
+</div>
+<div class="pic">
+<svg class="dresser" viewBox="0 0 100 148" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="facem6" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F0EEEB"/>
+    </linearGradient>
+    <linearGradient id="sidem6" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F7F5F2"/><stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <linearGradient id="glassm6" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#EAF1F5"/><stop offset=".45" stop-color="#F4F8FA"/>
+      <stop offset="1" stop-color="#CFDDE6"/>
+    </linearGradient>
+    <linearGradient id="cavm6" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E7E3DE"/><stop offset="1" stop-color="#F6F4F1"/>
+    </linearGradient>
+    <radialGradient id="shadowm6" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#8A7A66" stop-opacity=".30"/>
+      <stop offset="1" stop-color="#8A7A66" stop-opacity="0"/>
+    </radialGradient>
+    
+  </defs>
+
+  <!-- 接地影 -->
+  <ellipse cx="50" cy="136" rx="46" ry="4.2" fill="url(#shadowm6)"/>
+
+  <!-- ===== 上部ユニット（オープンラック） ===== -->
+  <rect x="10" y="5" width="80" height="55" rx="1.4" fill="url(#cavm6)" stroke="#DCD6CF" stroke-width="0.5"/>
+  <rect x="11.6" y="6.6" width="76.8" height="51.8" fill="#EDEAE5" opacity=".6"/>
+  <!-- 棚板 -->
+  <rect x="10" y="5" width="80" height="2.2" rx="1" fill="url(#facem6)" stroke="#DCD6CF" stroke-width="0.4"/>
+  <rect x="11.6" y="22.4" width="76.8" height="1.8" fill="url(#facem6)" stroke="#DCD6CF" stroke-width="0.35"/>
+  <rect x="11.6" y="39.4" width="76.8" height="1.8" fill="url(#facem6)" stroke="#DCD6CF" stroke-width="0.35"/>
+  <!-- 側板 -->
+  <rect x="10" y="5" width="1.8" height="55" fill="url(#sidem6)" stroke="#DCD6CF" stroke-width="0.35"/>
+  <rect x="88.2" y="5" width="1.8" height="55" fill="url(#sidem6)" stroke="#DCD6CF" stroke-width="0.35"/>
+  <!-- 中仕切り -->
+  <rect x="46.6" y="6.6" width="1.4" height="51.8" fill="url(#sidem6)" stroke="#DCD6CF" stroke-width="0.3"/>
+  
+
+  <!-- ===== スライドミラー ===== -->
+  
+  <!-- レール -->
+  <rect x="11" y="5.4" width="78" height="1.4" rx="0.7" fill="#F2E7D5" stroke="#D9BC8E" stroke-width="0.25"/>
+  <g >
+    <rect x="50" y="7" width="38" height="50" rx="1.6"
+          fill="#FFCF8A" opacity="0.32"/>
+    <rect x="51.5" y="8.5" width="35" height="47" rx="1" fill="url(#glassm6)"/>
+  </g>
+  <rect x="50" y="7" width="38" height="50" rx="1.6" fill="none"
+        stroke="#DCD6CF" stroke-width="0.55"/>
+  <rect x="51.5" y="8.5" width="35" height="47" rx="1" fill="none"
+        stroke="#D9BC8E" stroke-width="0.8" opacity=".9"/>
+  <!-- 鏡面ハイライト -->
+  <path d="M 54 55 L 66 9.6 L 72 9.6 L 60 55 Z" fill="#FFFFFF" opacity=".38"/>
+  <path d="M 74 55 L 81 9.6 L 83.5 9.6 L 76.5 55 Z" fill="#FFFFFF" opacity=".22"/>
+  <!-- タッチスイッチ -->
+  <circle cx="84.6" cy="52.5" r="1.15" fill="#FFFFFF" opacity=".85" stroke="#D9BC8E" stroke-width="0.3"/>
+
+  <!-- ===== 天板 ===== -->
+  <rect x="8" y="60" width="84" height="3" rx="1.1" fill="url(#facem6)" stroke="#DCD6CF" stroke-width="0.5"/>
+  <rect x="8" y="62.2" width="84" height="0.8" fill="#F0EEEB"/>
+
+  <!-- ===== 下部：左チェスト（引き出し3杯） ===== -->
+  <rect x="10" y="63" width="34" height="72" rx="1.2" fill="url(#facem6)" stroke="#DCD6CF" stroke-width="0.5"/>
+  
+    
+    <rect x="11.4" y="65" width="31.200000000000003" height="21" rx="1.2"
+          fill="url(#facem6)" opacity="1"
+          stroke="#DCD6CF" stroke-width="0.45"
+          stroke-dasharray="none"/>
+    <rect x="20" y="74.65" width="14" height="1.7" rx="0.85"
+          fill="#C9A176"/>
+    <rect x="20" y="74.65" width="14" height="0.6" rx="0.3"
+          fill="#A87F4F" opacity=".35"/>
+    
+  
+    
+    <rect x="11.4" y="88" width="31.200000000000003" height="21" rx="1.2"
+          fill="url(#facem6)" opacity="1"
+          stroke="#DCD6CF" stroke-width="0.45"
+          stroke-dasharray="none"/>
+    <rect x="20" y="97.65" width="14" height="1.7" rx="0.85"
+          fill="#C9A176"/>
+    <rect x="20" y="97.65" width="14" height="0.6" rx="0.3"
+          fill="#A87F4F" opacity=".35"/>
+    
+  
+    
+    <rect x="11.4" y="111" width="31.200000000000003" height="19.5" rx="1.2"
+          fill="url(#facem6)" opacity="1"
+          stroke="#DCD6CF" stroke-width="0.45"
+          stroke-dasharray="none"/>
+    <rect x="20" y="119.9" width="14" height="1.7" rx="0.85"
+          fill="#C9A176"/>
+    <rect x="20" y="119.9" width="14" height="0.6" rx="0.3"
+          fill="#A87F4F" opacity=".35"/>
+    
+  <rect x="12.5" y="131.5" width="29" height="3.5" fill="#F0EEEB" stroke="#DCD6CF" stroke-width="0.35"/>
+
+  <!-- ===== 下部：右 鍵付きワイド引き出し＋ニースペース ===== -->
+  
+    
+    <rect x="46" y="65" width="44" height="14" rx="1.2"
+          fill="url(#facem6)" opacity="1"
+          stroke="#DCD6CF" stroke-width="0.45"
+          stroke-dasharray="none"/>
+    <rect x="61" y="71.15" width="14" height="1.7" rx="0.85"
+          fill="#C9A176"/>
+    <rect x="61" y="71.15" width="14" height="0.6" rx="0.3"
+          fill="#A87F4F" opacity=".35"/>
+    <circle cx="85.5" cy="72" r="1.15" fill="none"
+          stroke="#A87F4F" stroke-width="0.4"/>
+       <circle cx="85.5" cy="72" r="0.35" fill="#A87F4F"/>
+  <rect x="88.2" y="79" width="1.8" height="56" fill="url(#sidem6)" stroke="#DCD6CF" stroke-width="0.35"/>
+  <rect x="46" y="79" width="42.2" height="56" fill="url(#cavm6)"/>
+  <rect x="46" y="79" width="42.2" height="1.2" fill="#DCD6CF" opacity=".7"/>
+  <line x1="46" y1="135" x2="90" y2="135" stroke="#DCD6CF" stroke-width="0.5"/>
+
+  
+</svg></div>
+<svg class="ov" viewBox="0 0 2000 2000" xmlns="http://www.w3.org/2000/svg">
+  <defs><linearGradient id="sideface" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#FBF7F2"/><stop offset="1" stop-color="#FFFFFF"/>
+  </linearGradient></defs>
+  
+    <path d="M456 1386 L456 1478" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/> <path d="M1064 1386 L1064 1478" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/>
+    
+    <path d="M456 1438 V1462 M1064 1438 V1462" stroke="#B8935E" stroke-width="3"/>
+    <path d="M456 1450 H1064" stroke="#B8935E" stroke-width="3"/>
+    <path d="M476 1441 L456 1450 L476 1459" fill="#B8935E"/>
+    <path d="M1044 1441 L1064 1450 L1044 1459" fill="#B8935E"/>
+    <rect x="642" y="1416" width="236" height="68" rx="12" fill="#fff"/>
+    <text x="760" y="1465" text-anchor="middle"
+          font-family="Noto Sans JP" font-size="42" font-weight="900" fill="#2F2A25">幅 80cm</text>
+    <path d="M456 398 L300 398" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/> <path d="M456 1386 L300 1386" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/>
+    
+    <path d="M318 398 H342 M318 1386 H342" stroke="#B8935E" stroke-width="3"/>
+    <path d="M330 398 V1386" stroke="#B8935E" stroke-width="3"/>
+    <path d="M321 418 L330 398 L339 418" fill="#B8935E"/>
+    <path d="M321 1366 L330 1386 L339 1366" fill="#B8935E"/>
+    <g transform="translate(330 892) rotate(-90)">
+      <rect x="-118" y="-34" width="236" height="68" rx="12" fill="#fff"/>
+      <text x="0" y="15" text-anchor="middle"
+            font-family="Noto Sans JP" font-size="42" font-weight="900" fill="#2F2A25">高さ 130cm</text>
+    </g>
+    <path d="M456 816 L300 816" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/>
+    
+    <path d="M1128 816 H1152 M1128 1386 H1152" stroke="#B8935E" stroke-width="3"/>
+    <path d="M1140 816 V1386" stroke="#B8935E" stroke-width="3"/>
+    <path d="M1131 836 L1140 816 L1149 836" fill="#B8935E"/>
+    <path d="M1131 1366 L1140 1386 L1149 1366" fill="#B8935E"/>
+    <g transform="translate(1140 1101) rotate(-90)">
+      <rect x="-118" y="-34" width="236" height="68" rx="12" fill="#fff"/>
+      <text x="0" y="15" text-anchor="middle"
+            font-family="Noto Sans JP" font-size="42" font-weight="900" fill="#2F2A25">天板高 75cm</text>
+    </g>
+    <path d="M1064 816 L1160 816" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/> <path d="M1064 1386 L1160 1386" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/>
+    
+    <path d="M1218 413.2 H1242 M1218 793.2 H1242" stroke="#B8935E" stroke-width="3"/>
+    <path d="M1230 413.2 V793.2" stroke="#B8935E" stroke-width="3"/>
+    <path d="M1221 433.2 L1230 413.2 L1239 433.2" fill="#B8935E"/>
+    <path d="M1221 773.2 L1230 793.2 L1239 773.2" fill="#B8935E"/>
+    <g transform="translate(1230 603.2) rotate(-90)">
+      <rect x="-118" y="-34" width="236" height="68" rx="12" fill="#fff"/>
+      <text x="0" y="15" text-anchor="middle"
+            font-family="Noto Sans JP" font-size="42" font-weight="900" fill="#2F2A25">ミラー 50cm</text>
+    </g>
+    <path d="M1048.8 413.2 L1250 413.2" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/> <path d="M1048.8 793.2 L1250 793.2" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/>
+    <!-- 側面図 -->
+    <rect x="1330" y="398" width="266" height="988" rx="6"
+          fill="url(#sideface)" stroke="#DCD6CF" stroke-width="3"/>
+    <path d="M1330 537.0799999999999 H1596 M1330 666.28 H1596"
+          stroke="#DCD6CF" stroke-width="2" opacity=".75"/>
+    <rect x="1320" y="816" width="286" height="22.799999999999955" rx="4"
+          fill="#FFFFFF" stroke="#DCD6CF" stroke-width="3"/>
+    <path d="M1330 1013.6 H1596 M1330 1188.4 H1596 M1330 1355.6 H1596"
+          stroke="#DCD6CF" stroke-width="2" opacity=".75"/>
+    <path d="M1316 816 H1610" stroke="#E4DACE" stroke-width="2.5" stroke-dasharray="9 9"/>
+    <text x="1463" y="364" text-anchor="middle" font-family="Noto Sans JP"
+          font-size="38" font-weight="700" fill="#6B6156">側面</text>
+    <path d="M1330 1386 L1330 1478" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/> <path d="M1596 1386 L1596 1478" stroke="#E4DACE"
+     stroke-width="2.5" stroke-dasharray="9 9"/>
+    
+    <path d="M1330 1438 V1462 M1596 1438 V1462" stroke="#B8935E" stroke-width="3"/>
+    <path d="M1330 1450 H1596" stroke="#B8935E" stroke-width="3"/>
+    <path d="M1350 1441 L1330 1450 L1350 1459" fill="#B8935E"/>
+    <path d="M1576 1441 L1596 1450 L1576 1459" fill="#B8935E"/>
+    <rect x="1345" y="1416" width="236" height="68" rx="12" fill="#fff"/>
+    <text x="1463" y="1465" text-anchor="middle"
+          font-family="Noto Sans JP" font-size="42" font-weight="900" fill="#2F2A25">奥行 35cm</text>
+</svg>
+<div class="chips">
+  <div class="dc">引き出し内寸<br>約28×30×深13cm</div>
+  <div class="dc">ラック1段の有効高<br>約16cm</div>
+  <div class="dc">ミラー<br>約38×50cm</div>
+  <div class="dc">スツール<br>約38×43cm</div>
+  <div class="dc">重量 / 梱包<br>約25kg・1箱</div>
+</div>
+<div class="nt"><p class="note">※サイズは手作業採寸のため、多少の誤差が生じる場合があります。</p></div>
+<div class="specbar">
+  <b>幅80 × 奥行35 × 高さ130cm</b><i></i><span>天板高 75cm</span><i></i><span>スツール付き</span>
+</div></div></body></html>
