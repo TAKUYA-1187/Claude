@@ -15,7 +15,9 @@ body{
   font-feature-settings:"palt" 1; line-height:1.62;
 }
 .page{
-  position:relative; width:210mm; height:297mm; background:#fff;
+  position:relative; width:210mm; height:297mm; background:#fff; color:var(--ink);
+  font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  line-height:1.62; font-feature-settings:"palt" 1;
   padding:13mm 13mm 11mm; margin:0 auto 10mm; overflow:hidden;
   box-shadow:0 6px 26px rgba(0,0,0,.28); display:flex; flex-direction:column;
 }
