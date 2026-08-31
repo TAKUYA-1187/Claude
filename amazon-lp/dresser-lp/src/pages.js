@@ -48,7 +48,7 @@ const p01 = () => page('01 メイン画像', `
 .stage{background:#fff;display:flex;align-items:center;justify-content:center}
 .wrap{width:1340px;height:1983px}
 `, `<div class="wrap">${slot('main',
-    dresserSVG({ id:'m1', mirror:'right', stool:true, glow:'neutral', items:true }),
+    dresserSVG({ id:'m1', mirror:'closed', stool:true, glow:'neutral', items:true }),
     { fit:'contain' })}</div>`);
 
 // ============================================================
@@ -88,11 +88,11 @@ const p02 = () => {
   <div class="lead">鏡・照明・収納をひとつに。<span class="mark">幅80cmのコンパクト設計</span>だから、<br>ワンルームでも“自分だけの場所”がつくれます。</div>
 </div>
 <div class="pic">${slot('hero',
-    dresserSVG({ id:'m2', mirror:'right', glow:'warm', items:true }), { fit:'contain' })}</div>
+    dresserSVG({ id:'m2', mirror:'closed', glow:'warm', items:true }), { fit:'contain' })}</div>
 <div class="feats">
   ${feat('01','3色調光LEDミラー','電球色・昼白色・昼光色を切替。<br>朝も夜も、顔色が正しく見える。')}
   ${feat('02','スライドミラー','鏡を横にスライドすれば<br>収納が全開。デスクにも早変わり。')}
-  ${feat('03','たっぷり収納','引き出し4杯＋オープンラック3段。<br>鍵付き引き出しも装備。')}
+  ${feat('03','4か所の収納','引き出し4杯・オープン棚・鏡裏収納。<br>デスク引き出しは鍵付き。')}
 </div>
 <div class="specbar">
   <b>幅80 × 奥行35 × 高さ130cm</b><i></i><span>スツール付き</span><i></i>
@@ -172,7 +172,7 @@ const p03 = () => {
 </div>
 <div class="specbar">
   <b>3色調光 LED</b><i></i><span>タッチスイッチ</span><i></i>
-  <span>省エネLED</span><i></i><span>ミラー幅 約38cm</span>
+  <span>グラデーション調光</span><i></i><span>ミラー 45×60cm</span>
 </div>`);
 };
 
@@ -215,7 +215,7 @@ const p04 = () => {
 </div>
 <div class="pair">
   ${panel('ドレッサーとして','鏡を中央へ','正面に鏡がくる位置に。<br>座ったままメイクが完結します。',
-    dresserSVG({ id:'m4a', mirror:'right', glow:'warm', stool:true, items:true }), P.gold, 'mirror_closed')}
+    dresserSVG({ id:'m4a', mirror:'closed', glow:'warm', stool:true, items:true }), P.gold, 'mirror_closed')}
   <div class="arrow">
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <circle cx="50" cy="50" r="46" fill="#fff" stroke="${P.line}" stroke-width="3"/>
@@ -226,16 +226,16 @@ const p04 = () => {
             stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
-  ${panel('デスクとして','鏡を左へスライド','鏡が隠れて集中モードに。<br>PC作業や勉強机としても。',
-    dresserSVG({ id:'m4b', mirror:'left', glow:null, stool:true, items:true }), P.ink, 'mirror_open')}
+  ${panel('収納を開くとき','鏡を右へスライド','鏡裏の収納が全開に。<br>コスメの出し入れがスムーズ。',
+    dresserSVG({ id:'m4b', mirror:'open', glow:null, stool:true, items:true }), P.ink, 'mirror_open')}
 </div>
 <div class="foot">
   <div class="fx"><b>指1本で軽く動く</b><span>スムーズなスライドレール</span></div>
-  <div class="fx"><b>広びろ天板 幅80cm</b><span>ノートPCもゆったり</span></div>
+  <div class="fx"><b>天板 幅50cm</b><span>ノートPCもゆったり</span></div>
   <div class="fx"><b>鏡を隠せる</b><span>来客時もすっきり</span></div>
 </div>
 <div class="specbar">
-  <b>1台2役</b><i></i><span>ドレッサー ↔ ワークデスク</span><i></i><span>天板高 約75cm</span>
+  <b>1台2役</b><i></i><span>ドレッサー ↔ ワークデスク</span><i></i><span>天板高 70cm</span>
 </div>`);
 };
 

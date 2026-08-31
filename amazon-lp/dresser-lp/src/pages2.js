@@ -11,10 +11,10 @@ const p05illust = () => {
   const mx = c => L + c * S, my = c => T + c * S;
 
   const anchors = [
-    { a:[24, 30],  from:[576, 748]  },   // オープンラック（左上）
-    { a:[80, 72],  from:[1424, 1068] },  // 鍵付き引き出し（右）
-    { a:[26, 100], from:[576, 1278] },   // 引き出し3杯（左下）
-    { a:[70, 120], from:[1424, 1438] },  // スツール収納（右下）
+    { a:[20, 45],  from:[576, 928]  },   // 左オープン棚
+    { a:[40, 20],  from:[1424, 708] },   // 鏡裏収納
+    { a:[60, 74],  from:[1424, 1168] },  // 鍵付きデスク引き出し
+    { a:[25, 110], from:[576, 1388] },   // 3段チェスト
   ];
   const lines = anchors.map(({a, from}) => {
     const [ax, ay] = [mx(a[0]), my(a[1])];
@@ -52,18 +52,18 @@ const p05illust = () => {
 <div class="top">
   <div class="eyebrow">PLENTY  OF  STORAGE</div>
   <div class="h2">コスメも、ドライヤーも。<br>“出しっぱなし”がなくなる。</div>
-  <div class="lead">計<span class="hl">4杯の引き出し</span>と<span class="hl">3段のオープンラック</span>。使う順に、しまえます。</div>
+  <div class="lead"><span class="hl">引き出し4杯</span>に加えて、<span class="hl">オープン棚</span>と<span class="hl">鏡裏収納</span>。</div>
 </div>
-<div class="pic">${dresserSVG({ id:'m5', mirror:'right', glow:null, stool:true, items:true, xray:true })}</div>
+<div class="pic">${dresserSVG({ id:'m5', mirror:'open', glow:null, stool:true, items:true, xray:true })}</div>
 <svg class="ov" viewBox="0 0 2000 2000" xmlns="http://www.w3.org/2000/svg">${lines}</svg>
-${card('1','オープンラック3段','高さのある香水・化粧水も<br>立てたまま収納できます。','left:56px;top:640px')}
-${card('3','引き出し3杯','コスメ・アクセサリー・<br>ヘアケアを種類ごとに。','left:56px;top:1170px')}
-${card('2','鍵付き引き出し','幅いっぱいのワイド設計。<br>ロックできて安心です。','left:1424px;top:960px')}
-${card('4','スツールも収納','使わないときは足元へ。<br>床が広く使えます。','left:1424px;top:1330px')}
+${card('1','オープン棚','24×13×60cm。<br>すぐ手の届く位置に。','left:56px;top:820px')}
+${card('4','3段チェスト','24×23×8cm ×3杯。<br>種類ごとに分類できます。','left:56px;top:1280px')}
+${card('2','鏡裏収納','40×8.5×60cm。<br>鏡の後ろの隠し収納。','left:1424px;top:600px')}
+${card('3','鍵付き引き出し','42×23×8cm。<br>ロックできて安心です。','left:1424px;top:1060px')}
 <div class="nt"><p class="note">※引き出し内・ラック上の小物は収納イメージです。商品には含まれません。</p></div>
 <div class="specbar">
-  <b>引き出し 計4杯</b><i></i><span>オープンラック 3段</span><i></i>
-  <span>鍵付き</span><i></i><span>天板耐荷重 約15kg</span>
+  <b>引き出し 計4杯</b><i></i><span>オープン棚 24×13×60cm</span><i></i>
+  <span>鏡裏収納 40×8.5×60cm</span>
 </div>`);
 };
 
@@ -97,18 +97,18 @@ const p05photo = () => {
 <div class="top">
   <div class="eyebrow">PLENTY  OF  STORAGE</div>
   <div class="h2">コスメも、ドライヤーも。<br>“出しっぱなし”がなくなる。</div>
-  <div class="lead">計<span class="hl">4杯の引き出し</span>と<span class="hl">3段のオープンラック</span>。使う順に、しまえます。</div>
+  <div class="lead"><span class="hl">引き出し4杯</span>に加えて、<span class="hl">オープン棚</span>と<span class="hl">鏡裏収納</span>。</div>
 </div>
 <div class="grid">
-  ${cell('1','storage_1','オープンラック3段','高さのある香水・化粧水も立てたまま。')}
-  ${cell('2','storage_2','鍵付き引き出し','幅いっぱいのワイド設計。ロックできて安心。')}
-  ${cell('3','storage_3','引き出し3杯','コスメ・アクセサリー・ヘアケアを種類ごとに。')}
-  ${cell('4','storage_4','スツールも収納','使わないときは足元へ。床が広く使えます。')}
+  ${cell('1','storage_1','オープン棚','24×13×60cm。手を伸ばせばすぐ取れる位置に。')}
+  ${cell('2','storage_2','鏡裏収納','40×8.5×60cm。鏡をスライドさせると現れます。')}
+  ${cell('3','storage_3','鍵付き引き出し','42×23×8cm。大切なものはロックして保管。')}
+  ${cell('4','storage_4','3段チェスト','24×23×8cm × 3杯。種類ごとに分類できます。')}
 </div>
 <div class="nt"><p class="note">※小物は収納イメージです。商品には含まれません。</p></div>
 <div class="specbar">
-  <b>引き出し 計4杯</b><i></i><span>オープンラック 3段</span><i></i>
-  <span>鍵付き</span><i></i><span>天板耐荷重 約15kg</span>
+  <b>引き出し 計4杯</b><i></i><span>オープン棚 24×13×60cm</span><i></i>
+  <span>鏡裏収納 40×8.5×60cm</span>
 </div>`);
 };
 
@@ -153,19 +153,20 @@ const p06 = () => {
     ${hDim(mx(10), mx(90), 1450, '幅 80cm')}
     ${ext(mx(10), my(5), 300, my(5))} ${ext(mx(10), my(135), 300, my(135))}
     ${vDim(my(5), my(135), 330, '高さ 130cm')}
-    ${ext(mx(10), my(60), 300, my(60))}
-    ${vDim(my(60), my(135), 1140, '天板高 75cm')}
-    ${ext(mx(90), my(60), 1160, my(60))} ${ext(mx(90), my(135), 1160, my(135))}
-    ${vDim(my(7), my(57), 1230, 'ミラー 50cm')}
-    ${ext(mx(88), my(7), 1250, my(7))} ${ext(mx(88), my(57), 1250, my(57))}
+    ${ext(mx(10), my(65), 300, my(65))}
+    ${vDim(my(65), my(135), 1120, '天板高 70cm')}
+    ${ext(mx(90), my(65), 1140, my(65))} ${ext(mx(90), my(135), 1140, my(135))}
+    ${vDim(my(5), my(65), 1230, 'ミラー 60cm')}
+    ${ext(mx(76), my(5), 1250, my(5))} ${ext(mx(76), my(65), 1250, my(65))}
+    ${hDim(mx(31), mx(76), 330, 'ミラー 45cm')}
     <!-- 側面図 -->
     <rect x="${SX}" y="${my(5)}" width="${SW}" height="${my(135) - my(5)}" rx="6"
           fill="url(#sideface)" stroke="${P.bodyEdge}" stroke-width="3"/>
-    <path d="M${SX} ${my(23.3)} H${SX + SW} M${SX} ${my(40.3)} H${SX + SW}"
+    <path d="M${SX} ${my(25)} H${SX + SW} M${SX} ${my(45)} H${SX + SW}"
           stroke="${P.bodyEdge}" stroke-width="2" opacity=".75"/>
-    <rect x="${SX - 10}" y="${my(60)}" width="${SW + 20}" height="${my(63) - my(60)}" rx="4"
+    <rect x="${SX - 10}" y="${my(65)}" width="${SW + 20}" height="${my(68) - my(65)}" rx="4"
           fill="#FFFFFF" stroke="${P.bodyEdge}" stroke-width="3"/>
-    <path d="M${SX} ${my(86)} H${SX + SW} M${SX} ${my(109)} H${SX + SW} M${SX} ${my(131)} H${SX + SW}"
+    <path d="M${SX} ${my(85)} H${SX + SW} M${SX} ${my(103)} H${SX + SW} M${SX} ${my(118)} H${SX + SW}"
           stroke="${P.bodyEdge}" stroke-width="2" opacity=".75"/>
     <path d="M${SX - 14} ${my(60)} H${SX + SW + 14}" stroke="${P.line}" stroke-width="2.5" stroke-dasharray="9 9"/>
     <text x="${SX + SW / 2}" y="${my(5) - 34}" text-anchor="middle" font-family="Noto Sans JP"
@@ -196,7 +197,7 @@ const p06 = () => {
   <div class="eyebrow">SIZE  &amp;  DIMENSIONS</div>
   <div class="h2">置ける場所が、きっとある。</div>
 </div>
-<div class="pic">${dresserSVG({ id:'m6', mirror:'right', glow:null, stool:false, items:false })}</div>
+<div class="pic">${dresserSVG({ id:'m6', mirror:'closed', glow:null, stool:false, items:false })}</div>
 <svg class="ov" viewBox="0 0 2000 2000" xmlns="http://www.w3.org/2000/svg">
   <defs><linearGradient id="sideface" x1="0" y1="0" x2="1" y2="0">
     <stop offset="0" stop-color="#FBF7F2"/><stop offset="1" stop-color="#FFFFFF"/>
@@ -204,15 +205,15 @@ const p06 = () => {
   ${dims}
 </svg>
 <div class="chips">
-  ${chip('引き出し内寸<br>約28×30×深13cm')}
-  ${chip('ラック1段の有効高<br>約16cm')}
-  ${chip('ミラー<br>約38×50cm')}
-  ${chip('スツール<br>約38×43cm')}
-  ${chip('重量 / 梱包<br>約25kg・1箱')}
+  ${chip('デスク引き出し<br>42×23×8cm 鍵付き')}
+  ${chip('チェスト引き出し<br>24×23×8cm × 3杯')}
+  ${chip('オープン棚<br>24×13×60cm')}
+  ${chip('鏡裏収納<br>40×8.5×60cm')}
+  ${chip('スツール<br>32×21.5×36cm')}
 </div>
 <div class="nt"><p class="note">※サイズは手作業採寸のため、多少の誤差が生じる場合があります。</p></div>
 <div class="specbar">
-  <b>幅80 × 奥行35 × 高さ130cm</b><i></i><span>天板高 75cm</span><i></i><span>スツール付き</span>
+  <b>幅80 × 奥行35 × 高さ130cm</b><i></i><span>天板高 70cm</span><i></i><span>スツール付き</span>
 </div>`);
 };
 
@@ -256,14 +257,14 @@ const p07 = () => {
   <div class="h2">買う前に、ぜんぶ確認。</div>
 </div>
 <div class="tbl">
-  ${row('サイズ', '幅80 × 奥行35 × 高さ130cm（天板高 75cm）')}
-  ${row('カラー', 'ホワイト / ナチュラル / ブラック（全3色）')}
-  ${row('素材', '天板・本体：MDF（環境配慮素材）／ 脚・レール：スチール')}
-  ${row('収納', '引き出し 計4杯（うち1杯は鍵付き）／ オープンラック 3段')}
-  ${row('照明', 'LED 3色調光（電球色・昼白色・昼光色）／ 無段階調光・タッチ操作')}
-  ${row('耐荷重', '天板 約15kg ／ 棚1段 約3kg ／ スツール 約100kg')}
-  ${row('付属品', 'スツール ／ 転倒防止金具 ／ 組立用工具・取扱説明書')}
-  ${row('組立', 'お客様組立（目安 約40分・2名推奨）／ 梱包 1箱・約25kg')}
+  ${row('外寸', '幅80 × 奥行35 × 高さ130cm（天板高 70cm）')}
+  ${row('カラー', 'ホワイト')}
+  ${row('素材', '木製（MDF）／ スライドレール：スチール')}
+  ${row('収納', 'デスク引き出し 42×23×8cm（鍵付き）／ 3段チェスト 24×23×8cm×3<br>オープン棚 24×13×60cm ／ 鏡裏収納 40×8.5×60cm')}
+  ${row('照明', 'LED 3色（電球色・昼白色・昼光色）タップ切替<br>長押しでグラデーション調光 0〜100%')}
+  ${row('ミラー', '45 × 60cm ／ 横スライド式（鏡裏収納が現れます）')}
+  ${row('スツール', '幅32 × 奥行21.5 × 高さ36cm（付属）')}
+  ${row('組立', 'お客様組立（組立説明書・工具付属）')}
 </div>
 <div class="bds">
   ${badge(ic('<path d="M8 40V20l16-12 16 12v20"/><path d="M18 40V28h12v12"/>'),
@@ -275,9 +276,9 @@ const p07 = () => {
   ${badge(ic('<path d="M24 8v8M24 32v8M8 24h8M32 24h8"/><circle cx="24" cy="24" r="8"/>'),
     '1年保証','初期不良は<br>無償で交換対応')}
 </div>
-<div class="nt"><p class="note">※画像はイメージです。仕様は改良のため予告なく変更となる場合があります。</p></div>
+<div class="nt"><p class="note">※本製品は木製のため、サイズに多少の誤差が生じる場合がございます。</p></div>
 <div class="specbar">
-  <b>安心の国内カスタマーサポート</b><i></i><span>組立説明書つき</span><i></i><span>お気軽にお問い合わせください</span>
+  <b>スツール付き</b><i></i><span>鍵付きデスク引き出し</span><i></i><span>3色LED・調光機能</span>
 </div>`);
 };
 

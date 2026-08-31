@@ -1,321 +1,312 @@
-# ChatGPT 画像生成プロンプト集 ─ ドレッサー 幅80cm
+# ChatGPT 画像生成プロンプト集 ─ 実物写真を「参照画像」として使う方式
+
+添付いただいた商品写真をもとに、実測仕様を反映して全面改訂しました。
 
 ---
 
-## 最初に：最高品質を出すための3つの鉄則
+## 最重要：ゼロから生成せず、実物写真を「編集」させる
 
-### 鉄則1　日本語テキストは絶対に生成させない
+「AI作成だとわかる画像」になる最大の原因は、**テキストだけで商品を作らせること**です。
+存在しない商品を想像で描くため、細部が破綻します。
 
-画像生成AIは日本語の描画が苦手で、必ず崩れます。「LEDライト」が「LEDフイト」になる、
-文字が溶ける、といった失敗が起きます。**プロンプトには必ず
-`no text, no letters, no logos, no watermarks` を入れてください。**
-
-テキストと図解は、このリポジトリのパイプラインで合成します。
+正解は、**実物写真をアップロードして背景や状況だけを変えさせる**ことです。
+商品そのものは実写のまま残るので、AIっぽさが出ません。
 
 ```
-AIに作らせるもの  →  商品の「写真」だけ
-パイプラインが乗せるもの  →  日本語コピー・数値・寸法線・仕様表
+✗ 「白いドレッサーの写真を作って」          → 想像で描く → AIだとバレる
+◎ 「この写真の商品はそのまま、背景だけ変えて」 → 商品は実写のまま → バレない
 ```
 
-この分担が、最高品質を得る唯一の方法です。
+**すべてのプロンプトで、必ず商品写真を添付してください。**
 
-### 鉄則2　1枚目を「基準画像」として作り込み、残りは参照画像から派生させる
+### 生成物の使いどころ
 
-テキストだけで生成すると、**毎回ちがう商品が出てきます。**
-引き出しの数が変わる、取っ手の色が変わる、鏡の形が変わる。
-とくに 03（LED3色）と 04（2WAY）は「同じ商品の同じ画角」であることが命なので、
-テキストだけで作ると成立しません。
-
-**正しい手順:**
-
-```
-1. § A の基準画像を1枚だけ生成し、納得いくまで作り込む
-2. その画像を ChatGPT にアップロードする
-3. 「この画像と同じ商品で、○○の状態を」と指示して残りを生成
-```
-
-参照画像を渡しても完全一致はしません。比較カットは特に慎重に見てください。
-
-### 鉄則3　商品ページのメイン画像には使わない
-
-AI生成画像は実物と一致しないため、Amazonのメイン画像には使用できません。
-出品停止やアカウント健全性の問題につながります。
-
-**この生成画像が有効な用途:**
-
-| 用途 | 有効性 |
+| 用途 | 可否 |
 |---|---|
-| 仕入先・工場への仕様イメージ伝達 | ◎ 「こういう商品が欲しい」が一発で伝わります |
-| 撮影時の構図リファレンス（カメラマンに見せる） | ◎ 撮影指示書と併せて渡すと精度が上がります |
-| 社内の企画検討・モック | ◎ |
-| SNS広告のイメージカット（商品が主役でないもの） | ○ |
-| **Amazon商品ページのメイン画像** | **✗ 使用不可** |
-| **Amazon商品ページのサブ画像** | **✗ 実物と相違するため不可** |
+| 仕入先・工場への仕様イメージ伝達 | ◎ |
+| 撮影時の構図リファレンス | ◎ |
+| 社内の企画検討 | ◎ |
+| Amazon商品ページへの入稿 | ✗ 実物との相違・権利の問題があるため不可 |
+
+添付の写真は他社の商品ページの画像です。これを加工したものも含め、
+自社の商品ページには使用できません。**自社で撮影した写真に対して
+同じプロンプトを使えば、そのまま入稿できる画像になります。**
 
 ---
 
-## 共通設定
+## 実測仕様（添付の製品仕様図より）
 
-- ChatGPTで**画像生成を有効**にし、**参照画像をアップロードできる状態**で使ってください
-- 出力は**正方形 1:1**（Amazon用）または**縦長 4:5**（ヒーロー用）を指定
-- 生成後、`photos/` に置いて `node build.js` → `node check.js`
-- **プロンプトは英語のまま使ってください。** 画像生成モデルは英語のほうが精度が高く、
-  日本語で指示すると細部が落ちます
+プロンプト内の数値はすべてこの実測値に統一してあります。
 
----
-
-## § A　基準画像（最初にこれを作り込む）
-
-まずこの1枚を、満足いくまで再生成してください。ここで妥協すると全部に響きます。
-
-```
-Professional commercial e-commerce product photograph of a modern compact vanity
-dressing table, shot for a Japanese furniture catalogue.
-
-PRODUCT — describe exactly:
-A white vanity dresser, 80cm wide, 35cm deep, 130cm tall.
-Matte white MDF body with a smooth, clean finish.
-UPPER SECTION: an open shelving unit divided into three horizontal tiers, and a
-rectangular LED-backlit mirror about 38cm wide and 50cm tall, mounted on a slim
-horizontal rail so it can slide sideways across the front of the shelves. The mirror
-sits on the right half, covering the right shelves; the left shelves are visible and
-hold a few skincare bottles and a small perfume bottle.
-LOWER SECTION: a chest of three drawers on the left with slim horizontal oak wooden
-bar handles; on the right, one wide shallow drawer beneath the desktop with a small
-round keyhole; open knee space below it.
-A matching white stool with a pale blush-pink upholstered seat cushion is tucked
-into the knee space.
-
-CAMERA: straight-on frontal view, camera at the product's mid-height (about 65cm
-from the floor). 85mm lens equivalent. No wide-angle distortion, no keystoning,
-perfectly vertical lines. Sharp focus from front to back.
-
-LIGHTING: two large softboxes at 45 degrees left and right, plus soft overhead fill.
-Even and shadowless. Neutral white balance so the white furniture reads as clean
-bright white, never grey, cream or yellow. The LED mirror is softly lit with a warm
-white glow around its inner frame.
-
-BACKGROUND: seamless pure white studio background, no horizon line, no cast shadow
-on the floor, no wall.
-
-CONSTRAINTS: no text, no letters, no numbers, no logos, no watermarks, no brand
-names, no people, no hands, no plants, no rugs, no decorative props beyond the few
-cosmetic bottles on the shelves.
-
-STYLE: photorealistic, ultra sharp, high resolution, clean commercial catalogue
-quality, minimal Japanese interior aesthetic.
-
-Square 1:1 composition, product fills about 85% of the frame height, centred.
-```
-
-**日本語での要点:** 幅80×奥行35×高さ130cmの白いドレッサー。上段は3段のオープンラックと
-横スライドするLEDミラー（右半分を覆う）。下段は左に3杯の引き出し（オークのバー取っ手）、
-右に鍵付きのワイド引き出しとニースペース。淡いピンクの座面のスツールが足元に。
-正面・85mm相当・影なし・純白背景・テキストなし。
+| 項目 | 実測値 |
+|---|---|
+| 外寸 | 幅80 × 奥行35 × 高さ130cm |
+| 天板高 | 70cm |
+| ミラー | 45 × 60cm（横スライド式） |
+| 鏡裏収納 | 40 × 8.5 × 60cm |
+| オープン棚（左タワー） | 24 × 13 × 60cm |
+| デスク引き出し | 42 × 23 × 8cm（鍵付き） |
+| 3段チェスト引き出し | 24 × 23 × 8cm × 3杯 |
+| 3段チェスト本体 | 幅30 × 奥行35 × 高さ50cm |
+| スツール | 32 × 21.5 × 36cm |
+| LED | 電球色・昼白色・昼光色（タップ切替）／長押しで0〜100%調光 |
 
 ---
 
-## § B　派生カット（基準画像をアップロードしてから指示）
+## § 1　背景差し替え（いちばん使う）
 
-以下はすべて**基準画像を添付した状態**で送ってください。
-冒頭の `Using the attached image as the exact reference product` が要です。
-
-### B-1　`main` — メイン画像用（白背景・切り抜き）
+商品写真（白背景のもの）を添付して送ります。
 
 ```
-Using the attached image as the exact reference product, keep the product design,
-proportions, colours and every detail identical.
+Keep the product in the attached photo EXACTLY as it is — do not redraw, redesign or
+alter the furniture in any way. Preserve every detail: the proportions, the white
+matte finish, the light oak bar handles, the three-tier chest, the sliding LED mirror,
+the open shelf tower, the keyhole, and the white upholstered stool.
 
-Re-render it as a pure white background cut-out product shot:
-seamless #FFFFFF background, absolutely no cast shadow, no floor line, no gradient.
-Straight-on frontal view. The product plus the stool fills 88% of the frame height,
-perfectly centred, generous even margins.
-Turn the mirror LED off or very dim so the white body colour reads accurately.
+Change ONLY the background and the floor.
 
-No text, no logos, no watermarks, no props, no people.
-Square 1:1, ultra high resolution, photorealistic commercial product photography.
+New setting: a bright, lived-in Japanese bedroom. Warm white painted wall, light oak
+flooring, soft natural daylight coming from a window on the left. Place the dresser
+against the wall so it sits naturally in the room, with correct perspective and a
+realistic soft contact shadow where it meets the floor.
+
+The lighting on the product must match the new room lighting — soft, warm, directional
+from the left — so the product does not look pasted in.
+
+Photorealistic interior photography, 35mm lens, natural depth of field, no HDR look,
+no over-saturation, no glow, no artificial sharpening.
+No text, no letters, no logos, no watermarks, no people.
 ```
 
-### B-2　`hero` — 斜め45度の全体カット
+### 背景のバリエーション
+
+上の `New setting:` の段落だけ差し替えます。
 
 ```
-Using the attached image as the exact reference product, keep the design identical.
-
-Re-render from a three-quarter angle: the camera rotated 45 degrees to the left of
-the product, at the product's mid-height, 85mm lens equivalent, showing both the
-front face and the left side panel so the depth is visible.
-The LED mirror is switched on with a warm 3000K glow.
-Soft studio lighting, seamless very light warm-grey background with a gentle
-gradient, subtle soft contact shadow under the product only.
-
-No text, no logos, no watermarks, no people.
-Vertical 4:5 composition, photorealistic, ultra sharp, commercial catalogue quality.
+【朝の窓辺】
+A sunlit bedroom corner in the morning. Off-white wall, pale oak floor, sheer white
+curtains diffusing bright daylight from the right. A few soft shadows on the wall.
 ```
 
-### B-3〜B-5　`led_warm` / `led_neutral` / `led_cool` — LED 3色比較
-
-3枚は**同じ画角・同じ露出**であることが命です。1枚ずつ、同じ参照画像から作ってください。
-
 ```
-【共通の骨格 — 色の部分だけ差し替える】
-
-Using the attached image as the exact reference product, keep the design identical.
-
-Close-up crop of the LED mirror section only, filling the frame.
-Camera straight-on, level with the centre of the mirror, 85mm lens equivalent.
-The room is dark so the LED is the dominant light source.
-The LED strip around the inner frame of the mirror is glowing [★COLOUR★].
-The glow spills softly onto the white body around the mirror.
-Identical framing, identical exposure, identical camera position.
-
-No text, no logos, no watermarks, no people, no reflection of a person in the mirror.
-Horizontal 4:3 composition, photorealistic, ultra sharp.
+【夜・間接照明】
+A calm bedroom at night. Warm dim ambient light, a soft glow from a bedside lamp out
+of frame. The mirror's LED is switched on with a warm 3000K glow, and it is the
+brightest light in the scene, casting a gentle warm light onto the wall.
 ```
 
-`★COLOUR★` を差し替えます。
+```
+【ワンルーム・狭さが伝わる】
+A compact Japanese one-room apartment. The dresser sits against a white wall between
+a bed on the left and a window on the right, showing how little floor space it needs.
+Light wood flooring, minimal styling, daylight.
+```
 
-| ファイル | 差し替える文言 |
+```
+【北欧ナチュラル】
+A Scandinavian-style bedroom. White wall, pale birch flooring, a small woven rug, a
+green plant in a terracotta pot at the edge of the frame. Bright, airy, soft daylight.
+```
+
+---
+
+## § 2　「使っている感」を出す
+
+生活感は**商品の周りの状況**で作ります。商品自体には手を入れさせないのが鉄則です。
+
+```
+Keep the product in the attached photo EXACTLY as it is — same design, same
+proportions, same finish, same angle. Do not redraw the furniture.
+
+Place it in a real, lived-in Japanese bedroom and add natural signs of daily use
+AROUND it, not on it:
+a few skincare bottles and a makeup brush holder on the desktop, a hair tie and a
+small tray, a soft cotton rug partly visible on the floor, a bed edge with rumpled
+linen entering the frame on the left, and daylight from a window on the right.
+
+Everything should look casually arranged, not styled for a catalogue — slightly
+imperfect placement, natural clutter, real textures.
+
+Photorealistic interior photography, 35mm lens, natural window light, gentle shadows,
+no HDR, no glow, no over-saturation.
+No text, no letters, no logos, no watermarks, no people.
+```
+
+### 人物を入れる場合
+
+```
+Keep the product in the attached photo EXACTLY as it is.
+
+Add a Japanese woman in her late twenties sitting on the stool, seen from behind and
+slightly to the side, so her face is only partly visible in the mirror. She is
+applying makeup with a brush, wearing a simple cream knit top, hair loosely tied.
+Natural, relaxed posture — a real moment, not a pose.
+
+The room: warm white wall, light oak floor, soft morning daylight from the left.
+The mirror's LED is on with a warm glow lighting her face.
+
+Photorealistic candid interior photography, 50mm lens, shallow depth of field with the
+product in focus, natural skin texture, no beauty filter, no over-smoothing.
+No text, no letters, no logos, no watermarks.
+```
+
+**人物を入れると一気にAIっぽくなります。** 手の指、髪の生え際、鏡像の整合性が
+崩れやすいためです。生成したら必ず**手・指の本数・鏡に映る像**を確認してください。
+
+---
+
+## § 3　ミラーのスライド 2状態
+
+比較として並べるので、**1枚目を作ってから2枚目**を続けて指示します。
+
+```
+【1枚目：鏡を閉じた状態】
+Keep the product in the attached photo EXACTLY as it is.
+Show the sliding mirror in its CLOSED position — centred over the storage unit,
+completely hiding the shelves behind it. The LED is on with a warm glow.
+Straight-on frontal view. Warm white wall, light oak floor, soft daylight.
+Photorealistic, 35mm lens, natural shadows.
+No text, no letters, no logos, no watermarks, no people.
+```
+
+```
+【2枚目：鏡を右へスライド】
+Keep the product, the camera position, the framing, the background and the lighting
+EXACTLY the same as the previous image.
+
+The ONLY change: the mirror has slid along its rail to the RIGHT, overhanging past the
+right edge of the desk, so the hidden storage behind it is now fully exposed — three
+tiers holding skincare bottles, lipsticks and small cosmetic jars. The black metal
+slide rails above and below the storage are visible. The LED is switched off.
+
+Identical camera angle, identical distance, identical lighting, identical background.
+No text, no letters, no logos, no watermarks, no people.
+```
+
+---
+
+## § 4　LED 3色
+
+ミラー部分のクローズアップ写真を添付し、**色の語句だけ差し替えて3回**送ります。
+
+```
+Keep the product in the attached photo EXACTLY as it is.
+
+Close-up of the LED mirror, filling the frame. The room is dim so the LED is the
+dominant light source. The LED strip inside the mirror frame is glowing ★COLOUR★.
+The glow spills softly onto the white body and the shelves beside it.
+Identical framing, identical exposure, identical camera position across all versions.
+
+Photorealistic, sharp, natural. No blown-out highlights, no bloom, no lens flare.
+No text, no letters, no logos, no watermarks, no people.
+```
+
+| ファイル名 | `★COLOUR★` |
 |---|---|
 | `led_warm` | `a warm amber 3000K warm-white, cosy and soft` |
 | `led_neutral` | `a natural 4500K neutral white, clean and balanced` |
 | `led_cool` | `a crisp 6000K cool daylight white, slightly blue-tinted` |
 
-### B-6　`mirror_closed` — ミラー中央（ドレッサーとして）
+---
+
+## § 5　収納ディテール 4枚
 
 ```
-Using the attached image as the exact reference product, keep the design identical.
-
-Straight-on frontal view, full product, camera at mid-height, 85mm lens equivalent.
-The sliding mirror is positioned in the centre-right of the upper unit — the normal
-dressing-table position. The LED is on with a warm glow.
-Seamless very light warm-grey background, soft contact shadow only.
-
-No text, no logos, no watermarks, no people.
-Vertical 3:4, photorealistic, ultra sharp, commercial product photography.
-```
-
-### B-7　`mirror_open` — ミラーを左へスライド（デスクとして）
-
-```
-Using the attached image as the exact reference product, keep the design, the camera
-position, the framing and the lighting EXACTLY the same as the previous image.
-
-The only change: the sliding mirror has been moved along its rail to the far LEFT
-of the upper unit. The right-hand shelves are now fully exposed and visible, holding
-skincare bottles and small cosmetic items on all three tiers.
-The LED is switched off.
-
-Identical camera angle, identical distance, identical lighting, identical background.
-No text, no logos, no watermarks, no people.
-Vertical 3:4, photorealistic, ultra sharp.
-```
-
-### B-8〜B-11　`storage_1`〜`storage_4` — 収納ディテール
-
-```
-【storage_1 — オープンラック】
-Using the attached image as the exact reference product, keep the design identical.
-Close-up of the three-tier open shelving unit, filling the frame.
-Each tier holds skincare bottles, a tall perfume bottle, and small jars, arranged
-neatly with room to spare. Slight three-quarter angle to show depth.
-Soft even studio lighting, warm and clean.
-No text, no logos, no watermarks, no people. Horizontal 4:3, photorealistic.
+【storage_1 オープン棚】
+Keep the product in the attached photo EXACTLY as it is.
+Close-up of the narrow open shelf tower on the left side (24cm wide, four tiers),
+filling the frame at a slight three-quarter angle. Each tier holds skincare bottles,
+a tall perfume bottle and small jars, casually arranged with room to spare.
+Soft natural daylight. Photorealistic, sharp, no HDR.
+No text, no letters, no logos, no watermarks, no people.
 ```
 
 ```
-【storage_2 — 鍵付き引き出し】
-Using the attached image as the exact reference product, keep the design identical.
-Close-up of the wide drawer beneath the desktop, pulled open about 20cm, seen from a
-slightly elevated three-quarter angle so the inside is visible.
-A small round keyhole and a slim metal key are clearly visible on the drawer front.
-Inside: neatly arranged makeup palettes and small boxes.
-Soft even studio lighting. No text, no logos, no watermarks, no people.
-Horizontal 4:3, photorealistic, ultra sharp.
+【storage_2 鏡裏収納】
+Keep the product in the attached photo EXACTLY as it is.
+The mirror slid fully to the right, revealing the three-tier hidden storage behind it.
+Close-up filling the frame, slight three-quarter angle. The shelves hold lipsticks,
+skincare bottles and small cosmetic boxes. The black metal slide rails are visible
+above and below. Soft natural daylight. Photorealistic, sharp.
+No text, no letters, no logos, no watermarks, no people.
 ```
 
 ```
-【storage_3 — 引き出し3杯】
-Using the attached image as the exact reference product, keep the design identical.
-The three left-hand drawers pulled open in a staggered cascade, seen from a slightly
-elevated three-quarter angle so the contents of all three are visible.
-Top drawer: lipsticks and compacts. Middle: makeup brushes and palettes.
-Bottom: a hair dryer and larger bottles.
-Soft even studio lighting. No text, no logos, no watermarks, no people.
-Horizontal 4:3, photorealistic, ultra sharp.
+【storage_3 鍵付きデスク引き出し】
+Keep the product in the attached photo EXACTLY as it is.
+The wide desk drawer pulled open about 20cm, seen from slightly above at a three-quarter
+angle so the inside is visible. The keyhole and a small silver key hanging from it are
+clearly in frame. Inside: makeup palettes, brushes and small boxes, casually arranged.
+Soft natural daylight. Photorealistic, sharp.
+No text, no letters, no logos, no watermarks, no people.
 ```
 
 ```
-【storage_4 — スツール収納】
-Using the attached image as the exact reference product, keep the design identical.
-Wider frontal shot showing the stool fully tucked into the knee space beneath the
-desktop, so the product's footprint looks compact and the floor is clear.
-The full width of the product is in frame.
-Soft even studio lighting, seamless light warm-grey background.
-No text, no logos, no watermarks, no people. Horizontal 4:3, photorealistic.
+【storage_4 3段チェスト】
+Keep the product in the attached photo EXACTLY as it is.
+The three chest drawers pulled open in a staggered cascade, seen from slightly above at
+a three-quarter angle so the contents of all three are visible. Top: lipsticks and
+compacts. Middle: brushes and palettes. Bottom: larger bottles and a hair dryer.
+The light oak bar handles are clearly visible. Soft natural daylight. Photorealistic.
+No text, no letters, no logos, no watermarks, no people.
 ```
 
 ---
 
-## § C　仕入先に見せる仕様イメージ用（この用途が今いちばん実用的）
+## § 6　仕入先に見せる仕様イメージ
 
-現物がない段階では、これが最も価値を生みます。工場に「こういう商品が欲しい」と
-見せるための、構造がわかる図です。
+現物がない段階では、これがいちばん実用的です。商品写真を添付して送ります。
 
 ```
-A clean technical product visualisation of a white vanity dressing table for a
-furniture manufacturing brief.
-
-Show the same product from three angles arranged side by side on a plain light grey
-background: front elevation, side elevation, and a three-quarter view.
-The product: 80cm wide, 35cm deep, 130cm tall, matte white body, oak wooden bar
-handles, three-tier open shelving on top with a sliding LED mirror on a rail,
-three drawers on the lower left, one wide lockable drawer on the lower right,
-open knee space, matching stool with a pale pink cushion.
-
-Clean, evenly lit, no shadows, no background clutter.
+Keep the product in the attached photo exactly as it is.
+Re-render it as a clean manufacturing reference sheet: the same product shown from
+three angles side by side on a plain light grey background — front elevation, side
+elevation, and a three-quarter view.
+Even lighting, no shadows, no background clutter, no styling props.
 No text, no numbers, no dimension lines, no logos, no watermarks.
-Horizontal 16:9, sharp, clear, technical illustration style with realistic materials.
+Horizontal 16:9, sharp and clear.
 ```
 
-**使い方:** この画像を 1688 / Alibaba のサプライヤーに送り、
-「这样的产品，你们能做吗？」（こういう商品は作れますか）と聞きます。
-言葉で説明するより圧倒的に速く伝わります。
+生成した画像を 1688 / Alibaba のサプライヤーに送り、こう聞きます。
+
+```
+这样的产品，你们能做吗？
+外径 80×35×130cm，台面高 70cm，镜子 45×60cm 可横向滑动，镜后收纳 40×8.5×60cm，
+开放格 24×13×60cm，带锁抽屉 42×23×8cm，三层抽屉柜 24×23×8cm×3，凳子 32×21.5×36cm。
+LED 三色（暖光/自然光/冷光），触摸切换，长按无级调光。
+请报价，并告知起订量、交货期，以及产品图片能否授权我们用于亚马逊商品页面。
+```
 
 ---
 
-## § D　思ったとおりに出ないときの修正指示
+## § 7　AIっぽさを消す修正指示
 
-生成し直すのではなく、**出てきた画像に対して追加指示**を出すほうが早く収束します。
+生成し直すより、**出てきた画像に追加で指示**するほうが早く収束します。
 
-| 症状 | 送る修正指示 |
+| 症状 | そのまま送る修正文 |
 |---|---|
-| 白がグレー・クリーム色に見える | `The furniture must be pure clean white, not grey or cream. Brighten the whites and set a neutral white balance.` |
-| 家具が歪む・広がって見える | `Use an 85mm lens perspective. Remove all wide-angle distortion. All vertical edges must be perfectly vertical and parallel.` |
-| 勝手に文字やロゴが入る | `Remove all text, letters, numbers, logos and watermarks from the image completely.` |
-| 床に影が落ちる（メイン画像用） | `Remove the cast shadow entirely. Pure seamless white background with no floor line and no gradient.` |
-| 引き出しの数が変わってしまう | `There must be exactly three drawers on the lower left and exactly one wide drawer on the lower right. Do not change the number of drawers.` |
-| 鏡が棚を覆っていない | `The mirror must overlap and cover the right half of the shelving unit, mounted in front of it on a horizontal rail — not beside it.` |
-| 人物や手が写り込む | `Remove all people, hands and body parts from the image.` |
-| 生活感が出すぎる | `Remove the rug, plants and decorative props. Keep only the product and the stool.` |
-| 解像度が足りない | `Regenerate at the highest available resolution, ultra sharp, fine detail.` |
+| CG・レンダリングっぽい | `This looks like a 3D render. Make it look like a real photograph taken with a camera: natural film grain, slightly imperfect lighting, realistic material texture, no perfect symmetry.` |
+| 全体がツヤツヤ・過剰に鮮やか | `Reduce the saturation and contrast. Remove the HDR look, the glow and the artificial sharpening. Make it look like a natural, unedited photo.` |
+| 商品が別物になった | `You changed the furniture. Restore the product to be IDENTICAL to the attached reference photo — same proportions, same handles, same drawer count, same mirror. Change only the background.` |
+| 合成に見える（浮いている） | `The product looks pasted in. Match the lighting direction and colour temperature of the product to the room, and add a realistic soft contact shadow where it meets the floor.` |
+| 影が不自然 | `Fix the shadows. There is a single soft light source from the left, so all shadows must fall to the right with consistent softness.` |
+| 木目・質感がのっぺり | `Add realistic material texture: fine wood grain on the oak handles, a subtle matte texture on the white painted surfaces, visible fabric weave on the stool cushion.` |
+| 引き出しの数が変わる | `There must be exactly three drawers in the left chest and exactly one wide drawer under the desktop. Do not change the number of drawers.` |
+| 鏡の映り込みがおかしい | `The mirror must reflect the room in front of it with correct perspective and geometry. Remove any impossible or duplicated reflection.` |
+| 人物の手や指が破綻 | `The hands are malformed. Redraw with anatomically correct hands, five fingers, natural proportions.` |
+| 文字やロゴが入る | `Remove all text, letters, numbers, logos and watermarks from the image completely.` |
 
 ---
 
-## § E　生成後の手順
+## § 8　生成後の手順
 
 ```bash
-# 1. 生成画像を photos/ に、決められた名前で保存
-#    main.png / hero.png / led_warm.png / ... （photos/README.md 参照）
-
-# 2. 合成
+# 1. photos/ に決められた名前で保存（photos/README.md 参照）
+# 2. 日本語コピー・寸法線・仕様表を合成
 node build.js
-
-# 3. 検証（解像度・背景の白色純度・商品の占有率）
+# 3. 解像度・背景の白色純度・商品占有率を検証
 node check.js
 ```
 
-生成画像は長辺が2000px未満のことが多いため、`check.js` が警告を出す可能性があります。
-その場合は生成時に最大解像度を指定し直すか、アップスケールしてください。
-
-**繰り返しになりますが、この画像を商品ページに入稿しないでください。**
-実物の撮影ができるまでの「つなぎ」と「仕入先への伝達手段」として使ってください。
+**日本語テキストは絶対にAIに描かせないでください。** 必ず崩れます。
+文字はすべて `build.js` が乗せます。AIには写真だけを作らせてください。
