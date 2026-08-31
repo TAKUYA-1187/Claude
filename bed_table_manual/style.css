@@ -1,0 +1,209 @@
+:root{
+  --ink:#16181C; --ink2:#4B535D; --mute:#7A838E;
+  --line:#D8DDE3; --line2:#EDF0F3;
+  --wash:#F6F4F0; --band:#ECEFF2;
+  --brand:#1E2833; --red:#D62828; --blue:#1C6FA8; --green:#2E7D5B;
+  --amber:#B67A05;
+}
+*{box-sizing:border-box}
+svg{display:block;max-width:100%}
+svg.fig,svg.pfig{width:100%;height:100%}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  color:var(--ink); background:#8A9099; -webkit-font-smoothing:antialiased;
+  font-feature-settings:"palt" 1; line-height:1.62;
+}
+.page{
+  position:relative; width:210mm; height:297mm; background:#fff;
+  padding:13mm 13mm 11mm; margin:0 auto 10mm; overflow:hidden;
+  box-shadow:0 6px 26px rgba(0,0,0,.28); display:flex; flex-direction:column;
+}
+.page::after{
+  content:attr(data-pg); position:absolute; right:13mm; bottom:5mm;
+  font-size:8.4pt; color:var(--mute); letter-spacing:.06em;
+}
+.page::before{
+  content:attr(data-run); position:absolute; left:13mm; bottom:5mm;
+  font-size:8.4pt; color:var(--mute); letter-spacing:.04em;
+}
+
+/* ---------------------------------------------------------- headings */
+.sec{display:flex; align-items:center; gap:9px; margin:0 0 2.8mm}
+.sec h2{
+  font-size:14.5pt; font-weight:900; margin:0; letter-spacing:.02em;
+  background:var(--band); padding:1.7mm 5mm 1.7mm 4mm; flex:1;
+  border-left:5px solid var(--brand); line-height:1.3;
+}
+.sec .lead{font-size:9pt; color:var(--ink2); font-weight:500; white-space:nowrap}
+h3.sub{font-size:11.5pt; font-weight:800; margin:0 0 2mm;
+  padding-left:3.4mm; border-left:3.5px solid var(--brand); line-height:1.35}
+
+/* ------------------------------------------------------------ cover */
+.cover-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8mm}
+.brandline{font-size:9pt; letter-spacing:.22em; color:var(--ink2); font-weight:700}
+.ptitle{font-size:19pt; font-weight:900; line-height:1.32; margin:1.6mm 0 0; letter-spacing:.01em}
+.ptitle small{display:block; font-size:11pt; font-weight:700; color:var(--ink2); letter-spacing:.04em}
+.doclabel{
+  display:inline-block; margin-top:3mm; background:var(--brand); color:#fff;
+  font-size:12.5pt; font-weight:900; padding:1.6mm 6mm; letter-spacing:.14em;
+}
+.qrbox{border:1.6px solid var(--line); padding:2.4mm; text-align:center; width:33mm; flex:none}
+.qrbox svg{width:100%; display:block}
+.qrbox b{display:block; font-size:7.6pt; margin-top:1.2mm; line-height:1.35}
+.qrbox span{display:block; font-size:6.6pt; color:var(--mute); line-height:1.3}
+
+.herowrap{display:flex; gap:6mm; align-items:center; margin:2mm 0 0}
+.herowrap .h1fig{flex:1.35; height:35mm}
+.herowrap .h2fig{flex:.72; height:35mm}
+.hcap{text-align:center; font-size:8.6pt; font-weight:700; color:var(--ink2); margin-top:-2mm}
+
+.facts{display:grid; grid-template-columns:repeat(3,1fr); gap:2.6mm; margin:2.4mm 0 0}
+.fact{background:var(--wash); border:1px solid var(--line); padding:2mm 3mm}
+.fact b{display:block; font-size:7.8pt; color:var(--blue); letter-spacing:.06em; font-weight:800}
+.fact span{font-size:10pt; font-weight:800; line-height:1.4; display:block; margin-top:.6mm}
+.fact em{font-style:normal; font-size:8pt; color:var(--ink2); font-weight:500}
+
+.flow{display:flex; align-items:stretch; gap:0; margin:2.6mm 0 0;
+  border:1px solid var(--line); background:#fff}
+.flow .f{flex:1; padding:1.7mm 1mm 1.9mm; text-align:center; position:relative}
+.flow .f + .f{border-left:1px dashed var(--line)}
+.flow .f i{display:block; font-style:normal; font-size:7.4pt; font-weight:800; color:var(--blue)}
+.flow .f b{display:block; font-size:9pt; font-weight:800; line-height:1.35; margin-top:.4mm}
+.flow .f em{display:block; font-style:normal; font-size:7.6pt; color:var(--ink2)}
+
+/* ------------------------------------------------------------ parts */
+.parts{display:grid; grid-template-columns:repeat(5,1fr); gap:0;
+  border:1.5px solid var(--brand); border-right:0; border-bottom:0}
+.pcell{border-right:1.5px solid var(--brand); border-bottom:1.5px solid var(--brand);
+  padding:1.8mm 1.8mm 2mm; display:flex; flex-direction:column; min-height:26.5mm}
+.pcell .hd{display:flex; align-items:center; justify-content:space-between}
+.pcell .ltr{background:var(--brand); color:#fff; font-weight:900; font-size:9.4pt;
+  width:5.4mm; height:5.4mm; display:grid; place-items:center; flex:none; border-radius:1mm}
+.pcell .nm{font-size:8.5pt; font-weight:800; line-height:1.34; margin-top:.7mm}
+.pcell .qty{font-size:9.2pt; font-weight:900; color:var(--red)}
+.pcell .pfig{flex:none; width:100%; height:16mm; margin-top:.8mm}
+.pcell .note{margin-top:auto; font-size:6.6pt; color:var(--ink2); line-height:1.36; margin-top:.6mm}
+.chk{width:3.2mm;height:3.2mm;border:1.2px solid var(--ink2);display:inline-block;
+  margin-right:1.2mm;vertical-align:-.3mm}
+
+.boltguide{display:flex; align-items:flex-end; gap:5mm; border:1px solid var(--line);
+  background:var(--wash); padding:2mm 3.4mm; margin-top:2.4mm}
+.boltguide .bg-t{font-size:9pt; font-weight:800; line-height:1.4; flex:none; width:34mm}
+.boltguide .bg-t em{font-style:normal; display:block; font-size:7.4pt; color:var(--ink2); font-weight:500}
+.bg-item{flex:1}
+.bg-item svg{height:23mm; width:100%; display:block}
+
+/* ------------------------------------------------------------ boxes */
+.note-box{border:1.5px solid var(--brand); padding:2.4mm 4mm; margin-top:2.6mm}
+.note-box h4{margin:0 0 1.4mm; font-size:10.5pt; font-weight:900; display:flex;
+  align-items:center; gap:2mm}
+.note-box ol{margin:0; padding-left:5.2mm; font-size:8.3pt; line-height:1.66}
+.note-box ol li{margin-bottom:.5mm}
+.warnmark{background:var(--red); color:#fff; width:5.4mm; height:5.4mm; display:grid;
+  place-items:center; font-size:9pt; font-weight:900; border-radius:.8mm; flex:none}
+
+.callout{border-left:4px solid var(--blue); background:#F2F7FB; padding:1.8mm 3mm;
+  font-size:8.3pt; line-height:1.58; margin-top:1.4mm}
+.callout b{color:var(--blue)}
+.callout.red{border-left-color:var(--red); background:#FDF3F3}
+.callout.red b{color:var(--red)}
+
+.banner{display:flex; gap:3mm; align-items:center; background:var(--brand); color:#fff;
+  padding:2.2mm 4mm; font-size:9.4pt; font-weight:700; line-height:1.5}
+.banner b{background:#fff; color:var(--brand); padding:.4mm 2.4mm; font-weight:900;
+  font-size:8.6pt; white-space:nowrap; flex:none}
+.banner u{text-decoration:none; background:#fff; color:var(--brand); font-weight:900;
+  padding:.2mm 1.4mm; border-radius:.6mm}
+
+/* ------------------------------------------------------------ steps */
+.steps{display:grid; grid-template-columns:1fr 1fr; gap:4mm; flex:1}
+.step{border:1.5px solid var(--line); display:flex; flex-direction:column; overflow:hidden}
+.step .sh{display:flex; align-items:center; gap:2.6mm; background:var(--brand); color:#fff;
+  padding:1.8mm 3mm}
+.step .sn{font-size:8pt; font-weight:800; letter-spacing:.1em; opacity:.85}
+.step .st{font-size:11pt; font-weight:900; line-height:1.3}
+.step .num{width:7.4mm; height:7.4mm; border-radius:50%; background:#fff; color:var(--brand);
+  display:grid; place-items:center; font-size:11pt; font-weight:900; flex:none}
+.step .sbody{padding:2.6mm 3.4mm 3mm; display:flex; flex-direction:column; flex:1}
+.step .fig{width:100%; height:33mm; margin:0 auto; flex:none}
+.step p{margin:1.6mm 0 0; font-size:9pt; line-height:1.68}
+.step .use{font-size:8.4pt; font-weight:800; color:var(--brand); background:var(--band);
+  display:inline-block; padding:.5mm 2.4mm; margin-top:1.4mm; align-self:flex-start}
+
+/* ------------------------------------------------------------ how-to */
+.duo{display:grid; grid-template-columns:1fr 1fr; gap:4mm}
+.trio{display:grid; grid-template-columns:repeat(3,1fr); gap:3mm}
+.opcard{border:1.5px solid var(--line); overflow:hidden; display:flex; flex-direction:column}
+.opcard .oh{background:var(--band); padding:1.5mm 3mm; font-size:10.5pt; font-weight:900;
+  display:flex; align-items:center; gap:2mm}
+.opcard .oh .dot{width:4.6mm;height:4.6mm;border-radius:50%;background:var(--red);color:#fff;
+  font-size:7.6pt;display:grid;place-items:center;font-weight:900;flex:none}
+.opcard .ob{padding:2mm 3mm 2.6mm; flex:1; display:flex; flex-direction:column}
+.opcard .fig{width:100%; height:38mm}
+.opcard p{margin:1.2mm 0 0; font-size:8.8pt; line-height:1.62}
+.opcard.sm .fig{height:26mm}
+.opcard.sm p{font-size:8.3pt}
+
+.check{display:flex; gap:3mm; margin-top:2mm}
+.check .ci{flex:1; border:1.5px solid var(--green); padding:1.8mm 2.6mm; font-size:8.5pt;
+  line-height:1.5; display:flex; gap:2mm; align-items:flex-start}
+.check .ci b{color:var(--green); font-size:10pt; line-height:1.2}
+
+/* ------------------------------------------------------------ tables */
+table.tb{width:100%; border-collapse:collapse; font-size:8.2pt}
+table.tb th{background:var(--brand); color:#fff; font-weight:800; text-align:left;
+  padding:1.2mm 2.4mm; font-size:8.4pt}
+table.tb td{border:1px solid var(--line); padding:1.3mm 2.4mm; vertical-align:top; line-height:1.55}
+table.tb td.sym{font-weight:800; width:42mm; background:#FAFBFC}
+table.tb tr:nth-child(even) td{background:#FCFCFD}
+table.tb tr:nth-child(even) td.sym{background:#F6F8F9}
+
+.qa{margin-top:2mm}
+.qa dl{margin:0}
+.qa dt{font-size:8.6pt; font-weight:800; margin-top:1.4mm; display:flex; gap:2mm}
+.qa dd{margin:.4mm 0 0 6mm; font-size:8.2pt; color:var(--ink2); line-height:1.56}
+.qa .q{color:var(--blue); font-weight:900}
+.qa .a{color:var(--red); font-weight:900}
+
+.safety{display:grid; grid-template-columns:1fr 1fr; gap:4mm}
+.sbox{border:1.5px solid var(--line)}
+.sbox .sth{padding:1.5mm 3mm; font-size:10pt; font-weight:900; color:#fff; display:flex;
+  align-items:center; gap:2mm}
+.sbox.w .sth{background:var(--red)}
+.sbox.c .sth{background:var(--amber)}
+.sbox ul{margin:0; padding:2mm 3mm 2.2mm 6.4mm; font-size:8.2pt; line-height:1.58}
+.sbox li{margin-bottom:1mm}
+
+.support{border:1.5px solid var(--brand); margin-top:3.4mm}
+.support .sph{background:var(--brand); color:#fff; padding:1.4mm 4mm; font-size:10.4pt; font-weight:900}
+.support .spb{padding:2.4mm 4mm; display:flex; gap:5mm; align-items:flex-start}
+.support .col{flex:1; font-size:8.3pt; line-height:1.62}
+.support .col b{display:block; font-size:9.2pt; margin-bottom:.6mm}
+.support .big{font-size:10.8pt; font-weight:900; letter-spacing:.02em}
+
+.foot{margin-top:2.4mm; font-size:7.6pt; color:var(--mute); line-height:1.5}
+
+/* ------------------------------------------------------------- print */
+@media print{
+  body{background:#fff}
+  .page{margin:0; box-shadow:none; page-break-after:always; break-after:page}
+  .page:last-child{page-break-after:auto; break-after:auto}
+}
+@page{ size:A4; margin:0 }
+
+.chknote{border:1.4px solid var(--line); border-top:0; background:var(--wash);
+  padding:1.8mm 3.4mm; font-size:8.2pt; line-height:1.55; color:var(--ink2)}
+.chknote b{color:var(--red)}
+.prep{border:1.5px solid var(--brand); margin-bottom:2.6mm}
+.prep .ph{display:flex; align-items:center; gap:2mm; font-size:10pt; font-weight:900;
+  padding:1.4mm 3mm; border-bottom:1.2px solid var(--line)}
+.prep .pg{display:grid; grid-template-columns:1fr 1fr; gap:0}
+.prep .pi{display:flex; gap:2mm; padding:1.3mm 3mm; font-size:8.6pt; line-height:1.45;
+  align-items:flex-start}
+.prep .pi:nth-child(odd){border-right:1px dashed var(--line)}
+.prep .pi:nth-child(-n+2){border-bottom:1px dashed var(--line)}
+.prep .pi i{font-style:normal; font-weight:900; background:var(--brand); color:#fff;
+  width:4.4mm; height:4.4mm; border-radius:50%; display:grid; place-items:center;
+  font-size:7.4pt; flex:none; margin-top:.3mm}
+.prep .pi em{font-style:normal; color:var(--ink2); font-size:7.6pt; display:block}
