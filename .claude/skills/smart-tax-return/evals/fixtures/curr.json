@@ -1,0 +1,23 @@
+{
+  "01.銀行口座": [],
+  "02.クレカ/AMAZONマスター": ["202607AMAZON KAORI.numbers","202607AMAZON TAKUYA.numbers","202608AMAZON KAORI.numbers","202608AMAZON TAKUYA.numbers","202609AMAZON KAORI.numbers","202609AMAZON TAKUYA.numbers","202610AMAZON KAORI.numbers","202610AMAZON TAKUYA.numbers","202611AMAZON KAORI.numbers","202611AMAZON TAKUYA.numbers","202612AMAZON KAORI.numbers","202612AMAZON TAKUYA.numbers"],
+  "02.クレカ/AMEX TAKUYA": ["2026-07Gold Preferred TAKUYA.pdf","2026-08Gold Preferred TAKUYA.pdf","2026-09Gold Preferred TAKUYA.pdf","2026-10Gold Preferred TAKUYA.pdf","2026-11Gold Preferred TAKUYA.pdf","2026-12Gold Preferred TAKUYA.pdf"],
+  "02.クレカ/ANA AMEX KAORI": ["2026-07ANA AMEX KAORI.pdf","2026-08ANA AMEX KAORI.pdf","2026-09ANA AMEX KAORI.pdf","2026-10ANA AMEX KAORI.pdf","2026-11ANA AMEX KAORI.pdf","2026-12ANA AMEX KAORI.pdf"],
+  "02.クレカ/ANA AMEX TAKUYA": ["2026-07ANA AMEX TAKUYA.pdf","2026-08ANA AMEX TAKUYA.pdf","2026-09ANA AMEX TAKUYA.pdf","2026-10ANA AMEX TAKUYA.pdf","2026-11ANA AMEX TAKUYA.pdf","2026-12ANA AMEX TAKUYA.pdf"],
+  "02.クレカ/JCBカード KAORI": ["202607JCB KAORI meisai.pdf","202608JCB KAORI meisai.pdf","202609JCB KAORI meisai.pdf","202610JCB KAORI meisai.pdf","202611JCB KAORI meisai.pdf","202612JCB KAORI meisai.pdf"],
+  "02.クレカ/JCBカード TAKUYA": ["202607JCB TAKUYA meisai.pdf","202608JCB TAKUYA meisai.pdf","202612JCB TAKUYA meisai.pdf"],
+  "02.クレカ/MARRIOTT AMEX KAORI": ["2026-07Marriott KAORI.pdf","2026-08Marriott KAORI.pdf","2026-09Marriott KAORI.pdf","2026-10Marriott KAORI.pdf","2026-11Marriott KAORI.pdf","2026-12Marriott KAORI.pdf"],
+  "02.クレカ/MARRIOTT AMEX TAKUYA": ["2026-07-02MARRIOTT AMEX TAKUYA.pdf","2026-08-02MARRIOTT AMEX TAKUYA.pdf","2026-09-02MARRIOTT AMEX TAKUYA.pdf","2026-10-02MARRIOTT AMEX TAKUYA.pdf","2026-11-02MARRIOTT AMEX TAKUYA.pdf","2026-12-02MARRIOTT AMEX TAKUYA.pdf","202607MARRIOTT AMEX TAKUYA.csv","202608MARRIOTT AMEX TAKUYA.csv","202609MARRIOTT AMEX TAKUYA.csv","202610MARRIOTT AMEX TAKUYA.csv","202611MARRIOTT AMEX TAKUYA.csv","202612MARRIOTT AMEX TAKUYA.csv"],
+  "02.クレカ/Oliveゴールド": ["202607OLIVE TAKUYA.numbers","202608OLIVE TAKUYA.numbers","202609OLIVE TAKUYA.numbers","202610OLIVE TAKUYA.numbers","202611OLIVE TAKUYA.numbers","202612OLIVE TAKUYA.numbers"],
+  "02.クレカ/PAYPAYカード KAORI": ["detail202607(1234).csv","detail202608(1234).csv","detail202609(1234).csv","detail202610(1234).csv","detail202611(1234).csv","detail202612(1234).csv"],
+  "02.クレカ/PAYPAYカード MICHIKA": [],
+  "02.クレカ/PAYPAYカード TAKUYA": ["detail202607(2222).csv","detail202608(2222).csv","detail202609(2222).csv","detail202610(2222).csv","detail202611(2222).csv","detail202612(2222).csv"],
+  "02.クレカ/楽天カード TAKUYA": ["enavi202608(3333).csv","enavi202609(3333).csv","enavi202610(3333).csv","enavi202611(3333).csv","enavi202612(3333).csv","enavi202701(3333).csv"],
+  "02.クレカ/三井住友Visa Infinite": [],
+  "03.PayPay履歴": ["PAYPAY1010_20260701-20261231.csv","PAYPAY2020_20260701-20261231.csv","PAYPAY9999_20260701-20261231.numbers","PAYPAY91079999_20260701-20261231.csv"],
+  "04.楽天ポイント履歴": ["楽天ポイント履歴_202607-202612.csv","楽天ポイント履歴_KAORI_202607-202612.csv"],
+  "05.AppleGiftCard": ["MC61968508.pdf","MC88123001.pdf","MC88999142.pdf"],
+  "06.現金レシート/経費": [],
+  "10.売上Amazon": ["2026JulMonthlyTransaction.csv","2026AugMonthlyTransaction.csv","2026SepMonthlyTransaction.csv","2026OctMonthlyTransaction.csv","2026NovMonthlyTransaction.csv","2026DecMonthlyTransaction.csv","2026JulMonthlySummary.pdf","2026AugMonthlySummary.pdf","2026SepMonthlySummary.pdf","2026OctMonthlySummary.pdf","2026NovMonthlySummary.pdf","2026DecMonthlySummary.pdf"],
+  "11.売上フリマ": ["mercari_sold_202607-202612.csv"]
+}

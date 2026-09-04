@@ -1,0 +1,26 @@
+{
+  "skill_name": "smart-tax-return",
+  "evals": [
+    {
+      "id": 0,
+      "name": "plan-new-quarter",
+      "prompt": "そろそろスマート確定申告の7-12月分の提出を始めたいです。前回の4-6月分はだいたい出し終わってます。何から手をつければいいか、段取りを教えてください。ブラウザは各サイトログイン済みです。",
+      "expected_output": "4フェーズ（棚卸し→収集→振り分け→監査）の段取りを提示する。対象フォルダが .07-12月分(1月10日まで厳守) だと特定できている。チェックリストとOneDriveステージングフォルダを先に確認する手順が入っている。監査フェーズを最後に置いている。Vpass/JCBのbot検知に触れ、ブロックされたらユーザーに手動DLを依頼する方針を示している。",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "audit-quarter-gaps",
+      "prompt": "スマカクのDriveの棚卸しを2つのJSONに落としました。/tmp/eval-audit/prev.json が4-6月分、/tmp/eval-audit/curr.json が7-12月分です。突き合わせて不足している資料を教えてください。対象は7月〜12月です。",
+      "expected_output": "compare_quarters.py を使って差分を出す。空フォルダ（三井住友Visa Infinite、PAYPAYカード MICHIKA、06.現金レシート/経費）、月次の抜け（JCBカード TAKUYA）、期間跨ぎ重複（MC61968508.pdf）、PayPayの表記ゆれ重複を検出する。MARRIOTT AMEX TAKUYA と 10.売上Amazon の PDF+CSV を重複と誤報告しない。緊急度別（🔴/🟡/⚠️/✅）に整理して報告する。削除を提案しない。",
+      "files": ["/tmp/eval-audit/prev.json", "/tmp/eval-audit/curr.json"]
+    },
+    {
+      "id": 2,
+      "name": "scrape-rakuten-points",
+      "prompt": "楽天ポイントの履歴をCSVで抜き出してほしいです。2026年7月1日から9月30日まで。ログインは済んでます。https://point.rakuten.co.jp/history/",
+      "expected_output": "CSVエクスポート機能が無いことを把握し、「さらに絞り込む」→期間プルダウンをform_inputで設定→全ページをget_page_textで取得→CSV化、の手順を示す。総件数と行数を突き合わせて検算する手順が入っている。出力列（日付/サービス/内容/ランクアップ対象/区分/ポイント数/備考）とBOM付きUTF-8に触れている。保存先がOneDriveの提出資料フォルダになっている。",
+      "files": []
+    }
+  ]
+}

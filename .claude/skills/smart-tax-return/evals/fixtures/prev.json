@@ -1,0 +1,23 @@
+{
+  "01.銀行口座": [],
+  "02.クレカ/AMAZONマスター": ["202604AMAZON KAORI.numbers","202604AMAZON TAKUYA.numbers","202605AMAZON KAORI.numbers","202605AMAZON TAKUYA.numbers","202606AMAZON KAORI.numbers","202606AMAZON TAKUYA.numbers"],
+  "02.クレカ/AMEX TAKUYA": ["2026-04Gold Preferred TAKUYA.pdf","2026-05Gold Preferred TAKUYA.pdf","2026-06Gold Preferred TAKUYA.pdf"],
+  "02.クレカ/ANA AMEX KAORI": ["2026-04ANA AMEX KAORI.pdf","2026-05ANA AMEX KAORI.pdf","2026-06ANA AMEX KAORI.pdf"],
+  "02.クレカ/ANA AMEX TAKUYA": ["2026-04ANA AMEX TAKUYA.pdf","2026-05ANA AMEX TAKUYA.pdf","2026-06ANA AMEX TAKUYA.pdf"],
+  "02.クレカ/JCBカード KAORI": ["202604JCB KAORI meisai.pdf","202605JCB KAORI meisai.pdf","202606JCB KAORI meisai.pdf"],
+  "02.クレカ/JCBカード TAKUYA": ["202604JCB TAKUYA meisai.pdf","202605JCB TAKUYA meisai.pdf","202606JCB TAKUYA meisai.pdf"],
+  "02.クレカ/MARRIOTT AMEX KAORI": ["2026-04Marriott KAORI.pdf","2026-05Marriott KAORI.pdf","2026-06Marriott KAORI.pdf"],
+  "02.クレカ/MARRIOTT AMEX TAKUYA": ["2026-04-02MARRIOTT AMEX TAKUYA.pdf","2026-05-02MARRIOTT AMEX TAKUYA.pdf","2026-06-02MARRIOTT AMEX TAKUYA.pdf","202604MARRIOTT AMEX TAKUYA.csv","202605MARRIOTT AMEX TAKUYA.csv","202606MARRIOTT AMEX TAKUYA.csv"],
+  "02.クレカ/Oliveゴールド": ["202604OLIVE TAKUYA.numbers","202605OLIVE TAKUYA.numbers","202606OLIVE TAKUYA.numbers"],
+  "02.クレカ/PAYPAYカード KAORI": ["detail202604(1234).csv","detail202605(1234).csv","detail202606(1234).csv"],
+  "02.クレカ/PAYPAYカード MICHIKA": ["detail202604(5678).csv","detail202605(5678).csv","detail202606(5678).csv"],
+  "02.クレカ/PAYPAYカード TAKUYA": ["detail202604(2222).csv","detail202605(2222).csv","detail202606(2222).csv"],
+  "02.クレカ/楽天カード TAKUYA": ["enavi202605(3333).csv","enavi202606(3333).csv","enavi202607(3333).csv"],
+  "02.クレカ/三井住友Visa Infinite": ["202604infinite TAKUYA.numbers","202605infinite TAKUYA.numbers","202606infinite TAKUYA.numbers"],
+  "03.PayPay履歴": ["PAYPAY1010_20260401-20260630.csv","PAYPAY2020_20260401-20260630.csv","PAYPAY91079999_20260401-20260630.csv"],
+  "04.楽天ポイント履歴": ["楽天ポイント履歴_202604-202606.csv","楽天ポイント履歴_KAORI_202604-202606.csv"],
+  "05.AppleGiftCard": ["MC61968508.pdf","MC70886405.pdf","MC71153517.pdf"],
+  "06.現金レシート/経費": ["2026現金精算領収書-1-ヤマト宅急便-2026-04-22.pdf","2026現金精算領収書-2-ゆうパック-2026-05-11.pdf"],
+  "10.売上Amazon": ["2026AprMonthlyTransaction.csv","2026MayMonthlyTransaction.csv","2026JunMonthlyTransaction.csv","2026AprMonthlySummary.pdf","2026MayMonthlySummary.pdf","2026JunMonthlySummary.pdf"],
+  "11.売上フリマ": ["mercari_sold_202604-202606.csv"]
+}
