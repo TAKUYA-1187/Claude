@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-23T01:54:05",
+  "run_at": "2026-09-23T01:58:03",
   "mode": "both",
   "candidates": 507,
   "buyback_candidates": 0,
@@ -7,7 +7,7 @@
   "price_hits": {
     "amazon": 0,
     "rakuten": 0,
-    "yahoo": 442
+    "yahoo": 438
   },
   "sources": {
     "amazon_api": "未設定 (PA-APIキーなし → Amazon価格・Amazon販売ルート判定不可)",
@@ -18,7 +18,7 @@
       "newest_price_fetched_at": "2026-04-24 21:11",
       "stale_prices_skipped": 20349
     },
-    "kaitori_csv": "なし (OneDrive共有リンクが解決できないか、CSV未配置 → 買取ルート判定不可)"
+    "kaitori_csv": "買取価格つきの商品なし (共有フォルダにファイルがない・データが古い等。onedrive / kaitori_data を参照)"
   },
   "routes": {
     "buyback": {
