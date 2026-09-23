@@ -1,0 +1,63 @@
+name: WordPress Publish
+
+# ブログ記事（blog/）を WordPress に同期する。手順は wordpress/README.md。
+# リポジトリの Secrets に WP_URL・WP_USER・WP_APP_PASSWORD が入るまでは、
+# WordPress 用ファイルを作るだけで投稿はしない（失敗扱いにもしない）。
+on:
+  push:
+    branches:
+      - main
+      - claude/nifty-thompson-99o7m3
+    paths:
+      - "blog/**"
+      - "wordpress/**"
+      - ".github/workflows/wordpress_publish.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wordpress-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: blog/.node-version
+          cache: npm
+          cache-dependency-path: blog/package-lock.json
+
+      - name: Build blog
+        working-directory: blog
+        env:
+          SITE_URL: ${{ secrets.WP_URL }}
+        run: |
+          npm ci
+          npm run build
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Build WordPress package
+        run: python wordpress/build_wp.py
+
+      - name: Publish to WordPress
+        env:
+          WP_URL: ${{ secrets.WP_URL }}
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+        run: python wordpress/publish_wp.py
+
+      - name: Upload WordPress package
+        uses: actions/upload-artifact@v6
+        with:
+          name: wordpress-package-${{ github.run_id }}
+          path: wordpress/dist/
+          retention-days: 30

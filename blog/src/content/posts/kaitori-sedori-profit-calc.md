@@ -4,6 +4,7 @@ description: 'ECで仕入れて買取店に売る「買取せどり」の利益�
 pubDate: 2026-09-23
 tags: ['買取せどり', '利益計算', '仕入れ基準']
 pr: false
+note: 'kaitori-sheet'
 scripts: ['calc.js']
 ---
 

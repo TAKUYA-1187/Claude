@@ -1,0 +1,201 @@
+/*
+ * せどり実務ノートの記事部品。本文は <div class="sedori-post"> で包んで同期されるので、
+ * すべてその中だけに効かせ、テーマ（SWELL・Cocoon など）の見出し・表のデザインには触らない。
+ */
+.sedori-post {
+  --snk-text: #1f2328;
+  --snk-muted: #5b636e;
+  --snk-line: #e4e1da;
+  --snk-bg: #fbfaf7;
+  --snk-surface: #ffffff;
+  --snk-accent: #0f6b52;
+  --snk-accent-soft: #e6f2ee;
+  --snk-warn: #9a3b12;
+  --snk-warn-soft: #fbeee6;
+  --snk-radius: 10px;
+}
+
+.sedori-post .pr-notice {
+  background: var(--snk-warn-soft);
+  color: var(--snk-warn);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  margin: 0 0 1.4em;
+}
+
+.sedori-post .summary-box {
+  background: var(--snk-surface);
+  border: 2px solid var(--snk-accent);
+  border-radius: var(--snk-radius);
+  padding: 14px 18px;
+  margin: 1.6em 0;
+}
+.sedori-post .summary-box > :first-child {
+  margin-top: 0;
+}
+.sedori-post .summary-box > :last-child {
+  margin-bottom: 0;
+}
+
+/* 表：テーマに枠線がなくても読めるように最低限の線を引く。スマホ幅では横スクロール */
+.sedori-post table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+.sedori-post th,
+.sedori-post td {
+  border: 1px solid var(--snk-line);
+  padding: 7px 8px;
+  text-align: left;
+}
+.sedori-post th {
+  background: var(--snk-accent-soft);
+}
+
+.sedori-post .meta {
+  color: var(--snk-muted);
+  font-size: 0.85rem;
+}
+
+/* 利益計算ツール */
+.sedori-post .calc {
+  background: var(--snk-surface);
+  border: 2px solid var(--snk-accent);
+  border-radius: var(--snk-radius);
+  padding: 16px 18px;
+  margin: 1.6em 0;
+  color: var(--snk-text);
+}
+.sedori-post .calc h4 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  border: 0;
+  padding: 0;
+  background: none;
+}
+.sedori-post .calc h4::before,
+.sedori-post .calc h4::after {
+  content: none;
+}
+.sedori-post .calc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+}
+.sedori-post .calc label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--snk-muted);
+}
+.sedori-post .calc input {
+  width: 100%;
+  margin-top: 2px;
+  font: inherit;
+  font-size: 16px;
+  padding: 8px 10px;
+  border: 1px solid var(--snk-line);
+  border-radius: 6px;
+  background: var(--snk-bg);
+  color: var(--snk-text);
+  box-sizing: border-box;
+}
+.sedori-post .calc-result {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--snk-accent-soft);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+.sedori-post .calc-result .verdict {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.sedori-post .calc-result.ng {
+  background: var(--snk-warn-soft);
+}
+.sedori-post .calc details {
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+.sedori-post .calc details summary {
+  cursor: pointer;
+  color: var(--snk-muted);
+}
+.sedori-post .calc details .calc-grid {
+  margin-top: 8px;
+}
+.sedori-post .calc-note {
+  font-size: 0.8rem;
+  color: var(--snk-muted);
+  margin: 8px 0 0;
+}
+
+/* 自分の note 商品の案内 */
+.sedori-post .note-cta {
+  margin: 2.4em 0 0;
+  padding: 16px 18px;
+  background: var(--snk-surface);
+  border: 2px solid var(--snk-accent);
+  border-radius: var(--snk-radius);
+  color: var(--snk-text);
+}
+.sedori-post .note-cta p {
+  margin: 0 0 8px;
+}
+.sedori-post .note-cta-label {
+  font-size: 0.8rem;
+  color: var(--snk-muted);
+}
+.sedori-post .note-cta-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.sedori-post .note-cta ul {
+  margin: 0 0 14px;
+  padding-left: 1.3em;
+  font-size: 0.92rem;
+}
+.sedori-post .note-cta-button {
+  display: block;
+  text-align: center;
+  padding: 11px 14px;
+  border-radius: 8px;
+  background: var(--snk-accent);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* お問い合わせフォーム（Googleフォーム） */
+.sedori-post .form-embed {
+  margin: 1.5rem 0;
+}
+.sedori-post .form-embed iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 80vh;
+  min-height: 640px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* チェックリストは黒丸を出さない */
+.sedori-post li:has(> input[type='checkbox']) {
+  list-style: none;
+  margin-left: -1.2em;
+}
+.sedori-post li > input[type='checkbox'] {
+  margin-right: 0.4em;
+}
+
+@media (max-width: 480px) {
+  .sedori-post .calc-grid {
+    grid-template-columns: 1fr;
+  }
+}

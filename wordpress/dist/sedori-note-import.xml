@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:wp="http://wordpress.org/export/1.2/">
+<channel>
+<title>せどり実務ノート</title>
+<link>https://sedori-note.pages.dev</link>
+<description>買取せどり・物販を、数字と仕組みで回すための実務メモ</description>
+<language>ja</language>
+<wp:wxr_version>1.2</wp:wxr_version>
+<wp:base_site_url>https://sedori-note.pages.dev</wp:base_site_url>
+<wp:base_blog_url>https://sedori-note.pages.dev</wp:base_blog_url>
+<wp:author><wp:author_id>1</wp:author_id><wp:author_login><![CDATA[sedori-note]]></wp:author_login><wp:author_email><![CDATA[]]></wp:author_email><wp:author_display_name><![CDATA[TAKUYA]]></wp:author_display_name></wp:author>
+<wp:category><wp:term_id>1</wp:term_id><wp:category_nicename><![CDATA[%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a]]></wp:category_nicename><wp:category_parent><![CDATA[]]></wp:category_parent><wp:cat_name><![CDATA[買取せどり]]></wp:cat_name></wp:category>
+<wp:tag><wp:term_id>100</wp:term_id><wp:tag_slug><![CDATA[%e3%83%84%e3%83%bc%e3%83%ab]]></wp:tag_slug><wp:tag_name><![CDATA[ツール]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>101</wp:term_id><wp:tag_slug><![CDATA[%e3%83%aa%e3%82%b9%e3%82%af%e7%ae%a1%e7%90%86]]></wp:tag_slug><wp:tag_name><![CDATA[リスク管理]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>102</wp:term_id><wp:tag_slug><![CDATA[%e4%bb%95%e5%85%a5%e3%82%8c%e5%9f%ba%e6%ba%96]]></wp:tag_slug><wp:tag_name><![CDATA[仕入れ基準]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>103</wp:term_id><wp:tag_slug><![CDATA[%e5%88%a9%e7%9b%8a%e8%a8%88%e7%ae%97]]></wp:tag_slug><wp:tag_name><![CDATA[利益計算]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>104</wp:term_id><wp:tag_slug><![CDATA[%e5%9f%ba%e7%a4%8e%e7%9f%a5%e8%ad%98]]></wp:tag_slug><wp:tag_name><![CDATA[基礎知識]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>105</wp:term_id><wp:tag_slug><![CDATA[%e5%a7%8b%e3%82%81%e6%96%b9]]></wp:tag_slug><wp:tag_name><![CDATA[始め方]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>106</wp:term_id><wp:tag_slug><![CDATA[%e6%a2%b1%e5%8c%85]]></wp:tag_slug><wp:tag_name><![CDATA[梱包]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>107</wp:term_id><wp:tag_slug><![CDATA[%e6%b8%9b%e9%a1%8d]]></wp:tag_slug><wp:tag_name><![CDATA[減額]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>108</wp:term_id><wp:tag_slug><![CDATA[%e7%99%ba%e9%80%81]]></wp:tag_slug><wp:tag_name><![CDATA[発送]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>109</wp:term_id><wp:tag_slug><![CDATA[%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a]]></wp:tag_slug><wp:tag_name><![CDATA[買取せどり]]></wp:tag_name></wp:tag>
+<wp:tag><wp:term_id>110</wp:term_id><wp:tag_slug><![CDATA[%e8%b2%b7%e5%8f%96%e3%82%b9%e3%82%ad%e3%83%a3%e3%83%8a%e3%83%bc]]></wp:tag_slug><wp:tag_name><![CDATA[買取スキャナー]]></wp:tag_name></wp:tag>
+<item>
+<title><![CDATA[買取せどりの梱包・発送のコツ｜送料を下げる同梱と、減額を防ぐ詰め方]]></title>
+<link>https://sedori-note.pages.dev/posts/kaitori-packing-shipping/</link>
+<pubDate>Wed, 23 Sep 2026 10:00:00 +0000</pubDate>
+<dc:creator><![CDATA[sedori-note]]></dc:creator>
+<guid isPermaLink="false">https://sedori-note.pages.dev/?p=1</guid>
+<description></description>
+<content:encoded><![CDATA[<!-- wp:html -->
+<div class="sedori-post"><div class="prose"><p>買取せどりの利益は、仕入れた時点では決まりません。<strong>買取店に届いて、査定が終わった時点</strong>で決まります。</p>
+<p>その間に利益を削るのが、送料と、輸送中の傷による減額です。どちらも梱包と発送のやり方でかなり防げます。この記事では、送料を下げる同梱の考え方と、減額を防ぐ詰め方を手順にまとめます。</p>
+<div class="summary-box">
+<p><strong>この記事の要点</strong></p>
+<ul>
+<li>送料は箱単位でかかる。1箱にまとめる点数を増やすほど、1点あたりの送料が下がる</li>
+<li>減額の多くは「外箱の傷・つぶれ・汚れ」。商品の箱を守る詰め方をする</li>
+<li>発送前に、中身と状態を写真に残す。減額されたときの確認材料になる</li>
+</ul>
+</div>
+<h2 id="送料は1箱にかかる同梱で1点あたりを下げる">送料は「1箱」にかかる：同梱で1点あたりを下げる</h2>
+<p>買取店への送料は、商品1点ごとではなく<strong>1箱ごと</strong>にかかります。送料600円の箱に1点だけなら1点あたり600円、5点入れれば120円です。</p>
+<table>
+<thead>
+<tr>
+<th>1箱の点数</th>
+<th>1点あたりの送料（1箱600円の場合）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1点</td>
+<td>600円</td>
+</tr>
+<tr>
+<td>3点</td>
+<td>200円</td>
+</tr>
+<tr>
+<td>5点</td>
+<td>120円</td>
+</tr>
+<tr>
+<td>10点</td>
+<td>60円</td>
+</tr>
+</tbody>
+</table>
+<p>利益の薄い商品は、1点で送ると赤字でも、まとめると黒字になることがあります。具体的な計算は<a href="/posts/kaitori-sedori-profit-calc/">買取せどりの利益計算（計算ツール付き）</a>で試せます。</p>
+<p>仕入れの段階で「この箱に何点入れて送るか」を決めておくと、送料を見込んだ仕入れ判断ができます。なお、一定の点数や金額以上で送料を負担してくれる買取店もあります。その場合は、条件を満たす量までまとめてから送るのが基本です。</p>
+<h3 id="箱のサイズは3辺の合計と重さで決まる">箱のサイズは「3辺の合計」と重さで決まる</h3>
+<p>宅配便の料金は、箱の縦・横・高さの合計と重さで決まるのが一般的です。商品に対して大きすぎる箱を使うと、そのぶん送料が上がり、中で商品が動いて傷の原因にもなります。</p>
+<ul>
+<li>商品を並べて、すき間が少し残るくらいの箱を選ぶ</li>
+<li>よく送る組み合わせのサイズの箱を、何種類か用意しておく</li>
+<li>重さの上限に近いときは、デジタルスケールで量ってからサイズを決める</li>
+</ul>
+<h2 id="減額を防ぐ詰め方">減額を防ぐ詰め方</h2>
+<p>新品・未開封での買取は、<strong>商品そのものだけでなく外箱の状態</strong>も査定されます。つぶれ、へこみ、角の折れ、シール跡、汚れは、減額の対象になることがあります。</p>
+<h3 id="詰め方の手順">詰め方の手順</h3>
+<ol>
+<li><strong>箱の底に緩衝材を敷く</strong>：落下の衝撃は底から来ます</li>
+<li><strong>重いもの・大きいものを下に置く</strong>：軽い商品を上にして、重さで押しつぶさない</li>
+<li><strong>商品どうしがこすれないようにする</strong>：1点ずつ袋に入れるか、間に緩衝材を挟む</li>
+<li><strong>すき間を緩衝材で埋める</strong>：箱を軽く振って、中で動かなければOK</li>
+<li><strong>上にも緩衝材を置いてから閉じる</strong>：ふたの上からの圧力を受け止めます</li>
+<li><strong>梱包用テープで、箱の合わせ目をしっかり閉じる</strong>：底が抜けないよう、底面も十字に貼ると安心です</li>
+</ol>
+<h3 id="やってはいけないこと">やってはいけないこと</h3>
+<ul>
+<li><strong>商品の箱に直接テープや伝票を貼る</strong>：はがした跡が減額の原因になります</li>
+<li><strong>緩衝材なしで詰める</strong>：輸送中に商品が動き、角がつぶれます</li>
+<li><strong>濡れる可能性を放置する</strong>：雨の日の配送に備え、商品を袋に入れておくと安全です</li>
+</ul>
+<h2 id="発送前のチェックリスト">発送前のチェックリスト</h2>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> 買取申込の内容と、箱の中身の点数・商品が一致している</li>
+<li class="task-list-item"><input type="checkbox" disabled> 各商品が買取条件（未開封・付属品・状態）を満たしている</li>
+<li class="task-list-item"><input type="checkbox" disabled> 申込書や同梱が必要な書類を入れた</li>
+<li class="task-list-item"><input type="checkbox" disabled> 中身と外箱の状態を写真に残した</li>
+<li class="task-list-item"><input type="checkbox" disabled> 箱が中で動かず、底と合わせ目を閉じた</li>
+</ul>
+<h3 id="写真を残す理由">写真を残す理由</h3>
+<p>発送前に、商品の外箱の状態と、箱に詰めた様子を写真に撮っておきます。減額や「商品が足りない」という連絡が来たときに、発送時点の状態を確認する材料になります。減額にあったときの確認の流れは、<a href="/posts/kaitori-price-drop/">減額・価格下落にあったときの対処法</a>で解説しています。</p>
+<h2 id="まとめ">まとめ</h2>
+<ul>
+<li>送料は箱単位。仕入れの段階で「何点まとめて送るか」を決める</li>
+<li>箱は商品に合ったサイズを選び、すき間を緩衝材で埋めて商品を動かさない</li>
+<li>商品の箱には何も貼らない。発送前に写真を残す</li>
+</ul>
+<p>梱包の手間は、減額1回ぶんの損失で簡単に元が取れます。最初に資材と手順をそろえておくのがおすすめです。</p>
+<p class="meta">記事の内容は2026年9月時点のものです。送料や送料無料の条件、買取条件は買取店・配送業者によって異なります。発送前に各社の最新情報をご確認ください。</p>
+</div></div>
+<!-- /wp:html -->]]></content:encoded>
+<excerpt:encoded><![CDATA[買取店への発送で利益を削らないための梱包・発送の手順。1箱に何点入れるかで送料がどう変わるか、外箱の傷やつぶれによる減額を防ぐ詰め方、発送前のチェックリストと写真記録までまとめました。]]></excerpt:encoded>
+<wp:post_id>1</wp:post_id>
+<wp:post_date><![CDATA[2026-09-23 19:00:00]]></wp:post_date>
+<wp:post_date_gmt><![CDATA[2026-09-23 10:00:00]]></wp:post_date_gmt>
+<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+<wp:post_name><![CDATA[kaitori-packing-shipping]]></wp:post_name>
+<wp:status><![CDATA[publish]]></wp:status>
+<wp:post_parent>0</wp:post_parent>
+<wp:menu_order>0</wp:menu_order>
+<wp:post_type><![CDATA[post]]></wp:post_type>
+<wp:post_password><![CDATA[]]></wp:post_password>
+<wp:is_sticky>0</wp:is_sticky>
+<category domain="category" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e6%a2%b1%e5%8c%85"><![CDATA[梱包]]></category>
+<category domain="post_tag" nicename="%e7%99%ba%e9%80%81"><![CDATA[発送]]></category>
+<wp:postmeta><wp:meta_key><![CDATA[sedori_source_hash]]></wp:meta_key><wp:meta_value><![CDATA[78ad8ec323b2e0f3]]></wp:meta_value></wp:postmeta>
+</item>
+<item>
+<title><![CDATA[買取価格が下がった・減額されたときの対処法｜確認する順番と、次から防ぐ3つの習慣]]></title>
+<link>https://sedori-note.pages.dev/posts/kaitori-price-drop/</link>
+<pubDate>Wed, 23 Sep 2026 11:00:00 +0000</pubDate>
+<dc:creator><![CDATA[sedori-note]]></dc:creator>
+<guid isPermaLink="false">https://sedori-note.pages.dev/?p=2</guid>
+<description></description>
+<content:encoded><![CDATA[<!-- wp:html -->
+<div class="sedori-post"><div class="prose"><p>買取せどりで避けて通れないのが、<strong>発送後の価格下落</strong>と<strong>査定での減額</strong>です。どちらも起きた瞬間は焦りますが、確認する順番を決めておけば、損失を小さくできます。</p>
+<p>この記事では、減額や価格下落にあったときの確認の順番と、判断の基準、次から防ぐための習慣をまとめます。</p>
+<div class="summary-box">
+<p><strong>この記事の要点</strong></p>
+<ul>
+<li>まず「価格がいつ確定するか」と「減額の理由」を、買取店の規約と通知で確認する</li>
+<li>返送できる場合は、返送料を含めて「そのまま売る」と「返して他店に売る」を比べる</li>
+<li>次から防ぐには、価格保証の条件・買取条件・発送前の写真の3つを習慣にする</li>
+</ul>
+</div>
+<h2 id="価格下落と減額の違い">価格下落と減額の違い</h2>
+<p>似ていますが、原因と対処が違います。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>価格下落</th>
+<th>減額</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>何が起きたか</td>
+<td>発送後に、買取店の買取価格そのものが改定された</td>
+<td>商品の状態が条件に合わず、査定額が下がった</td>
+</tr>
+<tr>
+<td>主な原因</td>
+<td>相場の変動</td>
+<td>外箱の傷・つぶれ、付属品の欠品、開封など</td>
+</tr>
+<tr>
+<td>防ぎ方</td>
+<td>価格保証の条件を確認する、早く届ける</td>
+<td>買取条件を確認する、梱包を丁寧にする</td>
+</tr>
+</tbody>
+</table>
+<h2 id="起きたときに確認する順番">起きたときに確認する順番</h2>
+<h3 id="1-価格がいつの時点で確定するかを確認する">1. 価格がいつの時点で確定するかを確認する</h3>
+<p>買取価格が「申込時の価格」で保証されるのか、「到着時・査定時の価格」になるのかは、買取店ごとに違います。申込時の価格が一定期間保証される店もあります。</p>
+<ul>
+<li>価格保証がある場合：保証期間内に届いていれば、申込時の価格が適用されるはずです。適用されていなければ、申込内容と到着日を添えて問い合わせます</li>
+<li>価格保証がない場合：到着・査定時の価格が適用されます。規約どおりなら、下落分は受け入れるしかありません</li>
+</ul>
+<h3 id="2-減額の理由を具体的に確認する">2. 減額の理由を具体的に確認する</h3>
+<p>減額の通知に理由が書かれていない、または「状態不良」とだけ書かれている場合は、どの部分が理由かを問い合わせます。発送前に撮った写真があれば、発送時点の状態と照らし合わせられます。</p>
+<p>発送前の写真の撮り方と、減額を防ぐ梱包は<a href="/posts/kaitori-packing-shipping/">買取せどりの梱包・発送のコツ</a>で解説しています。</p>
+<h3 id="3-そのまま売るか返してもらうかを比べる">3. 「そのまま売る」か「返してもらう」かを比べる</h3>
+<p>減額や価格下落に納得できない場合、買取をキャンセルして商品を返送してもらえる店もあります。ただし返送料は自己負担になることが多いので、次の2つを比べて判断します。</p>
+<ul>
+<li><strong>そのまま売る場合の入金額</strong></li>
+<li><strong>返送してもらい、他店に売る場合の見込み額</strong>：他店の買取価格 − 返送料 − 他店への送料</li>
+</ul>
+<p>返送と再発送には日数がかかり、その間にさらに相場が動くこともあります。差が小さいなら、そのまま売って次の仕入れに資金を回すほうが結果的に得なことも多いです。</p>
+<h3 id="4-記録を残す">4. 記録を残す</h3>
+<p>減額や下落があった取引は、商品・買取店・理由・金額を記録しておきます。同じ店・同じ種類の商品で繰り返すなら、仕入れ基準や送り先を見直す材料になります。</p>
+<h2 id="次から防ぐ3つの習慣">次から防ぐ3つの習慣</h2>
+<ol>
+<li><strong>価格保証の条件を確認してから申し込む</strong>：保証期間と、その期間内に届く発送日を確認します</li>
+<li><strong>買取条件を仕入れ前に読む</strong>：未開封・付属品・外箱の状態など、減額の対象になる条件を把握しておきます</li>
+<li><strong>発送前に写真を残す</strong>：外箱の状態と、箱に詰めた様子を撮っておきます</li>
+</ol>
+<p>もう1つ大事なのは、<strong>価格が少し下がっても利益が残る商品だけを仕入れる</strong>ことです。運営者は、利益額だけでなく利益率にも下限（15%）を置き、価格下落に対する余裕を確保しています。考え方は<a href="/posts/kaitori-sedori-profit-calc/">買取せどりの利益計算</a>で解説しています。</p>
+<h2 id="まとめ">まとめ</h2>
+<ul>
+<li>価格下落は「価格の確定タイミング」、減額は「理由」を最初に確認する</li>
+<li>返送するかどうかは、返送料と日数を含めて比べる</li>
+<li>価格保証・買取条件・写真の3つを習慣にして、利益率に余裕のある商品だけを仕入れる</li>
+</ul>
+<p class="meta">記事の内容は2026年9月時点のものです。価格保証、減額、キャンセル・返送の条件は買取店ごとに異なります。取引前に各店の規約をご確認ください。</p>
+</div></div>
+<!-- /wp:html -->]]></content:encoded>
+<excerpt:encoded><![CDATA[買取せどりで、発送後に買取価格が下がった、査定で減額されたときに何を確認し、どう判断するかを順番に解説。価格の確定タイミング、減額理由の確認、返送とキャンセルの判断、次から防ぐための習慣までまとめました。]]></excerpt:encoded>
+<wp:post_id>2</wp:post_id>
+<wp:post_date><![CDATA[2026-09-23 20:00:00]]></wp:post_date>
+<wp:post_date_gmt><![CDATA[2026-09-23 11:00:00]]></wp:post_date_gmt>
+<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+<wp:post_name><![CDATA[kaitori-price-drop]]></wp:post_name>
+<wp:status><![CDATA[publish]]></wp:status>
+<wp:post_parent>0</wp:post_parent>
+<wp:menu_order>0</wp:menu_order>
+<wp:post_type><![CDATA[post]]></wp:post_type>
+<wp:post_password><![CDATA[]]></wp:post_password>
+<wp:is_sticky>0</wp:is_sticky>
+<category domain="category" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e6%b8%9b%e9%a1%8d"><![CDATA[減額]]></category>
+<category domain="post_tag" nicename="%e3%83%aa%e3%82%b9%e3%82%af%e7%ae%a1%e7%90%86"><![CDATA[リスク管理]]></category>
+<wp:postmeta><wp:meta_key><![CDATA[sedori_source_hash]]></wp:meta_key><wp:meta_value><![CDATA[10eecf2b9b2af69d]]></wp:meta_value></wp:postmeta>
+</item>
+<item>
+<title><![CDATA[買取スキャナーの全データCSVで利益商品を探す方法｜実データで見つけた4つの落とし穴]]></title>
+<link>https://sedori-note.pages.dev/posts/kaitori-scanner-csv/</link>
+<pubDate>Wed, 23 Sep 2026 09:00:00 +0000</pubDate>
+<dc:creator><![CDATA[sedori-note]]></dc:creator>
+<guid isPermaLink="false">https://sedori-note.pages.dev/?p=3</guid>
+<description></description>
+<content:encoded><![CDATA[<!-- wp:html -->
+<div class="sedori-post"><div class="prose"><p>買取スキャナーの「全データCSV保存」を使うと、複数の買取店の買取価格を1つの表で受け取れます。ただし、表をそのまま眺めても利益商品は見つかりません。<strong>どの列を、どの順番で、何に気をつけて読むか</strong>を決めておく必要があります。</p>
+<p>この記事では、運営者が実際に使っている全データCSVをもとに、利益商品を探す手順と、実際にはまった4つの落とし穴を紹介します。</p>
+<div class="summary-box">
+<p><strong>この記事の要点</strong></p>
+<ul>
+<li>見るのは「JAN」と、各店の「店名_買取価格」「店名_取得日時」の3種類の列</li>
+<li>取得日時が古い価格は使わない（運営者のデータは、気づかないうちに5か月前のものになっていた）</li>
+<li>iPhone・Mac で開くと Numbers 形式で保存されやすい。CSV で書き出し直す</li>
+<li>JANが同じでも、EC側で中古品やダウンロードコードが当たることがある。利益率が高すぎる組み合わせは疑う</li>
+</ul>
+</div>
+<h2 id="全データcsvの中身">全データCSVの中身</h2>
+<p>運営者の手元のデータ（2026年9月時点）は、約2万3千行の表でした。1行が1商品（1つのJAN）で、列は大きく3つに分かれています。</p>
+<table>
+<thead>
+<tr>
+<th>列の種類</th>
+<th>例</th>
+<th>使い方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>商品の識別</td>
+<td>JAN、小売希望価格</td>
+<td>JANでECの価格と突き合わせる</td>
+</tr>
+<tr>
+<td>Amazonの情報</td>
+<td>amazon_カート価格、amazon_取得日時</td>
+<td>Amazon価格の目安</td>
+</tr>
+<tr>
+<td>買取店ごとの情報</td>
+<td>店名_商品名、店名_買取価格、店名_取得日時、店名_メインカテゴリ</td>
+<td>買取価格と、その価格をいつ取得したか</td>
+</tr>
+</tbody>
+</table>
+<p>買取店ごとの列は「店名_項目」の形で、店の数だけ並んでいます。運営者のデータには12店分の列がありました。</p>
+<h2 id="利益商品を探す手順">利益商品を探す手順</h2>
+<ol>
+<li><strong>使う買取店を決める</strong>：送料の条件や入金の早さを見て、実際に送る店を2〜3店に絞ります</li>
+<li><strong>その店の「店名_買取価格」列だけを見る</strong>：同じ店の「商品名」「取得日時」の列を価格と取り違えないようにします</li>
+<li><strong>取得日時で古い価格を外す</strong>：運営者は7日より古い価格を使いません</li>
+<li><strong>JANでECの価格を調べる</strong>：送料・クーポン反映後の支払額で比べます</li>
+<li><strong>利益を計算する</strong>：送料と手数料を引いて、利益額と利益率の両方で判断します</li>
+</ol>
+<p>5 の計算方法と基準は、<a href="/posts/kaitori-sedori-profit-calc/">買取せどりの利益計算（計算ツール付き）</a>で詳しく解説しています。</p>
+<h2 id="実データで見つけた4つの落とし穴">実データで見つけた4つの落とし穴</h2>
+<p>運営者はこの手順を自作ツールで自動化しています。その過程で、次の4つに実際にはまりました。</p>
+<h3 id="1-取得日時が古い">1. 取得日時が古い</h3>
+<p>表の買取価格は、書き出した時点の最新ではなく、<strong>それぞれの価格を取得した日時の値</strong>です。運営者のデータは、共有フォルダに置いたまま更新を忘れていたため、最新の取得日時が<strong>5か月前</strong>になっていました。</p>
+<p>古い価格のまま計算すると、今では赤字になる商品が「利益あり」と表示されます。対策は2つです。</p>
+<ul>
+<li>「店名_取得日時」の列で、一定より古い価格を外す（運営者は7日）</li>
+<li>全データCSVは、仕入れを判断する日に書き出し直す</li>
+</ul>
+<h3 id="2-店名が略されている">2. 店名が略されている</h3>
+<p>列名の店名は、正式名称ではなく短く省略されていることがあります。運営者のデータでは、買取商店の列は「商店_買取価格」でした。</p>
+<p>「買取商店」で列を探すと見つからず、その店の価格が丸ごと抜け落ちます。最初に列名を一覧で確認し、使う店がどの名前で入っているかを確かめてください。</p>
+<h3 id="3-iphonemac-で開くと-numbers-形式になる">3. iPhone・Mac で開くと Numbers 形式になる</h3>
+<p>CSV を iPhone や Mac で開くと、Numbers で開かれることがあります。そのまま保存すると、ファイルが Numbers 形式（.numbers）に変わります。</p>
+<p>運営者も、共有フォルダの中身が Numbers 形式に変わっていて、CSV を読む処理が「ファイルなし」と判断していました。ほかのツールに渡すときは、Numbers の「書き出す」から CSV を選んで保存し直してください。</p>
+<h3 id="4-janが同じでも別の商品が当たる">4. JANが同じでも別の商品が当たる</h3>
+<p>ECでJANを検索すると、本体と同じJANを付けた別の出品が最安値に来ることがあります。</p>
+<p>運営者の自動チェックでは、ゲーム機本体のJANに、同じJANを付けた**ダウンロードコードの出品（1,098円）**が当たりました。計算上は9万円を超える利益が表示されましたが、もちろん実際には仕入れられません。</p>
+<p>次のような出品は、買取条件（新品・未開封など）と一致しないので外します。</p>
+<ul>
+<li>中古・訳あり・箱なし・アウトレット</li>
+<li>ダウンロードコード・修理サービス・交換用部品</li>
+</ul>
+<p>さらに、<strong>利益率が極端に高い組み合わせは、まず取り違えを疑う</strong>のが安全です。運営者は、利益率60%を超えたものは自動で除外しています。</p>
+<h2 id="まとめ">まとめ</h2>
+<ul>
+<li>全データCSVは「JAN」「店名_買取価格」「店名_取得日時」を軸に読む</li>
+<li>古い価格・略された店名・Numbers 形式・JANの取り違えの4つで、判断を誤りやすい</li>
+<li>利益が大きすぎる候補ほど、仕入れる前に出品の中身を目で確認する</li>
+</ul>
+<p>表から候補を見つけたら、<a href="/posts/kaitori-sedori-profit-calc/">利益計算ツール</a>に数字を入れて、送料と価格下落を引いても利益が残るかを確かめてください。</p>
+<p class="meta">記事の内容は2026年9月時点で運営者が使っているデータにもとづきます。買取スキャナーの仕様や列の構成は変わることがあります。</p>
+</div></div>
+<!-- /wp:html -->]]></content:encoded>
+<excerpt:encoded><![CDATA[買取スキャナーの「全データCSV保存」で出したデータを、仕入れ判断に使う手順を解説。列の読み方、古い価格・店名の略称・Numbers形式・JANの取り違えという、運営者が実際にはまった4つの落とし穴と対策をまとめました。]]></excerpt:encoded>
+<wp:post_id>3</wp:post_id>
+<wp:post_date><![CDATA[2026-09-23 18:00:00]]></wp:post_date>
+<wp:post_date_gmt><![CDATA[2026-09-23 09:00:00]]></wp:post_date_gmt>
+<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+<wp:post_name><![CDATA[kaitori-scanner-csv]]></wp:post_name>
+<wp:status><![CDATA[publish]]></wp:status>
+<wp:post_parent>0</wp:post_parent>
+<wp:menu_order>0</wp:menu_order>
+<wp:post_type><![CDATA[post]]></wp:post_type>
+<wp:post_password><![CDATA[]]></wp:post_password>
+<wp:is_sticky>0</wp:is_sticky>
+<category domain="category" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e8%b2%b7%e5%8f%96%e3%82%b9%e3%82%ad%e3%83%a3%e3%83%8a%e3%83%bc"><![CDATA[買取スキャナー]]></category>
+<category domain="post_tag" nicename="%e3%83%84%e3%83%bc%e3%83%ab"><![CDATA[ツール]]></category>
+<wp:postmeta><wp:meta_key><![CDATA[sedori_source_hash]]></wp:meta_key><wp:meta_value><![CDATA[c215a616fa7db082]]></wp:meta_value></wp:postmeta>
+</item>
+<item>
+<title><![CDATA[買取せどりの利益計算｜送料・ポイント込みで赤字を防ぐ計算式と仕入れ基準【計算ツール付き】]]></title>
+<link>https://sedori-note.pages.dev/posts/kaitori-sedori-profit-calc/</link>
+<pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+<dc:creator><![CDATA[sedori-note]]></dc:creator>
+<guid isPermaLink="false">https://sedori-note.pages.dev/?p=4</guid>
+<description></description>
+<content:encoded><![CDATA[<!-- wp:html -->
+<div class="sedori-post"><div class="prose"><p>「差額が出ていると思って仕入れたのに、送料を引いたら赤字だった」。買取せどりでいちばん多い失敗はこれです。</p>
+<p>買取せどりは、Amazon・楽天市場・Yahoo!ショッピングなどのECで仕入れ、買取店に送って買い取ってもらう手法です。販売価格が買取店の提示額で先にわかるので、<strong>仕入れる前に利益を計算できる</strong>のが強みです。そのぶん、計算式を間違えると失敗がそのまま赤字になります（仕組みとリスクの全体像は<a href="/posts/what-is-kaitori-sedori/">買取せどりとは？</a>で解説しています）。</p>
+<p>この記事では、運営者が仕入れ判断に使っている計算式と基準を、そのまま公開します。</p>
+<div class="summary-box">
+<p><strong>この記事の結論</strong></p>
+<ul>
+<li>利益 ＝ 買取価格 − 仕入れ価格 − 1点あたり送料 − その他コスト</li>
+<li>送料は「箱単位」でかかるので、同梱点数で割って1点あたりに直す</li>
+<li>ポイント還元は利益に混ぜず、別枠で見る</li>
+<li>運営者の仕入れ基準は <strong>利益500円以上</strong> かつ <strong>利益率15%以上</strong>（利益率＝利益÷仕入れ価格）</li>
+</ul>
+</div>
+<h2 id="利益計算ツール">利益計算ツール</h2>
+<p>数字を入れると、その場で利益と仕入れ判定が出ます。初期値は運営者の実際の設定（送料600円／箱、利益500円以上、利益率15%以上）です。</p>
+<div class="calc" data-calc="kaitori">
+<h4>買取せどり 利益計算</h4>
+<div class="calc-grid">
+<label>買取価格（円）<input name="buy" type="number" inputmode="numeric" value="5000"></label>
+<label>仕入れ価格（円）<input name="cost" type="number" inputmode="numeric" value="3800"></label>
+<label>送料／1箱（円）<input name="ship" type="number" inputmode="numeric" value="600"></label>
+<label>同梱点数<input name="qty" type="number" inputmode="numeric" value="1" min="1"></label>
+</div>
+<div class="calc-result" aria-live="polite">JavaScript を有効にすると計算結果が表示されます。</div>
+<details>
+<summary>ポイント還元・その他コスト・判定基準を変える</summary>
+<div class="calc-grid">
+<label>ポイント還元率（%）<input name="point" type="number" inputmode="decimal" value="0"></label>
+<label>その他／1点（円）<input name="other" type="number" inputmode="numeric" value="0"></label>
+<label>最低利益（円）<input name="minProfit" type="number" inputmode="numeric" value="500"></label>
+<label>最低利益率（%）<input name="minRate" type="number" inputmode="decimal" value="15"></label>
+</div>
+</details>
+<p class="calc-note">仕入れ価格は送料・クーポン反映後の支払額を入れてください。判定は現金ベースの利益で行い、ポイントは付与時期や上限があるため別枠で表示します。</p>
+</div>
+<h2 id="買取せどりの利益計算式">買取せどりの利益計算式</h2>
+<h3 id="基本の式">基本の式</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>利益 ＝ 買取価格 − 仕入れ価格 − 1点あたり送料 − その他コスト</span></span>
+<span class="line"><span>利益率 ＝ 利益 ÷ 仕入れ価格</span></span></code></pre>
+<p>「買取価格 − 仕入れ価格」だけを見て仕入れると、ほぼ確実に失敗します。残りの2項目を毎回必ず引きます。</p>
+<h3 id="仕入れ価格表示価格ではなく支払う金額">仕入れ価格：「表示価格」ではなく「支払う金額」</h3>
+<p>ECの商品ページの価格ではなく、<strong>カートに入れて送料とクーポンを反映した後の支払額</strong>を使います。同じ商品でも、店によっては送料で数百円変わります。複数のECで比べるときも、この支払額どうしで比べます。</p>
+<h3 id="送料箱単位の送料を点数で割る">送料：箱単位の送料を点数で割る</h3>
+<p>買取店へ送る送料は、商品1点ごとではなく<strong>1箱ごと</strong>にかかります。送料600円の箱に1点だけ入れれば1点あたり600円、5点入れれば1点あたり120円です。</p>
+<p>利益が薄い商品ほど、この差で結果が逆転します。仕入れの段階で「何点まとめて送るか」を決めておくのがコツです。</p>
+<h3 id="ポイント還元利益とは分けて考える">ポイント還元：利益とは分けて考える</h3>
+<p>楽天市場やYahoo!ショッピングのポイント還元は、実質的な値引きです。ただし次の理由から、運営者は<strong>判定には入れず、上乗せ分として別に見ています</strong>。</p>
+<ul>
+<li>付与されるまでに時間がかかる（翌月以降になることが多い）</li>
+<li>キャンペーンごとに付与上限がある</li>
+<li>期間限定ポイントは使い道が限られる</li>
+</ul>
+<p>ポイントがなくても利益が出る商品だけを仕入れ、ポイントは「うまくいったらプラス」と考えておけば、キャンペーン条件の読み違いで赤字になることはありません。</p>
+<h3 id="その他コスト">その他コスト</h3>
+<p>梱包材、振込手数料（買取店によってかかる場合）、交通費など、1点あたりにかかる費用です。小さな金額でも、件数が増えると効いてきます。</p>
+<h2 id="実例4つのパターンで計算してみる">実例：4つのパターンで計算してみる</h2>
+<p>送料は1箱600円、ポイントなしで計算します。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>買取</th>
+<th>仕入れ</th>
+<th>点数</th>
+<th>利益（利益率）</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>5,000円</td>
+<td>3,800円</td>
+<td>1点</td>
+<td>600円（15.8%）</td>
+<td>◯</td>
+</tr>
+<tr>
+<td>B</td>
+<td>5,000円</td>
+<td>3,800円</td>
+<td>5点</td>
+<td>1,080円（28.4%）</td>
+<td>◯</td>
+</tr>
+<tr>
+<td>C</td>
+<td>2,000円</td>
+<td>1,300円</td>
+<td>1点</td>
+<td>100円（7.7%）</td>
+<td>✕</td>
+</tr>
+<tr>
+<td>C’</td>
+<td>2,000円</td>
+<td>1,300円</td>
+<td>5点</td>
+<td>580円（44.6%）</td>
+<td>◯</td>
+</tr>
+<tr>
+<td>D</td>
+<td>12,000円</td>
+<td>10,800円</td>
+<td>1点</td>
+<td>600円（5.6%）</td>
+<td>✕</td>
+</tr>
+</tbody>
+</table>
+<p>1点あたりの送料は、1点送付なら600円、5点同梱なら120円です。</p>
+<p>Aは基準ぎりぎりの合格です。AとBは同じ商品です。<strong>同梱点数を変えただけで利益がほぼ2倍</strong>になっています。CとC’も同じで、1点で送れば基準未達の商品が、まとめれば基準クリアに変わります。</p>
+<p>Dは利益額だけ見れば600円でAと同じですが、利益率が5.6%しかありません。これを見送る理由は次の章で説明します。</p>
+<h2 id="仕入れ基準利益500円以上利益率15以上の理由">仕入れ基準「利益500円以上・利益率15%以上」の理由</h2>
+<p>運営者は、<strong>利益額と利益率の両方</strong>が基準を満たしたときだけ仕入れています。片方だけでは足りない理由は次のとおりです。</p>
+<h3 id="利益額だけで判断すると価格下落1回で赤字になる">利益額だけで判断すると、価格下落1回で赤字になる</h3>
+<p>買取価格は固定ではありません。いつの時点の価格で確定するか（申込時か、到着・査定時か）は店舗によって違い、発送してから下がることもあります。</p>
+<p>仮に買取価格が10%下がると、上の表の結果はこう変わります。</p>
+<table>
+<thead>
+<tr>
+<th>パターン</th>
+<th>下落後の買取価格</th>
+<th>下落後の利益</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>4,500円</td>
+<td>100円</td>
+</tr>
+<tr>
+<td>D</td>
+<td>10,800円</td>
+<td>−600円</td>
+</tr>
+</tbody>
+</table>
+<p>同じ「利益600円」でも、利益率15.8%のAはかろうじてプラスで残り、5.6%のDは赤字に転落します。<strong>利益率は、価格下落に対する安全余裕</strong>だと考えてください。</p>
+<h3 id="利益率だけで判断すると手間に見合わない">利益率だけで判断すると、手間に見合わない</h3>
+<p>逆に、仕入れ価格が数百円の商品は、利益率が高くても利益額がわずかです。注文・検品・梱包・発送の手間は、商品単価が低くてもほとんど変わりません。最低利益額を決めておけば、作業時間あたりの利益を守れます。</p>
+<p>基準の数字は人によって変わりますが、<strong>利益額と利益率の両方に下限を置く</strong>という考え方は共通です。</p>
+<h2 id="赤字になりやすい5つの見落とし">赤字になりやすい5つの見落とし</h2>
+<ol>
+<li><strong>送料を引いていない</strong>：最も多い失敗です。1点送付なら送料がまるごと1点にかかります。</li>
+<li><strong>買取価格の確定タイミングを確認していない</strong>：発送中に買取価格が改定されても、どの時点の価格が適用されるかは店舗の規約次第です。</li>
+<li><strong>買取条件を満たしていない</strong>：未開封・新品のみなど、条件から外れると減額や買取不可になることがあります。箱のつぶれやシール跡も減額の対象になる場合があります。</li>
+<li><strong>買取上限数を超えている</strong>：店舗や商品によっては、1人あたりの買取点数に上限があります。まとめて仕入れる前に確認します。</li>
+<li><strong>ポイントを前提に仕入れている</strong>：付与上限や条件の読み違いで、見込んだポイントが付かないことがあります。</li>
+</ol>
+<p>どれも、<strong>仕入れボタンを押す前に買取店の条件ページを1回確認する</strong>だけで防げます。</p>
+<h2 id="価格比較と計算を自動化する方法">価格比較と計算を自動化する方法</h2>
+<p>商品数が増えると、手作業での価格比較は追いつきません。運営者は、次の流れを自動で回すツールを自作しています。</p>
+<ol>
+<li>買取価格の一覧（買取スキャナーの全データCSV）を取得する</li>
+<li>JANコードで Amazon・楽天市場・Yahoo!ショッピングの価格を検索する</li>
+<li>最安の仕入れ先を選び、この記事の式で利益と利益率を計算する</li>
+<li>「利益500円以上・利益率15%以上」の商品だけを一覧にする</li>
+</ol>
+<p>ツールが出すのは「候補の一覧」までです。上で説明した買取条件は、仕入れる前に人の目で確認します。計算は機械に任せて、条件の確認に時間を使う分担です。</p>
+<h2 id="まとめ">まとめ</h2>
+<ul>
+<li>利益 ＝ 買取価格 − 仕入れ価格 − 1点あたり送料 − その他コスト</li>
+<li>仕入れ価格は、送料・クーポン反映後の支払額を使う</li>
+<li>送料は箱単位。同梱点数で割ると、同じ商品でも利益が大きく変わる</li>
+<li>ポイントは判定に入れず、別枠のプラスとして見る</li>
+<li>利益額と利益率の両方に下限を置く（運営者は500円・15%）</li>
+</ul>
+<p>まずは上の計算ツールに、今カートに入っている商品の数字を入れてみてください。送料と下落リスクを入れても利益が残る商品だけを仕入れれば、買取せどりで赤字になる確率は大きく下がります。</p>
+<p class="meta">記事内の送料・基準値は、運営者の2026年9月時点の設定です。手数料・送料・買取条件は変わることがあるため、取引前に各サービスの最新情報をご確認ください。</p>
+</div></div>
+<!-- /wp:html -->]]></content:encoded>
+<excerpt:encoded><![CDATA[ECで仕入れて買取店に売る「買取せどり」の利益計算を、送料の按分・ポイントの扱い・価格下落リスクまで含めて解説。運営者が実際に使っている仕入れ基準（利益500円以上・利益率15%以上）と、そのまま使える計算ツール付き。]]></excerpt:encoded>
+<wp:post_id>4</wp:post_id>
+<wp:post_date><![CDATA[2026-09-23 09:00:00]]></wp:post_date>
+<wp:post_date_gmt><![CDATA[2026-09-23 00:00:00]]></wp:post_date_gmt>
+<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+<wp:post_name><![CDATA[kaitori-sedori-profit-calc]]></wp:post_name>
+<wp:status><![CDATA[publish]]></wp:status>
+<wp:post_parent>0</wp:post_parent>
+<wp:menu_order>0</wp:menu_order>
+<wp:post_type><![CDATA[post]]></wp:post_type>
+<wp:post_password><![CDATA[]]></wp:post_password>
+<wp:is_sticky>0</wp:is_sticky>
+<category domain="category" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e5%88%a9%e7%9b%8a%e8%a8%88%e7%ae%97"><![CDATA[利益計算]]></category>
+<category domain="post_tag" nicename="%e4%bb%95%e5%85%a5%e3%82%8c%e5%9f%ba%e6%ba%96"><![CDATA[仕入れ基準]]></category>
+<wp:postmeta><wp:meta_key><![CDATA[sedori_source_hash]]></wp:meta_key><wp:meta_value><![CDATA[978af500a152d4cd]]></wp:meta_value></wp:postmeta>
+</item>
+<item>
+<title><![CDATA[買取せどりとは？ECで仕入れて買取店に売る仕組みと、始める前に知るべき5つのリスク]]></title>
+<link>https://sedori-note.pages.dev/posts/what-is-kaitori-sedori/</link>
+<pubDate>Wed, 23 Sep 2026 03:00:00 +0000</pubDate>
+<dc:creator><![CDATA[sedori-note]]></dc:creator>
+<guid isPermaLink="false">https://sedori-note.pages.dev/?p=5</guid>
+<description></description>
+<content:encoded><![CDATA[<!-- wp:html -->
+<div class="sedori-post"><div class="prose"><p>買取せどりは、<strong>Amazon・楽天市場・Yahoo!ショッピングなどのECで商品を買い、買取店に送って買い取ってもらう</strong>ことで差額を得る方法です。</p>
+<p>一般的な転売と違って、売値（買取価格）が仕入れる前にわかります。そのため「売れ残り」の心配はほぼありません。その代わり、利幅は薄く、買取価格の改定や減額で簡単に赤字になります。</p>
+<p>この記事では、買取せどりを実践している運営者が、仕組みと始める前に知っておくべきリスクを、良い面・悪い面の両方からまとめます。</p>
+<div class="summary-box">
+<p><strong>この記事の要点</strong></p>
+<ul>
+<li>買取せどり＝ECで仕入れて買取店に売る。売値が先に決まるので在庫リスクが小さい</li>
+<li>代わりに利幅は薄く、1件あたり数百円〜千円程度の積み重ねになりやすい</li>
+<li>赤字の原因は「送料の見落とし」「買取価格の改定」「減額」「資金繰り」「ポイント頼み」</li>
+<li>始めるときは、まず1箱分だけ「仕入れ→発送→査定→入金」を一周して、実際の日数と減額の有無を確かめる</li>
+</ul>
+</div>
+<h2 id="買取せどりの仕組み">買取せどりの仕組み</h2>
+<p>流れは次の4ステップです。</p>
+<ol>
+<li>買取店が提示している買取価格を調べる</li>
+<li>同じ商品を、ECで買取価格より安く買える店を探す</li>
+<li>利益が出るなら仕入れて、届いた商品を買取店へ発送する</li>
+<li>買取店の査定が終わると、買取代金が口座に振り込まれる</li>
+</ol>
+<p>利益は「買取価格 − 仕入れ価格 − 送料 − その他コスト」です。計算方法と、運営者が実際に使っている仕入れ基準は、<a href="/posts/kaitori-sedori-profit-calc/">買取せどりの利益計算（計算ツール付き）</a>で詳しく解説しています。</p>
+<h3 id="なぜ差額が生まれるのか">なぜ差額が生まれるのか</h3>
+<p>買取店は、買い取った商品を自社の店舗や通販で販売します。人気の商品は在庫を確保したいので、高めの買取価格を付けます。</p>
+<p>一方ECでは、セール・クーポン・ポイント還元などで、一時的に販売価格が下がることがあります。<strong>買取価格がECの実質価格を上回った瞬間</strong>が、買取せどりの利益になります。差額が生まれるのは一時的なことが多いので、スピードと、条件を見落とさない確認が大切です。</p>
+<h2 id="通常の転売との違い">通常の転売との違い</h2>
+<p>Amazonなどに自分で出品して売る一般的な転売と比べると、特徴がはっきりします。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>買取せどり</th>
+<th>出品して売る転売</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>売値が決まる時点</td>
+<td>仕入れる前</td>
+<td>売れた時点</td>
+</tr>
+<tr>
+<td>在庫リスク</td>
+<td>小さい</td>
+<td>売れ残る可能性あり</td>
+</tr>
+<tr>
+<td>販売手数料</td>
+<td>なし（送料はかかる）</td>
+<td>販売・配送手数料がかかる</td>
+</tr>
+<tr>
+<td>1件あたりの利幅</td>
+<td>小さめ</td>
+<td>大きめになりやすい</td>
+</tr>
+<tr>
+<td>必要な作業</td>
+<td>仕入れ・検品・発送</td>
+<td>出品・価格調整・購入者対応も</td>
+</tr>
+</tbody>
+</table>
+<p>「利幅は小さいが、読みやすい」のが買取せどりです。</p>
+<h2 id="メリット">メリット</h2>
+<h3 id="1-仕入れる前に利益が計算できる">1. 仕入れる前に利益が計算できる</h3>
+<p>売値である買取価格が先に提示されているので、仕入れボタンを押す前に利益を計算できます。「いくらで売れるか分からない」という転売の最大の不確実性がありません。</p>
+<h3 id="2-在庫を抱えない">2. 在庫を抱えない</h3>
+<p>届いた商品はすぐ買取店に送るので、部屋に在庫が積み上がりません。売れ残りの値下げや、保管場所の心配もほぼ不要です。</p>
+<h3 id="3-販売の手間がかからない">3. 販売の手間がかからない</h3>
+<p>出品ページの作成、価格の調整、購入者とのやり取りがありません。作業は「仕入れ・検品・梱包・発送」に絞られるので、仕組み化もしやすくなります。</p>
+<h2 id="始める前に知るべき5つのリスク">始める前に知るべき5つのリスク</h2>
+<h3 id="1-利幅が薄い">1. 利幅が薄い</h3>
+<p>1件あたりの利益は数百円〜千円程度になりやすく、送料を引き忘れるだけで赤字になります。<strong>送料は箱単位でかかる</strong>ので、何点まとめて送るかで利益が大きく変わります。</p>
+<h3 id="2-買取価格は変わる">2. 買取価格は変わる</h3>
+<p>買取価格は相場に合わせて改定されます。申込時の価格が保証されるのか、到着・査定時の価格になるのかは、店舗ごとに違います。発送してから価格が下がると、利益が消えることがあります。</p>
+<h3 id="3-状態による減額買取不可">3. 状態による減額・買取不可</h3>
+<p>「未開封・新品のみ」などの条件から外れると、減額や買取不可になります。外箱のつぶれ、シール跡、付属品の欠品も減額の対象になる場合があります。</p>
+<h3 id="4-資金を立て替える期間がある">4. 資金を立て替える期間がある</h3>
+<p>ECで仕入れた代金を払ってから、買取代金が入金されるまでには、配送と査定の日数がかかります。その間は自分の資金を立て替える形になるため、<strong>扱える量は手元資金に左右されます</strong>。クレジットカードで仕入れる場合は、支払日と入金日の関係を把握しておく必要があります。</p>
+<h3 id="5-ポイント頼みの仕入れは崩れやすい">5. ポイント頼みの仕入れは崩れやすい</h3>
+<p>ポイント還元込みでやっと利益が出る商品は、付与条件の読み違いや付与上限で、見込みが外れることがあります。運営者は、ポイントを判定には入れず、上乗せ分として別に見ています。</p>
+<h2 id="始める手順">始める手順</h2>
+<ol>
+<li><strong>買取店を2〜3店に絞り、買取条件を読む</strong>：価格の確定タイミング、未開封などの条件、送料の負担、振込のタイミングと手数料を確認します</li>
+<li><strong>会員登録と本人確認を済ませる</strong>：宅配買取は、本人確認書類の登録が必要です</li>
+<li><strong>買取価格とECの支払額を比べる</strong>：買取価格は買取店のサイトや、複数店の価格をまとめて見られるツール（運営者は「買取スキャナー」を使っています）で調べます。ECは送料・クーポン反映後の支払額で比べます</li>
+<li><strong>利益を計算する</strong>：送料・その他コストまで引いて、利益額と利益率の両方で判断します（<a href="/posts/kaitori-sedori-profit-calc/">計算ツール</a>）</li>
+<li><strong>まず1箱分でテストする</strong>：仕入れ→発送→査定→入金まで一周して、かかった日数と減額の有無を記録します。この実測が、次からの仕入れ基準になります</li>
+</ol>
+<p>なお、中古品を仕入れて売る場合などは、取引の形によって古物商許可が必要になることがあります。判断に迷う場合は、管轄の警察署に確認してください。</p>
+<h2 id="向いている人向いていない人">向いている人・向いていない人</h2>
+<p><strong>向いている人</strong></p>
+<ul>
+<li>数字の確認をコツコツ続けられる人</li>
+<li>在庫を抱えたくない、販売の手間をかけたくない人</li>
+<li>1件の大きな利益より、小さな利益の積み重ねを受け入れられる人</li>
+</ul>
+<p><strong>向いていない人</strong></p>
+<ul>
+<li>1件で大きく稼ぎたい人</li>
+<li>買取条件や規約を読むのが面倒な人</li>
+<li>仕入れ代金の立て替えが難しい人</li>
+</ul>
+<h2 id="まとめ">まとめ</h2>
+<ul>
+<li>買取せどりは、ECで仕入れて買取店に売る方法。売値が先に決まり、在庫リスクが小さい</li>
+<li>利幅は薄く、送料・価格改定・減額・資金繰り・ポイントの5点が赤字の原因になる</li>
+<li>始めるときは、条件を読み、利益を計算し、1箱分のテストで実測してから量を増やす</li>
+</ul>
+<p>最初の一歩は、仕入れ候補の数字を<a href="/posts/kaitori-sedori-profit-calc/">利益計算ツール</a>に入れてみることです。送料と価格下落を入れても利益が残るかどうかで、その商品を仕入れるべきかがはっきりします。</p>
+<p class="meta">記事の内容は2026年9月時点のものです。買取条件・手数料・送料は店舗ごとに異なり、変更されることがあります。取引前に各サービスの最新情報をご確認ください。</p>
+</div></div>
+<!-- /wp:html -->]]></content:encoded>
+<excerpt:encoded><![CDATA[買取せどりの仕組み、通常の転売との違い、メリットとリスク、始める手順を実務目線で解説。売値が仕入れ前にわかる一方で、買取価格の改定・減額・資金の立替など、赤字になる原因も具体的にまとめました。]]></excerpt:encoded>
+<wp:post_id>5</wp:post_id>
+<wp:post_date><![CDATA[2026-09-23 12:00:00]]></wp:post_date>
+<wp:post_date_gmt><![CDATA[2026-09-23 03:00:00]]></wp:post_date_gmt>
+<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+<wp:post_name><![CDATA[what-is-kaitori-sedori]]></wp:post_name>
+<wp:status><![CDATA[publish]]></wp:status>
+<wp:post_parent>0</wp:post_parent>
+<wp:menu_order>0</wp:menu_order>
+<wp:post_type><![CDATA[post]]></wp:post_type>
+<wp:post_password><![CDATA[]]></wp:post_password>
+<wp:is_sticky>0</wp:is_sticky>
+<category domain="category" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e8%b2%b7%e5%8f%96%e3%81%9b%e3%81%a9%e3%82%8a"><![CDATA[買取せどり]]></category>
+<category domain="post_tag" nicename="%e5%a7%8b%e3%82%81%e6%96%b9"><![CDATA[始め方]]></category>
+<category domain="post_tag" nicename="%e5%9f%ba%e7%a4%8e%e7%9f%a5%e8%ad%98"><![CDATA[基礎知識]]></category>
+<wp:postmeta><wp:meta_key><![CDATA[sedori_source_hash]]></wp:meta_key><wp:meta_value><![CDATA[5a5b6060d89ed5c9]]></wp:meta_value></wp:postmeta>
+</item>
+<item>
+<title><![CDATA[運営者情報]]></title>
+<link>https://sedori-note.pages.dev/about/</link>
+<pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+<dc:creator><![CDATA[sedori-note]]></dc:creator>
+<guid isPermaLink="false">https://sedori-note.pages.dev/?page_id=6</guid>
+<description></description>
+<content:encoded><![CDATA[<!-- wp:html -->
+<div class="sedori-post"><table><tbody><tr><th>サイト名</th><td>せどり実務ノート</td></tr><tr><th>運営者</th><td>TAKUYA</td></tr><tr><th>URL</th><td>https://sedori-note.pages.dev</td></tr><tr><th>お問い合わせ</th><td><a href="/contact/">お問い合わせページ</a></td></tr></tbody></table><h2>運営者について</h2><p>EC（Amazon・楽天・Yahoo!）で仕入れて買取店へ売る「買取せどり」を実践中。価格比較と利益判定を自動化するツールを自作し、経費・確定申告の処理まで仕組み化しています。このブログでは、その実務で使っている数字と手順をそのまま公開します。</p><h2>運営方針</h2><ul><li>記事の数字は、運営者が実際に使っている計算式・仕入れ基準・運用データを元にしています。</li><li>価格・手数料・規約は変わるため、記事内に確認日を明記し、変更に気づいた時点で更新します。</li><li>商品やサービスを紹介する場合は、実際に使った・比較した根拠を示し、広告を含む記事には冒頭でその旨を表示します。</li><li>利益を保証する表現や、誰でも簡単に稼げるといった表現は使いません。</li></ul></div>
+<!-- /wp:html -->]]></content:encoded>
+<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+<wp:post_id>6</wp:post_id>
+<wp:post_date><![CDATA[2026-09-23 09:00:00]]></wp:post_date>
+<wp:post_date_gmt><![CDATA[2026-09-23 00:00:00]]></wp:post_date_gmt>
+<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+<wp:post_name><![CDATA[about]]></wp:post_name>
+<wp:status><![CDATA[publish]]></wp:status>
+<wp:post_parent>0</wp:post_parent>
+<wp:menu_order>0</wp:menu_order>
+<wp:post_type><![CDATA[page]]></wp:post_type>
+<wp:post_password><![CDATA[]]></wp:post_password>
+<wp:is_sticky>0</wp:is_sticky>
+<wp:postmeta><wp:meta_key><![CDATA[sedori_source_hash]]></wp:meta_key><wp:meta_value><![CDATA[5c829c8f6b8e81a6]]></wp:meta_value></wp:postmeta>
+</item>
+<item>
+<title><![CDATA[プライバシーポリシー・免責事項]]></title>
+<link>https://sedori-note.pages.dev/privacy/</link>
+<pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+<dc:creator><![CDATA[sedori-note]]></dc:creator>
+<guid isPermaLink="false">https://sedori-note.pages.dev/?page_id=7</guid>
+<description></description>
+<content:encoded><![CDATA[<!-- wp:html -->
+<div class="sedori-post"><h2>広告の配信について</h2><p>当サイトは、第三者配信の広告サービス（Google AdSense 等）およびアフィリエイトプログラム（Amazonアソシエイト、A8.net、もしもアフィリエイト 等）を利用する場合があります。広告配信事業者は、ユーザーの興味に応じた広告を表示するために Cookie を使用することがあります。Cookie を無効にする方法や Google AdSense に関する詳細は、Google の「広告 – ポリシーと規約」をご確認ください。</p><p>当サイトは Amazon.co.jp を宣伝しリンクすることによってサイトが紹介料を獲得できる手段を提供することを目的に設定されたアフィリエイトプログラムである、Amazonアソシエイト・プログラムの参加者となる場合があります。</p><p>広告・アフィリエイトリンクを含む記事には、記事冒頭にその旨を表示します。</p><h2>アクセス解析ツールについて</h2><p>当サイトでは、サイト改善のためにアクセス解析ツールを利用する場合があります。これらは Cookie を使用して匿名のトラフィックデータを収集するもので、個人を特定するものではありません。</p><h2>お問い合わせで取得する個人情報</h2><p>お問い合わせの際にいただいた氏名・メールアドレス等は、ご質問への回答にのみ利用し、法令に基づく場合を除き第三者に提供しません。</p><p>お問い合わせフォームには Google フォームを利用しています。フォームの表示・送信にあたっては Google のプライバシーポリシーが適用されます。送信された内容は、運営者が管理するスプレッドシートに保存されます。</p><h2>免責事項</h2><p>当サイトの情報は、掲載時点で運営者が確認した内容に基づきます。価格・手数料・買取条件・各サービスの規約は変更されることがあるため、取引の前に必ず公式情報をご確認ください。当サイトの情報を利用して生じた損害について、運営者は責任を負いかねます。</p><p>記事内の利益計算・事例は、将来の利益を保証するものではありません。</p><h2>著作権</h2><p>当サイトの文章・画像の無断転載を禁止します。引用の際は出典として当サイトの URL を明記してください。</p><p class="meta">制定日：2026年9月23日</p></div>
+<!-- /wp:html -->]]></content:encoded>
+<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+<wp:post_id>7</wp:post_id>
+<wp:post_date><![CDATA[2026-09-23 09:00:00]]></wp:post_date>
+<wp:post_date_gmt><![CDATA[2026-09-23 00:00:00]]></wp:post_date_gmt>
+<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+<wp:post_name><![CDATA[privacy]]></wp:post_name>
+<wp:status><![CDATA[publish]]></wp:status>
+<wp:post_parent>0</wp:post_parent>
+<wp:menu_order>0</wp:menu_order>
+<wp:post_type><![CDATA[page]]></wp:post_type>
+<wp:post_password><![CDATA[]]></wp:post_password>
+<wp:is_sticky>0</wp:is_sticky>
+<wp:postmeta><wp:meta_key><![CDATA[sedori_source_hash]]></wp:meta_key><wp:meta_value><![CDATA[c8211e65f606223b]]></wp:meta_value></wp:postmeta>
+</item>
+<item>
+<title><![CDATA[お問い合わせ]]></title>
+<link>https://sedori-note.pages.dev/contact/</link>
+<pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+<dc:creator><![CDATA[sedori-note]]></dc:creator>
+<guid isPermaLink="false">https://sedori-note.pages.dev/?page_id=8</guid>
+<description></description>
+<content:encoded><![CDATA[<!-- wp:html -->
+<div class="sedori-post"><p>記事の誤り・情報の更新・掲載に関するご連絡は、以下のフォームからお送りください。内容を確認のうえ、必要に応じて返信いたします。</p><ul><li>返信が必要な場合は、メールアドレスを正しくご入力ください</li><li>返信の目安は、内容を確認のうえ数日以内です</li><li>いただいた個人情報の取り扱いは<a href="/privacy/">プライバシーポリシー</a>のとおりです</li></ul><div class="form-embed"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdvyzX9rZ37Z-NFzuox4qdByBfZp6M6U4NDxpPRR4uzEl_3rw/viewform?embedded=true" title="お問い合わせフォーム" loading="lazy" referrerpolicy="no-referrer-when-downgrade">読み込んでいます…</iframe></div><p class="meta">フォームが表示されない場合は、<a href="https://docs.google.com/forms/d/e/1FAIpQLSdvyzX9rZ37Z-NFzuox4qdByBfZp6M6U4NDxpPRR4uzEl_3rw/viewform" rel="noopener" target="_blank">別ウィンドウでフォームを開く</a>をご利用ください。</p></div>
+<!-- /wp:html -->]]></content:encoded>
+<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+<wp:post_id>8</wp:post_id>
+<wp:post_date><![CDATA[2026-09-23 09:00:00]]></wp:post_date>
+<wp:post_date_gmt><![CDATA[2026-09-23 00:00:00]]></wp:post_date_gmt>
+<wp:comment_status><![CDATA[closed]]></wp:comment_status>
+<wp:ping_status><![CDATA[closed]]></wp:ping_status>
+<wp:post_name><![CDATA[contact]]></wp:post_name>
+<wp:status><![CDATA[publish]]></wp:status>
+<wp:post_parent>0</wp:post_parent>
+<wp:menu_order>0</wp:menu_order>
+<wp:post_type><![CDATA[page]]></wp:post_type>
+<wp:post_password><![CDATA[]]></wp:post_password>
+<wp:is_sticky>0</wp:is_sticky>
+<wp:postmeta><wp:meta_key><![CDATA[sedori_source_hash]]></wp:meta_key><wp:meta_value><![CDATA[c31258290b597b21]]></wp:meta_value></wp:postmeta>
+</item>
+</channel>
+</rss>
