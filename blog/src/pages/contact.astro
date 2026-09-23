@@ -1,16 +1,60 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE } from '../site.config';
+
+// Googleフォームは ?embedded=true を付けると、余白と枠を詰めた埋め込み用の表示になる。
+const embedUrl = SITE.contactUrl
+  ? `${SITE.contactUrl}${SITE.contactUrl.includes('?') ? '&' : '?'}embedded=true`
+  : '';
 ---
 
 <Base title="お問い合わせ" description={`${SITE.name}へのお問い合わせ窓口です。`}>
   <article class="prose">
     <h1>お問い合わせ</h1>
     <p>記事の誤り・情報の更新・掲載に関するご連絡は、以下のフォームからお送りください。内容を確認のうえ、必要に応じて返信いたします。</p>
+
     {SITE.contactUrl ? (
-      <p><a href={SITE.contactUrl} rel="noopener" target="_blank">お問い合わせフォームを開く</a></p>
+      <>
+        <ul>
+          <li>返信が必要な場合は、メールアドレスを正しくご入力ください</li>
+          <li>返信の目安は、内容を確認のうえ数日以内です</li>
+          <li>いただいた個人情報の取り扱いは<a href="/privacy/">プライバシーポリシー</a>のとおりです</li>
+        </ul>
+
+        <div class="form-embed">
+          <iframe
+            src={embedUrl}
+            title="お問い合わせフォーム"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          >読み込んでいます…</iframe>
+        </div>
+
+        <p class="meta">
+          フォームが表示されない場合は、
+          <a href={SITE.contactUrl} rel="noopener" target="_blank">別ウィンドウでフォームを開く</a>
+          をご利用ください。
+        </p>
+      </>
     ) : (
       <p>お問い合わせフォームは準備中です。</p>
     )}
   </article>
 </Base>
+
+<style>
+  /* スマホ幅で横にはみ出さないよう、幅は常に100%にして高さだけ確保する */
+  .form-embed {
+    margin: 1.5rem 0;
+  }
+  .form-embed iframe {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 80vh;
+    min-height: 640px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+  }
+</style>

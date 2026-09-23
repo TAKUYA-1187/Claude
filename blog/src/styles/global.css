@@ -341,3 +341,12 @@ article h1 {
     padding: 6px;
   }
 }
+
+/* GFM のチェックリストは箇条書きの黒丸を出さない */
+.prose li:has(> input[type='checkbox']) {
+  list-style: none;
+  margin-left: -1.2em;
+}
+.prose li > input[type='checkbox'] {
+  margin-right: 0.4em;
+}

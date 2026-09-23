@@ -8,7 +8,8 @@ export const SITE = {
   author: 'TAKUYA',
   authorBio:
     'EC（Amazon・楽天・Yahoo!）で仕入れて買取店へ売る「買取せどり」を実践中。価格比較と利益判定を自動化するツールを自作し、経費・確定申告の処理まで仕組み化しています。このブログでは、その実務で使っている数字と手順をそのまま公開します。',
-  // Googleフォーム等のURLを入れると、お問い合わせページにリンクが表示される
-  contactUrl: '',
+  // Googleフォーム等のURL。入れるとお問い合わせページにフォームが埋め込まれる
+  contactUrl:
+    'https://docs.google.com/forms/d/e/1FAIpQLSdvyzX9rZ37Z-NFzuox4qdByBfZp6M6U4NDxpPRR4uzEl_3rw/viewform',
   lang: 'ja',
 };
