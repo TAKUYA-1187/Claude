@@ -4,6 +4,15 @@ on:
   schedule:
     # JST 11:00 = UTC 02:00, JST 18:00 = UTC 09:00
     - cron: "0 2,9 * * *"
+  # 作業ブランチでツールを変更したときの動作確認用
+  push:
+    branches:
+      - claude/nifty-thompson-99o7m3
+    paths:
+      - "price_comparison/src/**"
+      - "price_comparison/scripts/**"
+      - "price_comparison/.refresh"
+      - ".github/workflows/price_comparison.yml"
   workflow_dispatch:
     inputs:
       limit:
