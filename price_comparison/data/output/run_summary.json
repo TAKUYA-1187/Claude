@@ -1,17 +1,18 @@
 {
-  "run_at": "2026-07-15T15:41:29",
+  "run_at": "2026-09-23T01:27:19",
   "mode": "both",
-  "candidates": 558,
+  "candidates": 507,
   "buyback_candidates": 0,
   "price_hits": {
     "amazon": 0,
     "rakuten": 0,
-    "yahoo": 558
+    "yahoo": 507
   },
   "sources": {
     "amazon_api": "未設定 (PA-APIキーなし → Amazon価格・Amazon販売ルート判定不可)",
-    "rakuten_api": "停止 (連続失敗でスキップ)",
+    "rakuten_api": "RAKUTEN_ACCESS_KEY が未設定です。楽天のアプリ管理画面に表示されるアクセスキー（pk_で始まる）を GitHub Secrets の RAKUTEN_ACCESS_KEY に設定してください。",
     "yahoo_api": "ok",
+    "onedrive": "ok (0 files)",
     "kaitori_csv": "なし (OneDrive共有リンクが解決できないか、CSV未配置 → 買取ルート判定不可)"
   },
   "routes": {
