@@ -18,6 +18,7 @@ import argparse
 import csv
 import json
 import logging
+import os
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -35,7 +36,7 @@ from .profit_calculator import (
     is_amazon_profitable,
     is_profitable,
 )
-from .rakuten_client import RakutenClient
+from .rakuten_client import RakutenClient, credentials_problem
 from .yahoo_client import YahooClient
 
 logging.basicConfig(
@@ -60,8 +61,17 @@ def build_clients():
     rakuten = None
     yahoo = None
     amazon = None
-    if config.rakuten_app_id:
-        rakuten = RakutenClient(config.rakuten_app_id, config.rakuten_affiliate_id or None)
+    rakuten_problem = credentials_problem(config.rakuten_app_id, config.rakuten_access_key)
+    if rakuten_problem:
+        log.error("楽天APIをスキップ: %s", rakuten_problem)
+        _annotate("warning", "楽天APIの設定が必要です", rakuten_problem)
+    elif config.rakuten_app_id:
+        rakuten = RakutenClient(
+            config.rakuten_app_id,
+            config.rakuten_access_key,
+            config.rakuten_referer,
+            config.rakuten_affiliate_id or None,
+        )
     else:
         log.warning("RAKUTEN_APP_ID not set; skipping Rakuten")
     if config.yahoo_app_id:
@@ -118,6 +128,8 @@ def build_candidates(collect: bool, amazon_client) -> list[Candidate]:
             pages=config.collect_pages,
             yahoo_app_id=config.yahoo_app_id,
             rakuten_app_id=config.rakuten_app_id,
+            rakuten_access_key=config.rakuten_access_key,
+            rakuten_referer=config.rakuten_referer,
             amazon_client=amazon_client,
         )
         save_collected(collected, config.collected_dir)
@@ -160,20 +172,32 @@ def write_outputs(rows: list, prefix: str, ts: str):
     log.info("Wrote %s_{%s,latest}.{csv,json} (%d rows)", prefix, ts, len(rows))
 
 
+def _annotate(level: str, title: str, message: str) -> None:
+    """GitHub Actions の実行画面に警告を表示する（ローカル実行では何もしない）。"""
+    if os.getenv("GITHUB_ACTIONS") == "true":
+        print(f"::{level} title={title}::{message}", flush=True)
+
+
 def run(
     limit: int | None = None,
     skip_fetch: bool = False,
     mode: str = "both",
     collect: bool = False,
 ):
-    if not skip_fetch and config.onedrive_share_url:
+    onedrive_status = "未設定 (ONEDRIVE_SHARE_URL なし)"
+    if skip_fetch:
+        onedrive_status = "スキップ (--skip-fetch)"
+    elif config.onedrive_share_url:
         log.info("Fetching CSV from OneDrive share...")
         try:
             fetched = fetch_folder(config.onedrive_share_url, config.input_dir)
+            onedrive_status = f"ok ({len(fetched)} files)"
             log.info("Fetched %d CSV file(s) from OneDrive", len(fetched))
         except Exception as e:
+            onedrive_status = f"失敗: {e}"
             log.error("OneDrive fetch failed: %s", e)
-            # 既存CSVがあれば続行、なければ致命的
+            _annotate("warning", "OneDrive から買取スキャナーCSVを取得できません", str(e))
+            # CSV がなくても EC 収集分と買取商店カタログ照合は続行する
     log.info("Mode: %s / Enabled shops: %s", mode, config.enabled_shops)
 
     amazon, rakuten, yahoo = build_clients()
@@ -240,11 +264,15 @@ def run(
         "price_hits": price_hits,
         "sources": {
             "amazon_api": "ok" if amazon else "未設定 (PA-APIキーなし → Amazon価格・Amazon販売ルート判定不可)",
-            "rakuten_api": ("停止 (連続失敗でスキップ)" if rakuten and rakuten.dead else "ok" if rakuten else "未設定"),
+            "rakuten_api": (
+                credentials_problem(config.rakuten_app_id, config.rakuten_access_key)
+                or ("停止 (連続失敗でスキップ)" if rakuten and rakuten.dead else "ok" if rakuten else "未設定")
+            ),
             "yahoo_api": ("停止 (連続失敗でスキップ)" if yahoo and yahoo.dead else "ok" if yahoo else "未設定"),
         },
         "routes": {},
     }
+    summary["sources"]["onedrive"] = onedrive_status
     if not summary["buyback_candidates"]:
         summary["sources"]["kaitori_csv"] = (
             "なし (OneDrive共有リンクが解決できないか、CSV未配置 → 買取ルート判定不可)"

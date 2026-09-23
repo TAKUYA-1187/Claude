@@ -1,31 +1,46 @@
 """OneDrive の匿名共有フォルダから CSV を取得する。
 
-個人向け OneDrive の匿名共有リンクは、認証不要の OneDrive API
-(`api.onedrive.com`) の `/shares/{token}/root` で解決できる。
-Microsoft Graph (`graph.microsoft.com`) の同エンドポイントは Bearer トークン必須の
-ため、認証情報を持たないこのツールでは基本的に使えないが、フォールバックとして残す。
+個人向け OneDrive の「リンクを知っている全員」共有は、2024年以降
+`api.onedrive.com` / `graph.microsoft.com` の `/shares/` を匿名で呼ぶと HTTP 401 になる
+（2026-07 の実行ログで両方 401 を確認）。
 
-Docs: https://learn.microsoft.com/onedrive/developer/rest-api/api/shares_get
+現在の OneDrive Web 画面は、匿名閲覧時に Badger トークン
+(`api-badgerp.svc.ms`) を取得し、`my.microsoftpersonalcontent.com` の
+`/shares/` API を呼んでいる。これを第一候補とし、旧エンドポイントはフォールバックに残す。
+Badger は非公開APIのため、Microsoft 側の変更で使えなくなる可能性がある。
+
+ログには共有URL・共有ID・トークンを出さない（HTTPステータスとエラーコードのみ）。
 """
 from __future__ import annotations
 
 import base64
 import logging
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
+from typing import Callable, Iterable
 
 import requests
-from tenacity import retry, stop_after_attempt, wait_exponential
 
 log = logging.getLogger(__name__)
 
-# 匿名アクセス可の OneDrive API を優先し、Graph はフォールバック
-API_BASES = [
-    ("https://api.onedrive.com/v1.0", "root"),
-    ("https://graph.microsoft.com/v1.0", "driveItem"),
-]
+BADGER_TOKEN_URL = "https://api-badgerp.svc.ms/v1.0/token"
+# OneDrive Web が匿名共有の閲覧に使っているアプリID
+BADGER_APP_ID = "5cbed6ac-a083-4e14-b191-b4ba07653de2"
 
 DOWNLOAD_URL_KEYS = ("@content.downloadUrl", "@microsoft.graph.downloadUrl")
+TIMEOUT = 30
+
+
+class OneDriveFetchError(RuntimeError):
+    pass
+
+
+@dataclass
+class _Strategy:
+    name: str
+    base: str
+    root_seg: str
+    headers: Callable[[], dict]
 
 
 def _encode_share_url(url: str) -> str:
@@ -33,89 +48,123 @@ def _encode_share_url(url: str) -> str:
     return "u!" + b64
 
 
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(min=2, max=16))
-def _get_json(url: str) -> dict:
-    r = requests.get(url, timeout=30)
+def _describe_error(r: requests.Response) -> str:
+    try:
+        err = r.json().get("error", {})
+        code = err.get("code", "")
+    except ValueError:
+        code = ""
+    return f"HTTP {r.status_code}" + (f" ({code})" if code else "")
+
+
+def _get_json(url: str, headers: dict) -> dict:
+    r = requests.get(url, headers=headers, timeout=TIMEOUT)
     if not r.ok:
-        log.warning("GET %s -> HTTP %d: %s", url.split("?")[0], r.status_code, r.text[:200])
-    r.raise_for_status()
+        raise OneDriveFetchError(_describe_error(r))
     return r.json()
 
 
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(min=2, max=16))
-def _download(url: str, dest: Path) -> None:
-    with requests.get(url, stream=True, timeout=60) as r:
+def _badger_headers_factory() -> Callable[[], dict]:
+    cache: dict[str, str] = {}
+
+    def headers() -> dict:
+        if "token" not in cache:
+            r = requests.post(BADGER_TOKEN_URL, json={"appId": BADGER_APP_ID}, timeout=TIMEOUT)
+            if not r.ok:
+                raise OneDriveFetchError(f"token {_describe_error(r)}")
+            cache["token"] = r.json()["token"]
+        return {"Authorization": f"Badger {cache['token']}", "Prefer": "autoredeem"}
+
+    return headers
+
+
+def _strategies() -> list[_Strategy]:
+    return [
+        _Strategy("badger", "https://my.microsoftpersonalcontent.com/_api/v2.0", "driveItem", _badger_headers_factory()),
+        _Strategy("onedrive-api", "https://api.onedrive.com/v1.0", "root", lambda: {}),
+        _Strategy("graph", "https://graph.microsoft.com/v1.0", "driveItem", lambda: {}),
+    ]
+
+
+def _share_url_variants(share_url: str) -> list[str]:
+    """短縮リンク (1drv.ms) はリダイレクト先URLも候補にする。"""
+    variants = [share_url.strip()]
+    try:
+        r = requests.get(variants[0], allow_redirects=False, timeout=TIMEOUT)
+        location = r.headers.get("Location")
+        if location and location not in variants:
+            variants.append(location)
+    except requests.RequestException as e:
+        log.info("Share link redirect lookup skipped: %s", type(e).__name__)
+    return variants
+
+
+def _iter_children(url: str, headers: Callable[[], dict]) -> Iterable[dict]:
+    while url:
+        data = _get_json(url, headers())
+        yield from data.get("value", [])
+        url = data.get("@odata.nextLink")
+
+
+def _download_file(item: dict, dest_dir: Path, extensions: tuple[str, ...]) -> list[Path]:
+    name = item.get("name", "")
+    if not name.lower().endswith(extensions):
+        return []
+    download_url = next((item[k] for k in DOWNLOAD_URL_KEYS if item.get(k)), None)
+    if not download_url:
+        log.warning("No download URL for %s", name)
+        return []
+    dest = dest_dir / Path(name).name
+    with requests.get(download_url, stream=True, timeout=60) as r:
         r.raise_for_status()
         with dest.open("wb") as f:
             for chunk in r.iter_content(chunk_size=64 * 1024):
                 if chunk:
                     f.write(chunk)
+    log.info("Downloaded %s (%d bytes)", name, dest.stat().st_size)
+    return [dest]
 
 
-def _iter_children(item_api_url: str) -> Iterable[dict]:
-    """children を next page 含めて列挙。"""
-    url = item_api_url
-    while url:
-        data = _get_json(url)
-        for c in data.get("value", []):
-            yield c
-        url = data.get("@odata.nextLink")
-
-
-def _resolve_root(share_url: str) -> tuple[str, dict]:
-    """共有リンクを解決し、(children列挙用URL, ルートitem) を返す。"""
-    token = _encode_share_url(share_url)
-    last_error: Exception | None = None
-    for base, root_seg in API_BASES:
-        root_url = f"{base}/shares/{token}/{root_seg}"
-        try:
-            root = _get_json(root_url)
-            log.info("Resolved share via %s", base)
-            return f"{root_url}/children", root
-        except Exception as e:
-            log.warning("Share resolve failed via %s: %s", base, e)
-            last_error = e
-    raise RuntimeError(
-        f"OneDrive共有リンクを解決できませんでした。リンクが「リンクを知っている全員」で"
-        f"共有されているか確認してください: {last_error}"
-    )
-
-
-def fetch_folder(share_url: str, dest_dir: Path, extensions: tuple[str, ...] = (".csv",)) -> list[Path]:
-    """共有フォルダ直下のファイルを取得。サブフォルダは再帰的にたどる。"""
-    dest_dir.mkdir(parents=True, exist_ok=True)
-    children_url, root = _resolve_root(share_url)
-    base = children_url.split("/shares/")[0]
-
+def _fetch_with(strategy: _Strategy, share_id: str, dest_dir: Path, extensions: tuple[str, ...]) -> list[Path]:
+    root_url = f"{strategy.base}/shares/{share_id}/{strategy.root_seg}"
+    root = _get_json(root_url, strategy.headers())
     if "folder" not in root:
-        # 単一ファイルが共有された場合
         return _download_file(root, dest_dir, extensions)
 
     downloaded: list[Path] = []
-    for item in _iter_children(children_url):
+    for item in _iter_children(f"{root_url}/children", strategy.headers):
         if "folder" in item:
-            # サブフォルダは driveId + itemId で辿る
             drive_id = item["parentReference"]["driveId"]
-            item_id = item["id"]
-            sub_url = f"{base}/drives/{drive_id}/items/{item_id}/children"
-            for sub in _iter_children(sub_url):
+            sub_url = f"{strategy.base}/drives/{drive_id}/items/{item['id']}/children"
+            for sub in _iter_children(sub_url, strategy.headers):
                 downloaded += _download_file(sub, dest_dir, extensions)
         else:
             downloaded += _download_file(item, dest_dir, extensions)
     return downloaded
 
 
-def _download_file(item: dict, dest_dir: Path, extensions: tuple[str, ...]) -> list[Path]:
-    name = item.get("name", "")
-    if not any(name.lower().endswith(ext) for ext in extensions):
-        return []
-    download_url = next(
-        (item[k] for k in DOWNLOAD_URL_KEYS if item.get(k)), None
+def fetch_folder(share_url: str, dest_dir: Path, extensions: tuple[str, ...] = (".csv",)) -> list[Path]:
+    """共有フォルダ（または単一ファイル）の CSV を dest_dir に保存する。サブフォルダは1階層たどる。"""
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    errors: list[str] = []
+    variants = _share_url_variants(share_url)
+    for strategy in _strategies():
+        for i, url in enumerate(variants):
+            label = f"{strategy.name}/{'link' if i == 0 else 'redirect'}"
+            try:
+                files = _fetch_with(strategy, _encode_share_url(url), dest_dir, extensions)
+            except OneDriveFetchError as e:
+                reason = f"{label}: {e}"
+            except (requests.RequestException, KeyError, ValueError) as e:
+                # 例外メッセージにはURL（共有IDやダウンロード用トークン）が含まれうるので型名だけ残す
+                reason = f"{label}: {type(e).__name__}"
+            else:
+                log.info("OneDrive share resolved via %s", label)
+                return files
+            log.warning("OneDrive %s", reason)
+            errors.append(reason)
+    raise OneDriveFetchError(
+        "OneDrive共有フォルダからCSVを取得できませんでした（"
+        + " / ".join(errors)
+        + "）。共有が「リンクを知っている全員」になっているか、リンクを作り直していないかを確認してください。"
     )
-    if not download_url:
-        log.warning("No downloadUrl for %s (keys: %s)", name, list(item.keys())[:10])
-        return []
-    dest = dest_dir / name
-    _download(download_url, dest)
-    log.info("Downloaded %s (%d bytes)", name, dest.stat().st_size)
-    return [dest]

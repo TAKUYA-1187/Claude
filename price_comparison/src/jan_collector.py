@@ -24,11 +24,16 @@ from typing import Optional
 import requests
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from .rakuten_client import MIN_INTERVAL_SEC as RAKUTEN_MIN_INTERVAL_SEC
+from .rakuten_client import auth_headers as rakuten_auth_headers
+from .rakuten_client import auth_params as rakuten_auth_params
+from .rakuten_client import credentials_problem as rakuten_credentials_problem
+
 log = logging.getLogger(__name__)
 
 YAHOO_ENDPOINT = "https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch"
 RAKUTEN_BOOKS_ENDPOINT = (
-    "https://app.rakuten.co.jp/services/api/BooksTotal/Search/20170404"
+    "https://openapi.rakuten.co.jp/services/api/BooksTotal/Search/20170404"
 )
 
 
@@ -118,20 +123,27 @@ class YahooJanCollector:
 class RakutenBooksCollector:
     """楽天ブックス総合検索API。CD/DVD/ゲーム等は jan、本は isbn (=JAN) を返す。"""
 
-    def __init__(self, app_id: str):
+    def __init__(self, app_id: str, access_key: str, referer: str):
         self.app_id = app_id
+        self.access_key = access_key
+        self.referer = referer
         self._last_call = 0.0
 
     def _throttle(self):
         elapsed = time.time() - self._last_call
-        if elapsed < 1.05:
-            time.sleep(1.05 - elapsed)
+        if elapsed < RAKUTEN_MIN_INTERVAL_SEC:
+            time.sleep(RAKUTEN_MIN_INTERVAL_SEC - elapsed)
         self._last_call = time.time()
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=2, max=16))
     def _get(self, params: dict) -> dict:
         self._throttle()
-        r = requests.get(RAKUTEN_BOOKS_ENDPOINT, params=params, timeout=15)
+        r = requests.get(
+            RAKUTEN_BOOKS_ENDPOINT,
+            params={**rakuten_auth_params(self.app_id, self.access_key), **params},
+            headers=rakuten_auth_headers(self.referer),
+            timeout=15,
+        )
         if not r.ok:
             log.warning("Rakuten Books collect HTTP %d: %s", r.status_code, r.text[:200])
         r.raise_for_status()
@@ -142,7 +154,6 @@ class RakutenBooksCollector:
         for kw in keywords:
             for page in range(1, pages + 1):
                 params = {
-                    "applicationId": self.app_id,
                     "keyword": kw,
                     "hits": 30,
                     "page": page,
@@ -228,6 +239,8 @@ def collect_all(
     pages: int,
     yahoo_app_id: str = "",
     rakuten_app_id: str = "",
+    rakuten_access_key: str = "",
+    rakuten_referer: str = "",
     amazon_client=None,
 ) -> dict[str, CollectedItem]:
     """設定済みの全ソースから収集し、JANでユニーク化して返す。"""
@@ -243,10 +256,15 @@ def collect_all(
         _merge(YahooJanCollector(yahoo_app_id).collect(keywords, yahoo_genres, pages))
     else:
         log.info("YAHOO_APP_ID 未設定のため Yahoo からの収集をスキップ")
-    if rakuten_app_id:
-        _merge(RakutenBooksCollector(rakuten_app_id).collect(keywords, pages))
-    else:
+    rakuten_problem = rakuten_credentials_problem(rakuten_app_id, rakuten_access_key)
+    if not rakuten_app_id:
         log.info("RAKUTEN_APP_ID 未設定のため 楽天ブックスからの収集をスキップ")
+    elif rakuten_problem:
+        log.warning("楽天ブックスからの収集をスキップ: %s", rakuten_problem)
+    else:
+        _merge(
+            RakutenBooksCollector(rakuten_app_id, rakuten_access_key, rakuten_referer).collect(keywords, pages)
+        )
     if amazon_client is not None:
         _merge(AmazonJanCollector(amazon_client).collect(keywords, pages))
 

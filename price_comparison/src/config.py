@@ -39,6 +39,9 @@ class Config:
 
     rakuten_app_id: str = os.getenv("RAKUTEN_APP_ID", "")
     rakuten_affiliate_id: str = os.getenv("RAKUTEN_AFFILIATE_ID", "")
+    rakuten_access_key: str = os.getenv("RAKUTEN_ACCESS_KEY", "")
+    # 楽天アプリの「許可されたWebサイト」に登録したURL（新API基盤で Referer/Origin として必須）
+    rakuten_referer: str = os.getenv("RAKUTEN_REFERER", "") or "https://sedori-note.pages.dev/"
 
     yahoo_app_id: str = os.getenv("YAHOO_APP_ID", "")
 
