@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import base64
 import logging
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Iterable
@@ -125,26 +126,45 @@ def _download_file(item: dict, dest_dir: Path, extensions: tuple[str, ...]) -> l
     return [dest]
 
 
+MAX_DEPTH = 3
+
+
+def _kind(item: dict) -> str:
+    if "folder" in item:
+        return "folder"
+    suffix = Path(item.get("name", "")).suffix.lower().lstrip(".")
+    return suffix or "no-ext"
+
+
 def _fetch_with(strategy: _Strategy, share_id: str, dest_dir: Path, extensions: tuple[str, ...]) -> list[Path]:
     root_url = f"{strategy.base}/shares/{share_id}/{strategy.root_seg}"
     root = _get_json(root_url, strategy.headers())
     if "folder" not in root:
+        log.info("OneDrive share is a single file (.%s)", _kind(root))
         return _download_file(root, dest_dir, extensions)
 
     downloaded: list[Path] = []
-    for item in _iter_children(f"{root_url}/children", strategy.headers):
-        if "folder" in item:
-            drive_id = item["parentReference"]["driveId"]
-            sub_url = f"{strategy.base}/drives/{drive_id}/items/{item['id']}/children"
-            for sub in _iter_children(sub_url, strategy.headers):
-                downloaded += _download_file(sub, dest_dir, extensions)
-        else:
-            downloaded += _download_file(item, dest_dir, extensions)
+    seen: Counter[str] = Counter()
+
+    def walk(children_url: str, depth: int) -> None:
+        nonlocal downloaded
+        for item in _iter_children(children_url, strategy.headers):
+            seen[_kind(item)] += 1
+            if "folder" in item:
+                if depth < MAX_DEPTH:
+                    drive_id = item["parentReference"]["driveId"]
+                    walk(f"{strategy.base}/drives/{drive_id}/items/{item['id']}/children", depth + 1)
+            else:
+                downloaded += _download_file(item, dest_dir, extensions)
+
+    walk(f"{root_url}/children", 1)
+    # 公開リポジトリのログに残るため、ファイル名は出さず種類ごとの件数だけ記録する
+    log.info("OneDrive shared folder contents (by type, up to %d levels): %s", MAX_DEPTH, dict(seen) or "empty")
     return downloaded
 
 
 def fetch_folder(share_url: str, dest_dir: Path, extensions: tuple[str, ...] = (".csv",)) -> list[Path]:
-    """共有フォルダ（または単一ファイル）の CSV を dest_dir に保存する。サブフォルダは1階層たどる。"""
+    """共有フォルダ（または単一ファイル）の CSV を dest_dir に保存する。サブフォルダは3階層までたどる。"""
     dest_dir.mkdir(parents=True, exist_ok=True)
     errors: list[str] = []
     variants = _share_url_variants(share_url)

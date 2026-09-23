@@ -77,11 +77,30 @@ def fetch(url: str, xhr: bool = False) -> str:
         return ""
 
 
+CATEGORY_LOC_RE = re.compile(r"<loc>\s*([^<\s]+/category/[^<\s]+)\s*</loc>")
+# サイトマップが取れないときに使う、2026-07 時点のサイトマップ控え
+SITEMAP_SNAPSHOT = RECON_DIR / "sitemap.html"
+
+
 def category_urls() -> list[str]:
-    xml = fetch(f"{BASE}/sitemap.xml")
-    urls = re.findall(r"<loc>([^<]+/category/[^<]+)</loc>", xml)
+    url = f"{BASE}/sitemap.xml"
+    try:
+        r = session.get(url, timeout=30)
+        body = r.text
+        log.info(
+            "Sitemap: HTTP %d, %s, %d bytes, final URL %s, head=%r",
+            r.status_code, r.headers.get("Content-Type", "?"), len(body), r.url,
+            " ".join(body[:160].split()),
+        )
+    except requests.RequestException as e:
+        log.warning("Sitemap fetch error: %s", type(e).__name__)
+        body = ""
+    urls = CATEGORY_LOC_RE.findall(body)
     log.info("Sitemap categories: %d", len(urls))
-    return urls
+    if not urls and SITEMAP_SNAPSHOT.exists():
+        urls = CATEGORY_LOC_RE.findall(SITEMAP_SNAPSHOT.read_text(encoding="utf-8"))
+        log.warning("Live sitemap had no categories; using saved snapshot (%d categories)", len(urls))
+    return list(dict.fromkeys(urls))
 
 
 def list_endpoint(category_url: str) -> str | None:
@@ -101,6 +120,8 @@ def crawl_category(category_url: str, save_sample: bool = False) -> list[dict]:
     for page_no in range(1, MAX_PAGES_PER_CATEGORY + 1):
         page_url = endpoint if page_no == 1 else f"{endpoint}?pageno={page_no}"
         html = fetch(page_url, xhr=True)
+        if save_sample and page_no == 1:
+            log.info("First category page: %d bytes, head=%r", len(html), " ".join(html[:160].split()))
         if not html:
             break
         if save_sample and page_no == 1:
@@ -151,6 +172,12 @@ def main():
         if i % 25 == 0:
             log.info("Categories %d/%d, catalog=%d items", i, len(urls), len(catalog))
     log.info("Catalog complete: %d unique JAN items", len(catalog))
+    if not catalog:
+        msg = "買取商店の買取価格を1件も取得できなかったため、前回の出力ファイルを残して終了します。"
+        log.error(msg)
+        if os.getenv("GITHUB_ACTIONS") == "true":
+            print(f"::warning title=買取商店の取得に失敗::{msg}", flush=True)
+        return
 
     # 買取カタログを保存
     with (OUT_DIR / "kaitorishouten_catalog_latest.csv").open(

@@ -83,10 +83,12 @@ ENABLED_SHOPS=買取商店,ウィキ,ブックオフ,駿河屋
 | サイト | 必要なもの | 取得先 |
 | --- | --- | --- |
 | Amazon | PA-API 5.0 の AccessKey / SecretKey / PartnerTag | https://affiliate.amazon.co.jp/assoc_credentials/home |
-| 楽天市場 | ApplicationID（アフィリエイトIDは任意） | https://webservice.rakuten.co.jp/ |
+| 楽天市場 | 新形式のアプリID（UUID形式）＋アクセスキー（`pk_`で始まる）。アフィリエイトIDは任意 | https://webservice.rakuten.co.jp/ |
 | Yahoo!ショッピング | Client ID (appid) | https://developer.yahoo.co.jp/webapi/shopping/ |
 
 最低1サイト設定すれば動作する。Amazon は直近のアフィリエイト売上実績がないとAPI利用権限が失われる点に注意。
+
+> ⚠ 楽天APIは2026年に新基盤（`openapi.rakuten.co.jp`）へ移行し、旧基盤（`app.rakuten.co.jp`）は2026年5月に停止した。数字だけの旧アプリIDは使えない（`specify valid applicationId` エラーになる）。手順は「5.2」を参照。
 
 ### 4. ローカル実行
 
@@ -110,10 +112,17 @@ python -m src.main --mode amazon --collect # Amazon販売ルートのみ
 3. 表示された `https://1drv.ms/f/...` をコピー
 
 #### 5.2 API キーを発行する
+
+楽天は2026年の新API基盤で、アプリの登録方法が変わった。旧アプリID（数字のみ）は使えないので、次の手順で作り直す。
+
+1. https://webservice.rakuten.co.jp/ に楽天会員でログインし、アプリを新規登録する
+2. 「許可されたWebサイト」に `sedori-note.pages.dev` を登録する（このツールは Referer にこのURLを入れて呼ぶ。別のURLにする場合は Variables の `RAKUTEN_REFERER` も合わせる）
+3. 表示された **アプリID**（UUID形式）と **アクセスキー**（`pk_`で始まる）を、5.3 の `RAKUTEN_APP_ID` / `RAKUTEN_ACCESS_KEY` に登録する
+
 | サイト | 取得ページ | 必要な値 |
 | --- | --- | --- |
 | Amazon | https://affiliate.amazon.co.jp/assoc_credentials/home | Access Key / Secret Key / Tracking ID（PartnerTag） |
-| 楽天 | https://webservice.rakuten.co.jp/ → 「アプリID発行」 | applicationId（必須） / affiliateId（任意） |
+| 楽天 | https://webservice.rakuten.co.jp/ → アプリを新規登録 | アプリID（UUID形式）／アクセスキー（`pk_`で始まる）／affiliateId（任意） |
 | Yahoo! | https://developer.yahoo.co.jp/ → 「アプリケーションの管理」でクライアントID発行 | Client ID |
 
 #### 5.3 リポジトリに Secrets を登録する
@@ -125,7 +134,8 @@ GitHub 上でリポジトリを開き、**Settings → Secrets and variables →
 | `AMAZON_ACCESS_KEY` | Amazon の Access Key |
 | `AMAZON_SECRET_KEY` | Amazon の Secret Key |
 | `AMAZON_PARTNER_TAG` | Amazon の Tracking ID（例: `yourtag-22`） |
-| `RAKUTEN_APP_ID` | 楽天の applicationId |
+| `RAKUTEN_APP_ID` | 楽天の新しいアプリID（UUID形式） |
+| `RAKUTEN_ACCESS_KEY` | 楽天のアクセスキー（`pk_`で始まる） |
 | `RAKUTEN_AFFILIATE_ID` | 楽天の affiliateId（任意） |
 | `YAHOO_APP_ID` | Yahoo! の Client ID |
 
@@ -145,11 +155,12 @@ GitHub 上でリポジトリを開き、**Settings → Secrets and variables →
 | `COLLECT_KEYWORDS` | 売れ筋10キーワード | JAN収集に使うキーワード（カンマ区切り） |
 | `COLLECT_YAHOO_GENRES` | （空） | Yahoo!のジャンルID（カンマ区切り、任意） |
 | `COLLECT_PAGES` | `3` | キーワード/ジャンルごとの取得ページ数 |
+| `RAKUTEN_REFERER` | `https://sedori-note.pages.dev/` | 楽天APIに送る Referer。楽天アプリの「許可されたWebサイト」に登録したURLと合わせる |
 
 #### 5.5 手動で1回実行して動作確認する
 1. リポジトリの **Actions** タブを開く
 2. 左カラムの **Price Comparison Update** を選択
-3. 右上の **Run workflow** → ブランチを `claude/price-comparison-profit-tool-PQeYK` にして
+3. 右上の **Run workflow** → ブランチはデフォルトのまま
    **limit** に `20` を入れて **Run workflow**（20件だけで通しテスト）
 4. ジョブが緑になったら:
    - **Artifacts** に `profitable-*.zip` が出ている
