@@ -11,9 +11,15 @@ from typing import Optional
 import requests
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from .listing_filter import looks_mismatched
+
 ENDPOINT = "https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch"
 
 log = logging.getLogger(__name__)
+
+
+# 連続失敗がこの回数に達したらクライアントを無効化し、残りのJANを高速スキップする
+CIRCUIT_BREAKER_THRESHOLD = 10
 
 
 class YahooClient:
@@ -22,6 +28,8 @@ class YahooClient:
             raise ValueError("YAHOO_APP_ID is required")
         self.app_id = app_id
         self._last_call = 0.0
+        self._consecutive_failures = 0
+        self.dead = False
 
     def _throttle(self):
         # 1req/sec 程度に抑制
@@ -34,25 +42,40 @@ class YahooClient:
     def _get(self, params: dict) -> dict:
         self._throttle()
         r = requests.get(ENDPOINT, params=params, timeout=15)
-        if r.status_code == 429:
-            raise requests.HTTPError(response=r)
+        if not r.ok:
+            log.warning("Yahoo API HTTP %d: %s", r.status_code, r.text[:200])
         r.raise_for_status()
         return r.json()
 
     def min_price_by_jan(self, jan: str) -> Optional[int]:
+        if self.dead:
+            return None
         params = {
             "appid": self.app_id,
             "jan_code": jan,
             "sort": "+price",
-            "results": 5,
+            "results": 10,
             "in_stock": "true",
         }
         try:
             data = self._get(params)
         except Exception as e:
             log.warning("Yahoo search failed for %s: %s", jan, e)
+            self._consecutive_failures += 1
+            if self._consecutive_failures >= CIRCUIT_BREAKER_THRESHOLD:
+                self.dead = True
+                log.error(
+                    "Yahoo API が %d 回連続で失敗したため以降スキップします。"
+                    "HTTP 429 の場合は1日の利用上限に達しています（翌日に回復）。それ以外は YAHOO_APP_ID を確認してください。",
+                    self._consecutive_failures,
+                )
             return None
 
+        self._consecutive_failures = 0
         hits = data.get("hits", []) or []
-        prices = [h.get("price") for h in hits if h.get("price")]
+        prices = [
+            h.get("price")
+            for h in hits
+            if h.get("price") and h.get("condition") != "used" and not looks_mismatched(h.get("name"))
+        ]
         return min(prices) if prices else None

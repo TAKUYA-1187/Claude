@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../site.config';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const { title, description, pubDate, updatedDate, pr, scripts } = post.data;
+const toc = headings.filter((h) => h.depth === 2);
+const fmt = (d: Date) => d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Tokyo' });
+const url = new URL(`/posts/${post.id}/`, Astro.site).toString();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  author: { '@type': 'Person', name: SITE.author, url: new URL('/about/', Astro.site).toString() },
+  publisher: { '@type': 'Organization', name: SITE.name },
+  mainEntityOfPage: url,
+};
+---
+
+<Base title={title} description={description} type="article" jsonLd={jsonLd} scripts={scripts}>
+  <article>
+    <div class="meta">
+      公開 <time datetime={pubDate.toISOString()}>{fmt(pubDate)}</time>
+      {updatedDate && <> ／ 更新 <time datetime={updatedDate.toISOString()}>{fmt(updatedDate)}</time></>}
+    </div>
+    <h1>{title}</h1>
+    {pr && <p class="pr-notice">本記事はプロモーション（アフィリエイト広告）を含みます。</p>}
+    {toc.length > 2 && (
+      <details class="toc" open>
+        <summary>目次</summary>
+        <ol>
+          {toc.map((h) => (
+            <li><a href={`#${h.slug}`}>{h.text}</a></li>
+          ))}
+        </ol>
+      </details>
+    )}
+    <div class="prose">
+      <Content />
+    </div>
+    <aside class="author-box">
+      <strong>この記事を書いた人：{SITE.author}</strong>
+      {SITE.authorBio}
+      <div><a href="/about/">運営者情報を見る</a></div>
+    </aside>
+  </article>
+</Base>

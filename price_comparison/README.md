@@ -1,25 +1,49 @@
-# 買取せどり 利益商品抽出ツール
+# せどり 利益商品抽出ツール
 
-買取スキャナーの商品マスタ（全データCSV保存）と、Amazon / 楽天市場 / Yahoo!ショッピングの販売価格を突合し、
-**「ECで仕入れて買取店に売ると利益が出る商品」** を自動で抽出する。
+JANコードを軸に Amazon / 楽天市場 / Yahoo!ショッピングの販売価格・買取店の買取価格を突合し、
+**2つのルートで利益商品を自動抽出** する。
 
-GitHub Actions で **毎日 JST 11:00 / 18:00** に更新され、最新結果は `data/output/profitable_latest.csv` にコミットされる。
+| ルート | 流れ | 出力 |
+| --- | --- | --- |
+| **A: 買取ルート** | ECで最安仕入れ → 買取店 (買取スキャナー掲載店) に売却 | `profitable_latest.csv` |
+| **B: Amazon販売ルート** | 楽天/Yahoo!で最安仕入れ → Amazon (FBA) で販売 | `amazon_profitable_latest.csv` |
+
+ルートBは [Amazon料金シミュレーター](https://sellercentral.amazon.co.jp/revcalpublic?lang=ja_JP) と同じ考え方で
+販売手数料 (カテゴリ別 8〜15%)・カテゴリー成約料・FBA配送代行料・消費税を差し引いて利益を概算する
+(`src/amazon_fee_simulator.py`)。
+
+GitHub Actions で **毎日 JST 11:00 / 18:00** に更新され、最新結果は `data/output/` にコミットされる。
 
 ---
 
 ## 全体の流れ
 
 ```
-買取スキャナー ──(全データCSV保存)──> data/input/*.csv
-                                          │
+買取スキャナー ──(全データCSV保存)──> data/input/*.csv ─────────┐
+                                                                  │ JAN母集団
+Yahoo!/楽天ブックス/Amazon API ──(売れ筋JAN収集 --collect)──────┤
+                                                                  ▼
+                          ┌──────────── main.py ─────────────────────┐
+                          │  JAN で各 EC を API 検索し価格を取得      │
+                          │  ルートA: 買取価格 − EC最安値 − 送料      │
+                          │  ルートB: Amazon手取り − 楽天/Yahoo最安値 │
+                          └──────────────┬────────────────────────────┘
                                           ▼
-                          ┌──────────── main.py ────────────┐
-                          │  JAN で各 EC を API 検索         │
-                          │  最安値を選び、利益を計算        │
-                          └──────────────┬───────────────────┘
-                                          ▼
-                   data/output/profitable_latest.{csv,json}
+              data/output/profitable_latest.{csv,json}          (ルートA)
+              data/output/amazon_profitable_latest.{csv,json}   (ルートB)
 ```
+
+### JANコードの収集について
+
+「3サイトの全商品のJANコード」を網羅取得することは各社APIの仕様・利用規約上不可能なため、
+`--collect` 実行時は **売れ筋順のサンプリング** で母集団を作る:
+
+- **Yahoo!ショッピング**: 商品検索API v3 (janCode 付き) をキーワード/ジャンルIDで売れ筋順に取得
+- **楽天**: 楽天市場APIはJANを返さないため、JAN/ISBNを返す楽天ブックス総合検索APIを使用
+- **Amazon**: PA-API SearchItems の EAN (認証情報がある場合のみ)
+
+対象キーワードは `COLLECT_KEYWORDS`、取得量は `COLLECT_PAGES` で調整する。
+収集結果は `data/collected/collected_latest.csv` に保存される。
 
 ---
 
@@ -33,8 +57,13 @@ GitHub Actions で **毎日 JST 11:00 / 18:00** に更新され、最新結果�
 
 OneDrive の「買取スキャナーCSV」フォルダを **「リンクを知っている全員」で共有** し、得られたリンク
 （例: `https://1drv.ms/f/...`) を GitHub Secrets の `ONEDRIVE_SHARE_URL` に登録する。
-GitHub Actions が実行のたびにフォルダ内の `.csv` をすべて取得してくる。
+GitHub Actions が実行のたびにフォルダ内の `.csv` と `.numbers`（Apple Numbers 形式）をすべて取得してくる。
+iPhone / Mac で CSV を開いて Numbers 形式で保存してしまっても、そのまま読める（JAN 列のある表だけを CSV に変換する）。
 ローカル実行の場合は `.env` の `ONEDRIVE_SHARE_URL` に同じURLを入れれば自動取得される。
+
+> 取得の仕組み: OneDrive の公式API（`api.onedrive.com` / Microsoft Graph）は、2024年以降「リンクを知っている全員」の共有でも
+> 匿名では 401 を返す。そのため OneDrive の Web 画面自身が使っている匿名トークン（Badger）で共有フォルダを読んでいる。
+> 非公開の仕組みなので、Microsoft 側の変更で再び読めなくなる可能性がある。その場合は実行画面に警告が出る。
 
 #### 方法B: リポジトリに置く
 
@@ -59,10 +88,12 @@ ENABLED_SHOPS=買取商店,ウィキ,ブックオフ,駿河屋
 | サイト | 必要なもの | 取得先 |
 | --- | --- | --- |
 | Amazon | PA-API 5.0 の AccessKey / SecretKey / PartnerTag | https://affiliate.amazon.co.jp/assoc_credentials/home |
-| 楽天市場 | ApplicationID（アフィリエイトIDは任意） | https://webservice.rakuten.co.jp/ |
+| 楽天市場 | 新形式のアプリID（UUID形式）＋アクセスキー（`pk_`で始まる）。アフィリエイトIDは任意 | https://webservice.rakuten.co.jp/ |
 | Yahoo!ショッピング | Client ID (appid) | https://developer.yahoo.co.jp/webapi/shopping/ |
 
 最低1サイト設定すれば動作する。Amazon は直近のアフィリエイト売上実績がないとAPI利用権限が失われる点に注意。
+
+> ⚠ 楽天APIは2026年に新基盤（`openapi.rakuten.co.jp`）へ移行し、旧基盤（`app.rakuten.co.jp`）は2026年5月に停止した。数字だけの旧アプリIDは使えない（`specify valid applicationId` エラーになる）。手順は「5.2」を参照。
 
 ### 4. ローカル実行
 
@@ -70,11 +101,13 @@ ENABLED_SHOPS=買取商店,ウィキ,ブックオフ,駿河屋
 cd price_comparison
 cp .env.example .env   # キーを埋める
 pip install -r requirements.txt
-python -m src.main --limit 20   # まずは20件で試す
-python -m src.main              # 本番 (全件)
+python -m src.main --limit 20             # まずは20件で試す (両ルート)
+python -m src.main --collect              # EC から売れ筋JANも収集して全件処理
+python -m src.main --mode buyback         # 買取ルートのみ (従来動作)
+python -m src.main --mode amazon --collect # Amazon販売ルートのみ
 ```
 
-結果は `data/output/profitable_YYYYMMDD_HHMM.csv` と `profitable_latest.csv`。
+結果は `data/output/profitable_latest.csv` (買取ルート) と `data/output/amazon_profitable_latest.csv` (Amazon販売ルート)。
 
 ### 5. GitHub Actions で自動化する（ステップバイステップ）
 
@@ -83,11 +116,21 @@ python -m src.main              # 本番 (全件)
 2. リンク設定を **「リンクを知っている全員」** に変更
 3. 表示された `https://1drv.ms/f/...` をコピー
 
+フォルダには買取スキャナーの全データ（`.csv` または `.numbers`）を入れておく。実行結果の `run_summary.json` の
+`sources.onedrive` に取得件数が出る。`ok (0 files)` のときはフォルダに対象ファイルがない。
+
 #### 5.2 API キーを発行する
+
+楽天は2026年の新API基盤で、アプリの登録方法が変わった。旧アプリID（数字のみ）は使えないので、次の手順で作り直す。
+
+1. https://webservice.rakuten.co.jp/ に楽天会員でログインし、アプリを新規登録する
+2. 「許可されたWebサイト」に `sedori-note.pages.dev` を登録する（このツールは Referer にこのURLを入れて呼ぶ。別のURLにする場合は Variables の `RAKUTEN_REFERER` も合わせる）
+3. 表示された **アプリID**（UUID形式）と **アクセスキー**（`pk_`で始まる）を、5.3 の `RAKUTEN_APP_ID` / `RAKUTEN_ACCESS_KEY` に登録する
+
 | サイト | 取得ページ | 必要な値 |
 | --- | --- | --- |
 | Amazon | https://affiliate.amazon.co.jp/assoc_credentials/home | Access Key / Secret Key / Tracking ID（PartnerTag） |
-| 楽天 | https://webservice.rakuten.co.jp/ → 「アプリID発行」 | applicationId（必須） / affiliateId（任意） |
+| 楽天 | https://webservice.rakuten.co.jp/ → アプリを新規登録 | アプリID（UUID形式）／アクセスキー（`pk_`で始まる）／affiliateId（任意） |
 | Yahoo! | https://developer.yahoo.co.jp/ → 「アプリケーションの管理」でクライアントID発行 | Client ID |
 
 #### 5.3 リポジトリに Secrets を登録する
@@ -99,7 +142,8 @@ GitHub 上でリポジトリを開き、**Settings → Secrets and variables →
 | `AMAZON_ACCESS_KEY` | Amazon の Access Key |
 | `AMAZON_SECRET_KEY` | Amazon の Secret Key |
 | `AMAZON_PARTNER_TAG` | Amazon の Tracking ID（例: `yourtag-22`） |
-| `RAKUTEN_APP_ID` | 楽天の applicationId |
+| `RAKUTEN_APP_ID` | 楽天の新しいアプリID（UUID形式） |
+| `RAKUTEN_ACCESS_KEY` | 楽天のアクセスキー（`pk_`で始まる） |
 | `RAKUTEN_AFFILIATE_ID` | 楽天の affiliateId（任意） |
 | `YAHOO_APP_ID` | Yahoo! の Client ID |
 
@@ -112,11 +156,21 @@ GitHub 上でリポジトリを開き、**Settings → Secrets and variables →
 | `SHIPPING_COST` | `600` | 買取店への送料想定（円） |
 | `MIN_PROFIT` | `500` | これ以上の利益だけ抽出（円） |
 | `MIN_PROFIT_RATE` | `0.15` | これ以上の利益率だけ抽出（0〜1） |
+| `AMAZON_REFERRAL_FEE_RATE` | `0.10` | カテゴリ不明時のAmazon販売手数料率 |
+| `AMAZON_FBA_FEE` | `500` | FBA配送代行料の概算（円） |
+| `AMAZON_FEE_TAX_RATE` | `0.10` | Amazon手数料への消費税率 |
+| `AMAZON_INBOUND_COST` | `200` | FBA納品送料の概算（円/個） |
+| `COLLECT_KEYWORDS` | 売れ筋10キーワード | JAN収集に使うキーワード（カンマ区切り） |
+| `COLLECT_YAHOO_GENRES` | （空） | Yahoo!のジャンルID（カンマ区切り、任意） |
+| `COLLECT_PAGES` | `3` | キーワード/ジャンルごとの取得ページ数 |
+| `MAX_PROFIT_RATE` | `0.6` | これを超える利益率は、JAN検索で別商品（コード販売・付属品・中古など）を拾った可能性が高いとみなして除外 |
+| `MAX_PRICE_AGE_DAYS` | `7` | 買取スキャナーの `店名_取得日時` がこの日数より古い買取価格は使わない |
+| `RAKUTEN_REFERER` | `https://sedori-note.pages.dev/` | 楽天APIに送る Referer。楽天アプリの「許可されたWebサイト」に登録したURLと合わせる |
 
 #### 5.5 手動で1回実行して動作確認する
 1. リポジトリの **Actions** タブを開く
 2. 左カラムの **Price Comparison Update** を選択
-3. 右上の **Run workflow** → ブランチを `claude/price-comparison-profit-tool-PQeYK` にして
+3. 右上の **Run workflow** → ブランチはデフォルトのまま
    **limit** に `20` を入れて **Run workflow**（20件だけで通しテスト）
 4. ジョブが緑になったら:
    - **Artifacts** に `profitable-*.zip` が出ている
@@ -137,7 +191,7 @@ GitHub の schedule は UTC かつ高負荷時に数分遅延することがあ�
 
 ## 出力フォーマット
 
-`profitable_latest.csv` の列:
+### ルートA: `profitable_latest.csv` の列
 
 | 列 | 意味 |
 | --- | --- |
@@ -154,18 +208,89 @@ GitHub の schedule は UTC かつ高負荷時に数分遅延することがあ�
 
 並び順は `profit` 降順。
 
+### ルートB: `amazon_profitable_latest.csv` の列
+
+| 列 | 意味 |
+| --- | --- |
+| jan / name / category | JAN・商品名・カテゴリ |
+| amazon_sell_price | Amazonでの想定販売価格（現在の最安値） |
+| purchase_price / purchase_source | 仕入れ価格と仕入れ元 (rakuten / yahoo) |
+| referral_fee | Amazon販売手数料（カテゴリ別 8〜15%） |
+| closing_fee | カテゴリー成約料（本80円 / CD・DVD等140円） |
+| fba_fee | FBA配送代行料の概算 |
+| fee_tax | 手数料への消費税 |
+| inbound_cost | FBA納品送料の概算 |
+| net_proceeds | Amazonからの手取り額 |
+| profit / profit_rate | 利益と利益率（対仕入れ価格） |
+| buyback_price / buyback_shop | 参考: 買取店の買取価格（あれば） |
+
 ---
 
 ## 利益計算モデル
+
+### ルートA（買取ルート）
 
 ```
 profit = buy_price − purchase_price − SHIPPING_COST
 profit_rate = profit / purchase_price
 ```
 
-抽出条件: `profit >= MIN_PROFIT` **かつ** `profit_rate >= MIN_PROFIT_RATE`（両方環境変数で調整可）。
+### ルートB（Amazon販売ルート）
+
+```
+net_proceeds = amazon_sell_price − 販売手数料 − 成約料 − FBA配送代行料 − 手数料消費税
+profit       = net_proceeds − purchase_price − AMAZON_INBOUND_COST
+profit_rate  = profit / purchase_price
+```
+
+抽出条件（両ルート共通）: `profit >= MIN_PROFIT` **かつ** `profit_rate >= MIN_PROFIT_RATE`（両方環境変数で調整可）。
 
 ※ 買取時の送料・決済手数料・税は送料枠に丸めている。厳密な計算が必要な場合は `profit_calculator.py` を拡張する。
+※ ルートBの手数料は概算。FBA配送代行料は商品サイズ・重量で変動するため、**仕入れ前に必ず
+[公式の料金シミュレーター](https://sellercentral.amazon.co.jp/revcalpublic?lang=ja_JP) でJAN/ASINを検索して最終確認すること**。
+また Amazon の想定販売価格は「現在の最安値」であり、カート価格・出品者数・ランキング（回転率）は考慮していない。
+
+---
+
+## ルートC: 買取商店 (kaitorishouten-co.jp) 直接突合
+
+買取スキャナーのCSVが無くても、**買取商店の公式サイトから全カテゴリの買取価格表を
+直接クロール**して Yahoo!ショッピング価格と突合する (`scripts/kaitori_catalog.py`)。
+Price Comparison ワークフローの1ステップとして毎回自動実行される。
+
+```
+sitemap.xml → 全カテゴリの商品リスト (AJAX) → JAN・新品買取額を抽出
+   ↓
+data/collected/collected_latest.csv (Yahoo!価格) と JAN で突合
+   ↓
+data/output/kaitorishouten_catalog_latest.csv     … 買取価格表 全件
+data/output/kaitorishouten_all_latest.csv         … 両価格あり全件 (実質利益順)
+data/output/kaitorishouten_profitable_latest.csv  … 実質利益 >= MIN_PROFIT のみ
+```
+
+### 実質利益 (ポイント還元込み)
+
+Yahoo!ショッピングはPayPayポイント還元があるため、額面の価格差に加えて
+**還元分を実質値引きとして織り込んだ利益**を計算する:
+
+```
+effective_cost   = yahoo_price × (1 − POINT_RATE)
+effective_profit = kaitori_price − effective_cost − SHIPPING_COST
+```
+
+| 列 | 意味 |
+| --- | --- |
+| profit | 額面の利益 (還元を考慮しない) |
+| point_rate | 適用したポイント還元率 (`POINT_RATE`、デフォルト0.05) |
+| effective_cost / effective_profit | 還元込みの実質仕入値・実質利益 |
+| note | 「要確認: 中古/ばら売り/コード」等、仕入れ側の状態が新品完品と食い違う可能性 |
+
+自分の還元率 (LYPプレミアム・日曜日・キャンペーンで10〜15%になる場合も) に合わせて
+リポジトリ変数 `POINT_RATE` を設定すると精度が上がる。
+
+> ⚠ `note` 付きの行は仕入れ側が中古・ばら売り・DLコード等の可能性があるため、
+> 買取条件 (新品未開封・完品) と一致するか必ず商品ページで確認すること。
+> 買取価格は日々変動するため、仕入れ前に買取商店のサイトで最新額を再確認すること。
 
 ---
 
@@ -185,11 +310,14 @@ price_comparison/
 ├── requirements.txt
 ├── data/
 │   ├── input/          # ここに買取スキャナーの CSV を置く
+│   ├── collected/      # --collect で収集した JAN リスト
 │   └── output/         # 結果 (latest は git commit される)
 └── src/
     ├── amazon_client.py
+    ├── amazon_fee_simulator.py  # Amazon手数料の概算 (料金シミュレーター相当)
     ├── config.py
     ├── csv_loader.py
+    ├── jan_collector.py         # EC から売れ筋JANを収集
     ├── main.py
     ├── onedrive_fetcher.py
     ├── profit_calculator.py

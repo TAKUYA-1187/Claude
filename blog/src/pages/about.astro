@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+---
+
+<Base title="運営者情報" description={`${SITE.name}の運営者情報と運営方針です。`}>
+  <article class="prose">
+    <h1>運営者情報</h1>
+    <table>
+      <tbody>
+        <tr><th>サイト名</th><td>{SITE.name}</td></tr>
+        <tr><th>運営者</th><td>{SITE.author}</td></tr>
+        <tr><th>URL</th><td>{SITE.url}</td></tr>
+        <tr><th>お問い合わせ</th><td><a href="/contact/">お問い合わせページ</a></td></tr>
+      </tbody>
+    </table>
+    <h2>運営者について</h2>
+    <p>{SITE.authorBio}</p>
+    <h2>運営方針</h2>
+    <ul>
+      <li>記事の数字は、運営者が実際に使っている計算式・仕入れ基準・運用データを元にしています。</li>
+      <li>価格・手数料・規約は変わるため、記事内に確認日を明記し、変更に気づいた時点で更新します。</li>
+      <li>商品やサービスを紹介する場合は、実際に使った・比較した根拠を示し、広告を含む記事には冒頭でその旨を表示します。</li>
+      <li>利益を保証する表現や、誰でも簡単に稼げるといった表現は使いません。</li>
+    </ul>
+  </article>
+</Base>

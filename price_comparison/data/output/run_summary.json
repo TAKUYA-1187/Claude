@@ -1,0 +1,33 @@
+{
+  "run_at": "2026-09-23T01:58:03",
+  "mode": "both",
+  "candidates": 507,
+  "buyback_candidates": 0,
+  "skipped_unreachable": 0,
+  "price_hits": {
+    "amazon": 0,
+    "rakuten": 0,
+    "yahoo": 438
+  },
+  "sources": {
+    "amazon_api": "未設定 (PA-APIキーなし → Amazon価格・Amazon販売ルート判定不可)",
+    "rakuten_api": "RAKUTEN_ACCESS_KEY が未設定です。楽天のアプリ管理画面に表示されるアクセスキー（pk_で始まる）を GitHub Secrets の RAKUTEN_ACCESS_KEY に設定してください。",
+    "yahoo_api": "停止 (連続失敗でスキップ)",
+    "onedrive": "ok (1 files)",
+    "kaitori_data": {
+      "newest_price_fetched_at": "2026-04-24 21:11",
+      "stale_prices_skipped": 20349
+    },
+    "kaitori_csv": "買取価格つきの商品なし (共有フォルダにファイルがない・データが古い等。onedrive / kaitori_data を参照)"
+  },
+  "routes": {
+    "buyback": {
+      "priced": 0,
+      "profitable": 0
+    },
+    "amazon": {
+      "priced": 0,
+      "profitable": 0
+    }
+  }
+}

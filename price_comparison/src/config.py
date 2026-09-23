@@ -13,6 +13,22 @@ def _parse_shops() -> list[str]:
     return [s.strip() for s in raw.split(",") if s.strip()]
 
 
+# 買取店 (買取商店等) の主力カテゴリに合わせたキーワード:
+# スマホ/Apple製品・ゲーム機本体・家電・お酒は買取価格が付きやすい
+DEFAULT_COLLECT_KEYWORDS = (
+    "iPhone 16 SIMフリー,iPhone 15 SIMフリー,iPad 第11世代,AirPods Pro,"
+    "Apple Watch,Nintendo Switch 2,プレイステーション5,"
+    "ダイソン ドライヤー,ルンバ,ブラウン シェーバー,"
+    "サントリー 山崎,サントリー 響,ポケモンカード"
+)
+
+
+def _parse_csv_env(name: str, default: str = "") -> list[str]:
+    # 空文字で設定されている場合もデフォルトにフォールバックする
+    raw = os.getenv(name) or default
+    return [s.strip() for s in raw.split(",") if s.strip()]
+
+
 @dataclass(frozen=True)
 class Config:
     amazon_access_key: str = os.getenv("AMAZON_ACCESS_KEY", "")
@@ -23,6 +39,9 @@ class Config:
 
     rakuten_app_id: str = os.getenv("RAKUTEN_APP_ID", "")
     rakuten_affiliate_id: str = os.getenv("RAKUTEN_AFFILIATE_ID", "")
+    rakuten_access_key: str = os.getenv("RAKUTEN_ACCESS_KEY", "")
+    # 楽天アプリの「許可されたWebサイト」に登録したURL（新API基盤で Referer/Origin として必須）
+    rakuten_referer: str = os.getenv("RAKUTEN_REFERER", "") or "https://sedori-note.pages.dev/"
 
     yahoo_app_id: str = os.getenv("YAHOO_APP_ID", "")
 
@@ -30,17 +49,31 @@ class Config:
 
     amazon_fee_rate: float = float(os.getenv("AMAZON_REFERRAL_FEE_RATE", "0.10"))
     amazon_fba_fee: float = float(os.getenv("AMAZON_FBA_FEE", "500"))
+    amazon_fee_tax_rate: float = float(os.getenv("AMAZON_FEE_TAX_RATE", "0.10"))
+    amazon_inbound_cost: float = float(os.getenv("AMAZON_INBOUND_COST", "200"))
     rakuten_fee_rate: float = float(os.getenv("RAKUTEN_FEE_RATE", "0.10"))
     yahoo_fee_rate: float = float(os.getenv("YAHOO_FEE_RATE", "0.08"))
     shipping_cost: float = float(os.getenv("SHIPPING_COST", "600"))
 
     min_profit: float = float(os.getenv("MIN_PROFIT", "500"))
     min_profit_rate: float = float(os.getenv("MIN_PROFIT_RATE", "0.15"))
+    # これを超える利益率は、JAN検索で別商品（コード販売・付属品など）を拾った可能性が高いので除外する
+    max_profit_rate: float = float(os.getenv("MAX_PROFIT_RATE", "0.6"))
 
     input_dir: Path = ROOT / os.getenv("INPUT_CSV_DIR", "data/input")
     output_dir: Path = ROOT / os.getenv("OUTPUT_DIR", "data/output")
+    collected_dir: Path = ROOT / os.getenv("COLLECTED_DIR", "data/collected")
 
     enabled_shops: list[str] = field(default_factory=_parse_shops)
+
+    # === JAN 収集 (jan_collector) ===
+    collect_keywords: list[str] = field(
+        default_factory=lambda: _parse_csv_env("COLLECT_KEYWORDS", DEFAULT_COLLECT_KEYWORDS)
+    )
+    collect_yahoo_genres: list[str] = field(
+        default_factory=lambda: _parse_csv_env("COLLECT_YAHOO_GENRES")
+    )
+    collect_pages: int = int(os.getenv("COLLECT_PAGES", "3"))
 
 
 config = Config()

@@ -8,10 +8,13 @@ from __future__ import annotations
 
 import glob
 import logging
+import os
 import re
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Iterable
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -45,18 +48,48 @@ def _pick(df: pd.DataFrame, aliases: Iterable[str]) -> str | None:
     return None
 
 
+PRICE_HINTS = ("買取価格", "価格")
+
+
+def _shop_aliases(shop: str) -> list[str]:
+    """買取スキャナーは店名を略すことがある（例: 買取商店 → 「商店_買取価格」）。"""
+    aliases = [shop]
+    if shop.startswith("買取") and len(shop) > 2:
+        aliases.append(shop[2:])
+    return aliases
+
+
 def _find_shop_columns(columns: list[str], shop_names: list[str]) -> dict[str, list[str]]:
-    """列名から、各店舗名を含む列を抽出する。
-    例: shop_names=['買取商店','ウィキ'] の場合、
-        '買取商店買取価格' / '買取商店_価格' / 'ウィキ' / 'ウィキ価格' 等にマッチ。
+    """各店舗の買取価格列を探す。
+
+    買取スキャナーの全データCSVは「店名_商品名 / 店名_買取価格 / 店名_取得日時 / 店名_メインカテゴリ」
+    の形なので、店名の列のうち「価格」を含む列だけを価格として使う（商品名中の数字や取得日時を
+    価格と誤読しないため）。価格列がなければ、店名そのものの列（例: 「ウィキ」）を使う。
     """
-    result: dict[str, list[str]] = {s: [] for s in shop_names}
-    for col in columns:
-        col_stripped = col.strip()
-        for shop in shop_names:
-            if shop in col_stripped:
-                result[shop].append(col)
+    result: dict[str, list[str]] = {}
+    for shop in shop_names:
+        aliases = _shop_aliases(shop)
+        matching = []
+        for col in columns:
+            c = col.strip()
+            if "_" in c:
+                if c.split("_", 1)[0] in aliases:
+                    matching.append(col)
+            elif any(a in c for a in aliases):
+                matching.append(col)
+        priced = [col for col in matching if any(h in col for h in PRICE_HINTS)]
+        result[shop] = priced or [col for col in matching if col.strip() in aliases]
     return result
+
+
+def _shop_name_column(columns: list[str], shop_cols: list[str]) -> str | None:
+    """「店名_買取価格」に対応する「店名_商品名」列。"""
+    for col in shop_cols:
+        prefix = col.strip().split("_", 1)[0]
+        candidate = f"{prefix}_商品名"
+        if candidate in columns:
+            return candidate
+    return None
 
 
 _NUM_RE = re.compile(r"-?\d+")
@@ -78,6 +111,18 @@ def _to_price(val: object) -> float | None:
     return p if p > 0 else None
 
 
+# 買取価格の取得日時がこれより古い価格は使わない（相場が動いているため）
+MAX_PRICE_AGE_DAYS = float(os.getenv("MAX_PRICE_AGE_DAYS", "7"))
+
+# 直近の load_all の集計（run_summary.json に載せる）
+last_stats: dict = {}
+
+
+def _date_column(price_col: str, columns: list[str]) -> str | None:
+    candidate = f"{price_col.strip().split('_', 1)[0]}_取得日時"
+    return candidate if candidate in columns else None
+
+
 def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
     for enc in ("utf-8-sig", "cp932", "utf-8"):
         try:
@@ -87,6 +132,8 @@ def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
             continue
     else:
         raise RuntimeError(f"Failed to decode CSV: {path}")
+
+    log.info("CSV %s: %d rows, columns=%s", path.name, len(df), list(df.columns))
 
     jan_col = _pick(df, JAN_ALIASES)
     name_col = _pick(df, NAME_ALIASES)
@@ -106,28 +153,47 @@ def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
         "Shop columns: %s",
         ", ".join(f"{s}={cols}" for s, cols in matched.items()),
     )
+    shop_name_cols = {s: _shop_name_column(list(df.columns), cols) for s, cols in matched.items()}
+    price_dates = {}
+    for cols in matched.values():
+        for col in cols:
+            date_col = _date_column(col, list(df.columns))
+            if date_col:
+                price_dates[col] = pd.to_datetime(df[date_col], errors="coerce")
+    cutoff = pd.Timestamp(datetime.now(ZoneInfo("Asia/Tokyo")).replace(tzinfo=None)) - pd.Timedelta(days=MAX_PRICE_AGE_DAYS)
+    newest = max((d.max() for d in price_dates.values() if d.notna().any()), default=None)
+    stale_skipped = 0
 
     products: list[Product] = []
-    for _, row in df.iterrows():
+    for idx, row in df.iterrows():
         jan = str(row[jan_col]).strip()
         if not jan or not jan.isdigit():
             continue
 
         best_shop: str | None = None
         best_price: float = 0.0
+        best_name = ""
         for shop, cols in matched.items():
             for col in cols:
                 p = _to_price(row[col])
-                if p is not None and p > best_price:
+                if p is None:
+                    continue
+                fetched_at = price_dates[col][idx] if col in price_dates else pd.NaT
+                if pd.notna(fetched_at) and fetched_at < cutoff:
+                    stale_skipped += 1
+                    continue
+                if p > best_price:
                     best_price = p
                     best_shop = shop
+                    shop_name_col = shop_name_cols.get(shop)
+                    best_name = str(row[shop_name_col]).strip() if shop_name_col else ""
         if best_shop is None:
             continue  # 対象店舗いずれにも買取価格がない → スキップ
 
         products.append(
             Product(
                 jan=jan,
-                name=str(row[name_col]).strip() if name_col else "",
+                name=str(row[name_col]).strip() if name_col else best_name,
                 buy_price=best_price,
                 buy_shop=best_shop,
                 category=str(row[cat_col]).strip() if cat_col else None,
@@ -135,10 +201,27 @@ def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
             )
         )
     log.info("Loaded %d products from %s (after shop filter)", len(products), path.name)
+    newest_str = newest.strftime("%Y-%m-%d %H:%M") if newest is not None and pd.notna(newest) else "不明"
+    log.info(
+        "Buyback prices: newest fetched at %s, %d price(s) older than %g days skipped",
+        newest_str, stale_skipped, MAX_PRICE_AGE_DAYS,
+    )
+    last_stats.update(
+        {"newest_price_fetched_at": newest_str, "stale_prices_skipped": last_stats.get("stale_prices_skipped", 0) + stale_skipped}
+    )
+    if newest is not None and pd.notna(newest) and newest < cutoff:
+        msg = (
+            f"買取スキャナーのデータが古いため買取価格を使えません（最新の取得日時 {newest_str}）。"
+            "買取スキャナーで全データCSVを保存し直し、OneDrive の共有フォルダに置いてください。"
+        )
+        log.error(msg)
+        if os.getenv("GITHUB_ACTIONS") == "true":
+            print(f"::warning title=買取価格データが古い::{msg}", flush=True)
     return products
 
 
 def load_all(input_dir: Path, shop_names: list[str]) -> list[Product]:
+    last_stats.clear()
     files = sorted(glob.glob(str(input_dir / "*.csv")))
     if not files:
         log.warning("No CSV found in %s", input_dir)
@@ -146,7 +229,12 @@ def load_all(input_dir: Path, shop_names: list[str]) -> list[Product]:
 
     merged: dict[str, Product] = {}
     for f in files:
-        for p in load_csv(Path(f), shop_names):
+        try:
+            loaded = load_csv(Path(f), shop_names)
+        except Exception as e:
+            log.error("CSV %s の読み込みに失敗したためスキップ: %s", Path(f).name, e)
+            continue
+        for p in loaded:
             existing = merged.get(p.jan)
             if existing is None or p.buy_price > existing.buy_price:
                 merged[p.jan] = p
