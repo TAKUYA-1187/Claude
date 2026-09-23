@@ -122,7 +122,7 @@ def _download_file(item: dict, dest_dir: Path, extensions: tuple[str, ...]) -> l
             for chunk in r.iter_content(chunk_size=64 * 1024):
                 if chunk:
                     f.write(chunk)
-    log.info("Downloaded %s (%d bytes)", name, dest.stat().st_size)
+    log.info("Downloaded a .%s file (%d bytes)", _kind(item), dest.stat().st_size)
     return [dest]
 
 
@@ -163,7 +163,9 @@ def _fetch_with(strategy: _Strategy, share_id: str, dest_dir: Path, extensions: 
     return downloaded
 
 
-def fetch_folder(share_url: str, dest_dir: Path, extensions: tuple[str, ...] = (".csv",)) -> list[Path]:
+def fetch_folder(
+    share_url: str, dest_dir: Path, extensions: tuple[str, ...] = (".csv", ".numbers")
+) -> list[Path]:
     """共有フォルダ（または単一ファイル）の CSV を dest_dir に保存する。サブフォルダは3階層までたどる。"""
     dest_dir.mkdir(parents=True, exist_ok=True)
     errors: list[str] = []

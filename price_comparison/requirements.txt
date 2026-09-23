@@ -3,3 +3,4 @@ python-dotenv>=1.0.0
 pandas>=2.1.0
 python-amazon-paapi>=5.0.1
 tenacity>=8.2.3
+numbers-parser>=4.10

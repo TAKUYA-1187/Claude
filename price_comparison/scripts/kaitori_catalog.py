@@ -37,6 +37,8 @@ THROTTLE_SEC = float(os.getenv("CRAWL_THROTTLE", "1.2"))
 SHIPPING_COST = int(os.getenv("SHIPPING_COST", "600"))
 MIN_PROFIT = int(os.getenv("MIN_PROFIT", "1"))
 MAX_PAGES_PER_CATEGORY = int(os.getenv("MAX_PAGES_PER_CATEGORY", "20"))
+# 先頭からこの数のカテゴリがすべて0件なら、構造変更とみなして巡回をやめる（無駄なアクセスを避ける）
+EMPTY_CATEGORY_ABORT = int(os.getenv("EMPTY_CATEGORY_ABORT", "10"))
 # Yahoo!ショッピングのポイント還元率 (PayPayポイント等の実質値引き分)。
 # 通常〜5%、LYPプレミアム/日曜日/キャンペーン適用で10〜15%程度まで上がる
 POINT_RATE = float(os.getenv("POINT_RATE", "0.05"))
@@ -71,6 +73,9 @@ def fetch(url: str, xhr: bool = False) -> str:
         if not r.ok:
             log.warning("GET %s -> HTTP %d", url, r.status_code)
             return ""
+        # charset 指定がないと requests は ISO-8859-1 とみなして日本語が化けるため推定し直す
+        if not r.encoding or r.encoding.lower() == "iso-8859-1":
+            r.encoding = r.apparent_encoding or "utf-8"
         return r.text
     except Exception as e:
         log.warning("GET %s error: %s", url, e)
@@ -84,17 +89,13 @@ SITEMAP_SNAPSHOT = RECON_DIR / "sitemap.html"
 
 def category_urls() -> list[str]:
     url = f"{BASE}/sitemap.xml"
-    try:
-        r = session.get(url, timeout=30)
-        body = r.text
-        log.info(
-            "Sitemap: HTTP %d, %s, %d bytes, final URL %s, head=%r",
-            r.status_code, r.headers.get("Content-Type", "?"), len(body), r.url,
-            " ".join(body[:160].split()),
-        )
-    except requests.RequestException as e:
-        log.warning("Sitemap fetch error: %s", type(e).__name__)
-        body = ""
+    body = fetch(url)
+    log.info("Sitemap: %d bytes, head=%r", len(body), " ".join(body[:120].split()))
+    if "<sitemapindex" in body:
+        # サイトマップが索引形式に変わった場合（2026-09 時点）は子サイトマップをたどる
+        children = re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", body)
+        log.info("Sitemap index with %d child sitemaps", len(children))
+        body = "\n".join(fetch(child) for child in children)
     urls = CATEGORY_LOC_RE.findall(body)
     log.info("Sitemap categories: %d", len(urls))
     if not urls and SITEMAP_SNAPSHOT.exists():
@@ -160,6 +161,12 @@ def main():
     catalog: dict[str, dict] = {}  # jan -> {name, price, category_url}
     urls = category_urls()
     for i, url in enumerate(urls, 1):
+        if i > EMPTY_CATEGORY_ABORT and not catalog:
+            log.error(
+                "最初の%dカテゴリで商品が1件も取れないため巡回を中止します（サイト構造の変更が疑われます）",
+                EMPTY_CATEGORY_ABORT,
+            )
+            break
         rows = crawl_category(url, save_sample=(i == 1))
         for r in rows:
             existing = catalog.get(r["jan"])

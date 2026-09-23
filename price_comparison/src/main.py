@@ -28,6 +28,7 @@ from typing import Optional
 from .config import config
 from .csv_loader import load_all
 from .jan_collector import collect_all, save_collected
+from .numbers_convert import convert_all as convert_numbers
 from .onedrive_fetcher import fetch_folder
 from .profit_calculator import (
     PriceRow,
@@ -192,12 +193,21 @@ def run(
         try:
             fetched = fetch_folder(config.onedrive_share_url, config.input_dir)
             onedrive_status = f"ok ({len(fetched)} files)"
-            log.info("Fetched %d CSV file(s) from OneDrive", len(fetched))
+            log.info("Fetched %d file(s) from OneDrive", len(fetched))
+            if not fetched:
+                _annotate(
+                    "warning",
+                    "OneDrive 共有フォルダに CSV / Numbers ファイルがありません",
+                    "買取スキャナーの全データCSVを共有フォルダに保存してください。",
+                )
         except Exception as e:
             onedrive_status = f"失敗: {e}"
             log.error("OneDrive fetch failed: %s", e)
             _annotate("warning", "OneDrive から買取スキャナーCSVを取得できません", str(e))
             # CSV がなくても EC 収集分と買取商店カタログ照合は続行する
+    converted = convert_numbers(config.input_dir)
+    if converted:
+        log.info("Converted %d table(s) from Numbers files to CSV", len(converted))
     log.info("Mode: %s / Enabled shops: %s", mode, config.enabled_shops)
 
     amazon, rakuten, yahoo = build_clients()

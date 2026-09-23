@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 data/input/*.csv
+data/input/*.numbers
 data/output/profitable_2*.csv
 data/output/profitable_2*.json
 data/output/amazon_profitable_2*.csv
