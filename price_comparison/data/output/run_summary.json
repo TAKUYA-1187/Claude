@@ -1,12 +1,13 @@
 {
-  "run_at": "2026-09-23T01:40:27",
+  "run_at": "2026-09-23T01:47:51",
   "mode": "both",
-  "candidates": 12492,
-  "buyback_candidates": 12090,
+  "candidates": 16123,
+  "buyback_candidates": 15764,
+  "skipped_unreachable": 146,
   "price_hits": {
     "amazon": 0,
     "rakuten": 0,
-    "yahoo": 526
+    "yahoo": 507
   },
   "sources": {
     "amazon_api": "未設定 (PA-APIキーなし → Amazon価格・Amazon販売ルート判定不可)",
@@ -16,8 +17,8 @@
   },
   "routes": {
     "buyback": {
-      "priced": 124,
-      "profitable": 5
+      "priced": 148,
+      "profitable": 7
     },
     "amazon": {
       "priced": 0,
