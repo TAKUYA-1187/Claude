@@ -300,7 +300,7 @@ def run(
         summary["sources"]["kaitori_data"] = dict(csv_loader_stats)
     if not summary["buyback_candidates"]:
         summary["sources"]["kaitori_csv"] = (
-            "なし (OneDrive共有リンクが解決できないか、CSV未配置 → 買取ルート判定不可)"
+            "買取価格つきの商品なし (共有フォルダにファイルがない・データが古い等。onedrive / kaitori_data を参照)"
         )
 
     if mode in ("buyback", "both"):
