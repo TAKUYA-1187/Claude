@@ -8,10 +8,13 @@ from __future__ import annotations
 
 import glob
 import logging
+import os
 import re
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Iterable
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -108,6 +111,18 @@ def _to_price(val: object) -> float | None:
     return p if p > 0 else None
 
 
+# 買取価格の取得日時がこれより古い価格は使わない（相場が動いているため）
+MAX_PRICE_AGE_DAYS = float(os.getenv("MAX_PRICE_AGE_DAYS", "7"))
+
+# 直近の load_all の集計（run_summary.json に載せる）
+last_stats: dict = {}
+
+
+def _date_column(price_col: str, columns: list[str]) -> str | None:
+    candidate = f"{price_col.strip().split('_', 1)[0]}_取得日時"
+    return candidate if candidate in columns else None
+
+
 def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
     for enc in ("utf-8-sig", "cp932", "utf-8"):
         try:
@@ -139,9 +154,18 @@ def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
         ", ".join(f"{s}={cols}" for s, cols in matched.items()),
     )
     shop_name_cols = {s: _shop_name_column(list(df.columns), cols) for s, cols in matched.items()}
+    price_dates = {}
+    for cols in matched.values():
+        for col in cols:
+            date_col = _date_column(col, list(df.columns))
+            if date_col:
+                price_dates[col] = pd.to_datetime(df[date_col], errors="coerce")
+    cutoff = pd.Timestamp(datetime.now(ZoneInfo("Asia/Tokyo")).replace(tzinfo=None)) - pd.Timedelta(days=MAX_PRICE_AGE_DAYS)
+    newest = max((d.max() for d in price_dates.values() if d.notna().any()), default=None)
+    stale_skipped = 0
 
     products: list[Product] = []
-    for _, row in df.iterrows():
+    for idx, row in df.iterrows():
         jan = str(row[jan_col]).strip()
         if not jan or not jan.isdigit():
             continue
@@ -152,7 +176,13 @@ def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
         for shop, cols in matched.items():
             for col in cols:
                 p = _to_price(row[col])
-                if p is not None and p > best_price:
+                if p is None:
+                    continue
+                fetched_at = price_dates[col][idx] if col in price_dates else pd.NaT
+                if pd.notna(fetched_at) and fetched_at < cutoff:
+                    stale_skipped += 1
+                    continue
+                if p > best_price:
                     best_price = p
                     best_shop = shop
                     shop_name_col = shop_name_cols.get(shop)
@@ -171,10 +201,27 @@ def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
             )
         )
     log.info("Loaded %d products from %s (after shop filter)", len(products), path.name)
+    newest_str = newest.strftime("%Y-%m-%d %H:%M") if newest is not None and pd.notna(newest) else "不明"
+    log.info(
+        "Buyback prices: newest fetched at %s, %d price(s) older than %g days skipped",
+        newest_str, stale_skipped, MAX_PRICE_AGE_DAYS,
+    )
+    last_stats.update(
+        {"newest_price_fetched_at": newest_str, "stale_prices_skipped": last_stats.get("stale_prices_skipped", 0) + stale_skipped}
+    )
+    if newest is not None and pd.notna(newest) and newest < cutoff:
+        msg = (
+            f"買取スキャナーのデータが古いため買取価格を使えません（最新の取得日時 {newest_str}）。"
+            "買取スキャナーで全データCSVを保存し直し、OneDrive の共有フォルダに置いてください。"
+        )
+        log.error(msg)
+        if os.getenv("GITHUB_ACTIONS") == "true":
+            print(f"::warning title=買取価格データが古い::{msg}", flush=True)
     return products
 
 
 def load_all(input_dir: Path, shop_names: list[str]) -> list[Product]:
+    last_stats.clear()
     files = sorted(glob.glob(str(input_dir / "*.csv")))
     if not files:
         log.warning("No CSV found in %s", input_dir)

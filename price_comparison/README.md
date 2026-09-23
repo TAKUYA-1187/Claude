@@ -163,6 +163,8 @@ GitHub 上でリポジトリを開き、**Settings → Secrets and variables →
 | `COLLECT_KEYWORDS` | 売れ筋10キーワード | JAN収集に使うキーワード（カンマ区切り） |
 | `COLLECT_YAHOO_GENRES` | （空） | Yahoo!のジャンルID（カンマ区切り、任意） |
 | `COLLECT_PAGES` | `3` | キーワード/ジャンルごとの取得ページ数 |
+| `MAX_PROFIT_RATE` | `0.6` | これを超える利益率は、JAN検索で別商品（コード販売・付属品・中古など）を拾った可能性が高いとみなして除外 |
+| `MAX_PRICE_AGE_DAYS` | `7` | 買取スキャナーの `店名_取得日時` がこの日数より古い買取価格は使わない |
 | `RAKUTEN_REFERER` | `https://sedori-note.pages.dev/` | 楽天APIに送る Referer。楽天アプリの「許可されたWebサイト」に登録したURLと合わせる |
 
 #### 5.5 手動で1回実行して動作確認する

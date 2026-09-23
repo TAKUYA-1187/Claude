@@ -73,5 +73,9 @@ class YahooClient:
 
         self._consecutive_failures = 0
         hits = data.get("hits", []) or []
-        prices = [h.get("price") for h in hits if h.get("price") and not looks_mismatched(h.get("name"))]
+        prices = [
+            h.get("price")
+            for h in hits
+            if h.get("price") and h.get("condition") != "used" and not looks_mismatched(h.get("name"))
+        ]
         return min(prices) if prices else None

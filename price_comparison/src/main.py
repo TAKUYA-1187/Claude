@@ -27,6 +27,7 @@ from pathlib import Path
 from typing import Optional
 
 from .config import config
+from .csv_loader import last_stats as csv_loader_stats
 from .csv_loader import load_all
 from .jan_collector import collect_all, save_collected
 from .numbers_convert import convert_all as convert_numbers
@@ -295,6 +296,8 @@ def run(
         "routes": {},
     }
     summary["sources"]["onedrive"] = onedrive_status
+    if csv_loader_stats:
+        summary["sources"]["kaitori_data"] = dict(csv_loader_stats)
     if not summary["buyback_candidates"]:
         summary["sources"]["kaitori_csv"] = (
             "なし (OneDrive共有リンクが解決できないか、CSV未配置 → 買取ルート判定不可)"

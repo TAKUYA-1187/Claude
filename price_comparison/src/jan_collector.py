@@ -24,6 +24,7 @@ from typing import Optional
 import requests
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from .listing_filter import looks_mismatched
 from .rakuten_client import MIN_INTERVAL_SEC as RAKUTEN_MIN_INTERVAL_SEC
 from .rakuten_client import auth_headers as rakuten_auth_headers
 from .rakuten_client import auth_params as rakuten_auth_params
@@ -107,11 +108,13 @@ class YahooJanCollector:
                     gc = h.get("genreCategory") or {}
                     if isinstance(gc, dict):
                         genre = str(gc.get("name") or "")
+                    # 中古・コード販売などは JAN の母集団には入れるが、仕入れ値としては使わない
+                    usable = h.get("condition") != "used" and not looks_mismatched(h.get("name"))
                     items.append(
                         CollectedItem(
                             jan=jan,
                             name=str(h.get("name") or ""),
-                            price=h.get("price") or None,
+                            price=(h.get("price") or None) if usable else None,
                             source="yahoo",
                             category=genre,
                         )
