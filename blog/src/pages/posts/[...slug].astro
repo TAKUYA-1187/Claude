@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { SITE } from '../../site.config';
+import { hasActiveAffiliate } from '../../lib/affiliate-links';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -10,7 +11,9 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
-const { title, description, pubDate, updatedDate, pr, scripts } = post.data;
+const { title, description, pubDate, updatedDate, scripts } = post.data;
+// 提携済みのアフィリエイトリンクを含む記事は、frontmatter の指定がなくてもPR表記を出す
+const pr = post.data.pr || hasActiveAffiliate(post.body ?? '');
 const toc = headings.filter((h) => h.depth === 2);
 const fmt = (d: Date) => d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Tokyo' });
 const url = new URL(`/posts/${post.id}/`, Astro.site).toString();
