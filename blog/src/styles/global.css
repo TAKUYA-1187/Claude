@@ -1,0 +1,343 @@
+:root {
+  --bg: #fbfaf7;
+  --surface: #ffffff;
+  --text: #1f2328;
+  --muted: #5b636e;
+  --line: #e4e1da;
+  --accent: #0f6b52;
+  --accent-soft: #e6f2ee;
+  --warn: #9a3b12;
+  --warn-soft: #fbeee6;
+  --radius: 10px;
+  --measure: 720px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171a;
+    --surface: #1d2024;
+    --text: #e8e6e1;
+    --muted: #a3a9b1;
+    --line: #30343a;
+    --accent: #5cc6a4;
+    --accent-soft: #1d3029;
+    --warn: #f0a47a;
+    --warn-soft: #36251c;
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Meiryo, sans-serif;
+  font-size: 17px;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.wrap {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* header / footer */
+.site-header {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.site-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.site-nav {
+  display: flex;
+  gap: 16px;
+  font-size: 0.9rem;
+}
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.site-footer {
+  margin-top: 64px;
+  border-top: 1px solid var(--line);
+  padding: 24px 0 40px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-bottom: 8px;
+}
+.site-footer a {
+  color: var(--muted);
+}
+
+/* post list */
+.hero {
+  padding: 32px 0 8px;
+}
+.hero h1 {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+.hero p {
+  color: var(--muted);
+  margin: 0;
+}
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  display: grid;
+  gap: 14px;
+}
+.post-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.post-card a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+.post-card p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+.meta {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+/* article */
+article {
+  padding-top: 28px;
+}
+article h1 {
+  font-size: 1.55rem;
+  line-height: 1.5;
+  margin: 8px 0 12px;
+}
+.prose h2 {
+  font-size: 1.3rem;
+  line-height: 1.5;
+  margin: 2.4em 0 0.8em;
+  padding: 0.4em 0.6em;
+  border-left: 5px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 6px 6px 0;
+}
+.prose h3 {
+  font-size: 1.1rem;
+  margin: 2em 0 0.6em;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  display: block;
+  overflow-x: auto;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--line);
+  padding: 7px 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+.prose th {
+  background: var(--accent-soft);
+}
+.prose code {
+  background: var(--accent-soft);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.prose blockquote {
+  margin: 1.4em 0;
+  padding: 10px 16px;
+  border-left: 4px solid var(--line);
+  color: var(--muted);
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 2.4em 0;
+}
+
+.pr-notice {
+  background: var(--warn-soft);
+  color: var(--warn);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  margin: 12px 0;
+}
+
+.summary-box {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin: 1.6em 0;
+}
+.summary-box > :first-child {
+  margin-top: 0;
+}
+.summary-box > :last-child {
+  margin-bottom: 0;
+}
+
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  margin: 20px 0;
+  font-size: 0.92rem;
+}
+.toc summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+.toc ol {
+  margin: 8px 0 0;
+  padding-left: 1.3em;
+}
+
+.author-box {
+  margin-top: 48px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  font-size: 0.92rem;
+}
+.author-box strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* calculator */
+.calc {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin: 1.6em 0;
+}
+.calc h4 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+}
+.calc label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.calc input {
+  width: 100%;
+  margin-top: 2px;
+  font: inherit;
+  font-size: 16px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+}
+.calc-result {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+.calc-result .verdict {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.calc-result.ng {
+  background: var(--warn-soft);
+}
+.calc details {
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+.calc details summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+.calc details .calc-grid {
+  margin-top: 8px;
+}
+.calc-note {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 8px 0 0;
+}
+
+@media (max-width: 480px) {
+  .prose table {
+    font-size: 0.82rem;
+  }
+  .prose th,
+  .prose td {
+    white-space: normal;
+    padding: 6px;
+  }
+}
