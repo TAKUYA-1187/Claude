@@ -17,6 +17,10 @@ ENDPOINT = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20220601"
 log = logging.getLogger(__name__)
 
 
+# 連続失敗がこの回数に達したらクライアントを無効化し、残りのJANを高速スキップする
+CIRCUIT_BREAKER_THRESHOLD = 10
+
+
 class RakutenClient:
     def __init__(self, app_id: str, affiliate_id: str | None = None):
         if not app_id:
@@ -24,6 +28,8 @@ class RakutenClient:
         self.app_id = app_id
         self.affiliate_id = affiliate_id
         self._last_call = 0.0
+        self._consecutive_failures = 0
+        self.dead = False
 
     def _throttle(self):
         # 楽天は 1秒1リクエストが推奨上限
@@ -36,14 +42,15 @@ class RakutenClient:
     def _get(self, params: dict) -> dict:
         self._throttle()
         r = requests.get(ENDPOINT, params=params, timeout=15)
-        if r.status_code == 429:
-            log.warning("Rakuten rate limited, retrying")
-            raise requests.HTTPError(response=r)
+        if not r.ok:
+            log.warning("Rakuten API HTTP %d: %s", r.status_code, r.text[:200])
         r.raise_for_status()
         return r.json()
 
     def min_price_by_jan(self, jan: str) -> Optional[int]:
         """JANコードで検索し、最安価格を返す。"""
+        if self.dead:
+            return None
         params = {
             "applicationId": self.app_id,
             "keyword": jan,
@@ -58,8 +65,17 @@ class RakutenClient:
             data = self._get(params)
         except Exception as e:
             log.warning("Rakuten search failed for %s: %s", jan, e)
+            self._consecutive_failures += 1
+            if self._consecutive_failures >= CIRCUIT_BREAKER_THRESHOLD:
+                self.dead = True
+                log.error(
+                    "Rakuten API が %d 回連続で失敗したため以降スキップします。"
+                    "RAKUTEN_APP_ID が有効か https://webservice.rakuten.co.jp/ で確認してください。",
+                    self._consecutive_failures,
+                )
             return None
 
+        self._consecutive_failures = 0
         items = data.get("Items", [])
         prices = [item.get("itemPrice") for item in items if item.get("itemPrice")]
         return min(prices) if prices else None

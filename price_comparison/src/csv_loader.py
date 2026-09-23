@@ -88,6 +88,8 @@ def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
     else:
         raise RuntimeError(f"Failed to decode CSV: {path}")
 
+    log.info("CSV %s: %d rows, columns=%s", path.name, len(df), list(df.columns))
+
     jan_col = _pick(df, JAN_ALIASES)
     name_col = _pick(df, NAME_ALIASES)
     cat_col = _pick(df, CATEGORY_ALIASES)
@@ -146,7 +148,12 @@ def load_all(input_dir: Path, shop_names: list[str]) -> list[Product]:
 
     merged: dict[str, Product] = {}
     for f in files:
-        for p in load_csv(Path(f), shop_names):
+        try:
+            loaded = load_csv(Path(f), shop_names)
+        except Exception as e:
+            log.error("CSV %s の読み込みに失敗したためスキップ: %s", Path(f).name, e)
+            continue
+        for p in loaded:
             existing = merged.get(p.jan)
             if existing is None or p.buy_price > existing.buy_price:
                 merged[p.jan] = p

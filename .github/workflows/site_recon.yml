@@ -1,0 +1,40 @@
+name: Site Recon
+
+on:
+  push:
+    branches:
+      - claude/resale-profit-analysis-nhbnaz
+    paths:
+      - "price_comparison/scripts/site_recon.py"
+      - ".github/workflows/site_recon.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  recon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run recon
+        run: python price_comparison/scripts/site_recon.py
+
+      - name: Commit findings
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f price_comparison/data/recon/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: site recon findings [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi
