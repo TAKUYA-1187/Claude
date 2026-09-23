@@ -4,8 +4,7 @@ export const SITE = {
   tagline: '買取せどり・物販を、数字と仕組みで回すための実務メモ',
   description:
     '買取せどり・EC物販を実践する運営者が、利益計算・仕入れ基準・自動化・経理まで、実際に使っている数字と仕組みをまとめるブログです。',
-  // WordPress へ同期するビルドでは、環境変数 SITE_URL にそのサイトのURLを入れる（wordpress/README.md）
-  url: process.env.SITE_URL || 'https://sedori-note.pages.dev',
+  url: 'https://sedori-note.pages.dev',
   author: 'TAKUYA',
   authorBio:
     'EC（Amazon・楽天・Yahoo!）で仕入れて買取店へ売る「買取せどり」を実践中。価格比較と利益判定を自動化するツールを自作し、経費・確定申告の処理まで仕組み化しています。このブログでは、その実務で使っている数字と手順をそのまま公開します。',

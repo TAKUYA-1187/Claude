@@ -15,8 +15,6 @@ const posts = defineCollection({
     draft: z.boolean().default(false),
     // public/ 配下の追加スクリプト（例: 計算ツール）
     scripts: z.array(z.string()).default([]),
-    // 本文の最後に案内する自分の note 商品（src/notes.ts の ID）
-    note: z.string().optional(),
   }),
 });
 

@@ -3,7 +3,6 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { SITE } from '../../site.config';
 import { hasActiveAffiliate } from '../../lib/affiliate-links';
-import { noteProduct } from '../../notes';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -15,7 +14,6 @@ const { Content, headings } = await render(post);
 const { title, description, pubDate, updatedDate, scripts } = post.data;
 // 提携済みのアフィリエイトリンクを含む記事は、frontmatter の指定がなくてもPR表記を出す
 const pr = post.data.pr || hasActiveAffiliate(post.body ?? '');
-const note = noteProduct(post.data.note);
 const toc = headings.filter((h) => h.depth === 2);
 const fmt = (d: Date) => d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Tokyo' });
 const url = new URL(`/posts/${post.id}/`, Astro.site).toString();
@@ -51,24 +49,8 @@ const jsonLd = {
         </ol>
       </details>
     )}
-    {/* post-body の中身が WordPress に送る本文（wordpress/build_wp.py が切り出す。PR表記はそちらで先頭に付け直す） */}
-    <div class="post-body">
-      <div class="prose">
-        <Content />
-      </div>
-      {note && (
-        <aside class="note-cta">
-          <p class="note-cta-label">運営者が note で配布しているシート</p>
-          <p class="note-cta-title">{note.title}</p>
-          <p>{note.pitch}</p>
-          <ul>
-            {note.includes.map((item) => <li>{item}</li>)}
-          </ul>
-          <a class="note-cta-button" href={note.url}>
-            note で中身を見る{note.price > 0 ? `（${note.price.toLocaleString('ja-JP')}円）` : '（無料）'}
-          </a>
-        </aside>
-      )}
+    <div class="prose">
+      <Content />
     </div>
     <aside class="author-box">
       <strong>この記事を書いた人：{SITE.author}</strong>
