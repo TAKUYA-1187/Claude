@@ -57,6 +57,8 @@ class Config:
 
     min_profit: float = float(os.getenv("MIN_PROFIT", "500"))
     min_profit_rate: float = float(os.getenv("MIN_PROFIT_RATE", "0.15"))
+    # これを超える利益率は、JAN検索で別商品（コード販売・付属品など）を拾った可能性が高いので除外する
+    max_profit_rate: float = float(os.getenv("MAX_PROFIT_RATE", "0.6"))
 
     input_dir: Path = ROOT / os.getenv("INPUT_CSV_DIR", "data/input")
     output_dir: Path = ROOT / os.getenv("OUTPUT_DIR", "data/output")

@@ -17,6 +17,7 @@ from typing import Optional
 
 from .amazon_fee_simulator import estimate_fees
 from .config import Config
+from .listing_filter import looks_mismatched
 
 
 @dataclass
@@ -108,7 +109,11 @@ def compute(row: PriceRow, cfg: Config) -> Optional[ProfitRow]:
 
 
 def is_profitable(r: ProfitRow, cfg: Config) -> bool:
-    return r.profit >= cfg.min_profit and r.profit_rate >= cfg.min_profit_rate
+    return (
+        r.profit >= cfg.min_profit
+        and cfg.min_profit_rate <= r.profit_rate <= cfg.max_profit_rate
+        and not looks_mismatched(r.name)
+    )
 
 
 @dataclass

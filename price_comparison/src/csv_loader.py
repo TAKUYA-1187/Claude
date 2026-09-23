@@ -45,18 +45,48 @@ def _pick(df: pd.DataFrame, aliases: Iterable[str]) -> str | None:
     return None
 
 
+PRICE_HINTS = ("買取価格", "価格")
+
+
+def _shop_aliases(shop: str) -> list[str]:
+    """買取スキャナーは店名を略すことがある（例: 買取商店 → 「商店_買取価格」）。"""
+    aliases = [shop]
+    if shop.startswith("買取") and len(shop) > 2:
+        aliases.append(shop[2:])
+    return aliases
+
+
 def _find_shop_columns(columns: list[str], shop_names: list[str]) -> dict[str, list[str]]:
-    """列名から、各店舗名を含む列を抽出する。
-    例: shop_names=['買取商店','ウィキ'] の場合、
-        '買取商店買取価格' / '買取商店_価格' / 'ウィキ' / 'ウィキ価格' 等にマッチ。
+    """各店舗の買取価格列を探す。
+
+    買取スキャナーの全データCSVは「店名_商品名 / 店名_買取価格 / 店名_取得日時 / 店名_メインカテゴリ」
+    の形なので、店名の列のうち「価格」を含む列だけを価格として使う（商品名中の数字や取得日時を
+    価格と誤読しないため）。価格列がなければ、店名そのものの列（例: 「ウィキ」）を使う。
     """
-    result: dict[str, list[str]] = {s: [] for s in shop_names}
-    for col in columns:
-        col_stripped = col.strip()
-        for shop in shop_names:
-            if shop in col_stripped:
-                result[shop].append(col)
+    result: dict[str, list[str]] = {}
+    for shop in shop_names:
+        aliases = _shop_aliases(shop)
+        matching = []
+        for col in columns:
+            c = col.strip()
+            if "_" in c:
+                if c.split("_", 1)[0] in aliases:
+                    matching.append(col)
+            elif any(a in c for a in aliases):
+                matching.append(col)
+        priced = [col for col in matching if any(h in col for h in PRICE_HINTS)]
+        result[shop] = priced or [col for col in matching if col.strip() in aliases]
     return result
+
+
+def _shop_name_column(columns: list[str], shop_cols: list[str]) -> str | None:
+    """「店名_買取価格」に対応する「店名_商品名」列。"""
+    for col in shop_cols:
+        prefix = col.strip().split("_", 1)[0]
+        candidate = f"{prefix}_商品名"
+        if candidate in columns:
+            return candidate
+    return None
 
 
 _NUM_RE = re.compile(r"-?\d+")
@@ -108,6 +138,7 @@ def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
         "Shop columns: %s",
         ", ".join(f"{s}={cols}" for s, cols in matched.items()),
     )
+    shop_name_cols = {s: _shop_name_column(list(df.columns), cols) for s, cols in matched.items()}
 
     products: list[Product] = []
     for _, row in df.iterrows():
@@ -117,19 +148,22 @@ def load_csv(path: Path, shop_names: list[str]) -> list[Product]:
 
         best_shop: str | None = None
         best_price: float = 0.0
+        best_name = ""
         for shop, cols in matched.items():
             for col in cols:
                 p = _to_price(row[col])
                 if p is not None and p > best_price:
                     best_price = p
                     best_shop = shop
+                    shop_name_col = shop_name_cols.get(shop)
+                    best_name = str(row[shop_name_col]).strip() if shop_name_col else ""
         if best_shop is None:
             continue  # 対象店舗いずれにも買取価格がない → スキップ
 
         products.append(
             Product(
                 jan=jan,
-                name=str(row[name_col]).strip() if name_col else "",
+                name=str(row[name_col]).strip() if name_col else best_name,
                 buy_price=best_price,
                 buy_shop=best_shop,
                 category=str(row[cat_col]).strip() if cat_col else None,

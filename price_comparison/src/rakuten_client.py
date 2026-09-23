@@ -17,6 +17,8 @@ from urllib.parse import urlsplit
 import requests
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from .listing_filter import looks_mismatched
+
 OPENAPI_BASE = "https://openapi.rakuten.co.jp"
 ENDPOINT = f"{OPENAPI_BASE}/ichibams/api/IchibaItem/Search/20260701"
 MIN_INTERVAL_SEC = 1.5
@@ -94,7 +96,7 @@ class RakutenClient:
         params = {
             "keyword": jan,
             "sort": "+itemPrice",
-            "hits": 5,
+            "hits": 10,
             "format": "json",
             "formatVersion": 2,
         }
@@ -117,5 +119,9 @@ class RakutenClient:
 
         self._consecutive_failures = 0
         items = data.get("Items", [])
-        prices = [item.get("itemPrice") for item in items if item.get("itemPrice")]
+        prices = [
+            item.get("itemPrice")
+            for item in items
+            if item.get("itemPrice") and not looks_mismatched(item.get("itemName"))
+        ]
         return min(prices) if prices else None

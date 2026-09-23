@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import dataclasses
 import json
 import logging
 import os
@@ -31,7 +32,9 @@ from .jan_collector import collect_all, save_collected
 from .numbers_convert import convert_all as convert_numbers
 from .onedrive_fetcher import fetch_folder
 from .profit_calculator import (
+    AmazonProfitRow,
     PriceRow,
+    ProfitRow,
     compute,
     compute_amazon,
     is_amazon_profitable,
@@ -147,25 +150,25 @@ def build_candidates(collect: bool, amazon_client) -> list[Candidate]:
     return list(candidates.values())
 
 
-def write_outputs(rows: list, prefix: str, ts: str):
-    if not rows:
-        log.info("No profitable products for '%s' this run", prefix)
-        return
+def write_outputs(rows: list, prefix: str, ts: str, row_type: type):
+    """結果を書き出す。0件でも *_latest は空にして上書きし、前回の結果が残り続けないようにする。"""
     config.output_dir.mkdir(parents=True, exist_ok=True)
-    fieldnames = list(rows[0].as_dict().keys())
-    for target in (
-        config.output_dir / f"{prefix}_{ts}.csv",
-        config.output_dir / f"{prefix}_latest.csv",
-    ):
+    fieldnames = [f.name for f in dataclasses.fields(row_type)]
+    if not rows:
+        log.info("No profitable products for '%s' this run (latest files cleared)", prefix)
+    targets = [config.output_dir / f"{prefix}_latest.csv"]
+    if rows:
+        targets.insert(0, config.output_dir / f"{prefix}_{ts}.csv")
+    for target in targets:
         with target.open("w", newline="", encoding="utf-8-sig") as f:
             w = csv.DictWriter(f, fieldnames=fieldnames)
             w.writeheader()
             for r in rows:
                 w.writerow(r.as_dict())
-    for target in (
-        config.output_dir / f"{prefix}_{ts}.json",
-        config.output_dir / f"{prefix}_latest.json",
-    ):
+    json_targets = [config.output_dir / f"{prefix}_latest.json"]
+    if rows:
+        json_targets.insert(0, config.output_dir / f"{prefix}_{ts}.json")
+    for target in json_targets:
         target.write_text(
             json.dumps([r.as_dict() for r in rows], ensure_ascii=False, indent=2),
             encoding="utf-8",
@@ -220,14 +223,22 @@ def run(
             config.input_dir,
         )
         sys.exit(1)
+    # API の1日上限で途中停止しても価値の高い商品を先に見られるよう、買取価格の高い順に照会する
+    candidates.sort(key=lambda c: c.buy_price or 0, reverse=True)
     if limit:
         candidates = candidates[:limit]
     log.info("Candidates: %d JAN codes", len(candidates))
+    # 買取価格が「最低利益＋送料」に届かない商品は、仕入れ値0円でも基準を満たさないので照会しない
+    unreachable_below = config.min_profit + config.shipping_cost
+    skipped_unreachable = 0
 
     buyback_rows: list = []
     amazon_rows: list = []
     price_hits = {"amazon": 0, "rakuten": 0, "yahoo": 0}
     for i, c in enumerate(candidates, 1):
+        if c.buy_price and c.buy_price < unreachable_below and amazon is None and not c.seed_prices:
+            skipped_unreachable += 1
+            continue
         # 収集時に価格が取れているソースは再照会せず流用する (APIクォータ節約)。
         # 収集は売れ筋順のため最安値より高い場合があるが、仕入れ値としては保守的な近似になる
         amz = c.seed_prices.get("amazon") or (amazon.min_price_by_jan(c.jan) if amazon else None)
@@ -271,6 +282,7 @@ def run(
         "mode": mode,
         "candidates": len(candidates),
         "buyback_candidates": sum(1 for c in candidates if c.buy_price),
+        "skipped_unreachable": skipped_unreachable,
         "price_hits": price_hits,
         "sources": {
             "amazon_api": "ok" if amazon else "未設定 (PA-APIキーなし → Amazon価格・Amazon販売ルート判定不可)",
@@ -295,7 +307,7 @@ def run(
             reverse=True,
         )
         log.info("[買取ルート] priced: %d, profitable: %d", len(buyback_rows), len(profitable))
-        write_outputs(profitable, "profitable", ts)
+        write_outputs(profitable, "profitable", ts, ProfitRow)
         summary["routes"]["buyback"] = {"priced": len(buyback_rows), "profitable": len(profitable)}
 
     if mode in ("amazon", "both"):
@@ -307,7 +319,7 @@ def run(
         log.info(
             "[Amazon販売ルート] priced: %d, profitable: %d", len(amazon_rows), len(profitable)
         )
-        write_outputs(profitable, "amazon_profitable", ts)
+        write_outputs(profitable, "amazon_profitable", ts, AmazonProfitRow)
         summary["routes"]["amazon"] = {"priced": len(amazon_rows), "profitable": len(profitable)}
 
     config.output_dir.mkdir(parents=True, exist_ok=True)

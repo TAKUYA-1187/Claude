@@ -11,6 +11,8 @@ from typing import Optional
 import requests
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from .listing_filter import looks_mismatched
+
 ENDPOINT = "https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch"
 
 log = logging.getLogger(__name__)
@@ -52,7 +54,7 @@ class YahooClient:
             "appid": self.app_id,
             "jan_code": jan,
             "sort": "+price",
-            "results": 5,
+            "results": 10,
             "in_stock": "true",
         }
         try:
@@ -64,12 +66,12 @@ class YahooClient:
                 self.dead = True
                 log.error(
                     "Yahoo API が %d 回連続で失敗したため以降スキップします。"
-                    "YAHOO_APP_ID が有効か確認してください。",
+                    "HTTP 429 の場合は1日の利用上限に達しています（翌日に回復）。それ以外は YAHOO_APP_ID を確認してください。",
                     self._consecutive_failures,
                 )
             return None
 
         self._consecutive_failures = 0
         hits = data.get("hits", []) or []
-        prices = [h.get("price") for h in hits if h.get("price")]
+        prices = [h.get("price") for h in hits if h.get("price") and not looks_mismatched(h.get("name"))]
         return min(prices) if prices else None

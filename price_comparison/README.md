@@ -57,8 +57,13 @@ Yahoo!/楽天ブックス/Amazon API ──(売れ筋JAN収集 --collect)──�
 
 OneDrive の「買取スキャナーCSV」フォルダを **「リンクを知っている全員」で共有** し、得られたリンク
 （例: `https://1drv.ms/f/...`) を GitHub Secrets の `ONEDRIVE_SHARE_URL` に登録する。
-GitHub Actions が実行のたびにフォルダ内の `.csv` をすべて取得してくる。
+GitHub Actions が実行のたびにフォルダ内の `.csv` と `.numbers`（Apple Numbers 形式）をすべて取得してくる。
+iPhone / Mac で CSV を開いて Numbers 形式で保存してしまっても、そのまま読める（JAN 列のある表だけを CSV に変換する）。
 ローカル実行の場合は `.env` の `ONEDRIVE_SHARE_URL` に同じURLを入れれば自動取得される。
+
+> 取得の仕組み: OneDrive の公式API（`api.onedrive.com` / Microsoft Graph）は、2024年以降「リンクを知っている全員」の共有でも
+> 匿名では 401 を返す。そのため OneDrive の Web 画面自身が使っている匿名トークン（Badger）で共有フォルダを読んでいる。
+> 非公開の仕組みなので、Microsoft 側の変更で再び読めなくなる可能性がある。その場合は実行画面に警告が出る。
 
 #### 方法B: リポジトリに置く
 
@@ -110,6 +115,9 @@ python -m src.main --mode amazon --collect # Amazon販売ルートのみ
 1. OneDrive で「買取スキャナーCSV」フォルダを右クリック → **共有**
 2. リンク設定を **「リンクを知っている全員」** に変更
 3. 表示された `https://1drv.ms/f/...` をコピー
+
+フォルダには買取スキャナーの全データ（`.csv` または `.numbers`）を入れておく。実行結果の `run_summary.json` の
+`sources.onedrive` に取得件数が出る。`ok (0 files)` のときはフォルダに対象ファイルがない。
 
 #### 5.2 API キーを発行する
 
