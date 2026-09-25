@@ -15,6 +15,7 @@ from openpyxl import load_workbook
 NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 RNS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 PNS = "http://schemas.openxmlformats.org/package/2006/relationships"
+ERRORS = {"#DIV/0!", "#N/A", "#NAME?", "#NULL!", "#NUM!", "#REF!", "#VALUE!"}
 
 
 def sheet_paths(zf):
@@ -57,6 +58,9 @@ def main(styled, computed, out):
                         if "t" in c.attrib:
                             del c.attrib["t"]
                         v.text = repr(float(val)) if isinstance(val, float) else str(val)
+                    elif isinstance(val, str) and val in ERRORS:
+                        c.set("t", "e")
+                        v.text = val
                     else:
                         c.set("t", "str")
                         v.text = str(val)
