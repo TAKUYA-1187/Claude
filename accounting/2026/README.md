@@ -76,7 +76,8 @@ accounting/2026/
 ├── reconciliation-2026-06.md        # 徴収状況突合レポート（2026年7月5日時点）
 └── chatgpt/
     ├── 2026-04-06_budget-review.md      # 予算資料ChatGPTチェック記録
-    └── 2026-04-06_settlement-review.md  # 決算資料ChatGPTチェック記録
+    ├── 2026-04-06_settlement-review.md  # 決算資料ChatGPTチェック記録
+    └── 2026-10-03_oct-reconciliation.md # 10月分通帳照合・資料更新・現金実査の記録
 ```
 
 ---
