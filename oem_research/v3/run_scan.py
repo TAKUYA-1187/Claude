@@ -8,6 +8,7 @@ import scrape as S
 from keywords import KEYWORDS
 
 out = sys.argv[1]
+print("JP address set:", S.session_init(), flush=True)
 res = {}
 if os.path.exists(out):
     res = json.load(open(out, encoding="utf-8"))

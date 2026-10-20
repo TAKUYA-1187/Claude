@@ -17,6 +17,34 @@ DELAY = float(os.environ.get("OEM_DELAY", "2.5"))
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/128.0 Safari/537.36")
 _last = [0.0]
+JAR = os.path.join(CACHE, "amazon_cookies.txt")
+
+
+def session_init(zipcode="100-0001"):
+    """Give the Amazon session a Japanese delivery address (otherwise items that
+    cannot ship abroad are hidden) and JPY prices."""
+    os.makedirs(CACHE, exist_ok=True)
+    base = ["curl", "-s", "--compressed", "--max-time", "30", "-A", UA, "-c", JAR, "-b", JAR,
+            "-H", "Accept-Language: ja-JP,ja;q=0.9"]
+    s = subprocess.run(base + ["https://www.amazon.co.jp/s?k=%E6%A3%9A"], capture_output=True).stdout.decode("utf-8", "ignore")
+    m = re.search(r"ajaxHeaders&quot;:\{&quot;anti-csrftoken-a2z&quot;:&quot;([^&]+)", s)
+    t1 = m.group(1) if m else ""
+    a = subprocess.run(base + ["-H", f"anti-csrftoken-a2z: {t1}",
+                               "https://www.amazon.co.jp/portal-migration/hz/glow/get-rendered-address-selections"
+                               "?deviceType=desktop&pageType=Search&storeContext=NoStoreName&actionSource=desktop-modal"],
+                       capture_output=True).stdout.decode("utf-8", "ignore")
+    m = re.search(r'CSRF_TOKEN : "([^"]+)"', a)
+    t2 = m.group(1) if m else ""
+    body = ('{"locationType":"LOCATION_INPUT","zipCode":"%s","deviceType":"web","storeContext":"generic",'
+            '"pageType":"Search","actionSource":"glow"}' % zipcode)
+    r = subprocess.run(base + ["-H", "Content-Type: application/json", "-H", f"anti-csrftoken-a2z: {t2}",
+                               "-H", "X-Requested-With: XMLHttpRequest", "-X", "POST", "--data", body,
+                               "https://www.amazon.co.jp/portal-migration/hz/glow/address-change?actionSource=glow"],
+                       capture_output=True).stdout.decode("utf-8", "ignore")
+    lines = [ln for ln in open(JAR, encoding="utf-8").read().splitlines() if "i18n-prefs" not in ln]
+    lines.append(".amazon.co.jp\tTRUE\t/\tFALSE\t2082787201\ti18n-prefs\tJPY")
+    open(JAR, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+    return '"countryCode":"JP"' in r
 
 
 def _fetch(url, path, accept_lang="ja-JP,ja;q=0.9", tries=3):
@@ -29,9 +57,9 @@ def _fetch(url, path, accept_lang="ja-JP,ja;q=0.9", tries=3):
         if wait > 0:
             time.sleep(wait)
         _last[0] = time.time()
+        cookies = ["-b", JAR, "-c", JAR] if "amazon" in url and os.path.exists(JAR) else []
         r = subprocess.run(["curl", "-s", "-L", "--compressed", "--max-time", "30", "-A", UA,
-                            "-H", f"Accept-Language: {accept_lang}",
-                            "-b", "i18n-prefs=JPY; lc-acbjp=ja_JP", url],
+                            "-H", f"Accept-Language: {accept_lang}"] + cookies + [url],
                            capture_output=True)
         body = r.stdout.decode("utf-8", errors="ignore")
         blocked = ("captcha" in body.lower() and "amazon" in url and "s-search-result" not in body
