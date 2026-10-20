@@ -1,3 +1,4 @@
 __pycache__/
 *.pyc
 oem_research/v2/*.xlsx
+oem_research/v3/cache/
