@@ -10,9 +10,10 @@ import sys
 import analyze as A
 import scrape as S
 
-MIN_YEN, PRICE_LO, PRICE_HI, TOPN = 2_000_000, 6000, 45000, 5
+MIN_YEN, PRICE_LO, PRICE_HI, TOPN = 8_000_000, 6000, 45000, 4
 
 scan_path, out = sys.argv[1], sys.argv[2]
+S.session_init()
 scan = json.load(open(scan_path, encoding="utf-8"))
 try:
     det = json.load(open(out, encoding="utf-8"))
