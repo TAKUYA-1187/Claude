@@ -26,7 +26,7 @@ def score_all(scan, det):
         top5 = [x for x in m["top10"][:5] if x["bought"] >= 50] or m["top10"][:3]
         band = st.median([x["price"] for x in top5]) if top5 else m["price_med"]
         hist = [d["hist"] for d in details if d.get("hist")]
-        neg = st.mean([(h.get(1, 0) + h.get(2, 0)) for h in hist]) if hist else None
+        neg = st.mean([(h.get("1", h.get(1, 0)) + h.get("2", h.get(2, 0))) for h in hist]) if hist else None
         r = dict(m)
         r.update(band=band, pk=pk, neg=neg, details=details)
         if pk and m["cost"]:
