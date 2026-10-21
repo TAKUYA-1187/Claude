@@ -44,9 +44,14 @@ def fee(price, cls):
     return price * (0.154 if cls == "A" else 0.104)
 
 
-def econ(price, cny, L, W, H, kg, cls, va=500, ad=0.05, fr=FR_SCALE):
+def econ(price, cny, L, W, H, kg, cls, va=500, ad=0.05, fr=FR_SCALE, n=None):
+    """n forces the number of parcels (longest side split into n boxes); None = first that fits."""
     cbm = L * W * H / 1e6
-    dom, n = ship(L, W, H, kg)
+    if n:
+        one = ship_one(L / n + W + H, kg / n)
+        dom = one * n if one else None
+    else:
+        dom, n = ship(L, W, H, kg)
     if dom is None:
         return None
     J = cny * FX
