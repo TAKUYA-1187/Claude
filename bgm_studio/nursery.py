@@ -64,6 +64,7 @@ NURSERY: dict[str, dict] = {
              "C/1 C/1 G/1 G/1 A/1 A/1 G/2 F/1 F/1 E/1 E/1 D/1 D/1 C/2"),
     "n02_mary_lamb_lullaby": dict(
         title="Mary Had a Little Lamb", bar=4, bpm=72, visual="morning_meadow",
+        bright=4.0,     # 旋律が E4-G4 だけと低く、1kHz 付近が薄くなるぶんを補う
         tune="E/1 D/1 C/1 D/1 E/1 E/1 E/2 D/1 D/1 D/2 E/1 G/1 G/2 "
              "E/1 D/1 C/1 D/1 E/1 E/1 E/1 E/1 D/1 D/1 E/1 D/1 C/4"),
     "n03_row_your_boat_lullaby": dict(
@@ -334,7 +335,8 @@ def build_nursery(spec, seconds: float):
         # 童謡ピアノは暖かく、でも籠らせない。飽和も入れず素直に。
         # 旋律を中音域に収めたぶん 1-4kHz が薄くなる (QA で「こもり」を実測)
         # ので、900Hz 以上を棚で +3.5dB 持ち上げて空気を戻す。
-        x = dsp.shelf(x, 900.0, 3.5, kind="high")
+        x = dsp.shelf(x, 900.0, 3.5 + float(song.get("bright", 0.0)),
+                      kind="high")
         x = dsp.lowpass(x, 15000.0, order=2)
         return dsp.highpass(x, 40.0, order=2)
 

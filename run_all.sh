@@ -10,6 +10,11 @@
 set -u
 cd "$(dirname "$0")"
 
+# Python は文字列の hash() を実行ごとにランダム化する。SampleBank が音色の乱数の種に
+# hash() を使っているため、固定しないと同じコマンドでも音が少しずつ変わり、
+# 「QA に通った状態」を再現できない。必ず固定する。
+export PYTHONHASHSEED=0
+
 PY=$(command -v python3 || command -v python)
 if [ -z "$PY" ]; then
   echo "Python が見つかりません。https://www.python.org/downloads/ からインストールしてください。"
@@ -49,6 +54,15 @@ echo "▶ [3/5] 長時間版を 2 本作ります (8時間の睡眠BGMと10時�
 "$PY" render_bgm.py --tracks 11_sleep_city_8h --repeats 20 \
   || { echo "エラーで止まりました。"; exit 1; }
 "$PY" render_bgm.py --tracks 27_rain_black_screen --repeats 25 \
+  || { echo "エラーで止まりました。"; exit 1; }
+echo ""
+
+echo "▶ [3.5/5] 童謡・子守唄 10 本 (各33分・ノイズ無し・A=432Hz) を作ります"
+"$PY" render_bgm.py --seconds 660 --repeats 3 --tracks \
+  n01_twinkle_lullaby n02_mary_lamb_lullaby n03_row_your_boat_lullaby \
+  n04_frere_jacques_lullaby n05_london_bridge_lullaby n06_old_macdonald_lullaby \
+  n07_au_clair_lullaby n08_silent_night_lullaby n09_ode_to_joy_lullaby \
+  n10_jingle_bells_lullaby \
   || { echo "エラーで止まりました。"; exit 1; }
 echo ""
 
