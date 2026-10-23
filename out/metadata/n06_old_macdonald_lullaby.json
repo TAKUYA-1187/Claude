@@ -1,0 +1,32 @@
+{
+  "slug": "n06_old_macdonald_lullaby",
+  "title": "Old MacDonald Had a Farm 🚜 Quiet Piano Version for Naptime",
+  "description": "Old MacDonald, with the animals asleep. 0:33:00.\n\nThe famous farm song is much calmer than it sounds when sung loudly. Played\nslowly on piano and music box with a soft harp sweeping underneath, it works\nas an easy, familiar background for winding down — the E-I-E-I-O turn is a\nnatural place to breathe.\n\nNo noise layer, no effects, nothing sudden. A = 432 Hz.\nTraditional song; sound and arrangement made for this channel.\n",
+  "tags": [
+    "old macdonald",
+    "nursery rhymes",
+    "baby music",
+    "naptime",
+    "kids music",
+    "soft piano",
+    "lullaby"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "ゆかいな牧場（子守唄ピアノ）",
+    "use_case": "sleep",
+    "bpm": 88.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 660.0,
+    "total_seconds": 1980.0,
+    "total_hhmmss": "0:33:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -155.43,
+    "visual": "seaside_cafe"
+  }
+}

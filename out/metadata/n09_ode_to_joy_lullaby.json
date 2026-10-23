@@ -1,0 +1,32 @@
+{
+  "slug": "n09_ode_to_joy_lullaby",
+  "title": "Ode to Joy ✨ Music Box & Piano Lullaby Version",
+  "description": "Beethoven's \"Ode to Joy\" as a music box lullaby. 0:33:00.\n\nNormally a tune of triumph, it turns out to be very gentle when you slow it\ndown and play it on celesta and soft piano: the melody barely moves, and the\nsound stays warm. The arrangement shifts every few minutes between a music box,\na piano with soft chords, and a harp, so the half hour never feels like a loop.\n\nNo hiss, no ambience, no added noise. A = 432 Hz, a softer reference pitch.\nBeethoven's melody is in the public domain; this performance is synthesised for\nthis channel.\n",
+  "tags": [
+    "ode to joy",
+    "beethoven lullaby",
+    "classical for babies",
+    "baby music",
+    "music box",
+    "piano lullaby",
+    "classical sleep"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "歓喜の歌（子守唄ピアノ）",
+    "use_case": "sleep",
+    "bpm": 84.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 660.0,
+    "total_seconds": 1980.0,
+    "total_hhmmss": "0:33:00",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -147.96,
+    "visual": "golden_light"
+  }
+}
