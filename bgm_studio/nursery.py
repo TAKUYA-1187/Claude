@@ -331,8 +331,10 @@ def build_nursery(spec, seconds: float):
                             width=0.55, seed=spec.seed)
 
     def master(x):
-        # 童謡ピアノは暖かく、でも籠らせない。飽和も入れず素直に
-        x = dsp.tilt_eq(x, pivot=900.0, gain_db=-1.5)
+        # 童謡ピアノは暖かく、でも籠らせない。飽和も入れず素直に。
+        # 旋律を中音域に収めたぶん 1-4kHz が薄くなる (QA で「こもり」を実測)
+        # ので、900Hz 以上を棚で +3.5dB 持ち上げて空気を戻す。
+        x = dsp.shelf(x, 900.0, 3.5, kind="high")
         x = dsp.lowpass(x, 15000.0, order=2)
         return dsp.highpass(x, 40.0, order=2)
 
