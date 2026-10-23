@@ -269,7 +269,10 @@ def audio_qa(slug: str) -> dict:
         issues.append(f"潰しすぎ crest {r['crest_db']:.1f}dB")
     if r["mono_corr"] < MONO_CORR_MIN:
         issues.append(f"位相 {r['mono_corr']:.2f}")
-    if r["repeat_corr"] > TILE_REPEAT_MAX:
+    # 童謡 (n01-n10) は同じ旋律を繰り返すのが商品そのもの。環境音ノイズは
+    # 敷いていないので、ノイズタイルの反復検査は意味を持たず除外する。
+    is_nursery = len(slug) > 3 and slug[0] == "n" and slug[1:3].isdigit()
+    if r["repeat_corr"] > TILE_REPEAT_MAX and not is_nursery:
         issues.append(f"★{r['repeat_lag_s']:.1f}s周期でノイズが反復"
                       f"({r['repeat_corr']:.2f})")
     for lo, (mn, mx) in BAND_WINDOW.items():

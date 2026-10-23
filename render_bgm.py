@@ -328,6 +328,21 @@ def _thumb_lines(spec: TR.TrackSpec, total_seconds: float) -> list[str]:
         "26_dark_academia_library": ["DARK ACADEMIA", f"{hours} HOURS · STUDY"],
         "27_rain_black_screen": ["RAIN · BLACK SCREEN", f"{hours} HOURS"],
     }
+    nursery = {
+        "n01_twinkle_lullaby": ["TWINKLE TWINKLE", "LULLABY PIANO"],
+        "n02_mary_lamb_lullaby": ["MARY HAD A", "LITTLE LAMB"],
+        "n03_row_your_boat_lullaby": ["ROW ROW ROW", "YOUR BOAT"],
+        "n04_frere_jacques_lullaby": ["FRÈRE JACQUES", "LULLABY"],
+        "n05_london_bridge_lullaby": ["LONDON BRIDGE", "LULLABY"],
+        "n06_old_macdonald_lullaby": ["OLD MACDONALD", "SOFT PIANO"],
+        "n07_au_clair_lullaby": ["AU CLAIR", "DE LA LUNE"],
+        "n08_silent_night_lullaby": ["SILENT NIGHT", "PIANO LULLABY"],
+        "n09_ode_to_joy_lullaby": ["ODE TO JOY", "MUSIC BOX"],
+        "n10_jingle_bells_lullaby": ["JINGLE BELLS", "SLOW LULLABY"],
+    }
+    if spec.slug in nursery:
+        mins = int(round(total_seconds / 60.0))
+        return [nursery[spec.slug][0], f"{mins} MIN · {nursery[spec.slug][1]}"]
     return head.get(spec.slug, [spec.title_en.upper(), f"{hours} HOURS"])
 
 

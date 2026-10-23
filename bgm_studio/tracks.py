@@ -1263,6 +1263,12 @@ def build_rain_black(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
 # トラック一覧
 # ──────────────────────────────────────────────────────────────
 
+def build_nursery_proxy(spec, seconds):
+    """童謡シリーズ。実体は nursery.py (循環 import を避けるため遅延 import)"""
+    from .nursery import build_nursery
+    return build_nursery(spec, seconds)
+
+
 TRACKS: list[TrackSpec] = [
     TrackSpec(
         slug="01_lofi_rainy_study",
@@ -1634,6 +1640,126 @@ TRACKS: list[TrackSpec] = [
                       "rain sounds 10 hours", "dark screen rain",
                       "sleep sounds", "rain no music", "insomnia",
                       "rain all night"],
+        ),
+    ),
+    TrackSpec(
+        slug="n01_twinkle_lullaby",
+        title_en="Twinkle Twinkle Little Star",
+        genre_ja="きらきら星（子守唄ピアノ）",
+        use_case="sleep", bpm=66.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="starry_night", seed=5037, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Twinkle Twinkle Little Star 🌙 Gentle Piano Lullaby for Babies & Sleep",
+            keywords=['twinkle twinkle little star', 'lullaby', 'baby sleep music', 'nursery rhymes', 'piano lullaby', 'baby lullaby', 'sleep music for babies'],
+        ),
+    ),
+    TrackSpec(
+        slug="n02_mary_lamb_lullaby",
+        title_en="Mary Had a Little Lamb",
+        genre_ja="メリーさんのひつじ（子守唄ピアノ）",
+        use_case="sleep", bpm=72.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="morning_meadow", seed=5074, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Mary Had a Little Lamb 🐑 Soft Piano & Music Box Lullaby",
+            keywords=['mary had a little lamb', 'nursery rhymes', 'lullaby', 'baby music', 'piano for kids', 'baby sleep', 'toddler music'],
+        ),
+    ),
+    TrackSpec(
+        slug="n03_row_your_boat_lullaby",
+        title_en="Row, Row, Row Your Boat",
+        genre_ja="こげこげボート（子守唄ピアノ）",
+        use_case="sleep", bpm=84.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="zen_water", seed=5111, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Row Row Row Your Boat 🚣 Calm Lullaby Piano for Little Ones",
+            keywords=['row row row your boat', 'nursery rhymes', 'lullaby', 'baby music', 'calm piano', 'bedtime music', 'kids music'],
+        ),
+    ),
+    TrackSpec(
+        slug="n04_frere_jacques_lullaby",
+        title_en="Frère Jacques",
+        genre_ja="フレール・ジャック（子守唄ピアノ）",
+        use_case="sleep", bpm=76.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="minimal_gradient", seed=5148, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Frère Jacques 🔔 Soft Lullaby Piano for Bedtime",
+            keywords=['frere jacques', 'brother john', 'nursery rhymes', 'lullaby', 'bedtime music', 'baby sleep', 'piano lullaby'],
+        ),
+    ),
+    TrackSpec(
+        slug="n05_london_bridge_lullaby",
+        title_en="London Bridge Is Falling Down",
+        genre_ja="ロンドン橋（子守唄ピアノ）",
+        use_case="sleep", bpm=80.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="night_skyline", seed=5185, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="London Bridge Is Falling Down 🌉 Gentle Music Box & Piano Lullaby",
+            keywords=['london bridge is falling down', 'nursery rhymes', 'lullaby', 'music box', 'baby music', 'bedtime', 'piano lullaby'],
+        ),
+    ),
+    TrackSpec(
+        slug="n06_old_macdonald_lullaby",
+        title_en="Old MacDonald Had a Farm",
+        genre_ja="ゆかいな牧場（子守唄ピアノ）",
+        use_case="sleep", bpm=88.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="seaside_cafe", seed=5222, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Old MacDonald Had a Farm 🚜 Quiet Piano Version for Naptime",
+            keywords=['old macdonald', 'nursery rhymes', 'baby music', 'naptime', 'kids music', 'soft piano', 'lullaby'],
+        ),
+    ),
+    TrackSpec(
+        slug="n07_au_clair_lullaby",
+        title_en="Au clair de la lune",
+        genre_ja="月の光に（子守唄ピアノ）",
+        use_case="sleep", bpm=70.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="moonlit_ocean", seed=5259, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Au clair de la lune 🌕 French Lullaby Piano by Moonlight",
+            keywords=['au clair de la lune', 'french lullaby', 'moonlight', 'baby sleep', 'piano lullaby', 'nursery rhymes', 'sleep music'],
+        ),
+    ),
+    TrackSpec(
+        slug="n08_silent_night_lullaby",
+        title_en="Silent Night",
+        genre_ja="きよしこの夜（子守唄ピアノ）",
+        use_case="sleep", bpm=60.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window", seed=5296, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Silent Night 🎄 Soft Piano Lullaby for a Peaceful Christmas Night",
+            keywords=['silent night', 'christmas lullaby', 'christmas piano', 'baby lullaby', 'sleep music', 'peaceful christmas', 'holiday lullaby'],
+        ),
+    ),
+    TrackSpec(
+        slug="n09_ode_to_joy_lullaby",
+        title_en="Ode to Joy",
+        genre_ja="歓喜の歌（子守唄ピアノ）",
+        use_case="sleep", bpm=84.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="golden_light", seed=5333, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Ode to Joy ✨ Music Box & Piano Lullaby Version",
+            keywords=['ode to joy', 'beethoven lullaby', 'classical for babies', 'baby music', 'music box', 'piano lullaby', 'classical sleep'],
+        ),
+    ),
+    TrackSpec(
+        slug="n10_jingle_bells_lullaby",
+        title_en="Jingle Bells",
+        genre_ja="ジングルベル（子守唄ピアノ）",
+        use_case="sleep", bpm=92.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="snow_cabin", seed=5370, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Jingle Bells ❄️ Slow Lullaby Piano for Cozy Winter Nights",
+            keywords=['jingle bells', 'christmas lullaby', 'winter lullaby', 'slow christmas piano', 'baby sleep', 'bedtime', 'holiday piano'],
         ),
     ),
 ]
