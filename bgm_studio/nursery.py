@@ -201,18 +201,20 @@ def harmonize(tune: list, bar_beats: int) -> list[tuple[float, float, str]]:
 # ──────────────────────────────────────────────────────────────
 
 ARRANGEMENTS = [
-    dict(lead="celesta", shift=12, acc="pad", tempo=1.00, trans=0, lg=0.36, ag=0.10),
+    dict(lead="celesta", shift=0, acc="pad", tempo=1.00, trans=0, lg=0.40, ag=0.10),
     dict(lead="piano", shift=0, acc="alberti", tempo=1.00, trans=0, lg=0.40, ag=0.20),
     dict(lead="piano", shift=0, acc="pad", tempo=0.96, trans=0, lg=0.38, ag=0.12, double=12),
     dict(lead="harp", shift=0, acc="block", tempo=1.00, trans=0, lg=0.38, ag=0.18),
-    dict(lead="celesta", shift=12, acc="alberti", tempo=0.95, trans=0, lg=0.32, ag=0.20),
+    dict(lead="celesta", shift=0, acc="alberti", tempo=0.95, trans=0, lg=0.38, ag=0.22),
     dict(lead="piano", shift=0, acc="harp", tempo=0.88, trans=0, lg=0.40, ag=0.15),
-    dict(lead="celesta", shift=12, acc="pad", tempo=1.00, trans=2, lg=0.34, ag=0.10),
+    dict(lead="celesta", shift=0, acc="pad", tempo=1.00, trans=2, lg=0.38, ag=0.10),
     dict(lead="harp", shift=0, acc="pad", tempo=0.94, trans=0, lg=0.40, ag=0.12),
     dict(lead="piano", shift=0, acc="block", tempo=1.00, trans=0, lg=0.40, ag=0.16, echo=12),
     dict(lead="piano", shift=0, acc="alberti", tempo=0.94, trans=-2, lg=0.40, ag=0.20),
-    dict(lead="celesta", shift=12, acc="harp", tempo=1.02, trans=0, lg=0.32, ag=0.14),
-    dict(lead="celesta", shift=12, acc="none", tempo=0.84, trans=0, lg=0.38, ag=0.0),
+    dict(lead="celesta", shift=0, acc="harp", tempo=1.02, trans=0, lg=0.36, ag=0.15),
+    # 伴奏なしにすると高音域だけが残り、500Hz 帯が突き出る (QA で実測)。
+    # 極薄のパッドを下に敷いて、低〜中域を空にしない
+    dict(lead="celesta", shift=0, acc="pad", tempo=0.84, trans=0, lg=0.40, ag=0.09),
     dict(lead="piano", shift=0, acc="pad", tempo=1.00, trans=0, lg=0.40, ag=0.12, echo=-12),
 ]
 
