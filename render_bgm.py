@@ -64,6 +64,11 @@ def build_metadata(spec: TR.TrackSpec, info: dict, total_seconds: float) -> dict
     seo = spec.seo
     dur = VID.hhmmss(total_seconds)
     hours = total_seconds / 3600.0
+    # 1 時間未満を "0:33:00" と書くと説明文の冒頭が不自然になる
+    if total_seconds < 3600:
+        dur = f"{int(round(total_seconds / 60))} minutes"
+    # 童謡・子守唄は乳幼児向け。YouTube (COPPA) 上「子ども向け」に設定する義務がある
+    is_kids = spec.slug[:1] == "n" and spec.slug[1:3].isdigit()
 
     # 10本すべてを同じテンプレートで書くと、外形が「テンプレート量産」に
     # なってしまう。1本ずつ書き下ろした説明文があればそちらを使う。
@@ -77,7 +82,7 @@ def build_metadata(spec: TR.TrackSpec, info: dict, total_seconds: float) -> dict
             "category": "Music",
             "language": "en",
             "visibility": "public",
-            "made_for_kids": False,
+            "made_for_kids": is_kids,
             "specs": _specs(spec, info, total_seconds, dur),
         }
 
@@ -124,7 +129,7 @@ All music and visuals in this video were created from scratch for this channel.
         "category": "Music",
         "language": "en",
         "visibility": "public",
-        "made_for_kids": False,
+        "made_for_kids": is_kids,
         "specs": _specs(spec, info, total_seconds, dur),
     }
 

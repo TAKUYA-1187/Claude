@@ -1,7 +1,7 @@
 {
   "slug": "n07_au_clair_lullaby",
   "title": "Au clair de la lune 🌕 French Lullaby Piano by Moonlight",
-  "description": "\"Au clair de la lune\" — 0:33:00 by moonlight.\n\nA French lullaby from the eighteenth century, simple enough to be played with\none finger and gentle enough to play for an hour. Here it moves between music\nbox and piano and harp, with long pauses between phrases so the room has time\nto settle. There is no hiss and no background sound; the only thing you'll hear\nis the instruments and their reverb.\n\nTuned to A = 432 Hz. Traditional melody; sound and arrangement original to this\nchannel.\n\nFor late evenings, early mornings, and candle-light.\n",
+  "description": "\"Au clair de la lune\" — 33 minutes by moonlight.\n\nA French lullaby from the eighteenth century, simple enough to be played with\none finger and gentle enough to play for an hour. Here it moves between music\nbox and piano and harp, with long pauses between phrases so the room has time\nto settle. There is no hiss and no background sound; the only thing you'll hear\nis the instruments and their reverb.\n\nTuned to A = 432 Hz. Traditional melody; sound and arrangement original to this\nchannel.\n\nFor late evenings, early mornings, and candle-light.\n",
   "tags": [
     "au clair de la lune",
     "french lullaby",
@@ -14,7 +14,7 @@
   "category": "Music",
   "language": "en",
   "visibility": "public",
-  "made_for_kids": false,
+  "made_for_kids": true,
   "specs": {
     "genre_ja": "月の光に（子守唄ピアノ）",
     "use_case": "sleep",

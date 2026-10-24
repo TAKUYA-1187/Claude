@@ -1,7 +1,7 @@
 {
   "slug": "n02_mary_lamb_lullaby",
   "title": "Mary Had a Little Lamb 🐑 Soft Piano & Music Box Lullaby",
-  "description": "Mary had a little lamb, and for 0:33:00 she has a very quiet piano with her.\n\nA short, friendly tune that is easy to follow and easy to fall asleep to. It\nis played gently and slowly, with the melody passing between a piano, a harp\nand a music box while the chords underneath change their pattern every few\nminutes. Nothing sudden, nothing loud, and no background noise of any kind.\n\nA = 432 Hz tuning (a softer reference pitch — a tuning choice, not a treatment).\nThe song is traditional and the performance is synthesised for this channel.\n\nGood for naptime, a calm play corner, and the last ten minutes before lights-out.\n",
+  "description": "Mary had a little lamb, and for 33 minutes she has a very quiet piano with her.\n\nA short, friendly tune that is easy to follow and easy to fall asleep to. It\nis played gently and slowly, with the melody passing between a piano, a harp\nand a music box while the chords underneath change their pattern every few\nminutes. Nothing sudden, nothing loud, and no background noise of any kind.\n\nA = 432 Hz tuning (a softer reference pitch — a tuning choice, not a treatment).\nThe song is traditional and the performance is synthesised for this channel.\n\nGood for naptime, a calm play corner, and the last ten minutes before lights-out.\n",
   "tags": [
     "mary had a little lamb",
     "nursery rhymes",
@@ -14,7 +14,7 @@
   "category": "Music",
   "language": "en",
   "visibility": "public",
-  "made_for_kids": false,
+  "made_for_kids": true,
   "specs": {
     "genre_ja": "メリーさんのひつじ（子守唄ピアノ）",
     "use_case": "sleep",

@@ -1,7 +1,7 @@
 {
   "slug": "n10_jingle_bells_lullaby",
   "title": "Jingle Bells ❄️ Slow Lullaby Piano for Cozy Winter Nights",
-  "description": "❄️ JINGLE BELLS, SLOWED DOWN — 0:33:00 of piano for a cozy winter evening\n\nThe bells and the sleigh are gone; what's left is the melody, played the\nslowest it will go, on a piano and a music box. It's the version for after the\npresents are opened and everyone's a bit tired.\n\n▸ Traditional tune (public domain), original arrangement and sound\n▸ No background noise of any kind\n▸ A = 432 Hz tuning (softer reference pitch, no health claims)\n\nFor wintry evenings and gentle bedtimes.\n",
+  "description": "❄️ JINGLE BELLS, SLOWED DOWN — 33 minutes of piano for a cozy winter evening\n\nThe bells and the sleigh are gone; what's left is the melody, played the\nslowest it will go, on a piano and a music box. It's the version for after the\npresents are opened and everyone's a bit tired.\n\n▸ Traditional tune (public domain), original arrangement and sound\n▸ No background noise of any kind\n▸ A = 432 Hz tuning (softer reference pitch, no health claims)\n\nFor wintry evenings and gentle bedtimes.\n",
   "tags": [
     "jingle bells",
     "christmas lullaby",
@@ -14,7 +14,7 @@
   "category": "Music",
   "language": "en",
   "visibility": "public",
-  "made_for_kids": false,
+  "made_for_kids": true,
   "specs": {
     "genre_ja": "ジングルベル（子守唄ピアノ）",
     "use_case": "sleep",
