@@ -122,7 +122,7 @@
 
 ## 5. チャンネルの土台（今週中に1回だけ）
 
-1. 再生リストを5つ作る：`Sleep Music` / `Study & Focus` / `Cafe Jazz` / `Cozy Fireplace` / `Lullabies for Babies`
+1. 再生リストを5つ作る：`Sleep Music` / `Study & Focus` / `Cafe Jazz` / `Cozy & Seasonal` / `Lullabies for Babies`
 2. 童謡は `Lullabies for Babies` だけに入れる（他のリストと混ぜない）
 3. チャンネルの「概要」に英語の説明文を入れる（`06_channel_setup_pack.md` の文面）
 4. 2段階認証をオンにする（収益化の必須条件）

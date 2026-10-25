@@ -994,6 +994,9 @@ def build_halloween(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
 
     def master(x):
         x = dsp.tilt_eq(x, pivot=550.0, gain_db=-5.0)
+        # 構成を不規則にすると celesta の多い区間が長くなり、500Hz 帯が +3.2dB
+        # 突き出た (QA 窓 +3)。celesta の基音域だけを浅く削る
+        x = dsp.peak_eq(x, 720.0, -2.0, q=1.2)
         # 1-2kHz を抑えた分、6kHz 以上の空気だけ棚で戻す
         x = dsp.shelf(x, 6000.0, 3.5, kind="high")
         x = dsp.lowpass(x, 12500.0, order=2)

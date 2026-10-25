@@ -2,21 +2,21 @@
   "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "07_fireplace_winter_jazz",
-      "title": "Fireplace Jazz 🔥 2 Hours of Warm Winter Jazz & Crackling Fire",
-      "bpm": 88.0,
-      "bars": 528,
-      "lufs": -14.000000010849575,
-      "true_peak_db": -2.752826667689359,
-      "loop_seam_db": -42.65564895615452,
+      "slug": "21_halloween_night",
+      "title": "Halloween Ambience 🎃 Spooky Night Music & Autumn Wind",
+      "bpm": 66.0,
+      "bars": 396,
+      "lufs": -14.0101433068791,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -25.155322895697516,
       "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
-      "video": "out/video/07_fireplace_winter_jazz.mp4",
+      "video": "out/video/21_halloween_night.mp4",
       "probe": {
         "duration_s": 8640.0,
-        "size_mb": 797.527021,
-        "bitrate_kbps": 738.45,
+        "size_mb": 790.657489,
+        "bitrate_kbps": 732.09,
         "streams": [
           {
             "type": "video",
@@ -34,7 +34,7 @@
           }
         ]
       },
-      "elapsed_s": 558.4
+      "elapsed_s": 582.3
     }
   ]
 }
