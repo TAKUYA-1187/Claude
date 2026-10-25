@@ -1,355 +1,40 @@
 {
-  "total_seconds": 1980.0,
+  "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "n01_twinkle_lullaby",
-      "title": "Twinkle Twinkle Little Star 🌙 Gentle Piano Lullaby for Babies & Sleep",
-      "bpm": 65.82,
-      "bars": 181,
-      "lufs": -14.00077298114529,
+      "slug": "21_halloween_night",
+      "title": "Halloween Ambience 🎃 Spooky Night Music & Autumn Wind",
+      "bpm": 66.0,
+      "bars": 396,
+      "lufs": -14.006868354650283,
       "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -148.7893018115417,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n01_twinkle_lullaby.mp4",
+      "loop_seam_db": -40.977471788647854,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/21_halloween_night.mp4",
       "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 177.424259,
-        "bitrate_kbps": 716.865,
+        "duration_s": 8640.0,
+        "size_mb": 791.174293,
+        "bitrate_kbps": 732.568,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "24/1",
-            "duration": 1980.0
+            "duration": 8640.0
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
             "fps": "0/0",
-            "duration": 1980.0
+            "duration": 8640.0
           }
         ]
       },
-      "elapsed_s": 199.2
-    },
-    {
-      "slug": "n02_mary_lamb_lullaby",
-      "title": "Mary Had a Little Lamb 🐑 Soft Piano & Music Box Lullaby",
-      "bpm": 72.0,
-      "bars": 198,
-      "lufs": -14.000130218846433,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -142.92018082606305,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n02_mary_lamb_lullaby.mp4",
-      "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 179.120012,
-        "bitrate_kbps": 723.717,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 1980.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 1980.0
-          }
-        ]
-      },
-      "elapsed_s": 295.8
-    },
-    {
-      "slug": "n03_row_your_boat_lullaby",
-      "title": "Row Row Row Your Boat 🚣 Calm Lullaby Piano for Little Ones",
-      "bpm": 84.0,
-      "bars": 231,
-      "lufs": -14.00423627846729,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -148.63931484738555,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n03_row_your_boat_lullaby.mp4",
-      "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 179.754063,
-        "bitrate_kbps": 726.279,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 1980.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 1980.0
-          }
-        ]
-      },
-      "elapsed_s": 205.1
-    },
-    {
-      "slug": "n04_frere_jacques_lullaby",
-      "title": "Frère Jacques 🔔 Soft Lullaby Piano for Bedtime",
-      "bpm": 76.0,
-      "bars": 209,
-      "lufs": -14.008723379589934,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -165.7095716931681,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n04_frere_jacques_lullaby.mp4",
-      "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 177.65294,
-        "bitrate_kbps": 717.789,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 1980.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 1980.0
-          }
-        ]
-      },
-      "elapsed_s": 190.0
-    },
-    {
-      "slug": "n05_london_bridge_lullaby",
-      "title": "London Bridge Is Falling Down 🌉 Gentle Music Box & Piano Lullaby",
-      "bpm": 80.0,
-      "bars": 220,
-      "lufs": -14.00013036728845,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -163.8939749732347,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n05_london_bridge_lullaby.mp4",
-      "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 177.525644,
-        "bitrate_kbps": 717.275,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 1980.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 1980.0
-          }
-        ]
-      },
-      "elapsed_s": 217.5
-    },
-    {
-      "slug": "n06_old_macdonald_lullaby",
-      "title": "Old MacDonald Had a Farm 🚜 Quiet Piano Version for Naptime",
-      "bpm": 88.0,
-      "bars": 242,
-      "lufs": -14.000971273466218,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -155.4297702864031,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n06_old_macdonald_lullaby.mp4",
-      "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 152.805796,
-        "bitrate_kbps": 617.397,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 1980.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 1980.0
-          }
-        ]
-      },
-      "elapsed_s": 220.3
-    },
-    {
-      "slug": "n07_au_clair_lullaby",
-      "title": "Au clair de la lune 🌕 French Lullaby Piano by Moonlight",
-      "bpm": 69.82,
-      "bars": 192,
-      "lufs": -14.00156900784338,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -157.34012772583282,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n07_au_clair_lullaby.mp4",
-      "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 177.319448,
-        "bitrate_kbps": 716.442,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 1980.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 1980.0
-          }
-        ]
-      },
-      "elapsed_s": 180.3
-    },
-    {
-      "slug": "n08_silent_night_lullaby",
-      "title": "Silent Night 🎄 Soft Piano Lullaby for a Peaceful Christmas Night",
-      "bpm": 60.0,
-      "bars": 165,
-      "lufs": -14.002848439181376,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -156.89205058178482,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n08_silent_night_lullaby.mp4",
-      "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 175.921632,
-        "bitrate_kbps": 710.794,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 1980.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 1980.0
-          }
-        ]
-      },
-      "elapsed_s": 1185.7
-    },
-    {
-      "slug": "n09_ode_to_joy_lullaby",
-      "title": "Ode to Joy ✨ Music Box & Piano Lullaby Version",
-      "bpm": 84.0,
-      "bars": 231,
-      "lufs": -13.999765996308835,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -147.9594343315934,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n09_ode_to_joy_lullaby.mp4",
-      "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 179.61757,
-        "bitrate_kbps": 725.727,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 1980.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 1980.0
-          }
-        ]
-      },
-      "elapsed_s": 223.3
-    },
-    {
-      "slug": "n10_jingle_bells_lullaby",
-      "title": "Jingle Bells ❄️ Slow Lullaby Piano for Cozy Winter Nights",
-      "bpm": 92.0,
-      "bars": 253,
-      "lufs": -14.005917995820534,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -149.10287185263118,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "video": "out/video/n10_jingle_bells_lullaby.mp4",
-      "probe": {
-        "duration_s": 1980.0,
-        "size_mb": 181.215102,
-        "bitrate_kbps": 732.182,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 1980.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 1980.0
-          }
-        ]
-      },
-      "elapsed_s": 169.7
+      "elapsed_s": 594.0
     }
   ]
 }
