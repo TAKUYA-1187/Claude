@@ -12,7 +12,29 @@
       "loop_seconds": 660.0,
       "total_seconds": 1980.0,
       "total_hhmmss": "0:33:00",
-      "elapsed_s": 35.6
+      "video": "out/video/n02_mary_lamb_lullaby.mp4",
+      "probe": {
+        "duration_s": 1980.0,
+        "size_mb": 178.991189,
+        "bitrate_kbps": 723.196,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 1980.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 1980.0
+          }
+        ]
+      },
+      "elapsed_s": 291.3
     },
     {
       "slug": "n04_frere_jacques_lullaby",
@@ -25,7 +47,29 @@
       "loop_seconds": 660.0,
       "total_seconds": 1980.0,
       "total_hhmmss": "0:33:00",
-      "elapsed_s": 36.0
+      "video": "out/video/n04_frere_jacques_lullaby.mp4",
+      "probe": {
+        "duration_s": 1980.0,
+        "size_mb": 178.106877,
+        "bitrate_kbps": 719.623,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 1980.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 1980.0
+          }
+        ]
+      },
+      "elapsed_s": 190.0
     },
     {
       "slug": "n05_london_bridge_lullaby",
@@ -38,7 +82,29 @@
       "loop_seconds": 660.0,
       "total_seconds": 1980.0,
       "total_hhmmss": "0:33:00",
-      "elapsed_s": 33.7
+      "video": "out/video/n05_london_bridge_lullaby.mp4",
+      "probe": {
+        "duration_s": 1980.0,
+        "size_mb": 177.484052,
+        "bitrate_kbps": 717.107,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 1980.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 1980.0
+          }
+        ]
+      },
+      "elapsed_s": 198.0
     },
     {
       "slug": "n10_jingle_bells_lullaby",
@@ -51,7 +117,29 @@
       "loop_seconds": 660.0,
       "total_seconds": 1980.0,
       "total_hhmmss": "0:33:00",
-      "elapsed_s": 32.7
+      "video": "out/video/n10_jingle_bells_lullaby.mp4",
+      "probe": {
+        "duration_s": 1980.0,
+        "size_mb": 180.954905,
+        "bitrate_kbps": 731.13,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 1980.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 1980.0
+          }
+        ]
+      },
+      "elapsed_s": 150.0
     }
   ]
 }
