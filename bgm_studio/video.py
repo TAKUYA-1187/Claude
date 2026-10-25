@@ -98,6 +98,7 @@ def loop_audio_to_aac(wav_path: str | Path, out_path: str | Path,
 def encode_visual_loop(scene: str, out_path: str | Path, seed: int = 0,
                        seconds: int = V.LOOP_SECONDS, fps: int = V.FPS,
                        crf: int = 24, maxrate: str = "400k",
+                       bufsize: str = "4M", out_size: tuple[int, int] | None = None,
                        progress=None) -> Path:
     """
     シーンのループ映像を MP4 にする。生 RGB を ffmpeg に流し込む。
@@ -114,8 +115,9 @@ def encode_visual_loop(scene: str, out_path: str | Path, seed: int = 0,
         ffmpeg_exe(), "-y", "-hide_banner", "-loglevel", "error",
         "-f", "rawvideo", "-pix_fmt", "rgb24",
         "-s", f"{V.W}x{V.H}", "-r", str(fps), "-i", "-",
+        *(["-vf", f"scale={out_size[0]}:{out_size[1]}:flags=lanczos"] if out_size else []),
         "-c:v", "libx264", "-preset", "slow",
-        "-crf", str(crf), "-maxrate", maxrate, "-bufsize", "4M",
+        "-crf", str(crf), "-maxrate", maxrate, "-bufsize", bufsize,
         "-pix_fmt", "yuv420p",
         "-g", str(keyint), "-keyint_min", str(keyint), "-sc_threshold", "0",
         "-movflags", "+faststart",
