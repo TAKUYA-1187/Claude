@@ -71,9 +71,10 @@ def _new_buf(clock: Clock, tail: float = 0.0) -> np.ndarray:
 
 
 def _timeline(spec: TrackSpec, clock: Clock,
-              rng: np.random.Generator) -> list[A.Span]:
+              rng: np.random.Generator, irregular: bool = False) -> list[A.Span]:
     progs = [T.transpose(p, spec.key_root) for p in T.PROGRESSIONS[spec.prog_key]]
-    sections = T.build_form(progs, clock.bars, rng)
+    form_rng = np.random.default_rng(spec.seed + 7001) if irregular else None
+    sections = T.build_form(progs, clock.bars, rng, irregular=form_rng)
     return A.build_timeline(sections, clock)
 
 
@@ -965,7 +966,8 @@ def build_halloween(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
     rng = np.random.default_rng(spec.seed)
     clock = clock_for(seconds, spec.bpm)
     bank = I.SampleBank(seed=spec.seed, n_variants=3)
-    spans = _timeline(spec, clock, rng)
+    # 音数が少ないので、固定の波だとメロディの出入りが周期的に聞こえる
+    spans = _timeline(spec, clock, rng, irregular=True)
     buf = _new_buf(clock, tail=18.0)
 
     A.play_pad(buf, spans, clock, bank, gain=0.16, brightness=0.45,

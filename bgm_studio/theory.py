@@ -348,22 +348,35 @@ class Section:
 
 def build_form(progressions: list[list[Chord]], total_bars: float,
                rng: np.random.Generator,
-               density_curve=(0.55, 0.8, 1.0, 0.85, 0.65)) -> list[Section]:
+               density_curve=(0.55, 0.8, 1.0, 0.85, 0.65),
+               irregular: np.random.Generator | None = None) -> list[Section]:
     """
     総小節数を埋めるように、進行を並べて「起伏のある構成」を作る。
 
     ずっと同じ密度だと 2 時間は絶対にもたないので、
     薄い→濃い→薄いの波を density_curve で作り、それを繰り返す。
+
+    irregular に乱数を渡すと、波の順番と各セクションの長さを毎周変える。
+    固定の波だと「メロディが鳴る→休む」が約 3 分おきに正確に繰り返され、
+    音数の少ない曲 (21 Halloween) では反復検査で 0.57 まで相関が出た。
+    呼び出し側の rng とは別の乱数を渡すこと (他の楽器の乱数列を変えないため)。
     """
     sections: list[Section] = []
     bars_done = 0.0
     i = 0
+    order: list[float] = []
     while bars_done < total_bars:
         prog = progressions[i % len(progressions)]
         prog_bars = sum(c.bars for c in prog)
-        d = density_curve[i % len(density_curve)]
-        # 薄いセクションは長めに回して「休ませる」
-        repeats = 2 if d >= 0.8 else 3
+        if irregular is None:
+            d = density_curve[i % len(density_curve)]
+            # 薄いセクションは長めに回して「休ませる」
+            repeats = 2 if d >= 0.8 else 3
+        else:
+            if not order:
+                order = list(irregular.permutation(density_curve))
+            d = float(order.pop())
+            repeats = int(irregular.choice([1, 2, 3] if d >= 0.8 else [2, 3, 4]))
         sec_bars = prog_bars * repeats
         if bars_done + sec_bars > total_bars:
             repeats = max(int((total_bars - bars_done) // prog_bars), 1)
