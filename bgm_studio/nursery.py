@@ -64,6 +64,7 @@ NURSERY: dict[str, dict] = {
              "C/1 C/1 G/1 G/1 A/1 A/1 G/2 F/1 F/1 E/1 E/1 D/1 D/1 C/2"),
     "n02_mary_lamb_lullaby": dict(
         title="Mary Had a Little Lamb", bar=4, bpm=72, visual="morning_meadow",
+        bright=4.5,    # 旋律が E4-G4 と低く倍音が少ないため、1kHz 以上を少し戻す (QA 1kHz -23)
         tune="E/1 D/1 C/1 D/1 E/1 E/1 E/2 D/1 D/1 D/2 E/1 G/1 G/2 "
              "E/1 D/1 C/1 D/1 E/1 E/1 E/1 E/1 D/1 D/1 E/1 D/1 C/4"),
     "n03_row_your_boat_lullaby": dict(
@@ -73,11 +74,13 @@ NURSERY: dict[str, dict] = {
              "G/1 F/.5 E/1 D/.5 C/3"),
     "n04_frere_jacques_lullaby": dict(
         title="Frère Jacques", bar=4, bpm=76, visual="minimal_gradient",
+        bright=4.5,    # G3-A4 と低く、こもった (QA 1kHz -21)
         tune="C/1 D/1 E/1 C/1 C/1 D/1 E/1 C/1 E/1 F/1 G/2 E/1 F/1 G/2 "
              "G/.5 A/.5 G/.5 F/.5 E/1 C/1 G/.5 A/.5 G/.5 F/.5 E/1 C/1 "
              "C/1 G3/1 C/2 C/1 G3/1 C/2"),
     "n05_london_bridge_lullaby": dict(
         title="London Bridge Is Falling Down", bar=4, bpm=80, visual="night_skyline",
+        bright=4.5,    # C4-A4 と低く、こもった (QA 1kHz -22)
         tune="G/1.5 A/.5 G/1 F/1 E/1 F/1 G/2 D/1 E/1 F/2 E/1 F/1 G/2 "
              "G/1.5 A/.5 G/1 F/1 E/1 F/1 G/2 D/2 G/2 E/2 C/2"),
     "n06_old_macdonald_lullaby": dict(
@@ -103,6 +106,7 @@ NURSERY: dict[str, dict] = {
              "E/1 E/1 F/1 G/1 G/1 F/1 E/1 D/1 C/1 C/1 D/1 E/1 D/1.5 C/.5 C/2"),
     "n10_jingle_bells_lullaby": dict(
         title="Jingle Bells", bar=4, bpm=92, visual="snow_cabin",
+        mid_cut=2.0,   # 500Hz 帯が窓を 0.9dB 超えた。700Hz 付近を浅く削る
         tune="E/1 E/1 E/2 E/1 E/1 E/2 E/1 G/1 C/1.5 D/.5 E/4 "
              "F/1 F/1 F/1.5 F/.5 F/1 E/1 E/1 E/.5 E/.5 E/1 D/1 D/1 E/1 D/2 G/2 "
              "E/1 E/1 E/2 E/1 E/1 E/2 E/1 G/1 C/1.5 D/.5 E/4 "
@@ -321,6 +325,11 @@ def build_nursery(spec, seconds: float):
         # 以前は QA の「こもり」判定に合わせて 900Hz 以上を +3.5dB 持ち上げて
         # いたが、それが硬さ (雑音っぽさ) の一因だった。子守唄は暖かい方が正しい
         # ので持ち上げはやめ、12kHz より上をなだらかに落とす。
+        # 旋律が低い曲だけ、曲ごとに 1kHz 以上を少し戻す / 中域を浅く削る
+        if song.get("bright"):
+            x = dsp.shelf(x, 1000.0, float(song["bright"]), kind="high")
+        if song.get("mid_cut"):
+            x = dsp.peak_eq(x, 700.0, -float(song["mid_cut"]), q=1.0)
         x = dsp.lowpass(x, 12000.0, order=2)
         return dsp.highpass(x, 50.0, order=2)
 

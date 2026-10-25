@@ -1,40 +1,57 @@
 {
-  "total_seconds": 8640,
+  "total_seconds": 1980.0,
   "tracks": [
     {
-      "slug": "07_fireplace_winter_jazz",
-      "title": "Fireplace Jazz 🔥 2 Hours of Warm Winter Jazz & Crackling Fire",
-      "bpm": 88.0,
-      "bars": 528,
-      "lufs": -13.999999834638468,
-      "true_peak_db": -2.5795962743669545,
-      "loop_seam_db": -39.64720433491006,
-      "loop_seconds": 1440,
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "video": "out/video/07_fireplace_winter_jazz.mp4",
-      "probe": {
-        "duration_s": 8640.0,
-        "size_mb": 798.901168,
-        "bitrate_kbps": 739.723,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 8640.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 8640.0
-          }
-        ]
-      },
-      "elapsed_s": 619.9
+      "slug": "n02_mary_lamb_lullaby",
+      "title": "Mary Had a Little Lamb 🐑 Soft Piano & Music Box Lullaby",
+      "bpm": 72.0,
+      "bars": 198,
+      "lufs": -14.000000036086796,
+      "true_peak_db": -2.4165331597809585,
+      "loop_seam_db": -50.29493986877726,
+      "loop_seconds": 660.0,
+      "total_seconds": 1980.0,
+      "total_hhmmss": "0:33:00",
+      "elapsed_s": 35.6
+    },
+    {
+      "slug": "n04_frere_jacques_lullaby",
+      "title": "Frère Jacques 🔔 Soft Lullaby Piano for Bedtime",
+      "bpm": 76.0,
+      "bars": 209,
+      "lufs": -14.00190181624399,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -48.60995617688546,
+      "loop_seconds": 660.0,
+      "total_seconds": 1980.0,
+      "total_hhmmss": "0:33:00",
+      "elapsed_s": 36.0
+    },
+    {
+      "slug": "n05_london_bridge_lullaby",
+      "title": "London Bridge Is Falling Down 🌉 Gentle Music Box & Piano Lullaby",
+      "bpm": 80.0,
+      "bars": 220,
+      "lufs": -14.00000001159786,
+      "true_peak_db": -2.0060383814417713,
+      "loop_seam_db": -68.15713283000042,
+      "loop_seconds": 660.0,
+      "total_seconds": 1980.0,
+      "total_hhmmss": "0:33:00",
+      "elapsed_s": 33.7
+    },
+    {
+      "slug": "n10_jingle_bells_lullaby",
+      "title": "Jingle Bells ❄️ Slow Lullaby Piano for Cozy Winter Nights",
+      "bpm": 92.0,
+      "bars": 253,
+      "lufs": -14.003176362732114,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -53.745995661401196,
+      "loop_seconds": 660.0,
+      "total_seconds": 1980.0,
+      "total_hhmmss": "0:33:00",
+      "elapsed_s": 32.7
     }
   ]
 }
