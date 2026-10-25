@@ -2,17 +2,39 @@
   "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "03_piano_and_rain",
-      "title": "Relaxing Piano & Rain Sounds 🎹🌧️ 2 Hours for Sleep, Study & Stress Relief",
-      "bpm": 62.0,
-      "bars": 372,
-      "lufs": -14.001366376772898,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -18.35399905666915,
+      "slug": "07_fireplace_winter_jazz",
+      "title": "Fireplace Jazz 🔥 2 Hours of Warm Winter Jazz & Crackling Fire",
+      "bpm": 88.0,
+      "bars": 528,
+      "lufs": -13.999999834638468,
+      "true_peak_db": -2.5795962743669545,
+      "loop_seam_db": -39.64720433491006,
       "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
-      "elapsed_s": 119.7
+      "video": "out/video/07_fireplace_winter_jazz.mp4",
+      "probe": {
+        "duration_s": 8640.0,
+        "size_mb": 798.901168,
+        "bitrate_kbps": 739.723,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 8640.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 8640.0
+          }
+        ]
+      },
+      "elapsed_s": 619.9
     }
   ]
 }
