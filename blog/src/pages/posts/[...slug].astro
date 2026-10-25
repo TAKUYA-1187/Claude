@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { SITE } from '../../site.config';
 import { hasActiveAffiliate } from '../../lib/affiliate-links';
+import { GUIDE } from '../../guide';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -15,6 +16,11 @@ const { title, description, pubDate, updatedDate, scripts } = post.data;
 // 提携済みのアフィリエイトリンクを含む記事は、frontmatter の指定がなくてもPR表記を出す
 const pr = post.data.pr || hasActiveAffiliate(post.body ?? '');
 const toc = headings.filter((h) => h.depth === 2);
+// 入門ガイドの次のステップと、同じガイド内のほかの記事（回遊用）
+const allPosts = new Map((await getCollection('posts', ({ data }) => !data.draft)).map((p) => [p.id, p]));
+const guideIndex = GUIDE.findIndex((g) => g.slug === post.id);
+const next = GUIDE.slice(guideIndex + 1).find((g) => allPosts.has(g.slug));
+const related = GUIDE.filter((g) => g.slug !== post.id && g.slug !== next?.slug && allPosts.has(g.slug)).slice(0, 3);
 const fmt = (d: Date) => d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Tokyo' });
 const url = new URL(`/posts/${post.id}/`, Astro.site).toString();
 
@@ -52,6 +58,21 @@ const jsonLd = {
     <div class="prose">
       <Content />
     </div>
+    {next && (
+      <aside class="next-box">
+        <span class="meta">次に読む（入門ガイド STEP {GUIDE.indexOf(next) + 1}：{next.step}）</span>
+        <a href={`/posts/${next.slug}/`}>{allPosts.get(next.slug)!.data.title}</a>
+      </aside>
+    )}
+    {related.length > 0 && (
+      <aside class="related">
+        <strong>あわせて読みたい</strong>
+        <ul>
+          {related.map((g) => <li><a href={`/posts/${g.slug}/`}>{allPosts.get(g.slug)!.data.title}</a></li>)}
+        </ul>
+        <a href="/guide/">入門ガイドの全体を見る</a>
+      </aside>
+    )}
     <aside class="author-box">
       <strong>この記事を書いた人：{SITE.author}</strong>
       {SITE.authorBio}

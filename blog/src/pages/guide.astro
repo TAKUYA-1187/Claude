@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { GUIDE } from '../guide';
+
+const posts = new Map((await getCollection('posts', ({ data }) => !data.draft)).map((p) => [p.id, p]));
+const steps = GUIDE.filter((g) => posts.has(g.slug));
+---
+
+<Base title="買取せどり入門ガイド" description="買取せどりを始めて、赤字を出さずに続けるまでを5ステップで。仕組み・利益計算・商品探し・梱包発送・減額対策を、読む順番に並べました。">
+  <article class="prose">
+    <h1>買取せどり入門ガイド</h1>
+    <p>買取せどりを始めて、赤字を出さずに続けるまでに必要なことを、読む順番に並べました。上から順に読めば、仕入れの判断から発送、トラブル対応まで一通りそろいます。</p>
+    <ol class="guide-steps">
+      {steps.map((g, i) => (
+        <li>
+          <span class="meta">STEP {i + 1}：{g.step}</span>
+          <a href={`/posts/${g.slug}/`}>{posts.get(g.slug)!.data.title}</a>
+          <p>{g.why}</p>
+        </li>
+      ))}
+    </ol>
+  </article>
+</Base>
