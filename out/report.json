@@ -6,17 +6,17 @@
       "title": "Halloween Ambience 🎃 Spooky Night Music & Autumn Wind",
       "bpm": 66.0,
       "bars": 396,
-      "lufs": -14.0101433068791,
+      "lufs": -14.008620416606535,
       "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -25.155322895697516,
+      "loop_seam_db": -23.918540841143315,
       "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
       "video": "out/video/21_halloween_night.mp4",
       "probe": {
         "duration_s": 8640.0,
-        "size_mb": 790.657489,
-        "bitrate_kbps": 732.09,
+        "size_mb": 791.178834,
+        "bitrate_kbps": 732.572,
         "streams": [
           {
             "type": "video",
@@ -34,7 +34,7 @@
           }
         ]
       },
-      "elapsed_s": 582.3
+      "elapsed_s": 565.3
     }
   ]
 }
