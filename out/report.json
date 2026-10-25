@@ -1,40 +1,18 @@
 {
-  "total_seconds": 8640,
+  "total_seconds": 1980.0,
   "tracks": [
     {
-      "slug": "21_halloween_night",
-      "title": "Halloween Ambience 🎃 Spooky Night Music & Autumn Wind",
-      "bpm": 66.0,
-      "bars": 396,
-      "lufs": -14.008620416606535,
+      "slug": "n01_twinkle_lullaby",
+      "title": "Twinkle Twinkle Little Star 🌙 Gentle Piano Lullaby for Babies & Sleep",
+      "bpm": 65.82,
+      "bars": 181,
+      "lufs": -14.002417178391413,
       "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -23.918540841143315,
-      "loop_seconds": 1440,
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "video": "out/video/21_halloween_night.mp4",
-      "probe": {
-        "duration_s": 8640.0,
-        "size_mb": 791.178834,
-        "bitrate_kbps": 732.572,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 8640.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 8640.0
-          }
-        ]
-      },
-      "elapsed_s": 565.3
+      "loop_seam_db": -46.43215578488709,
+      "loop_seconds": 660.0,
+      "total_seconds": 1980.0,
+      "total_hhmmss": "0:33:00",
+      "elapsed_s": 33.0
     }
   ]
 }
