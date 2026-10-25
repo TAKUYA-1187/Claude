@@ -238,11 +238,13 @@ def build_piano_rain(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
 
     A.play_pad(buf, spans, clock, bank, gain=0.07, brightness=0.6,
                attack=3.0, release=3.5, rng=rng, n_voices=4)
-    A.play_comp(buf, spans, clock, bank, inst="piano", style="ballad",
+    # ピアノは子守唄と同じやわらかい音色に替えた (旧 "piano" は倍音が硬く、
+    # 雨と重なると「ジャリッ」とした雑音感が出た)
+    A.play_comp(buf, spans, clock, bank, inst="soft_piano", style="ballad",
                 gain=0.30, voicing="close", center=54, rng=rng, spread_ms=45.0)
-    A.play_arp(buf, spans, clock, bank, inst="piano", gain=0.13, rate=1.0,
+    A.play_arp(buf, spans, clock, bank, inst="soft_piano", gain=0.13, rate=1.0,
                octaves=1, center=69, direction="updown", rng=rng, pan=0.1)
-    A.play_melody(buf, spans, clock, bank, inst="piano", gain=0.26,
+    A.play_melody(buf, spans, clock, bank, inst="soft_piano", gain=0.26,
                   scale_root=spec.key_root, scale=spec.scale,
                   lo=64, hi=88, density=0.4, rng=rng, rest_prob=0.42)
     A.play_bass(buf, spans, clock, bank, inst="subbass", style="root",
@@ -251,8 +253,10 @@ def build_piano_rain(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
     ir = dsp.make_reverb_ir(4.0, rt60=3.6, damp=0.55, predelay=0.03, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.7, window=True), -13.0),
-        (lambda: NT.thunder(n, seed=spec.seed + 2, count=3), -20.0),
+        # 雨はこの動画の主役の片方だが、-13dB ではピアノの薄いところで雨が
+        # 前に出て「雑音っぽい」と言われた。ピアノの後ろに回す
+        (lambda: NT.rain(n, seed=spec.seed + 1, intensity=0.7, window=True), -17.0),
+        (lambda: NT.thunder(n, seed=spec.seed + 2, count=3), -24.0),
         (lambda: NT.room_tone(n, seed=spec.seed + 3), -32.0),
     ]
 
@@ -388,7 +392,7 @@ def build_winter_fire(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict
                 gain=0.26, octave=-2, rng=rng,
                 scale_root=spec.key_root, scale=spec.scale)
     A.play_jazz_brushes(buf, spans, clock, bank, gain=0.16, rng=rng, ride_prob=0.35)
-    A.play_melody(buf, spans, clock, bank, inst="celesta", gain=0.16,
+    A.play_melody(buf, spans, clock, bank, inst="music_box", gain=0.16,
                   scale_root=spec.key_root, scale=spec.scale,
                   lo=72, hi=93, density=0.34, rng=rng, rest_prob=0.5, pan=0.2)
     A.play_pad(buf, spans, clock, bank, gain=0.07, brightness=0.6,
@@ -397,7 +401,7 @@ def build_winter_fire(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict
     ir = dsp.make_reverb_ir(2.8, rt60=2.2, damp=0.6, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        (lambda: NT.fireplace(n, seed=spec.seed + 1), -16.0),
+        (lambda: NT.fireplace(n, seed=spec.seed + 1), -20.0),   # 旧 -16 (雑音っぽいとの指摘)
         (lambda: NT.room_tone(n, seed=spec.seed + 2), -32.0),
     ]
 
@@ -974,7 +978,7 @@ def build_halloween(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
                attack=5.0, release=6.0, rng=rng, n_voices=4, low=41, high=67)
     # オルゴールが半音ずれたような celesta。ハロウィンの音はほぼこれ。
     # ゲインを上げすぎると 1-2kHz が突き出て耳障りになる (QA で実測済み)
-    A.play_melody(buf, spans, clock, bank, inst="celesta", gain=0.13,
+    A.play_melody(buf, spans, clock, bank, inst="music_box", gain=0.13,
                   scale_root=(spec.key_root + 9) % 12, scale="harmonic_minor",
                   lo=67, hi=85, density=0.35, rng=rng, rest_prob=0.5)
     A.play_bass(buf, spans, clock, bank, inst="subbass", style="root",
@@ -986,9 +990,11 @@ def build_halloween(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
                             seed=spec.seed)
     n = clock.n_samples
     beds = [
-        (lambda: NT.wind(n, seed=spec.seed + 1), -13.0),
-        (lambda: NT.night_ambience(n, seed=spec.seed + 2), -22.0),
-        (lambda: NT.thunder(n, seed=spec.seed + 3, count=2), -18.0),
+        # 風が音楽の 13dB 下だと、旋律の薄いところで「サー」という雑音に
+        # 聞こえた (視聴者の指摘)。情景として気づく程度まで下げる
+        (lambda: NT.wind(n, seed=spec.seed + 1), -20.0),
+        (lambda: NT.night_ambience(n, seed=spec.seed + 2), -26.0),
+        (lambda: NT.thunder(n, seed=spec.seed + 3, count=2), -22.0),
         (lambda: NT.room_tone(n, seed=spec.seed + 4), -32.0),
     ]
 

@@ -53,9 +53,21 @@ MONO_CORR_MIN = 0.20        # これ未満は位相打ち消しの疑い
 # 同じノイズがそのまま繰り返されると相関 1.0 になる。
 # タイルを 3 枚重ねた設計では 0.33 前後に収まる。
 TILE_REPEAT_MAX = 0.45
+SILENCE_MAX_S = 3.0         # これより長い無音は「止まった」と聞こえる
 
 # オクターブバンドの許容範囲 (250-500Hz を 0dB とした相対値)
 # 実在のリラクゼーション音源を参考にした窓。
+# 童謡 (環境音なし・やわらかいピアノとオルゴールだけ) 用の帯域窓。
+# BGM 用の窓に合わせて高域を +3.5dB 持ち上げていたら、硬さが「雑音っぽい」と
+# 指摘された。子守唄は暖かいのが正解なので、下限を下げ、上限で硬さを見張る。
+NURSERY_BAND_WINDOW = {
+    500: (-14.0, -2.0),
+    1000: (-21.0, -9.0),
+    2000: (-30.0, -16.0),
+    4000: (-40.0, -24.0),
+    8000: (-58.0, -34.0),
+}
+
 BAND_WINDOW = {
     500: (-8.0, +3.0),
     1000: (-14.0, -1.0),
@@ -250,6 +262,18 @@ def audio_qa(slug: str) -> dict:
     # 「常に自分自身と似ている」ために誤検出される (18/19/24 で実際に起きた)。
     # 耳につく反復は「ノイズの模様の繰り返し」で、それは振幅包絡に現れる。
     # ドローンの包絡は平坦なので、包絡の自己相関なら誤検出しない。
+    # 無音の検査。童謡でループ末尾に約 28 秒の無音が残っていたのを
+    # 見逃した (視聴者に「途中で止まる」と言われた)。0.5 秒ごとの RMS が
+    # -50dBFS を下回る区間の最長を測る。ループなので末尾と先頭はつなげて数える
+    hop = dsp.SR // 2
+    fr = m[:len(m) // hop * hop].reshape(-1, hop)
+    quiet = 20.0 * np.log10(np.sqrt((fr ** 2).mean(axis=1)) + 1e-12) < -50.0
+    run = best = 0
+    for qv in np.concatenate([quiet, quiet]):
+        run = run + 1 if qv else 0
+        best = max(best, run)
+    r["silence_s"] = min(best, len(quiet)) * 0.5
+
     rep = read_wav(wav, seconds=300.0, offset=max(len(m) / dsp.SR * 0.30, 0))
     r["repeat_lag_s"], r["repeat_corr"] = env_repeat(rep)
     del rep
@@ -261,6 +285,8 @@ def audio_qa(slug: str) -> dict:
         issues.append(f"TP {r['true_peak_db']:.2f}")
     if r["seam_rel_db"] > SEAM_REL_MAX and r["seam_abs_dbfs"] > SEAM_ABS_MAX:
         issues.append(f"継ぎ目 {r['seam_rel_db']:+.1f}dB")
+    if r["silence_s"] > SILENCE_MAX_S:
+        issues.append(f"無音 {r['silence_s']:.1f}s")
     if r["clipped"]:
         issues.append(f"クリップ {r['clipped']}")
     if r["dc_dbfs"] > DC_MAX_DBFS:
@@ -275,7 +301,7 @@ def audio_qa(slug: str) -> dict:
     if r["repeat_corr"] > TILE_REPEAT_MAX and not is_nursery:
         issues.append(f"★{r['repeat_lag_s']:.1f}s周期でノイズが反復"
                       f"({r['repeat_corr']:.2f})")
-    for lo, (mn, mx) in BAND_WINDOW.items():
+    for lo, (mn, mx) in (NURSERY_BAND_WINDOW if is_nursery else BAND_WINDOW).items():
         v = r["bands"][lo]
         if v < mn:
             issues.append(f"{lo}Hz こもり({v:+.0f})")

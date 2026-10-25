@@ -273,6 +273,52 @@ def celesta(m: int, vel: float = 0.8, sr: int = SR,
     return (y * (0.3 + 0.7 * vel)).astype(np.float32)
 
 
+def soft_piano(m: int, vel: float = 0.8, sr: int = SR,
+               rng: np.random.Generator | None = None) -> np.ndarray:
+    """
+    子守唄用のやわらかいピアノ (フェルトを挟んだアップライトのイメージ)。
+
+    piano() は倍音が 1/k 程度でしか減らず、ゆっくりした童謡で単音を
+    聞かせると「ジャリッ」とした硬さが雑音のように聞こえた (視聴者の指摘)。
+    ここでは倍音を 1/k^1.35 で落とし、高い倍音ほど早く消し、
+    ハンマーノイズもほぼ入れない。
+    """
+    rng = rng or np.random.default_rng(m + 1500)
+    f0 = midi2hz(m)
+    dur = float(np.clip(8.0 - (m - 40) * 0.07, 2.0, 8.0))
+    B = 0.0003 * (2.0 ** ((60 - m) / 24.0))
+    ks = np.arange(1, _n_partials(f0, 8000.0, cap=30, floor=8) + 1)
+    ratios = (ks * np.sqrt(1.0 + B * ks * ks)).tolist()
+    amps = [1.0 / (k ** 1.35) * (1.0 + 0.08 * rng.standard_normal()) for k in ks]
+    amps = [max(a, 0.0) for a in amps]
+    if len(amps) > 1:
+        amps[1] *= 1.15
+    taus = [dur * 0.38 / (1.0 + 0.25 * (k - 1)) for k in ks]
+    y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.006, rng=rng)
+
+    n_h = int(0.03 * sr)
+    hm = dsp.bandpass(rng.standard_normal(n_h).astype(np.float32), 300, 1800, taps=257)
+    hm *= np.exp(-np.arange(n_h, dtype=np.float32) / (0.003 * sr)) * 0.006 * vel
+    y[:n_h] += hm
+    return (y * (0.30 + 0.70 * vel)).astype(np.float32)
+
+
+def music_box(m: int, vel: float = 0.8, sr: int = SR,
+              rng: np.random.Generator | None = None) -> np.ndarray:
+    """
+    オルゴール。celesta() と同じ金属の倍音列だが、上の非整数倍音を
+    大きく下げて「チリッ」とした金属ノイズ感を消してある
+    """
+    rng = rng or np.random.default_rng(m + 4500)
+    f0 = midi2hz(m)
+    dur = float(np.clip(4.0 - (m - 60) * 0.03, 1.4, 4.0))
+    ratios = [1, 2.0, 3.01, 4.2, 5.4]
+    amps = [1.0, 0.30, 0.10, 0.035, 0.015]
+    taus = [dur * 0.45, dur * 0.28, dur * 0.18, 0.35, 0.22]
+    y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.003, rng=rng)
+    return (y * (0.3 + 0.7 * vel)).astype(np.float32)
+
+
 def singing_bowl(m: int, vel: float = 0.8, sr: int = SR,
                  rng: np.random.Generator | None = None) -> np.ndarray:
     """
@@ -551,6 +597,8 @@ PITCHED = {
     "koto": koto,
     "synth": synth_pluck,
     "celesta": celesta,
+    "soft_piano": soft_piano,
+    "music_box": music_box,
     "bowl": singing_bowl,
     "marimba": marimba,
     "upright": upright_bass,

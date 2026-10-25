@@ -355,7 +355,8 @@ def play_melody(buf: np.ndarray, spans: list[Span], clock: Clock, bank,
                 scale_root: int = 0, scale: str = "major",
                 lo: int = 62, hi: int = 86, density: float = 0.45,
                 rng: np.random.Generator | None = None,
-                pan: float = 0.12, rest_prob: float = 0.35) -> None:
+                pan: float = 0.12, rest_prob: float = 0.35,
+                motif: bool = True) -> None:
     """
     生成メロディ。
 
@@ -363,6 +364,13 @@ def play_melody(buf: np.ndarray, spans: list[Span], clock: Clock, bank,
       - 音程は基本 2 度・3 度で動く (跳躍しすぎると耳が起きる)
       - 小節頭とフレーズ終わりはコードトーンに着地させる
       - 休符をしっかり入れる。BGM は「鳴っていない時間」が命
+
+    motif=True (既定) では、進行の中の「何番目のコードか」ごとにフレーズを
+    1 度だけ作り、同じ進行が戻ってくるたびに同じフレーズを弾く。
+    以前は毎回その場で音を選んでいたため旋律が二度と戻らず、さらに薄い
+    区間ではメロディを丸ごと止めていた。視聴者には「途中からメロディが
+    変わる」「(残った環境音が) 雑音っぽくなる」と聞こえた。
+    薄い区間でも同じフレーズを音数を減らして弾き、旋律を途切れさせない。
     """
     rng = rng or np.random.default_rng(4)
     allowed = scale_pitches(scale_root, scale, lo, hi)
@@ -378,6 +386,47 @@ def play_melody(buf: np.ndarray, spans: list[Span], clock: Clock, bank,
         return int(np.argmin(np.abs(arr - p)))
 
     cur = allowed[len(allowed) // 2]
+
+    if motif:
+        phrases: dict[tuple, list[tuple[float, int, float]]] = {}
+        for sp in spans:
+            prog = sp.section.prog
+            slot = next((i for i, c in enumerate(prog) if c is sp.chord), 0)
+            key = (id(prog), slot)
+            ph = phrases.get(key)
+            if ph is None:
+                ph = []
+                beat = 0.0
+                while beat < sp.beats:
+                    step = float(rng.choice([0.5, 1.0, 1.0, 1.5, 2.0, 2.0, 3.0],
+                                            p=[0.10, 0.22, 0.20, 0.14, 0.16, 0.10, 0.08]))
+                    if rng.random() < rest_prob * 0.6:
+                        beat += step
+                        continue
+                    move = int(rng.choice([-3, -2, -1, 1, 2, 3],
+                                          p=[0.08, 0.20, 0.22, 0.22, 0.20, 0.08]))
+                    nxt = allowed[int(np.clip(idx_of(cur) + move, 0, len(allowed) - 1))]
+                    on_bar = abs(beat % clock.beats_per_bar) < 1e-6
+                    if on_bar or step >= 2.0:
+                        nxt = nearest_chord_tone(nxt, sp.chord, lo, hi)
+                    cur = nxt
+                    vel = float(np.clip(rng.normal(0.55, 0.10), 0.25, 0.85))
+                    ph.append((beat, cur, vel))
+                    beat += step
+                phrases[key] = ph
+            dens = sp.section.density
+            # 薄い区間ほど音を間引く。ただし小節頭の音は残して旋律の形を保つ
+            keep = 0.45 + 0.55 * min(dens / 0.85, 1.0)
+            for (off, pitch, vel) in ph:
+                if sp.start_beat + off >= sp.end_beat:
+                    break
+                if abs(off % clock.beats_per_bar) > 1e-6 and rng.random() > keep:
+                    continue
+                v = float(np.clip(vel * density * 1.6, 0.2, 0.95))
+                s = bank.note(inst, pitch, v)
+                add_panned(buf, s, clock.at(sp.start_beat + off) + humanize(rng, 16.0),
+                           gain * (0.55 + 0.45 * min(dens, 1.0)), pan)
+        return
 
     for sp in spans:
         if not sp.section.melody or sp.section.density < 0.7:

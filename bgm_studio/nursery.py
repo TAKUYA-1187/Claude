@@ -64,7 +64,6 @@ NURSERY: dict[str, dict] = {
              "C/1 C/1 G/1 G/1 A/1 A/1 G/2 F/1 F/1 E/1 E/1 D/1 D/1 C/2"),
     "n02_mary_lamb_lullaby": dict(
         title="Mary Had a Little Lamb", bar=4, bpm=72, visual="morning_meadow",
-        bright=4.0,     # 旋律が E4-G4 だけと低く、1kHz 付近が薄くなるぶんを補う
         tune="E/1 D/1 C/1 D/1 E/1 E/1 E/2 D/1 D/1 D/2 E/1 G/1 G/2 "
              "E/1 D/1 C/1 D/1 E/1 E/1 E/1 E/1 D/1 D/1 E/1 D/1 C/4"),
     "n03_row_your_boat_lullaby": dict(
@@ -198,26 +197,28 @@ def harmonize(tune: list, bar_beats: int) -> list[tuple[float, float, str]]:
 
 
 # ──────────────────────────────────────────────────────────────
-# アレンジ (33 分の間に巡回させる 13 通り)
+# アレンジ (やさしい 4 通りを、2 コーラスずつ順に回す)
 # ──────────────────────────────────────────────────────────────
+#
+# 以前は 13 通りを 1 コーラスごとに切り替え、転調 (±2) やテンポ変更 (0.84〜1.02)、
+# ハープ・アルベルティ・低音 C2 のブロック和音まで入れていた。視聴者から
+# 「途中からメロディが変わる」「雑音っぽくなる」と指摘された。子守唄で
+# 求められているのは変化ではなく安心感なので、次の方針に改めた。
+#   - 調とテンポは変えない (全編 C・同じ速さ)
+#   - 楽器はやわらかいピアノとオルゴールだけ (硬いハープ・celesta をやめる)
+#   - 伴奏は中音域のパッドか、ゆっくりした分散和音だけ (C2 の低音を鳴らさない)
+#   - 切り替えは 2 コーラスごと (約 1 分半) に減らす
 
 ARRANGEMENTS = [
-    dict(lead="celesta", shift=0, acc="pad", tempo=1.00, trans=0, lg=0.40, ag=0.10),
-    dict(lead="piano", shift=0, acc="alberti", tempo=1.00, trans=0, lg=0.40, ag=0.20),
-    dict(lead="piano", shift=0, acc="pad", tempo=0.96, trans=0, lg=0.38, ag=0.12, double=12),
-    dict(lead="harp", shift=0, acc="block", tempo=1.00, trans=0, lg=0.38, ag=0.18),
-    dict(lead="celesta", shift=0, acc="alberti", tempo=0.95, trans=0, lg=0.38, ag=0.22),
-    dict(lead="piano", shift=0, acc="harp", tempo=0.88, trans=0, lg=0.40, ag=0.15),
-    dict(lead="celesta", shift=0, acc="pad", tempo=1.00, trans=2, lg=0.38, ag=0.10),
-    dict(lead="harp", shift=0, acc="pad", tempo=0.94, trans=0, lg=0.40, ag=0.12),
-    dict(lead="piano", shift=0, acc="block", tempo=1.00, trans=0, lg=0.40, ag=0.16, echo=12),
-    dict(lead="piano", shift=0, acc="alberti", tempo=0.94, trans=-2, lg=0.40, ag=0.20),
-    dict(lead="celesta", shift=0, acc="harp", tempo=1.02, trans=0, lg=0.36, ag=0.15),
-    # 伴奏なしにすると高音域だけが残り、500Hz 帯が突き出る (QA で実測)。
-    # 極薄のパッドを下に敷いて、低〜中域を空にしない
-    dict(lead="celesta", shift=0, acc="pad", tempo=0.84, trans=0, lg=0.40, ag=0.09),
-    dict(lead="piano", shift=0, acc="pad", tempo=1.00, trans=0, lg=0.40, ag=0.12, echo=-12),
+    dict(lead="soft_piano", acc="pad", lg=0.44, ag=0.065),
+    dict(lead="music_box", acc="pad", lg=0.34, ag=0.065),
+    dict(lead="soft_piano", acc="broken", lg=0.42, ag=0.12),
+    # ピアノの 1 オクターブ上でオルゴールがそっと重なる
+    dict(lead="soft_piano", acc="pad", lg=0.42, ag=0.065,
+         double=12, double_inst="music_box"),
 ]
+CHORUSES_PER_ARRANGEMENT = 2
+BREATH_S = 2.4                           # コーラス間の息継ぎ
 
 
 def _chord_notes(name: str, trans: int) -> tuple[int, list[int]]:
@@ -262,83 +263,66 @@ def build_nursery(spec, seconds: float):
     bank = I.SampleBank(seed=spec.seed, n_variants=3)
     buf = np.zeros((n + int(12 * sr), 2), dtype=np.float32)
 
-    t = 0.8                                  # 最初の音の前に少し間を置く
-    k = 0
-    limit = seconds - 7.0                    # 最後は残響が自然に尽きる余白
-    while True:
-        arr = ARRANGEMENTS[k % len(ARRANGEMENTS)]
-        beat_s = 60.0 / song["bpm"] / arr["tempo"]
-        pass_s = total_beats * beat_s
-        if t + pass_s > limit:
-            break
-        trans = arr["trans"]
-        shift = arr["shift"] + trans
+    # ── コーラス数と速さを、ループ長にぴったり収まるように決める ──
+    # 以前は「次のコーラスが入らなければ打ち切り」にしていたため、
+    # 11 分ループの末尾に約 28 秒の無音が残り、33 分の動画で 3 回
+    # 無音になっていた。コーラス数を決めてから速さを数 % だけ合わせる。
+    head, tail = 0.8, 3.0
+    avail = seconds - head - tail
+    beat0 = 60.0 / song["bpm"]
+    pass0 = total_beats * beat0
+    n_pass = max(int(round((avail + BREATH_S) / (pass0 + BREATH_S))), 1)
+    beat_s = (avail - (n_pass - 1) * BREATH_S) / (n_pass * total_beats)
+    pass_s = total_beats * beat_s
+
+    t = head
+    for k in range(n_pass):
+        arr = ARRANGEMENTS[(k // CHORUSES_PER_ARRANGEMENT) % len(ARRANGEMENTS)]
 
         # ── 旋律 ───────────────────────────────────────
         b = 0.0
         for midi, d in tune:
             if midi is not None:
                 tt = t + b * beat_s + float(rng.normal(0, 0.006))
-                vel = float(np.clip(rng.normal(0.55, 0.05), 0.38, 0.70))
-                m = midi + shift
+                vel = float(np.clip(rng.normal(0.50, 0.04), 0.38, 0.62))
                 pos = int(round(tt * sr))
-                A.add_panned(buf, bank.note(arr["lead"], m, vel), pos,
+                A.add_panned(buf, bank.note(arr["lead"], midi, vel), pos,
                              arr["lg"], -0.05)
                 if arr.get("double"):
-                    A.add_panned(buf, bank.note(arr["lead"], m + arr["double"],
-                                                vel * 0.6),
-                                 pos, arr["lg"] * 0.55, 0.10)
-                if arr.get("echo"):
-                    A.add_panned(buf, bank.note("celesta", m + arr["echo"],
-                                                vel * 0.7),
-                                 pos + int(0.5 * beat_s * sr), arr["lg"] * 0.45, 0.22)
+                    A.add_panned(buf, bank.note(arr["double_inst"],
+                                                midi + arr["double"], vel * 0.6),
+                                 pos, arr["lg"] * 0.40, 0.12)
             b += d
 
         # ── 伴奏 (和声区間ごと) ───────────────────────────
         for (seg_start, seg_len, cname) in chords:
             seg_t = t + seg_start * beat_s
-            bass, mids = _chord_notes(cname, trans)
-            acc = arr["acc"]
+            bass, mids = _chord_notes(cname, 0)
             ag = arr["ag"]
-            if acc == "none":
-                continue
             p0 = int(round(seg_t * sr))
-            if acc == "alberti":
-                seq = [bass, mids[1], mids[2], mids[1]]
-                for si in range(int(seg_len * 2)):
-                    vel = 0.34 if si % 2 == 0 else 0.26
-                    A.add_panned(buf, bank.note("piano", seq[si % 4], vel),
-                                 int(round((seg_t + si * 0.5 * beat_s) * sr)),
-                                 ag, 0.05)
-            elif acc == "block":
-                A.add_panned(buf, bank.note("piano", bass, 0.40), p0, ag * 1.1, 0.0)
-                for ci, m in enumerate(mids):
-                    A.add_panned(buf, bank.note("piano", m, 0.30),
-                                 p0 + int((0.012 + 0.014 * ci) * sr), ag * 0.8, 0.05)
-            elif acc == "harp":
-                notes = [bass + 12, mids[0], mids[1], mids[2], mids[1], mids[0]]
-                for si in range(min(int(seg_len * 2), len(notes))):
-                    A.add_panned(buf, bank.note("harp", notes[si], 0.34),
-                                 int(round((seg_t + si * 0.5 * beat_s) * sr)),
-                                 ag, 0.10)
-            elif acc == "pad":
+            if arr["acc"] == "broken":
+                # 1 拍に 1 音のゆっくりした分散和音。低音は C3 より下に行かない
+                notes = [bass + 12, mids[0], mids[1], mids[2]]
+                for si in range(int(seg_len)):
+                    A.add_panned(buf, bank.note("soft_piano", notes[si % 4], 0.32),
+                                 int(round((seg_t + si * beat_s) * sr)), ag, 0.08)
+            else:
                 dur = seg_len * beat_s * 1.35
                 for ci, m in enumerate([bass + 12] + mids[:2]):
                     _pad_note(bank, m, dur, ag, buf, p0, (-0.2, 0.0, 0.2)[ci])
-        t += pass_s + float(rng.uniform(1.8, 3.2))    # フレーズ間の息継ぎ
-        k += 1
+        t += pass_s + BREATH_S
+    k = n_pass
 
     ir = dsp.make_reverb_ir(2.4, rt60=2.2, damp=0.55, predelay=0.02,
                             width=0.55, seed=spec.seed)
 
     def master(x):
-        # 童謡ピアノは暖かく、でも籠らせない。飽和も入れず素直に。
-        # 旋律を中音域に収めたぶん 1-4kHz が薄くなる (QA で「こもり」を実測)
-        # ので、900Hz 以上を棚で +3.5dB 持ち上げて空気を戻す。
-        x = dsp.shelf(x, 900.0, 3.5 + float(song.get("bright", 0.0)),
-                      kind="high")
-        x = dsp.lowpass(x, 15000.0, order=2)
-        return dsp.highpass(x, 40.0, order=2)
+        # 童謡ピアノは暖かく、飽和も入れず素直に。
+        # 以前は QA の「こもり」判定に合わせて 900Hz 以上を +3.5dB 持ち上げて
+        # いたが、それが硬さ (雑音っぽさ) の一因だった。子守唄は暖かい方が正しい
+        # ので持ち上げはやめ、12kHz より上をなだらかに落とす。
+        x = dsp.lowpass(x, 12000.0, order=2)
+        return dsp.highpass(x, 50.0, order=2)
 
     # beds=[]: 環境音ノイズは敷かない。ここがノイズゼロの核心
     out, info = TR._finish(buf, clock, spec, ir, 0.30, [], master)
