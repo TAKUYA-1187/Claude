@@ -261,7 +261,10 @@ def build_piano_rain(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
     ]
 
     def master(x):
-        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-3.0)
+        # soft_piano に替えて雨を下げた分、8kHz 帯が -44dB まで落ちた (窓 -42)。
+        # 暗くする傾きを弱め、6kHz より上の空気だけ少し戻す
+        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-1.5)
+        x = dsp.shelf(x, 6000.0, 3.0, kind="high")
         x = dsp.lowpass(x, 15000.0, order=2)
         return dsp.saturate(x, drive=1.15, mix=0.28)
 
@@ -978,7 +981,7 @@ def build_halloween(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
                attack=5.0, release=6.0, rng=rng, n_voices=4, low=41, high=67)
     # オルゴールが半音ずれたような celesta。ハロウィンの音はほぼこれ。
     # ゲインを上げすぎると 1-2kHz が突き出て耳障りになる (QA で実測済み)
-    A.play_melody(buf, spans, clock, bank, inst="music_box", gain=0.13,
+    A.play_melody(buf, spans, clock, bank, inst="music_box", gain=0.09,
                   scale_root=(spec.key_root + 9) % 12, scale="harmonic_minor",
                   lo=67, hi=85, density=0.35, rng=rng, rest_prob=0.5)
     A.play_bass(buf, spans, clock, bank, inst="subbass", style="root",
@@ -993,19 +996,19 @@ def build_halloween(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
         # 風が音楽の 13dB 下だと、旋律の薄いところで「サー」という雑音に
         # 聞こえた (視聴者の指摘)。情景として気づく程度まで下げる
         (lambda: NT.wind(n, seed=spec.seed + 1), -20.0),
-        (lambda: NT.night_ambience(n, seed=spec.seed + 2), -26.0),
+        (lambda: NT.night_ambience(n, seed=spec.seed + 2), -23.0),
         (lambda: NT.thunder(n, seed=spec.seed + 3, count=2), -22.0),
         (lambda: NT.room_tone(n, seed=spec.seed + 4), -32.0),
     ]
 
     def master(x):
         x = dsp.tilt_eq(x, pivot=550.0, gain_db=-5.0)
-        # 構成を不規則にすると celesta の多い区間が長くなり、500Hz 帯が +3.2dB
-        # 突き出た (QA 窓 +3)。celesta の基音域だけを浅く削る
-        x = dsp.peak_eq(x, 720.0, -2.0, q=1.2)
-        # 1-2kHz を抑えた分、6kHz 以上の空気だけ棚で戻す
-        x = dsp.shelf(x, 6000.0, 3.5, kind="high")
-        x = dsp.lowpass(x, 12500.0, order=2)
+        # 旋律 (オルゴール) を途切れさせなくした分、その基音域 500Hz 帯が
+        # +6.8dB 突き出た。基音域を削り、風を下げて足りなくなった 3kHz 以上を戻す
+        x = dsp.peak_eq(x, 720.0, -6.0, q=0.9)
+        x = dsp.shelf(x, 3000.0, 7.0, kind="high")
+        x = dsp.shelf(x, 7000.0, 5.0, kind="high")
+        x = dsp.lowpass(x, 14000.0, order=2)
         return dsp.saturate(x, drive=1.1, mix=0.2)
 
     return _finish(buf, clock, spec, ir, 0.34, beds, master)

@@ -17,3 +17,4 @@ out/songs/tmp/
 
 # 投稿用にまとめたZIP (動画を含み巨大。再生成できるのでコミットしない)
 out/upload/
+out/listen/

@@ -228,6 +228,14 @@ def tile_repeat(x: np.ndarray, lo_s: float = 5.0, hi_s: float = 200.0,
     return (lo + k) / dsp.SR, float(seg[k])
 
 
+def _is_melodic(slug: str) -> bool:
+    """そのトラックの生成関数が旋律 (play_melody) を鳴らしているか"""
+    import inspect
+    from bgm_studio.tracks import TRACKS
+    spec = next((t for t in TRACKS if t.slug == slug), None)
+    return spec is not None and "A.play_melody(" in inspect.getsource(spec.build)
+
+
 def audio_qa(slug: str) -> dict:
     wav = OUT / "audio" / f"{slug}.wav"
     if not wav.exists():
@@ -298,7 +306,11 @@ def audio_qa(slug: str) -> dict:
     # 童謡 (n01-n10) は同じ旋律を繰り返すのが商品そのもの。環境音ノイズは
     # 敷いていないので、ノイズタイルの反復検査は意味を持たず除外する。
     is_nursery = len(slug) > 3 and slug[0] == "n" and slug[1:3].isdigit()
-    if r["repeat_corr"] > TILE_REPEAT_MAX and not is_nursery:
+    # 旋律のあるトラックも同様に除外する。旋律は進行ごとのフレーズを繰り返す
+    # 作り (arrange.play_melody の motif) に変えたので、曲全体の包絡には
+    # 「フレーズが戻ってくる周期」が出るのが正しい。ノイズタイルの反復は
+    # layer_qa() が層ごとに単体で見ているので、そちらで担保される。
+    if r["repeat_corr"] > TILE_REPEAT_MAX and not is_nursery and not _is_melodic(slug):
         issues.append(f"★{r['repeat_lag_s']:.1f}s周期でノイズが反復"
                       f"({r['repeat_corr']:.2f})")
     for lo, (mn, mx) in (NURSERY_BAND_WINDOW if is_nursery else BAND_WINDOW).items():

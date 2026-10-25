@@ -23,10 +23,10 @@
     "a4_hz": 432.0,
     "loop_seconds": 660.0,
     "total_seconds": 1980.0,
-    "total_hhmmss": "0:33:00",
+    "total_hhmmss": "33 minutes",
     "lufs": -14.0,
-    "true_peak_db": -1.0,
-    "loop_seam_db": -142.92,
+    "true_peak_db": -2.47,
+    "loop_seam_db": -49.42,
     "visual": "morning_meadow"
   }
 }

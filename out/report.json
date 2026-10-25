@@ -1,18 +1,18 @@
 {
-  "total_seconds": 1980.0,
+  "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "n01_twinkle_lullaby",
-      "title": "Twinkle Twinkle Little Star 🌙 Gentle Piano Lullaby for Babies & Sleep",
-      "bpm": 65.82,
-      "bars": 181,
-      "lufs": -14.002417178391413,
+      "slug": "03_piano_and_rain",
+      "title": "Relaxing Piano & Rain Sounds 🎹🌧️ 2 Hours for Sleep, Study & Stress Relief",
+      "bpm": 62.0,
+      "bars": 372,
+      "lufs": -14.001366376772898,
       "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -46.43215578488709,
-      "loop_seconds": 660.0,
-      "total_seconds": 1980.0,
-      "total_hhmmss": "0:33:00",
-      "elapsed_s": 33.0
+      "loop_seam_db": -18.35399905666915,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "elapsed_s": 119.7
     }
   ]
 }
