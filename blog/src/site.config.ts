@@ -11,5 +11,7 @@ export const SITE = {
   // Googleフォーム等のURL。入れるとお問い合わせページにフォームが埋め込まれる
   contactUrl:
     'https://docs.google.com/forms/d/e/1FAIpQLSdvyzX9rZ37Z-NFzuox4qdByBfZp6M6U4NDxpPRR4uzEl_3rw/viewform',
+  // Google Search Console の「HTMLタグ」で確認するときの content の値（空なら出力しない）
+  googleSiteVerification: '',
   lang: 'ja',
 };
