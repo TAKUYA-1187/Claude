@@ -1,7 +1,7 @@
 {
   "slug": "n10_jingle_bells_lullaby",
-  "title": "Jingle Bells ❄️ Slow Lullaby Piano for Cozy Winter Nights",
-  "description": "❄️ JINGLE BELLS, SLOWED DOWN — 33 minutes of piano for a cozy winter evening\n\nThe bells and the sleigh are gone; what's left is the melody, played the\nslowest it will go, on a piano and a music box. It's the version for after the\npresents are opened and everyone's a bit tired.\n\n▸ Traditional tune (public domain), original arrangement and sound\n▸ No background noise of any kind\n▸ A = 432 Hz tuning (softer reference pitch, no health claims)\n\nFor wintry evenings and gentle bedtimes.\n",
+  "title": "Jingle Bells ❄️ 1 Hour Slow Lullaby for Babies | Soft Piano & Music Box",
+  "description": "❄️ JINGLE BELLS, SLOWED DOWN — 1 hour of piano for a cozy winter evening\n\nThe bells and the sleigh are gone; what's left is the melody, played gently on\na soft piano and a music box. It's the version for after the presents are\nopened and everyone's a bit tired.\n\n▸ Traditional tune (public domain), original arrangement, sound and animation\n▸ No background noise of any kind\n▸ A = 432 Hz tuning (softer reference pitch, no health claims)\n\nFor wintry evenings and gentle bedtimes.\n",
   "tags": [
     "jingle bells",
     "christmas lullaby",
@@ -21,12 +21,12 @@
     "bpm": 92.0,
     "key": "C",
     "a4_hz": 432.0,
-    "loop_seconds": 660.0,
-    "total_seconds": 1980.0,
-    "total_hhmmss": "33 minutes",
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
     "lufs": -14.0,
     "true_peak_db": -1.0,
-    "loop_seam_db": -53.75,
-    "visual": "snow_cabin"
+    "loop_seam_db": -53.51,
+    "visual": "lullaby_moon"
   }
 }

@@ -1,7 +1,7 @@
 {
   "slug": "n08_silent_night_lullaby",
-  "title": "Silent Night 🎄 Soft Piano Lullaby for a Peaceful Christmas Night",
-  "description": "🎄 SILENT NIGHT — 33 minutes of soft piano for a peaceful Christmas night\n\nThe carol at its slowest, 60 beats a minute and in a calm 6/8 sway, with the\nmelody passing between a music box, a piano and a harp. It's quiet enough for\na nursery and plain enough for a living room, and there is no background\nnoise, just the instruments.\n\nTraditional melody (public domain). All sound and arrangement are original to\nthis channel. Tuned to A = 432 Hz, a softer-sounding reference pitch — a tuning\nchoice, nothing more.\n\nFor putting children to bed on Christmas Eve, wrapping presents, and the quiet\npart of the evening.\n",
+  "title": "Silent Night 🎄 1 Hour Christmas Lullaby for Babies | Soft Piano & Music Box",
+  "description": "🎄 SILENT NIGHT — 1 hour of soft piano for a peaceful Christmas night\n\nThe carol at its slowest, in a calm 3-beat sway, played on a soft piano and a\nmusic box. It's quiet enough for a nursery and plain enough for a living room,\nand there is no background noise, just the instruments.\n\nTraditional melody (public domain). All sound, arrangement and animation are\noriginal to this channel. Tuned to A = 432 Hz, a softer-sounding reference\npitch — a tuning choice, nothing more.\n\nFor putting children to bed on Christmas Eve, wrapping presents, and the quiet\npart of the evening.\n",
   "tags": [
     "silent night",
     "christmas lullaby",
@@ -21,12 +21,12 @@
     "bpm": 60.0,
     "key": "C",
     "a4_hz": 432.0,
-    "loop_seconds": 660.0,
-    "total_seconds": 1980.0,
-    "total_hhmmss": "33 minutes",
-    "lufs": -14.01,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.0,
     "true_peak_db": -1.0,
-    "loop_seam_db": -64.05,
-    "visual": "christmas_window"
+    "loop_seam_db": -60.85,
+    "visual": "lullaby_moon"
   }
 }

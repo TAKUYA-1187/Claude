@@ -1,7 +1,7 @@
 {
   "slug": "n05_london_bridge_lullaby",
-  "title": "London Bridge Is Falling Down 🌉 Gentle Music Box & Piano Lullaby",
-  "description": "🌉 LONDON BRIDGE IS FALLING DOWN — 33 minutes of music-box and piano lullaby\n\nThe old game-song, with the game taken out. Eight bars, played over and over\nin thirteen different ways: a bright music box, a warm piano, a harp in\nbroken chords, a slower pass, a higher pass. The chords are chosen to follow\nthe tune and land on a quiet C at the end of every phrase.\n\n▸ No background noise at all\n▸ A = 432 Hz, a softer-sounding reference pitch\n▸ Traditional melody, original sound\n\nFor naps, calm-down corners, and quiet rooms.\n",
+  "title": "London Bridge 🌉 1 Hour Music Box Lullaby for Babies to Sleep",
+  "description": "🌉 LONDON BRIDGE IS FALLING DOWN — 1 hour of music-box and piano lullaby\n\nThe old game-song, with the game taken out. Eight bars, played slowly and\nevenly on a music box and a soft piano, with chords chosen to follow the tune\nand land on a quiet C at the end of every phrase. Same key, same tempo, no\nsurprises.\n\n▸ No background noise at all\n▸ A = 432 Hz, a softer-sounding reference pitch\n▸ Traditional melody, original sound and animation\n\nFor naps, calm-down corners, and quiet rooms.\n",
   "tags": [
     "london bridge is falling down",
     "nursery rhymes",
@@ -21,12 +21,12 @@
     "bpm": 80.0,
     "key": "C",
     "a4_hz": 432.0,
-    "loop_seconds": 660.0,
-    "total_seconds": 1980.0,
-    "total_hhmmss": "33 minutes",
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
     "lufs": -14.0,
-    "true_peak_db": -2.01,
-    "loop_seam_db": -68.16,
-    "visual": "night_skyline"
+    "true_peak_db": -1.8,
+    "loop_seam_db": -89.14,
+    "visual": "lullaby_moon"
   }
 }

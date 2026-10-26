@@ -2,21 +2,21 @@
   "total_seconds": 3600.0,
   "tracks": [
     {
-      "slug": "n01_twinkle_lullaby",
-      "title": "Twinkle Twinkle Little Star 🌙 1 Hour Lullaby for Babies to Sleep | Soft Piano & Music Box",
-      "bpm": 66.0,
-      "bars": 198,
-      "lufs": -14.001638934447382,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -54.080832842071686,
+      "slug": "n02_mary_lamb_lullaby",
+      "title": "Mary Had a Little Lamb 🐑 1 Hour Baby Lullaby | Soft Piano & Music Box for Sleep",
+      "bpm": 72.0,
+      "bars": 216,
+      "lufs": -14.00000011146162,
+      "true_peak_db": -1.7899296344894744,
+      "loop_seam_db": -54.79162287471003,
       "loop_seconds": 720.0,
       "total_seconds": 3600.0,
       "total_hhmmss": "1:00:00",
-      "video": "out/video/n01_twinkle_lullaby.mp4",
+      "video": "out/video/n02_mary_lamb_lullaby.mp4",
       "probe": {
         "duration_s": 3600.0,
-        "size_mb": 247.949464,
-        "bitrate_kbps": 550.998,
+        "size_mb": 250.147246,
+        "bitrate_kbps": 555.882,
         "streams": [
           {
             "type": "video",
@@ -34,7 +34,7 @@
           }
         ]
       },
-      "elapsed_s": 214.8
+      "elapsed_s": 224.7
     }
   ]
 }

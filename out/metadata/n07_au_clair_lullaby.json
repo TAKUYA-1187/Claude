@@ -1,7 +1,7 @@
 {
   "slug": "n07_au_clair_lullaby",
-  "title": "Au clair de la lune 🌕 French Lullaby Piano by Moonlight",
-  "description": "\"Au clair de la lune\" — 33 minutes by moonlight.\n\nA French lullaby from the eighteenth century, simple enough to be played with\none finger and gentle enough to play for an hour. Here it moves between music\nbox and piano and harp, with long pauses between phrases so the room has time\nto settle. There is no hiss and no background sound; the only thing you'll hear\nis the instruments and their reverb.\n\nTuned to A = 432 Hz. Traditional melody; sound and arrangement original to this\nchannel.\n\nFor late evenings, early mornings, and candle-light.\n",
+  "title": "Au Clair de la Lune 🌕 1 Hour French Lullaby for Babies | Piano & Music Box",
+  "description": "\"Au clair de la lune\" — 1 hour by moonlight.\n\nA French lullaby from the eighteenth century, simple enough to be played with\none finger and gentle enough to play for an hour. Here it moves between a music\nbox and a soft piano, with a short breath between verses so the room has time\nto settle. There is no hiss and no background sound; the only thing you'll hear\nis the instruments and their reverb.\n\nTuned to A = 432 Hz. Traditional melody; sound, arrangement and animation\noriginal to this channel.\n\nFor late evenings, early mornings, and candle-light.\n",
   "tags": [
     "au clair de la lune",
     "french lullaby",
@@ -18,15 +18,15 @@
   "specs": {
     "genre_ja": "月の光に（子守唄ピアノ）",
     "use_case": "sleep",
-    "bpm": 69.82,
+    "bpm": 70.0,
     "key": "C",
     "a4_hz": 432.0,
-    "loop_seconds": 660.0,
-    "total_seconds": 1980.0,
-    "total_hhmmss": "33 minutes",
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
     "lufs": -14.0,
     "true_peak_db": -1.0,
-    "loop_seam_db": -57.38,
-    "visual": "moonlit_ocean"
+    "loop_seam_db": -55.04,
+    "visual": "lullaby_moon"
   }
 }

@@ -64,7 +64,8 @@ NURSERY: dict[str, dict] = {
              "C/1 C/1 G/1 G/1 A/1 A/1 G/2 F/1 F/1 E/1 E/1 D/1 D/1 C/2"),
     "n02_mary_lamb_lullaby": dict(
         title="Mary Had a Little Lamb", bar=4, bpm=72, visual="morning_meadow",
-        bright=4.5,    # 旋律が E4-G4 と低く倍音が少ないため、1kHz 以上を少し戻す (QA 1kHz -23)
+        bright=5.5,    # 旋律が E4-G4 と低く倍音が少ないため、1kHz 以上を少し戻す (QA 1kHz -23)
+        lowmid_cut=4.5,  # 1 時間版でも 1kHz -24 とこもった。旋律と伴奏が重なる 350Hz 付近を浅く削る
         tune="E/1 D/1 C/1 D/1 E/1 E/1 E/2 D/1 D/1 D/2 E/1 G/1 G/2 "
              "E/1 D/1 C/1 D/1 E/1 E/1 E/1 E/1 D/1 D/1 E/1 D/1 C/4"),
     "n03_row_your_boat_lullaby": dict(
@@ -328,6 +329,8 @@ def build_nursery(spec, seconds: float):
         # 旋律が低い曲だけ、曲ごとに 1kHz 以上を少し戻す / 中域を浅く削る
         if song.get("bright"):
             x = dsp.shelf(x, 1000.0, float(song["bright"]), kind="high")
+        if song.get("lowmid_cut"):
+            x = dsp.peak_eq(x, 350.0, -float(song["lowmid_cut"]), q=1.2)
         if song.get("mid_cut"):
             x = dsp.peak_eq(x, 700.0, -float(song["mid_cut"]), q=1.0)
         x = dsp.lowpass(x, 12000.0, order=2)

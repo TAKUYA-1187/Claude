@@ -1,7 +1,7 @@
 {
   "slug": "n03_row_your_boat_lullaby",
-  "title": "Row Row Row Your Boat 🚣 Calm Lullaby Piano for Little Ones",
-  "description": "🚣 ROW, ROW, ROW YOUR BOAT — 33 minutes (calm piano version)\n\nThis is the nursery rhyme slowed right down, with the little rocking feel of\nits 6/8 rhythm kept intact. The piano carries the tune; a harp and a music box\ntake turns with it so the ear isn't asked to hear the same sound for half an\nhour.\n\n▸ Clean sound: no hiss, no ambience layer, no noise floor — only instruments.\n▸ Tuning: A = 432 Hz (a softer reference pitch, no health claims).\n▸ Tune: traditional. Sound and arrangement: made for this channel.\n\nFor rocking to sleep, quiet bath-time, and car rides.\n",
+  "title": "Row Row Row Your Boat 🚣 1 Hour Calm Lullaby for Babies | Soft Piano for Sleep",
+  "description": "🚣 ROW, ROW, ROW YOUR BOAT — 1 hour (calm piano version)\n\nThe nursery rhyme slowed right down, with the little rocking feel of its 6/8\nrhythm kept intact. A soft piano carries the tune and a music box takes over\nnow and then, always in the same key and at the same gentle pace.\n\n▸ Clean sound: no hiss, no ambience layer, no noise floor — only instruments.\n▸ Tuning: A = 432 Hz (a softer reference pitch, no health claims).\n▸ Tune: traditional. Sound, arrangement and animation: made for this channel.\n\nFor rocking to sleep, quiet bath-time, and car rides.\n",
   "tags": [
     "row row row your boat",
     "nursery rhymes",
@@ -21,12 +21,12 @@
     "bpm": 84.0,
     "key": "C",
     "a4_hz": 432.0,
-    "loop_seconds": 660.0,
-    "total_seconds": 1980.0,
-    "total_hhmmss": "33 minutes",
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
     "lufs": -14.0,
     "true_peak_db": -1.0,
-    "loop_seam_db": -54.68,
-    "visual": "zen_water"
+    "loop_seam_db": -49.06,
+    "visual": "lullaby_moon"
   }
 }
