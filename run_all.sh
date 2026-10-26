@@ -57,8 +57,8 @@ echo "▶ [3/5] 長時間版を 2 本作ります (8時間の睡眠BGMと10時�
   || { echo "エラーで止まりました。"; exit 1; }
 echo ""
 
-echo "▶ [3.5/5] 童謡・子守唄 10 本 (各33分・ノイズ無し・A=432Hz) を作ります"
-"$PY" render_bgm.py --seconds 660 --repeats 3 --tracks \
+echo "▶ [3.5/5] 童謡・子守唄 10 本 (各1時間・ノイズ無し・A=432Hz) を作ります"
+"$PY" render_bgm.py --seconds 720 --repeats 5 --tracks \
   n01_twinkle_lullaby n02_mary_lamb_lullaby n03_row_your_boat_lullaby \
   n04_frere_jacques_lullaby n05_london_bridge_lullaby n06_old_macdonald_lullaby \
   n07_au_clair_lullaby n08_silent_night_lullaby n09_ode_to_joy_lullaby \

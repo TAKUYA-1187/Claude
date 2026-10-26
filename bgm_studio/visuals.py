@@ -1631,6 +1631,13 @@ SCENES = {
 }
 
 
+# 子守唄シリーズのシーン (キャラクター入り) は別モジュール。循環 import を
+# 避けるため、ここで (このモジュールの定義が全て済んだ後に) 取り込む
+from .kids_visuals import KIDS_SCENES  # noqa: E402
+
+SCENES.update(KIDS_SCENES)
+
+
 def render_frames(scene_name: str, seed: int = 0, seconds: int = LOOP_SECONDS,
                   fps: int = FPS):
     """シーンのフレームを順に yield する (uint8 RGB)"""

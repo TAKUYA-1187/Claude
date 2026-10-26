@@ -1,7 +1,7 @@
 {
   "slug": "n01_twinkle_lullaby",
-  "title": "Twinkle Twinkle Little Star 🌙 Gentle Piano Lullaby for Babies & Sleep",
-  "description": "33 minutes of \"Twinkle, Twinkle, Little Star\" played softly on piano and music box.\n\nThe tune is traditional, so nothing here is borrowed from anyone's recording\nor arrangement — the harmony, the playing and the sound are all made for this\nvideo. What changes is how it's played: the melody moves between a music box,\na piano, and a harp, sometimes with a slow arpeggio underneath, sometimes with\nonly a quiet pad, and in a few passes it's slowed down or shifted up a tone.\nThirteen settings in rotation, so thirty-three minutes never sounds like one\nloop on repeat.\n\nThere is no background noise in this recording — no hiss, no rain, no room\ntone. Just the instruments and a little reverb. Tuned to A = 432 Hz, which is\nsimply a slightly lower, softer reference pitch than the usual 440 Hz. It is a\ntuning choice, not a treatment, and no health claims are made.\n\nFor bedtime, naptime, and quiet afternoons.\n\n— Original arrangement and sound, synthesised for this channel.\n",
+  "title": "Twinkle Twinkle Little Star 🌙 1 Hour Lullaby for Babies to Sleep | Soft Piano & Music Box",
+  "description": "1 hour of \"Twinkle, Twinkle, Little Star\", played softly on piano and music box.\n\nLuna, our sleepy little moon, rocks gently in her nightcap while the stars\ntwinkle around her. The tune is played slowly and stays in the same key and\nthe same calm tempo from start to finish, so nothing changes suddenly and\nnothing wakes anyone up. Every couple of verses the sound shifts a little —\npiano, then music box, then piano with slow broken chords — and that's all.\n\nThere is no background noise in this recording: no hiss, no rain, no room\ntone. Just the two instruments and a little reverb. Tuned to A = 432 Hz, a\nslightly lower reference pitch than the usual 440 Hz — a tuning choice, not a\ntreatment, and no health claims are made.\n\nFor bedtime, naptime, and quiet afternoons.\n\n— Traditional melody. Arrangement, sound and animation made for this channel.\n",
   "tags": [
     "twinkle twinkle little star",
     "lullaby",
@@ -18,15 +18,15 @@
   "specs": {
     "genre_ja": "きらきら星（子守唄ピアノ）",
     "use_case": "sleep",
-    "bpm": 65.82,
+    "bpm": 66.0,
     "key": "C",
     "a4_hz": 432.0,
-    "loop_seconds": 660.0,
-    "total_seconds": 1980.0,
-    "total_hhmmss": "33 minutes",
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
     "lufs": -14.0,
     "true_peak_db": -1.0,
-    "loop_seam_db": -46.43,
-    "visual": "starry_night"
+    "loop_seam_db": -54.08,
+    "visual": "lullaby_moon"
   }
 }

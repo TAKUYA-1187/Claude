@@ -766,37 +766,41 @@ SHORT_HOOKS["27_rain_black_screen"] = [
 # 音は合成。効能は謳わない (調律は「やわらかく聞こえる選択」とだけ書く)。
 # ──────────────────────────────────────────────────────────────
 
+# 童謡は 2026-10-26 に作り直した (無音・転調・硬い音を解消し、1 時間・新映像に)。
+# 説明文は実際の内容と食い違わないことを最優先に書き直した:
+#   楽器はやわらかいピアノとオルゴールだけ / 調とテンポは最後まで同じ /
+#   やさしい 4 つの弾き方を 2 コーラスずつ回す / 映像はオリジナルキャラ Luna。
+
 DESCRIPTIONS["n01_twinkle_lullaby"] = """\
-{duration} of "Twinkle, Twinkle, Little Star" played softly on piano and music box.
+{duration} of "Twinkle, Twinkle, Little Star", played softly on piano and music box.
 
-The tune is traditional, so nothing here is borrowed from anyone's recording
-or arrangement — the harmony, the playing and the sound are all made for this
-video. What changes is how it's played: the melody moves between a music box,
-a piano, and a harp, sometimes with a slow arpeggio underneath, sometimes with
-only a quiet pad, and in a few passes it's slowed down or shifted up a tone.
-Thirteen settings in rotation, so thirty-three minutes never sounds like one
-loop on repeat.
+Luna, our sleepy little moon, rocks gently in her nightcap while the stars
+twinkle around her. The tune is played slowly and stays in the same key and
+the same calm tempo from start to finish, so nothing changes suddenly and
+nothing wakes anyone up. Every couple of verses the sound shifts a little —
+piano, then music box, then piano with slow broken chords — and that's all.
 
-There is no background noise in this recording — no hiss, no rain, no room
-tone. Just the instruments and a little reverb. Tuned to A = 432 Hz, which is
-simply a slightly lower, softer reference pitch than the usual 440 Hz. It is a
-tuning choice, not a treatment, and no health claims are made.
+There is no background noise in this recording: no hiss, no rain, no room
+tone. Just the two instruments and a little reverb. Tuned to A = 432 Hz, a
+slightly lower reference pitch than the usual 440 Hz — a tuning choice, not a
+treatment, and no health claims are made.
 
 For bedtime, naptime, and quiet afternoons.
 
-— Original arrangement and sound, synthesised for this channel.
+— Traditional melody. Arrangement, sound and animation made for this channel.
 """
 
 DESCRIPTIONS["n02_mary_lamb_lullaby"] = """\
 Mary had a little lamb, and for {duration} she has a very quiet piano with her.
 
-A short, friendly tune that is easy to follow and easy to fall asleep to. It
-is played gently and slowly, with the melody passing between a piano, a harp
-and a music box while the chords underneath change their pattern every few
-minutes. Nothing sudden, nothing loud, and no background noise of any kind.
+A short, friendly tune that is easy to follow and easy to fall asleep to,
+played slowly on a soft piano and a music box under a sleepy moon. The key and
+the tempo never change, and the accompaniment is either a quiet pad or a few
+slow notes per bar. Nothing sudden, nothing loud, and no background noise of
+any kind.
 
 A = 432 Hz tuning (a softer reference pitch — a tuning choice, not a treatment).
-The song is traditional and the performance is synthesised for this channel.
+The song is traditional; the performance and animation are made for this channel.
 
 Good for naptime, a calm play corner, and the last ten minutes before lights-out.
 """
@@ -804,28 +808,27 @@ Good for naptime, a calm play corner, and the last ten minutes before lights-out
 DESCRIPTIONS["n03_row_your_boat_lullaby"] = """\
 🚣 ROW, ROW, ROW YOUR BOAT — {duration} (calm piano version)
 
-This is the nursery rhyme slowed right down, with the little rocking feel of
-its 6/8 rhythm kept intact. The piano carries the tune; a harp and a music box
-take turns with it so the ear isn't asked to hear the same sound for half an
-hour.
+The nursery rhyme slowed right down, with the little rocking feel of its 6/8
+rhythm kept intact. A soft piano carries the tune and a music box takes over
+now and then, always in the same key and at the same gentle pace.
 
 ▸ Clean sound: no hiss, no ambience layer, no noise floor — only instruments.
 ▸ Tuning: A = 432 Hz (a softer reference pitch, no health claims).
-▸ Tune: traditional. Sound and arrangement: made for this channel.
+▸ Tune: traditional. Sound, arrangement and animation: made for this channel.
 
 For rocking to sleep, quiet bath-time, and car rides.
 """
 
 DESCRIPTIONS["n04_frere_jacques_lullaby"] = """\
-Frère Jacques, sung by no one: {duration} of it, on piano, harp and music box.
+Frère Jacques, sung by no one: {duration} of it, on soft piano and music box.
 
-The round is one of the oldest tunes anyone still hums, which is why it's
-safe to play without lyrics — every parent already knows the words. Here it
-goes slowly, with soft chords and a rotating cast of instruments, and with
-nothing in the background but the instruments themselves.
+The round is one of the oldest tunes anyone still hums, which is why it works
+without lyrics — every parent already knows the words. Here it goes slowly,
+with quiet chords underneath, and with nothing in the background but the
+instruments themselves. The key and tempo stay the same the whole way through.
 
-Tuned to A = 432 Hz. Traditional melody; arrangement and sound original to
-this channel.
+Tuned to A = 432 Hz. Traditional melody; arrangement, sound and animation
+original to this channel.
 
 Use it for settling down, reading time, or calm background at home.
 """
@@ -833,14 +836,14 @@ Use it for settling down, reading time, or calm background at home.
 DESCRIPTIONS["n05_london_bridge_lullaby"] = """\
 🌉 LONDON BRIDGE IS FALLING DOWN — {duration} of music-box and piano lullaby
 
-The old game-song, with the game taken out. Eight bars, played over and over
-in thirteen different ways: a bright music box, a warm piano, a harp in
-broken chords, a slower pass, a higher pass. The chords are chosen to follow
-the tune and land on a quiet C at the end of every phrase.
+The old game-song, with the game taken out. Eight bars, played slowly and
+evenly on a music box and a soft piano, with chords chosen to follow the tune
+and land on a quiet C at the end of every phrase. Same key, same tempo, no
+surprises.
 
 ▸ No background noise at all
 ▸ A = 432 Hz, a softer-sounding reference pitch
-▸ Traditional melody, original sound
+▸ Traditional melody, original sound and animation
 
 For naps, calm-down corners, and quiet rooms.
 """
@@ -849,25 +852,24 @@ DESCRIPTIONS["n06_old_macdonald_lullaby"] = """\
 Old MacDonald, with the animals asleep. {duration}.
 
 The famous farm song is much calmer than it sounds when sung loudly. Played
-slowly on piano and music box with a soft harp sweeping underneath, it works
-as an easy, familiar background for winding down — the E-I-E-I-O turn is a
-natural place to breathe.
+slowly on a soft piano and a music box, it works as an easy, familiar
+background for winding down — the E-I-E-I-O turn is a natural place to breathe.
 
 No noise layer, no effects, nothing sudden. A = 432 Hz.
-Traditional song; sound and arrangement made for this channel.
+Traditional song; sound, arrangement and animation made for this channel.
 """
 
 DESCRIPTIONS["n07_au_clair_lullaby"] = """\
 "Au clair de la lune" — {duration} by moonlight.
 
 A French lullaby from the eighteenth century, simple enough to be played with
-one finger and gentle enough to play for an hour. Here it moves between music
-box and piano and harp, with long pauses between phrases so the room has time
+one finger and gentle enough to play for an hour. Here it moves between a music
+box and a soft piano, with a short breath between verses so the room has time
 to settle. There is no hiss and no background sound; the only thing you'll hear
 is the instruments and their reverb.
 
-Tuned to A = 432 Hz. Traditional melody; sound and arrangement original to this
-channel.
+Tuned to A = 432 Hz. Traditional melody; sound, arrangement and animation
+original to this channel.
 
 For late evenings, early mornings, and candle-light.
 """
@@ -875,14 +877,13 @@ For late evenings, early mornings, and candle-light.
 DESCRIPTIONS["n08_silent_night_lullaby"] = """\
 🎄 SILENT NIGHT — {duration} of soft piano for a peaceful Christmas night
 
-The carol at its slowest, 60 beats a minute and in a calm 6/8 sway, with the
-melody passing between a music box, a piano and a harp. It's quiet enough for
-a nursery and plain enough for a living room, and there is no background
-noise, just the instruments.
+The carol at its slowest, in a calm 3-beat sway, played on a soft piano and a
+music box. It's quiet enough for a nursery and plain enough for a living room,
+and there is no background noise, just the instruments.
 
-Traditional melody (public domain). All sound and arrangement are original to
-this channel. Tuned to A = 432 Hz, a softer-sounding reference pitch — a tuning
-choice, nothing more.
+Traditional melody (public domain). All sound, arrangement and animation are
+original to this channel. Tuned to A = 432 Hz, a softer-sounding reference
+pitch — a tuning choice, nothing more.
 
 For putting children to bed on Christmas Eve, wrapping presents, and the quiet
 part of the evening.
@@ -892,23 +893,22 @@ DESCRIPTIONS["n09_ode_to_joy_lullaby"] = """\
 Beethoven's "Ode to Joy" as a music box lullaby. {duration}.
 
 Normally a tune of triumph, it turns out to be very gentle when you slow it
-down and play it on celesta and soft piano: the melody barely moves, and the
-sound stays warm. The arrangement shifts every few minutes between a music box,
-a piano with soft chords, and a harp, so the half hour never feels like a loop.
+down and play it on a music box and a soft piano: the melody barely moves, and
+the sound stays warm. Same key and tempo from start to finish.
 
 No hiss, no ambience, no added noise. A = 432 Hz, a softer reference pitch.
-Beethoven's melody is in the public domain; this performance is synthesised for
-this channel.
+Beethoven's melody is in the public domain; this performance and animation are
+made for this channel.
 """
 
 DESCRIPTIONS["n10_jingle_bells_lullaby"] = """\
 ❄️ JINGLE BELLS, SLOWED DOWN — {duration} of piano for a cozy winter evening
 
-The bells and the sleigh are gone; what's left is the melody, played the
-slowest it will go, on a piano and a music box. It's the version for after the
-presents are opened and everyone's a bit tired.
+The bells and the sleigh are gone; what's left is the melody, played gently on
+a soft piano and a music box. It's the version for after the presents are
+opened and everyone's a bit tired.
 
-▸ Traditional tune (public domain), original arrangement and sound
+▸ Traditional tune (public domain), original arrangement, sound and animation
 ▸ No background noise of any kind
 ▸ A = 432 Hz tuning (softer reference pitch, no health claims)
 
@@ -919,7 +919,7 @@ SHORT_HOOKS["n01_twinkle_lullaby"] = ["twinkle twinkle,\\nvery quietly", "a musi
 SHORT_HOOKS["n02_mary_lamb_lullaby"] = ["mary's lamb,\\nsoftly", "a tune that\\nfalls asleep itself", "no hiss.\\nno noise."]
 SHORT_HOOKS["n03_row_your_boat_lullaby"] = ["row row row,\\nvery slowly", "gently down\\nthe stream", "6/8 rocking\\nfor sleepy heads"]
 SHORT_HOOKS["n04_frere_jacques_lullaby"] = ["frère jacques,\\nno words needed", "one of the oldest\\ntunes we still hum", "dormez-vous?\\nalmost."]
-SHORT_HOOKS["n05_london_bridge_lullaby"] = ["london bridge,\\nwithout the game", "a music box\\nin thirteen ways", "falling down,\\ngently"]
+SHORT_HOOKS["n05_london_bridge_lullaby"] = ["london bridge,\\nwithout the game", "a music box,\\nvery slowly", "falling down,\\ngently"]
 SHORT_HOOKS["n06_old_macdonald_lullaby"] = ["old macdonald,\\nanimals asleep", "e-i-e-i-o,\\nwhispered", "the farm song,\\nturned down"]
 SHORT_HOOKS["n07_au_clair_lullaby"] = ["by the light\\nof the moon", "a french lullaby,\\ntwo hundred years old", "play it\\nby candle-light"]
 SHORT_HOOKS["n08_silent_night_lullaby"] = ["silent night,\\nslowest version", "christmas eve,\\nbedtime", "no noise.\\njust a music box"]

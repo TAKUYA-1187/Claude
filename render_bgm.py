@@ -67,6 +67,9 @@ def build_metadata(spec: TR.TrackSpec, info: dict, total_seconds: float) -> dict
     # 1 時間未満を "0:33:00" と書くと説明文の冒頭が不自然になる
     if total_seconds < 3600:
         dur = f"{int(round(total_seconds / 60))} minutes"
+    elif abs(total_seconds % 3600) < 1.0:
+        h_ = int(round(total_seconds / 3600))
+        dur = f"{h_} hour" if h_ == 1 else f"{h_} hours"
     # 童謡・子守唄は乳幼児向け。YouTube (COPPA) 上「子ども向け」に設定する義務がある
     is_kids = spec.slug[:1] == "n" and spec.slug[1:3].isdigit()
 
@@ -213,9 +216,7 @@ def process(spec: TR.TrackSpec, args) -> dict:
     # ── サムネイル ─────────────────────────────────────────
     thumb_dir = OUT / "thumbnail"
     thumb_dir.mkdir(parents=True, exist_ok=True)
-    lines = _thumb_lines(spec, total_seconds)
-    VIS.thumbnail(spec.visual, lines, seed=spec.seed).save(
-        thumb_dir / f"{spec.slug}.png")
+    _make_thumbnail(spec, total_seconds).save(thumb_dir / f"{spec.slug}.png")
 
     # ── メタデータ ─────────────────────────────────────────
     meta = build_metadata(spec, info, total_seconds)
@@ -280,8 +281,7 @@ def process_visual_only(spec: TR.TrackSpec, args, t_start: float) -> dict:
 
     thumb_dir = OUT / "thumbnail"
     thumb_dir.mkdir(parents=True, exist_ok=True)
-    VIS.thumbnail(spec.visual, _thumb_lines(spec, total_seconds),
-                  seed=spec.seed).save(thumb_dir / f"{spec.slug}.png")
+    _make_thumbnail(spec, total_seconds).save(thumb_dir / f"{spec.slug}.png")
 
     log(f"  音声を {args.repeats} 回つないで AAC 化中...")
     m4a = VID.loop_audio_to_aac(wav, OUT / "tmp" / f"{spec.slug}.m4a",
@@ -299,6 +299,33 @@ def process_visual_only(spec: TR.TrackSpec, args, t_start: float) -> dict:
             "total_hhmmss": VID.hhmmss(total_seconds),
             "lufs": -14.0, "loop_seam_db": 0.0,
             "elapsed_s": round(time.time() - t_start, 1)}
+
+
+# 子守唄のサムネ: キャラクター + 太い丸文字 2 行 + 用途のバッジ
+# (子ども向けの高再生動画に倣う。kids_visuals.kids_thumbnail 参照)
+KIDS_THUMB = {
+    "n01_twinkle_lullaby": ["TWINKLE", "TWINKLE"],
+    "n02_mary_lamb_lullaby": ["MARY HAD A", "LITTLE LAMB"],
+    "n03_row_your_boat_lullaby": ["ROW ROW", "YOUR BOAT"],
+    "n04_frere_jacques_lullaby": ["FRÈRE", "JACQUES"],
+    "n05_london_bridge_lullaby": ["LONDON", "BRIDGE"],
+    "n06_old_macdonald_lullaby": ["OLD", "MACDONALD"],
+    "n07_au_clair_lullaby": ["AU CLAIR", "DE LA LUNE"],
+    "n08_silent_night_lullaby": ["SILENT", "NIGHT"],
+    "n09_ode_to_joy_lullaby": ["ODE TO", "JOY"],
+    "n10_jingle_bells_lullaby": ["JINGLE", "BELLS"],
+}
+
+
+def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
+    if spec.slug in KIDS_THUMB:
+        from bgm_studio import kids_visuals as KV
+        h = total_seconds / 3600.0
+        length = (f"{int(round(h))} HOUR" if h >= 0.99 else
+                  f"{int(round(total_seconds / 60))} MIN")
+        return KV.kids_thumbnail(KIDS_THUMB[spec.slug], f"{length} LULLABY",
+                                 "for Babies & Sleep", scene=spec.visual, seed=spec.seed)
+    return VIS.thumbnail(spec.visual, _thumb_lines(spec, total_seconds), seed=spec.seed)
 
 
 def _thumb_lines(spec: TR.TrackSpec, total_seconds: float) -> list[str]:
