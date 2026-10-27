@@ -1,6 +1,6 @@
 # 07. 動画戦略 — 月100万円までのロードマップ
 
-最終更新: 2026-10-26（「視聴が伸びない・高再生の子ども向け動画に倣って」を受けて §1.5 を追加）
+最終更新: 2026-10-27（新主力 Sleep Piano・子守唄まとめ版・子ども向け Shorts を追加し、カレンダーを更新）
 
 ---
 
@@ -132,22 +132,42 @@
 
 | 日付 | 時刻 | 動画 | 柱 | 状態 |
 |---|---|---|---|---|
-| 10/26（月） | 12:00 | 21 Halloween Ambience（作り直し版） | C | 差し替えて予約 |
-| 10/28（水） | 12:00 | 03 Relaxing Piano & Rain（作り直し版） | A寄り | 作り直し済み |
-| 10/31（土） | 9:00 | n03 Row Row Row Your Boat | D | 作り直し済み |
-| 11/1（日） | 12:00 | 07 Fireplace Jazz（作り直し版） | C | 作り直し済み |
-| 11/3（火） | 9:00 | n04 Frère Jacques | D | |
-| 11/4（水） | 12:00 | 05 Bossa Nova Cafe | B | 作り直し・試聴待ち |
-| 11/6（金） | 9:00 | n07 Au clair de la lune | D | |
-| 11/7（土） | 12:00 | **新作 Gentle Piano for Sleep（3時間）** | A | 制作予定 |
-| 11/9（月） | 9:00 | n05 London Bridge | D | |
-| 11/11（水） | 12:00 | 04 Cozy Coffee Shop Jazz | B | 作り直し・試聴待ち |
-| 11/12（木） | 9:00 | n09 Ode to Joy | D | |
-| 11/14（土） | 12:00 | 17 Christmas Jazz | C | 作り直し・試聴待ち |
-| 11/15（日） | 9:00 | n06 Old MacDonald | D | |
-| 11/18（水） | 9:00 | n08 Silent Night | D | |
-| 11/19（木） | 12:00 | **新作 Gentle Piano for Sleep（8時間）** | A | 制作予定 |
-| 11/21（土） | 9:00 | n10 Jingle Bells | D | |
+| 10/26（月） | 12:00 | 21 Halloween Ambience（作り直し版） | C | 送付済み |
+| 10/27（火） | 9:00 | n01 Twinkle Twinkle（1時間・Luna） | D | 送付済み（旧版と差し替え） |
+| 10/28（水） | 12:00 | 03 Relaxing Piano & Rain（作り直し版） | A寄り | 送付済み |
+| 10/29（木） | 9:00 | n02 Mary Had a Little Lamb（1時間・Luna） | D | 送付済み（旧版と差し替え） |
+| 10/30（金） | 12:00 | **g01 Sleep Piano 3時間（新主力・雨音なし）** | A | **送付済み** |
+| 10/31（土） | 9:00 | n03 Row Row Row Your Boat | D | 送付済み |
+| 11/1（日） | 12:00 | 07 Fireplace Jazz（作り直し版） | C | 送付済み |
+| 11/3（火） | 9:00 | n04 Frère Jacques | D | 送付済み |
+| 11/4（水） | 12:00 | 05 Bossa Nova Cafe | B | 作り直し予定 |
+| 11/6（金） | 9:00 | n07 Au clair de la lune | D | 完成（公開の数日前に送付） |
+| 11/7（土） | 12:00 | Sleep Piano 第2弾（別の曲・3時間） | A | 制作予定 |
+| 11/9（月） | 9:00 | n05 London Bridge | D | 完成 |
+| 11/11（水） | 12:00 | 04 Cozy Coffee Shop Jazz | B | 作り直し予定 |
+| 11/12（木） | 9:00 | n09 Ode to Joy | D | 完成 |
+| 11/14（土） | 12:00 | 17 Christmas Jazz | C | 作り直し予定 |
+| 11/15（日） | 9:00 | n06 Old MacDonald | D | 完成 |
+| 11/18（水） | 9:00 | n08 Silent Night | D | 完成 |
+| 11/19（木） | 12:00 | Sleep Piano 第3弾（4時間） | A | 制作予定 |
+| 11/21（土） | 9:00 | n10 Jingle Bells | D | 完成 |
+| 11/24（火） | 9:00 | **n11 10 Lullabies for Babies（2時間まとめ版）** | D | 完成 |
+
+> 8時間版は、音声だけでチャットの送信上限（400MB）を超えるため、チャット経由では渡せません。
+> 4時間版までをチャットで送り、8時間版は Mac で `run_all.sh` を動かせるようになってから作ります。
+
+### 子ども向け Shorts（`kids_shorts_10.zip`）
+
+その曲の1時間版を公開した**翌日の 18:00** に、同じ曲の Shorts を1本出します（Shorts は「長尺1日1本」の数に入れません）。
+各 mp4 の横にある `.txt` に、タイトル・説明・設定を書いてあります。
+
+| 日付 | Shorts |
+|---|---|
+| 10/28（水） 18:00 | Twinkle Twinkle |
+| 10/30（金） 18:00 | Mary Had a Little Lamb |
+| 11/1（日） 18:00 | Row Row Row Your Boat |
+| 11/4（水） 18:00 | Frère Jacques |
+| 以降 | 各曲の公開翌日 18:00 |
 
 11/22 以降は、A（Gentle Piano）とB（Jazz）を週1本ずつ交互に出します。
 B の順番は 16 Autumn Jazz → 26 Dark Academia → 12 Anime Piano → 09 Fantasy Tavern → 13 Fresh Morning です。

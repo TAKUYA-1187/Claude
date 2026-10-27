@@ -1,40 +1,40 @@
 {
-  "total_seconds": 10800.0,
+  "total_seconds": 7200.0,
   "tracks": [
     {
-      "slug": "g01_gentle_piano_sleep",
-      "title": "Sleep Piano 🌙 3 Hours of Gentle Piano Music | No Rain, No Noise — Deep Sleep",
-      "bpm": 58.0,
-      "bars": 435,
-      "lufs": -14.001662775732001,
+      "slug": "n11_lullaby_medley",
+      "title": "10 Lullabies for Babies to Go to Sleep 🌙 2 Hours | Soft Piano & Music Box",
+      "bpm": 0.0,
+      "bars": 0,
+      "lufs": -14.000853275281207,
       "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -21.289368534192374,
-      "loop_seconds": 1800.0,
-      "total_seconds": 10800.0,
-      "total_hhmmss": "3:00:00",
-      "video": "out/video/g01_gentle_piano_sleep.mp4",
+      "loop_seam_db": -240.0,
+      "loop_seconds": 7200.0,
+      "total_seconds": 7200.0,
+      "total_hhmmss": "2:00:00",
+      "video": "out/video/n11_lullaby_medley.mp4",
       "probe": {
-        "duration_s": 10800.0,
-        "size_mb": 663.851473,
-        "bitrate_kbps": 491.741,
+        "duration_s": 7200.0,
+        "size_mb": 497.84379,
+        "bitrate_kbps": 553.159,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "24/1",
-            "duration": 10800.0
+            "duration": 7200.0
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
             "fps": "0/0",
-            "duration": 10800.0
+            "duration": 7200.0
           }
         ]
       },
-      "elapsed_s": 441.7
+      "elapsed_s": 636.5
     }
   ]
 }

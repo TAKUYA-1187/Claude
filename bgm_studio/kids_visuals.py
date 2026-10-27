@@ -257,7 +257,7 @@ def kids_thumbnail(title_lines: list[str], badge: str, sub: str = "",
     for i, line in enumerate(title_lines):
         size_px = int(h * (0.20 if len(line) <= 9 else 0.155))
         f = _font(size_px, "Bold")
-        while d.textbbox((0, 0), line, font=f)[2] > w * 0.60 and size_px > 40:
+        while d.textbbox((0, 0), line, font=f)[2] > w * 0.55 and size_px > 40:
             size_px -= 4
             f = _font(size_px, "Bold")
         _outlined(d, (x0, y), line, f, (255, 224, 74), (38, 34, 102), int(size_px * 0.10))

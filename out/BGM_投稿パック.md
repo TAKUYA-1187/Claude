@@ -22,6 +22,7 @@
 |---|---|---|
 | 10月26日(月) 12:00 | Halloween Ambience 🎃 Spooky Night Music & Autumn Wind | `21_halloween_night` |
 | 10月28日(水) 12:00 | Relaxing Piano & Rain Sounds 🎹🌧️ 2 Hours for Sleep, Study & Stress Relief | `03_piano_and_rain` |
+| 10月30日(金) 12:00 | Sleep Piano 🌙 3 Hours of Gentle Piano Music | No Rain, No Noise — Deep Sleep | `g01_gentle_piano_sleep` |
 | 11月1日(日) 12:00 | Fireplace Jazz 🔥 2 Hours of Warm Winter Jazz & Crackling Fire | `07_fireplace_winter_jazz` |
 | 11月4日(水) 12:00 | Deep Sleep Music 😴 Fall Asleep Fast — 2 Hours of Calm Ambient & Rain | `02_deep_sleep_ambient` |
 | 11月7日(土) 12:00 | Blizzard & Crackling Fireplace ❄️ Cozy Snowstorm for Sleep | `22_snowstorm_fireplace` |
@@ -345,6 +346,46 @@ Not a medical treatment — just music designed to be easy to sleep through.
 【タグ】
 ```
 8 hour sleep music, sleep music, deep sleep, ambient, insomnia, relaxing music, night
+```
+
+---
+
+## 10月30日(金) 12:00 — Sleep Piano 3時間（新主力・雨音なし）
+
+- 公開日時：**10月30日(金) 12:00**
+- 再生リスト：**Gentle Piano for Sleep**（新しく作る）
+- 長さ：3:00:00
+- 子ども向け：**いいえ**
+
+【タイトル】
+```
+Sleep Piano 🌙 3 Hours of Gentle Piano Music | No Rain, No Noise — Deep Sleep
+```
+
+【説明文】
+```
+🌙 SLEEP PIANO — 3 hours of gentle piano, with no rain and no noise
+
+Most sleep music comes with rain, wind or white noise underneath. This one
+doesn't. It's only a soft, felt-like piano, a quiet pad, and once in a while a
+single music-box note — nothing else, from the first second to the last.
+
+The melody is slow and comes back the way a song does, so your ear always knows
+where it is and has nothing to follow or wait for. The tempo is a resting 58
+beats a minute, the dynamics stay low, and there are no sudden changes.
+
+▸ No rain, no ambience, no hiss — only the instruments and their reverb
+▸ Same calm pace for the whole 3 hours
+▸ Loops seamlessly, so you can let it play through the night
+
+For falling asleep, staying asleep, reading in bed, or a quiet room.
+
+— Composed, arranged and animated for this channel.
+```
+
+【タグ】
+```
+sleep piano, sleep music, piano music for sleep, relaxing piano, deep sleep music, calm piano, sleep music no rain, 3 hours sleep music
 ```
 
 ---

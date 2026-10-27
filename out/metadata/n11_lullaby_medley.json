@@ -1,0 +1,33 @@
+{
+  "slug": "n11_lullaby_medley",
+  "title": "10 Lullabies for Babies to Go to Sleep 🌙 2 Hours | Soft Piano & Music Box",
+  "description": "🌙 10 LULLABIES FOR BABIES — 2 hours, one song after another\n\nTen of the best-known lullabies and nursery songs, each played for about twelve\nminutes on a soft piano and a music box, while Luna, our sleepy little moon,\nrocks gently among the stars.\n\n00:00 Twinkle, Twinkle, Little Star\n12:00 Mary Had a Little Lamb\n24:00 Row, Row, Row Your Boat\n36:00 Frère Jacques\n48:00 London Bridge\n1:00:00 Old MacDonald Had a Farm\n1:12:00 Au Clair de la Lune\n1:24:00 Ode to Joy\n1:36:00 Silent Night\n1:48:00 Jingle Bells\n\nEvery song stays in one key and one calm tempo, and moves gently into the next.\nThere is no background noise anywhere — no rain, no hiss, no room tone.\nTuned to A = 432 Hz, a slightly lower reference pitch (a tuning choice, not a\ntreatment; no health claims are made).\n\nAll melodies are traditional or in the public domain. Arrangement, sound and\nanimation are made for this channel.\n",
+  "tags": [
+    "lullabies for babies",
+    "baby sleep music",
+    "lullaby",
+    "nursery rhymes",
+    "baby lullaby 2 hours",
+    "music box lullaby",
+    "piano lullaby",
+    "sleep music for babies"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": true,
+  "specs": {
+    "genre_ja": "子守唄10曲のまとめ版（2時間）",
+    "use_case": "sleep",
+    "bpm": 0.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 7200.0,
+    "total_seconds": 7200.0,
+    "total_hhmmss": "2 hours",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -240.0,
+    "visual": "lullaby_moon"
+  }
+}
