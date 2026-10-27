@@ -1,40 +1,40 @@
 {
-  "total_seconds": 3600.0,
+  "total_seconds": 10800.0,
   "tracks": [
     {
-      "slug": "n02_mary_lamb_lullaby",
-      "title": "Mary Had a Little Lamb 🐑 1 Hour Baby Lullaby | Soft Piano & Music Box for Sleep",
-      "bpm": 72.0,
-      "bars": 216,
-      "lufs": -14.00000011146162,
-      "true_peak_db": -1.7899296344894744,
-      "loop_seam_db": -54.79162287471003,
-      "loop_seconds": 720.0,
-      "total_seconds": 3600.0,
-      "total_hhmmss": "1:00:00",
-      "video": "out/video/n02_mary_lamb_lullaby.mp4",
+      "slug": "g01_gentle_piano_sleep",
+      "title": "Sleep Piano 🌙 3 Hours of Gentle Piano Music | No Rain, No Noise — Deep Sleep",
+      "bpm": 58.0,
+      "bars": 435,
+      "lufs": -14.001662775732001,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -21.289368534192374,
+      "loop_seconds": 1800.0,
+      "total_seconds": 10800.0,
+      "total_hhmmss": "3:00:00",
+      "video": "out/video/g01_gentle_piano_sleep.mp4",
       "probe": {
-        "duration_s": 3600.0,
-        "size_mb": 250.147246,
-        "bitrate_kbps": 555.882,
+        "duration_s": 10800.0,
+        "size_mb": 663.851473,
+        "bitrate_kbps": 491.741,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "24/1",
-            "duration": 3600.0
+            "duration": 10800.0
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
             "fps": "0/0",
-            "duration": 3600.0
+            "duration": 10800.0
           }
         ]
       },
-      "elapsed_s": 224.7
+      "elapsed_s": 441.7
     }
   ]
 }

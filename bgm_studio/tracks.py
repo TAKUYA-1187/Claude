@@ -226,6 +226,50 @@ def build_deep_sleep(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]
 
 
 # ──────────────────────────────────────────────────────────────
+# G01. Gentle Piano for Sleep  (柱 A の主力。雑音ゼロの大人向け睡眠ピアノ)
+# ──────────────────────────────────────────────────────────────
+
+def build_gentle_piano(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
+    """
+    雨も風も入れない、ピアノだけの睡眠用。
+
+    オーナー自身が雨・風・暖炉の音を「雑音」と感じた (2026-10-25 の指摘) ことから
+    作った柱。子守唄で評判の良かった soft_piano と、進行ごとに戻ってくる旋律
+    (play_melody の motif) をそのまま大人向けに使う。環境音のベッドは一切敷かない。
+    """
+    rng = np.random.default_rng(spec.seed)
+    clock = clock_for(seconds, spec.bpm)
+    bank = I.SampleBank(seed=spec.seed, n_variants=3)
+    spans = _timeline(spec, clock, rng)
+    buf = _new_buf(clock, tail=18.0)
+
+    A.play_pad(buf, spans, clock, bank, gain=0.06, brightness=0.5,
+               attack=4.0, release=5.0, rng=rng, n_voices=4)
+    A.play_comp(buf, spans, clock, bank, inst="soft_piano", style="ballad",
+                gain=0.24, voicing="close", center=55, rng=rng, spread_ms=55.0)
+    A.play_arp(buf, spans, clock, bank, inst="soft_piano", gain=0.08, rate=0.5,
+               octaves=1, center=64, direction="up", rng=rng, pan=0.12)
+    A.play_melody(buf, spans, clock, bank, inst="soft_piano", gain=0.27,
+                  scale_root=spec.key_root, scale=spec.scale,
+                  lo=60, hi=79, density=0.40, rng=rng, rest_prob=0.40)
+    A.play_sparse_bells(buf, spans, clock, bank, inst="music_box", gain=0.045,
+                        every_bars=8.0, center=79, rng=rng)
+    A.play_bass(buf, spans, clock, bank, inst="subbass", style="root",
+                gain=0.12, octave=-2, rng=rng)
+
+    ir = dsp.make_reverb_ir(4.2, rt60=3.8, damp=0.55, predelay=0.03, seed=spec.seed)
+
+    def master(x):
+        # 旋律を C4-G5 に収め、1kHz 帯が前に出ないようにゆるく傾ける (初回 QA 1kHz -0.3)
+        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-2.5)
+        x = dsp.lowpass(x, 14000.0, order=2)
+        return dsp.highpass(x, 35.0, order=2)
+
+    # beds=[]: 環境音は一切敷かない (この柱の約束)
+    return _finish(buf, clock, spec, ir, 0.40, [], master)
+
+
+# ──────────────────────────────────────────────────────────────
 # 03. Piano & Rain  (雨とピアノ)
 # ──────────────────────────────────────────────────────────────
 
@@ -1283,6 +1327,43 @@ def build_nursery_proxy(spec, seconds):
     return build_nursery(spec, seconds)
 
 
+MEDLEY_ORDER = [
+    "n01_twinkle_lullaby", "n02_mary_lamb_lullaby", "n03_row_your_boat_lullaby",
+    "n04_frere_jacques_lullaby", "n05_london_bridge_lullaby", "n06_old_macdonald_lullaby",
+    "n07_au_clair_lullaby", "n09_ode_to_joy_lullaby", "n08_silent_night_lullaby",
+    "n10_jingle_bells_lullaby",
+]
+MEDLEY_SONG_SECONDS = 720.0
+
+
+def build_lullaby_medley(spec, seconds):
+    """
+    子守唄 10 曲のまとめ版 (各 12 分 × 10 = 2 時間)。
+
+    子守唄の検索で最も再生されているのは「1 曲の長時間版」より「何曲も続くまとめ版」
+    なので作る。各曲は単体版と同じ build_nursery で作り (同じ 432Hz)、曲の変わり目は
+    前の曲の残響を 1.5 秒で消してから次を始める。曲ごとに -14 LUFS 済みなので、
+    つないだ後に音量を揃え直す必要はない。
+    """
+    from .nursery import build_nursery
+    parts = []
+    for slug in MEDLEY_ORDER:
+        song, _ = build_nursery(BY_SLUG[slug], MEDLEY_SONG_SECONDS)
+        parts.append(dsp.fade(song, fade_in=0.3, fade_out=1.5))
+        del song
+    out = np.concatenate(parts, axis=0)
+    del parts
+    info = {
+        "lufs_after": dsp.lufs_integrated(out),
+        "true_peak_db": dsp.true_peak_db(out),
+        "seam_db": dsp.check_loop_seam(out),
+        "seam_dbfs": dsp.seam_step_dbfs(out),
+        "bpm": 0.0, "bars": 0,
+        "songs": len(MEDLEY_ORDER),
+    }
+    return out, info
+
+
 TRACKS: list[TrackSpec] = [
     TrackSpec(
         slug="01_lofi_rainy_study",
@@ -1654,6 +1735,34 @@ TRACKS: list[TrackSpec] = [
                       "rain sounds 10 hours", "dark screen rain",
                       "sleep sounds", "rain no music", "insomnia",
                       "rain all night"],
+        ),
+    ),
+    TrackSpec(
+        slug="g01_gentle_piano_sleep",
+        title_en="Gentle Piano for Sleep",
+        genre_ja="睡眠用のやさしいピアノ（雨音・雑音なし）",
+        use_case="sleep", bpm=58.0, key="F", key_root=5, scale="major",
+        prog_key="piano_rain", visual="moon_lake", seed=7101,
+        build=build_gentle_piano,
+        seo=dict(
+            title="Sleep Piano 🌙 3 Hours of Gentle Piano Music | No Rain, No Noise — Deep Sleep",
+            keywords=["sleep piano", "sleep music", "piano music for sleep",
+                      "relaxing piano", "deep sleep music", "calm piano",
+                      "sleep music no rain", "3 hours sleep music"],
+        ),
+    ),
+    TrackSpec(
+        slug="n11_lullaby_medley",
+        title_en="10 Lullabies for Babies",
+        genre_ja="子守唄10曲のまとめ版（2時間）",
+        use_case="sleep", bpm=72.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="lullaby_moon", seed=5800, a4=432.0,
+        build=build_lullaby_medley,
+        seo=dict(
+            title="10 Lullabies for Babies to Go to Sleep 🌙 2 Hours | Soft Piano & Music Box",
+            keywords=["lullabies for babies", "baby sleep music", "lullaby", "nursery rhymes",
+                      "baby lullaby 2 hours", "music box lullaby", "piano lullaby",
+                      "sleep music for babies"],
         ),
     ),
     TrackSpec(

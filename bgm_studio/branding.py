@@ -38,7 +38,7 @@ def _font(path: str, size: int) -> ImageFont.FreeTypeFont:
 
 def _scene_image(scene: str, seed: int, w: int, h: int, t01: float = 0.3) -> Image.Image:
     """シーンを1フレーム描画して指定サイズへ切り出す"""
-    frame = V.SCENES[scene](seed=seed)(t01)
+    frame = V.scene_maker(scene)(seed=seed)(t01)
     im = Image.fromarray(np.clip(frame, 0, 255).astype(np.uint8))
     # アスペクト比を保ったまま中央でクロップ
     src_ar, dst_ar = im.width / im.height, w / h

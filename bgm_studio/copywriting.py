@@ -766,10 +766,57 @@ SHORT_HOOKS["27_rain_black_screen"] = [
 # 音は合成。効能は謳わない (調律は「やわらかく聞こえる選択」とだけ書く)。
 # ──────────────────────────────────────────────────────────────
 
+DESCRIPTIONS["g01_gentle_piano_sleep"] = """\
+🌙 SLEEP PIANO — {duration} of gentle piano, with no rain and no noise
+
+Most sleep music comes with rain, wind or white noise underneath. This one
+doesn't. It's only a soft, felt-like piano, a quiet pad, and once in a while a
+single music-box note — nothing else, from the first second to the last.
+
+The melody is slow and comes back the way a song does, so your ear always knows
+where it is and has nothing to follow or wait for. The tempo is a resting 58
+beats a minute, the dynamics stay low, and there are no sudden changes.
+
+▸ No rain, no ambience, no hiss — only the instruments and their reverb
+▸ Same calm pace for the whole {duration}
+▸ Loops seamlessly, so you can let it play through the night
+
+For falling asleep, staying asleep, reading in bed, or a quiet room.
+
+— Composed, arranged and animated for this channel.
+"""
+
 # 童謡は 2026-10-26 に作り直した (無音・転調・硬い音を解消し、1 時間・新映像に)。
 # 説明文は実際の内容と食い違わないことを最優先に書き直した:
 #   楽器はやわらかいピアノとオルゴールだけ / 調とテンポは最後まで同じ /
 #   やさしい 4 つの弾き方を 2 コーラスずつ回す / 映像はオリジナルキャラ Luna。
+
+DESCRIPTIONS["n11_lullaby_medley"] = """\
+🌙 10 LULLABIES FOR BABIES — {duration}, one song after another
+
+Ten of the best-known lullabies and nursery songs, each played for about twelve
+minutes on a soft piano and a music box, while Luna, our sleepy little moon,
+rocks gently among the stars.
+
+00:00 Twinkle, Twinkle, Little Star
+12:00 Mary Had a Little Lamb
+24:00 Row, Row, Row Your Boat
+36:00 Frère Jacques
+48:00 London Bridge
+1:00:00 Old MacDonald Had a Farm
+1:12:00 Au Clair de la Lune
+1:24:00 Ode to Joy
+1:36:00 Silent Night
+1:48:00 Jingle Bells
+
+Every song stays in one key and one calm tempo, and moves gently into the next.
+There is no background noise anywhere — no rain, no hiss, no room tone.
+Tuned to A = 432 Hz, a slightly lower reference pitch (a tuning choice, not a
+treatment; no health claims are made).
+
+All melodies are traditional or in the public domain. Arrangement, sound and
+animation are made for this channel.
+"""
 
 DESCRIPTIONS["n01_twinkle_lullaby"] = """\
 {duration} of "Twinkle, Twinkle, Little Star", played softly on piano and music box.

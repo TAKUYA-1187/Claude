@@ -47,6 +47,16 @@ def pack(slug: str) -> Path:
 
     budget_bits = TARGET_BYTES * 8 - m4a.stat().st_size * 8
     v_kbps = int(budget_bits / dur / 1000)
+    if v_kbps < 100:
+        # 3 時間版などは 256kbps の音声だけで上限に近い。そのときだけ、元のループ WAV
+        # から 192kbps で作り直す (AAC→AAC の再エンコードにしないため)。
+        # YouTube 側の再生音質 (Opus 最大 160kbps 前後) よりは十分に高い
+        wav = OUT / "audio" / f"{slug}.wav"
+        loop_s = VID.probe(wav)["duration_s"]
+        reps = int(round(dur / loop_s))
+        VID.loop_audio_to_aac(wav, m4a, repeats=reps, bitrate="192k")
+        budget_bits = TARGET_BYTES * 8 - m4a.stat().st_size * 8
+        v_kbps = int(budget_bits / dur / 1000)
     if v_kbps < 80:
         raise SystemExit(f"{slug}: 音声だけで上限に近く、映像に {v_kbps}kbps しか残りません。"
                          "8時間・10時間版はこの方法では送れません。")

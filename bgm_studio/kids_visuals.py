@@ -46,12 +46,15 @@ def _supersample(draw_fn, size: tuple[int, int], ss: int = 3) -> Image.Image:
     return big.resize(size, Image.LANCZOS)
 
 
-def moon_sprite(px: int = 640) -> Image.Image:
-    """ナイトキャップをかぶって眠る三日月 (Luna)。px 四方"""
+def moon_sprite(px: int = 640, face: bool = True, cap: bool = True,
+                body=(255, 226, 132, 255)) -> Image.Image:
+    """
+    ナイトキャップをかぶって眠る三日月 (Luna)。px 四方。
+    face=False, cap=False で、大人向けの睡眠動画に使う素の三日月になる
+    """
     def draw(d: ImageDraw.ImageDraw, s: int):
         S = px * s
         cx, cy, r = S * 0.50, S * 0.56, S * 0.36
-        body = (255, 226, 132, 255)
         # 三日月 = 大きな円 − ずらした円 (右側が欠ける)
         moon = Image.new("L", (S, S), 0)
         md = ImageDraw.Draw(moon)
@@ -67,16 +70,19 @@ def moon_sprite(px: int = 640) -> Image.Image:
         shade = Image.fromarray(np.minimum(np.asarray(shade), np.asarray(moon)))
         d._image.paste(Image.new("RGBA", (S, S), (236, 170, 90, 255)), (0, 0),
                        Image.fromarray((np.asarray(shade) * 0.6).astype(np.uint8)))
-        # 顔 (閉じた目・ほっぺ・口)。三日月の太い部分 (左側) に置く
-        fx, fy = cx - r * 0.50, cy + r * 0.05
-        lw = max(int(S * 0.012), 2)
-        ink = (110, 70, 60, 255)
-        d.arc([fx - r * 0.20, fy - r * 0.16, fx + r * 0.02, fy + r * 0.02],
-              start=20, end=160, fill=ink, width=lw)          # 閉じた目 (∪)
-        d.ellipse([fx - r * 0.30, fy + r * 0.06, fx - r * 0.08, fy + r * 0.20],
-                  fill=(255, 150, 150, 200))                 # ほっぺ
-        d.arc([fx - r * 0.05, fy + r * 0.14, fx + r * 0.13, fy + r * 0.30],
-              start=10, end=170, fill=ink, width=lw)          # 口
+        if face:
+            # 顔 (閉じた目・ほっぺ・口)。三日月の太い部分 (左側) に置く
+            fx, fy = cx - r * 0.50, cy + r * 0.05
+            lw = max(int(S * 0.012), 2)
+            ink = (110, 70, 60, 255)
+            d.arc([fx - r * 0.20, fy - r * 0.16, fx + r * 0.02, fy + r * 0.02],
+                  start=20, end=160, fill=ink, width=lw)          # 閉じた目 (∪)
+            d.ellipse([fx - r * 0.30, fy + r * 0.06, fx - r * 0.08, fy + r * 0.20],
+                      fill=(255, 150, 150, 200))                 # ほっぺ
+            d.arc([fx - r * 0.05, fy + r * 0.14, fx + r * 0.13, fy + r * 0.30],
+                  start=10, end=170, fill=ink, width=lw)          # 口
+        if not cap:
+            return
         # ナイトキャップ。上の角 (外円と内円の交点 ≈ (+0.35r, -0.94r)) にかぶせ、
         # 先をたらして先端にぼんぼりを付ける。スプライトの外にはみ出さない寸法
         def bez(p0, p1, p2, n=24):

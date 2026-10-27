@@ -1,0 +1,33 @@
+{
+  "slug": "g01_gentle_piano_sleep",
+  "title": "Sleep Piano 🌙 3 Hours of Gentle Piano Music | No Rain, No Noise — Deep Sleep",
+  "description": "🌙 SLEEP PIANO — 3 hours of gentle piano, with no rain and no noise\n\nMost sleep music comes with rain, wind or white noise underneath. This one\ndoesn't. It's only a soft, felt-like piano, a quiet pad, and once in a while a\nsingle music-box note — nothing else, from the first second to the last.\n\nThe melody is slow and comes back the way a song does, so your ear always knows\nwhere it is and has nothing to follow or wait for. The tempo is a resting 58\nbeats a minute, the dynamics stay low, and there are no sudden changes.\n\n▸ No rain, no ambience, no hiss — only the instruments and their reverb\n▸ Same calm pace for the whole 3 hours\n▸ Loops seamlessly, so you can let it play through the night\n\nFor falling asleep, staying asleep, reading in bed, or a quiet room.\n\n— Composed, arranged and animated for this channel.\n",
+  "tags": [
+    "sleep piano",
+    "sleep music",
+    "piano music for sleep",
+    "relaxing piano",
+    "deep sleep music",
+    "calm piano",
+    "sleep music no rain",
+    "3 hours sleep music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "睡眠用のやさしいピアノ（雨音・雑音なし）",
+    "use_case": "sleep",
+    "bpm": 58.0,
+    "key": "F",
+    "a4_hz": 440.0,
+    "loop_seconds": 1800.0,
+    "total_seconds": 10800.0,
+    "total_hhmmss": "3 hours",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -21.29,
+    "visual": "moon_lake"
+  }
+}

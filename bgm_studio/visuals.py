@@ -1631,17 +1631,23 @@ SCENES = {
 }
 
 
-# 子守唄シリーズのシーン (キャラクター入り) は別モジュール。循環 import を
-# 避けるため、ここで (このモジュールの定義が全て済んだ後に) 取り込む
-from .kids_visuals import KIDS_SCENES  # noqa: E402
-
-SCENES.update(KIDS_SCENES)
+def scene_maker(name: str):
+    """
+    シーン名 → 生成関数。キャラクター入りのシーン (kids_visuals / sleep_visuals) は
+    このモジュールを import して作られているので、循環 import を避けて遅延で取り込む
+    """
+    if name not in SCENES:
+        from .kids_visuals import KIDS_SCENES
+        from .sleep_visuals import SLEEP_SCENES
+        SCENES.update(KIDS_SCENES)
+        SCENES.update(SLEEP_SCENES)
+    return SCENES[name]
 
 
 def render_frames(scene_name: str, seed: int = 0, seconds: int = LOOP_SECONDS,
                   fps: int = FPS):
     """シーンのフレームを順に yield する (uint8 RGB)"""
-    make = SCENES[scene_name]
+    make = scene_maker(scene_name)
     frame_fn = make(seed=seed)
     n = int(seconds * fps)
     for i in range(n):
@@ -1656,7 +1662,7 @@ def thumbnail(scene_name: str, title_lines: list[str], seed: int = 0,
     BGM のサムネは「一目で用途と雰囲気が分かる」ことが全てなので、
     文字は 3〜4 語まで、フォントは太く大きく。
     """
-    make = SCENES[scene_name]
+    make = scene_maker(scene_name)
     img = np.clip(make(seed=seed)(0.25), 0, 255).astype(np.uint8)
     im = Image.fromarray(img).resize(size, Image.LANCZOS)
     w, h = size

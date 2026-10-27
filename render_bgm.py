@@ -304,6 +304,7 @@ def process_visual_only(spec: TR.TrackSpec, args, t_start: float) -> dict:
 # 子守唄のサムネ: キャラクター + 太い丸文字 2 行 + 用途のバッジ
 # (子ども向けの高再生動画に倣う。kids_visuals.kids_thumbnail 参照)
 KIDS_THUMB = {
+    "n11_lullaby_medley": ["10 BABY", "LULLABIES"],
     "n01_twinkle_lullaby": ["TWINKLE", "TWINKLE"],
     "n02_mary_lamb_lullaby": ["MARY HAD A", "LITTLE LAMB"],
     "n03_row_your_boat_lullaby": ["ROW ROW", "YOUR BOAT"],
@@ -321,10 +322,17 @@ def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
     if spec.slug in KIDS_THUMB:
         from bgm_studio import kids_visuals as KV
         h = total_seconds / 3600.0
-        length = (f"{int(round(h))} HOUR" if h >= 0.99 else
+        hrs = int(round(h))
+        length = (("1 HOUR" if hrs == 1 else f"{hrs} HOURS") if h >= 0.99 else
                   f"{int(round(total_seconds / 60))} MIN")
-        return KV.kids_thumbnail(KIDS_THUMB[spec.slug], f"{length} LULLABY",
+        badge = f"{length} LULLABY" if spec.slug != "n11_lullaby_medley" else f"{length} · 10 SONGS"
+        return KV.kids_thumbnail(KIDS_THUMB[spec.slug], badge,
                                  "for Babies & Sleep", scene=spec.visual, seed=spec.seed)
+    if spec.visual == "moon_lake":
+        from bgm_studio import sleep_visuals as SV
+        hrs = int(round(total_seconds / 3600.0))
+        return SV.calm_thumbnail(["SLEEP", "PIANO"], f"{hrs} HOURS",
+                                 "No rain · No noise · Just piano", seed=spec.seed)
     return VIS.thumbnail(spec.visual, _thumb_lines(spec, total_seconds), seed=spec.seed)
 
 
