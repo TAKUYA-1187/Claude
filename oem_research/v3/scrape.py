@@ -41,10 +41,14 @@ def session_init(zipcode="100-0001"):
                                "-H", "X-Requested-With: XMLHttpRequest", "-X", "POST", "--data", body,
                                "https://www.amazon.co.jp/portal-migration/hz/glow/address-change?actionSource=glow"],
                        capture_output=True).stdout.decode("utf-8", "ignore")
+    _force_jpy()
+    return '"countryCode":"JP"' in r
+
+
+def _force_jpy():
     lines = [ln for ln in open(JAR, encoding="utf-8").read().splitlines() if "i18n-prefs" not in ln]
     lines.append(".amazon.co.jp\tTRUE\t/\tFALSE\t2082787201\ti18n-prefs\tJPY")
     open(JAR, "w", encoding="utf-8").write("\n".join(lines) + "\n")
-    return '"countryCode":"JP"' in r
 
 
 def _fetch(url, path, accept_lang="ja-JP,ja;q=0.9", tries=3):
@@ -57,6 +61,9 @@ def _fetch(url, path, accept_lang="ja-JP,ja;q=0.9", tries=3):
         if wait > 0:
             time.sleep(wait)
         _last[0] = time.time()
+        jp = "amazon.co.jp" in url
+        if jp and os.path.exists(JAR):
+            _force_jpy()
         cookies = ["-b", JAR, "-c", JAR] if "amazon" in url and os.path.exists(JAR) else []
         r = subprocess.run(["curl", "-s", "-L", "--compressed", "--max-time", "30", "-A", UA,
                             "-H", f"Accept-Language: {accept_lang}"] + cookies + [url],
@@ -64,6 +71,10 @@ def _fetch(url, path, accept_lang="ja-JP,ja;q=0.9", tries=3):
         body = r.stdout.decode("utf-8", errors="ignore")
         blocked = ("captcha" in body.lower() and "amazon" in url and "s-search-result" not in body
                    and "productTitle" not in body) or "punish" in body[:3000]
+        if jp and re.search(r'a-price-symbol">(USD|\$)', body):
+            # the session fell back to an overseas view (USD prices, fewer listings): reset it and retry
+            session_init()
+            continue
         if len(body) > 5000 and not blocked:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(body)
@@ -196,14 +207,22 @@ def amazon_detail(asin):
 
 # ---------------------------------------------------------------------------
 def m1688_market(kw_cn):
+    """Offer cards of the 1688 market page: id, url, title, price (yuan), monthly sales, shop."""
     h = "".join("%02X" % b for b in kw_cn.encode("gbk"))
     url = f"https://www.1688.com/market/-{h}.html"
     path = os.path.join(CACHE, "1688", f"{h}.html")
     s = _fetch(url, path, accept_lang="zh-CN,zh;q=0.9")
-    t = re.sub(r"<script.*?</script>|<style.*?</style>", "", s, flags=re.S)
-    t = text(t)
     offers = []
-    for m in re.finditer(r"([^¥]{10,80})¥\s*([\d.]+)\s*月销\s*([\d.]+)(万)?\s*\S*", t):
-        sold = float(m.group(3)) * (10000 if m.group(4) else 1)
-        offers.append(dict(title=m.group(1)[-60:].strip(), price=float(m.group(2)), sold=int(sold)))
+    for blk in re.split(r'<li rank="\d+" offerId=', s)[1:]:
+        oid = re.match(r'"(\d+)"', blk)
+        title = re.search(r'sm-offerShopwindow-titleLink[^>]*title="([^"]+)"', blk)
+        price = re.search(r'su-price">\s*<i>[^<]*</i>\s*([\d.]+)', blk)
+        if not (oid and title and price):
+            continue
+        sold = re.search(r'月销\s*([\d.]+)(万)?', blk)
+        shop = re.search(r'click-item="com">([^<]+)<', blk)
+        offers.append(dict(id=oid.group(1), url=f"https://detail.1688.com/offer/{oid.group(1)}.html",
+                           title=html.unescape(title.group(1)), price=float(price.group(1)),
+                           sold=int(float(sold.group(1)) * (10000 if sold.group(2) else 1)) if sold else 0,
+                           shop=shop.group(1).strip() if shop else ""))
     return offers

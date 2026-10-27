@@ -2,6 +2,8 @@
 """v4 content: finalists (spec-matched 1688 costs), rejected-after-verification rows, type
 verdicts, dresser study and summary texts. Numbers come from the 2026-10-21 Amazon/1688 data."""
 
+SCREEN_MIN_UNITS = 100
+
 SUMMARY_SUB = ("2026-10-20〜21 取得：Amazon.co.jp 231キーワード×2ページ（配送先 東京都）→ ¥1万以上・月100個以上の547商品の商品ページ、"
                "1688 市場ページ（60タイプ×3〜5語＋最終候補の仕様別検索）。料金は天瞳 送料・保管料一覧表（2024.1.6版）。")
 

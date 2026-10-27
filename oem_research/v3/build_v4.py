@@ -17,15 +17,18 @@ import sys
 from urllib.parse import quote
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "v2"))
+import analyze_prods as P_  # noqa: E402
 import analyze_v4 as A  # noqa: E402
 import build_v2 as B  # noqa: E402
 import complaints as C  # noqa: E402
-import data_v4 as D  # noqa: E402
+import importlib  # noqa: E402
 from openpyxl import load_workbook  # noqa: E402
 from openpyxl.formatting.rule import CellIsRule, FormulaRule  # noqa: E402
 from openpyxl.styles import Alignment, Font  # noqa: E402
 from finalists_cn import T2  # noqa: E402
 from type_map import KW2T  # noqa: E402
+
+D = importlib.import_module(os.environ.get("OEM_DATAMOD", "data_v4"))
 
 put, head_row, merge_put, link_sheet = B.put, B.head_row, B.merge_put, B.link_sheet
 YEN, PCT, CNY, KG, CM = B.YEN, B.PCT, B.CNY, B.KG, B.CM
@@ -137,14 +140,15 @@ OV_HEAD = ["No", "企画品（自社仕様）", "タイプ", "手数料区分", 
            "梱包 長", "梱包 幅", "梱包 高", "梱包重量", "個口", "CBM", "三辺合計", "国内送料",
            "テンプレ粗利", "テンプレ利益率", "税抜売上", "販売手数料", "保管料", "着地原価",
            "実質利益（広告10%）", "実質利益（広告5%）", "実質利益率（広告5%）", "判定",
-           "価格差（倍）", "競合1位の月販", "月販目標（3年目）", "月利（3年目）", "詳細シート", "規制・注意"]
+           "価格差（倍）", "競合1位の月販", "月販目標（3年目）", "月利（3年目）", "詳細シート", "規制・注意",
+           "Amazon（競合1位）", "1688（原価の根拠・月销最多）", "Alibaba検索"]
 
 
 def build_overview(ws):
     ws.title = "01_最終候補"
     put(ws, "A1", "最終候補の商品化判断（天瞳の実料金・数式で再計算）", B.F_TITLE, border=False)
     put(ws, "A2", "黄色＝入力（売価・原価・梱包）。青字＝推定値（要実測・要見積）。送料・利益はすべて前提条件シートから計算。", B.F_NOTE, border=False)
-    widths = [5, 40, 10, 6, 10, 9, 8, 6, 6, 6, 7, 5, 8, 7, 9, 10, 8, 10, 9, 8, 10, 10, 10, 9, 7, 7, 8, 8, 12, 14, 24]
+    widths = [5, 40, 10, 6, 10, 9, 8, 6, 6, 6, 7, 5, 8, 7, 9, 10, 8, 10, 9, 8, 10, 10, 10, 9, 7, 7, 8, 8, 12, 14, 24, 34, 40, 30]
     head_row(ws, 4, OV_HEAD, widths, height=40)
     rowmap = {}
     for i, f in enumerate(D.FINALISTS + D.REJECTED):
@@ -178,6 +182,9 @@ def build_overview(ws):
             link_sheet(cell, f"'{f['sheet']}'!A1")
         else:
             put(ws, f"AD{r}", "（検証で見送り）", B.F_SMALL, align=B.WRAP_C)
+        for col, url in links_of(f):
+            cell = put(ws, f"{col}{r}", url, B.F_LINK, align=B.LEFT_C)
+            cell.hyperlink = url
         ws.row_dimensions[r].height = 32
     last = 4 + len(D.FINALISTS) + len(D.REJECTED)
     ws.freeze_panes = "C5"
@@ -190,40 +197,76 @@ def build_overview(ws):
     return rowmap, last
 
 
+def links_of(f):
+    """(column, url) for a finalist: rival 1 on Amazon, best-selling spec-matched 1688 offer, Alibaba search."""
+    out = []
+    if f.get("rivals"):
+        out.append(("AF", AMZ + f["rivals"][0]))
+    if f.get("fin_key"):
+        ev = evidence(f, 1)
+        if ev and ev[0].get("url"):
+            out.append(("AG", ev[0]["url"]))
+    if f.get("en"):
+        out.append(("AH", "https://www.alibaba.com/trade/search?SearchText=" + quote(f["en"])))
+    return out
+
+
+def ref_offer(x):
+    """Best-selling 1688 offer of the product's type priced near its mainstream cost (0.5-2x)."""
+    offers = CN.get(x["type"]) or (SCAN.get(x["kw"], {}).get("offers") or [])
+    c = x.get("cost")
+    if c:
+        offers = [o for o in offers if 0.5 * c <= o["price"] <= 2 * c]
+    offers = [o for o in offers if o.get("url")]
+    return max(offers, key=lambda o: o["sold"]) if offers else None
+
+
 # ---------------------------------------------------------------------------
 SCREEN_HEAD = ["全条件", "判定", "タイプ", "ASIN", "商品名", "売価", "月販（下限）", "評価数", "★", "サブカテゴリ順位",
                "梱包 長×幅×高", "梱包重量", "梱包の根拠", "160サイズ以上", "1688標準原価（元）", "1688同タイプ出品数", "価格差（倍）",
                "国内送料", "個口", "CBM", "テンプレ利益率", "実質利益率（広告5%）", "1個利益（広告5%）", "月利見込（月販×1個利益）",
-               "ブランド依存", "規制・注意", "検索キーワード"]
+               "ブランド依存", "規制・注意", "検索キーワード", "Amazon商品ページ", "1688参考出品（同タイプ・月销最多）",
+               "1688参考 価格（元）", "Alibaba検索"]
 
 
 def build_screen(ws):
     ws.title = "02_全商品スクリーニング"
-    put(ws, "A1", f"Amazon全商品スクリーニング：231キーワードで¥10,000以上・月100個以上売れている{len(EV)}商品", B.F_TITLE, border=False)
+    put(ws, "A1", f"Amazon全商品スクリーニング：{len(SCAN)}キーワードで¥10,000以上・月{D.SCREEN_MIN_UNITS}個以上売れている{len(EV)}商品",
+        B.F_TITLE, border=False)
     put(ws, "A2", "全条件＝売価¥1万以上・月販100個以上・160サイズ以上（三辺160cm超または30kg以上）・1688との価格差3倍以上・判定GO/COND・ブランド依存でない。"
                   "梱包は商品ページ記載値、無い場合は同種品の標準梱包（青字の推定）。原価は同タイプ1688出品の中間50%の中央値（標準原価）。最終候補は01シートで仕様一致の原価に置換。",
         B.F_NOTE, border=False)
-    head_row(ws, 4, SCREEN_HEAD, [6, 6, 10, 12, 50, 9, 8, 8, 5, 22, 14, 7, 14, 6, 9, 7, 7, 8, 5, 7, 8, 8, 9, 11, 6, 16, 18], height=40)
+    head_row(ws, 4, SCREEN_HEAD, [12, 6, 10, 12, 50, 9, 8, 8, 5, 22, 14, 7, 14, 6, 9, 7, 7, 8, 5, 7, 8, 8, 9, 11, 6, 16, 18, 34, 40, 9, 30],
+             height=40)
     order = {"GO": 0, "COND": 1, "NO": 2, None: 3}
-    rows = sorted(EV, key=lambda x: (not x["ok_all"], order[x.get("judge")], -(x.get("profit_month") or -1e9), -x["bought"]))
+    vno = getattr(D, "VERIFIED_NO", {})
+    rows = sorted(EV, key=lambda x: (not x["ok_all"], bool(vno.get(x["type"]) or vno.get(x["kw"])), order[x.get("judge")],
+                                     -(x.get("profit_month") or -1e9), -x["bought"]))
     tj = {v["id"]: v["jp"] for v in D.TYPES}
     for i, x in enumerate(rows):
         r = 5 + i
-        vals = ["○" if x["ok_all"] else "", x.get("judge") or "原価不明", tj.get(x["type"], x["type"] or "対象外"), x["asin"], x["title"][:90],
+        vno = getattr(D, "VERIFIED_NO", {})
+        vkey = vno.get(x["type"]) or vno.get(x["kw"])
+        flag = ("×（検証で見送り " + vkey + "）" if vkey else "○") if x["ok_all"] else ""
+        vals = [flag, x.get("judge") or "原価不明", tj.get(x["type"], x["type"] or x["kw"]), x["asin"], x["title"][:90],
                 x["price"], x["bought"], x["reviews"], x["rating"],
                 f"{x['sub_cat']} {x['sub_rank']:,}位" if x.get("sub_rank") else "",
                 f"{x['L']:.0f}×{x['W']:.0f}×{x['H']:.0f}" if x.get("L") else "", x.get("kg"), (x.get("pk_src") or "")[:14],
                 ("○" if x.get("size160") else "×") if x.get("L") else "", x.get("cost"), x.get("n_offers"), x.get("gap"),
                 x.get("dom"), x.get("parcels"), x.get("cbm"), x.get("tm"), x.get("r5"), x.get("p5"), x.get("profit_month"),
                 "○" if x["brand_lock"] else "", x.get("reg", ""), x["kw"]]
+        ro = ref_offer(x)
+        en = D.TYPE_EN.get(x["type"]) if hasattr(D, "TYPE_EN") else None
+        vals += [AMZ + x["asin"], ro["url"] if ro else "", ro["price"] if ro else None,
+                 "https://www.alibaba.com/trade/search?SearchText=" + quote(en) if en else ""]
         fmts = [None, None, None, None, None, YEN, "#,##0", "#,##0", "0.0", None, None, KG, None, None, "#,##0.0", "#,##0",
-                '0.0"倍"', YEN, "0", M3, PCT, PCT, YEN, YEN, None, None, None]
+                '0.0"倍"', YEN, "0", M3, PCT, PCT, YEN, YEN, None, None, None, None, None, "#,##0.0", None]
         for j, (v, fm) in enumerate(zip(vals, fmts), start=1):
             est = j in (11, 12) and "推定" in (x.get("pk_src") or "")
             cell = put(ws, f"{B.get_column_letter(j)}{r}", v, B.F_EST if est else B.F_SMALL, fmt=fm,
                        align=B.LEFT_C if j == 5 else None)
-            if j == 4:
-                cell.hyperlink = AMZ + x["asin"]
+            if j == 4 or (j in (28, 29, 31) and v):
+                cell.hyperlink = v if j != 4 else AMZ + x["asin"]
                 cell.font = B.F_LINK
     last = 4 + len(rows)
     ws.freeze_panes = "F5"
@@ -349,6 +392,11 @@ def build_dresser(ws):
 # ---------------------------------------------------------------------------
 def rival_dict(asin, f, cny):
     x, d = EVA.get(asin, {}), DET.get(asin, {})
+    if not x:  # rival outside the screen (e.g. no purchase badge): page data and our own carton estimate
+        L, W, H, kg = f["pkg"]
+        x = dict(title=d.get("title", ""), price=d.get("price"), bought=d.get("bought") or 0, reviews=d.get("reviews"),
+                 rating=d.get("rating"), L=L, W=W, H=H, kg=kg, pk_src="推定（自社企画の梱包）",
+                 sub_cat=P_.sub_rank(d.get("bsr"))[0], sub_rank=P_.sub_rank(d.get("bsr"))[1])
     dims = A.parse_dims(d.get("dims")) or ["", "", ""]
     brand = (d.get("brand") or "").split(" ")[0] if d.get("brand") and "＆" not in d.get("brand", "") else ""
     return dict(name=x.get("title", d.get("title", ""))[:120], url=AMZ + asin, asin=asin,
@@ -365,7 +413,7 @@ def fill_rival(ws, b, rv, f):
     cell = put(ws, b["site"], rv["url"], B.F_URL, align=B.LEFT_C, border=False)
     cell.hyperlink = rv["url"]
     put(ws, b["maker"], rv["maker"], B.F_BASE, align=B.WRAP_C, border=False)
-    put(ws, b["price"], f"¥{rv['price']:,.0f}（月{rv['units']}個以上購入・評価{rv['reviews']:,}件 ★{rv['rating']}）", B.F_BASE,
+    put(ws, b["price"], f"¥{rv['price'] or 0:,.0f}（月{rv['units'] or 0}個以上購入・評価{rv['reviews'] or 0:,}件 ★{rv['rating']}）", B.F_BASE,
         align=B.WRAP_C, border=False)
     est = "推定" in rv["src"]
     for ref, v in zip(b["pkg"], rv["pkg"]):
@@ -688,7 +736,8 @@ def build_sources(ws):
             cell.hyperlink = url
 
 
-def main(template, out):
+def main(template, out, extra=None):
+    """extra(wb) may add sheets; they are placed after the summary sheets."""
     wb = load_workbook(template)
     tpl = wb["リサーチ表"]
     names = ["00_結論", "01_最終候補", "02_全商品スクリーニング", "03_タイプ別集計", "04_ドレッサー検証",
@@ -707,7 +756,8 @@ def main(template, out):
     sheets = [build_product_sheet(wb, tpl, f, rowmap[f["id"]]) for f in D.FINALISTS]
     tpl.title = "テンプレート(原本)"
     head = [S[n] for n in names[:7]]
-    wb._sheets = head + sheets + [S["前提条件"], S["生データ_1688"], S["出典"], tpl]
+    added = extra(wb) if extra else []
+    wb._sheets = head + added + sheets + [S["前提条件"], S["生データ_1688"], S["出典"], tpl]
     wb.active = 0
     for ws in wb.worksheets:
         ws.sheet_view.tabSelected = ws is S["00_結論"]
