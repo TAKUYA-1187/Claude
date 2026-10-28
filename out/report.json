@@ -12,7 +12,134 @@
       "loop_seconds": 720.0,
       "total_seconds": 3600.0,
       "total_hhmmss": "1:00:00",
-      "elapsed_s": 35.8
+      "video": "out/video/n01_twinkle_lullaby_musicbox.mp4",
+      "probe": {
+        "duration_s": 3600.0,
+        "size_mb": 316.23453,
+        "bitrate_kbps": 702.743,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 3600.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 3600.0
+          }
+        ]
+      },
+      "elapsed_s": 172.8
+    },
+    {
+      "slug": "n02_mary_lamb_lullaby_musicbox",
+      "title": "Mary Had a Little Lamb 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+      "bpm": 72.0,
+      "bars": 216,
+      "lufs": -14.000097409375666,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -63.097283332448754,
+      "loop_seconds": 720.0,
+      "total_seconds": 3600.0,
+      "total_hhmmss": "1:00:00",
+      "video": "out/video/n02_mary_lamb_lullaby_musicbox.mp4",
+      "probe": {
+        "duration_s": 3600.0,
+        "size_mb": 316.739067,
+        "bitrate_kbps": 703.864,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 3600.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 3600.0
+          }
+        ]
+      },
+      "elapsed_s": 162.2
+    },
+    {
+      "slug": "n03_row_your_boat_lullaby_musicbox",
+      "title": "Row Row Row Your Boat 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+      "bpm": 84.0,
+      "bars": 252,
+      "lufs": -14.000764810824574,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -64.08846475948832,
+      "loop_seconds": 720.0,
+      "total_seconds": 3600.0,
+      "total_hhmmss": "1:00:00",
+      "video": "out/video/n03_row_your_boat_lullaby_musicbox.mp4",
+      "probe": {
+        "duration_s": 3600.0,
+        "size_mb": 313.612682,
+        "bitrate_kbps": 696.917,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 3600.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 3600.0
+          }
+        ]
+      },
+      "elapsed_s": 163.8
+    },
+    {
+      "slug": "n04_frere_jacques_lullaby_musicbox",
+      "title": "Frère Jacques 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+      "bpm": 76.0,
+      "bars": 228,
+      "lufs": -14.009727013366495,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -68.70763678542625,
+      "loop_seconds": 720.0,
+      "total_seconds": 3600.0,
+      "total_hhmmss": "1:00:00",
+      "video": "out/video/n04_frere_jacques_lullaby_musicbox.mp4",
+      "probe": {
+        "duration_s": 3600.0,
+        "size_mb": 309.481126,
+        "bitrate_kbps": 687.735,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 3600.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 3600.0
+          }
+        ]
+      },
+      "elapsed_s": 158.2
     }
   ]
 }

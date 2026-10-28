@@ -1,0 +1,31 @@
+{
+  "slug": "n04_frere_jacques_lullaby_musicbox",
+  "title": "Frère Jacques 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+  "description": "🎵 FRÈRE JACQUES — 1 hour of music box lullaby\n\nThe same gentle lullaby as our piano version, played this time on a music box,\nhigh and soft like the little tune inside a toy, with a quiet piano underneath.\nIt stays in one key and one calm tempo the whole way through, with nothing\nsudden and no background noise of any kind — a bunny asleep by a village window sets the mood.\n\n▸ Music box melody with a soft piano — no rain, no hiss\n▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)\n▸ Traditional melody; arrangement and sound made for this channel\n\nFor bedtime, naptime, and quiet evenings.\n",
+  "tags": [
+    "frere jacques music box",
+    "music box lullaby",
+    "baby sleep music",
+    "lullaby for babies",
+    "nursery rhymes music box",
+    "music box"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": true,
+  "specs": {
+    "genre_ja": "フレール・ジャック（オルゴール）",
+    "use_case": "sleep",
+    "bpm": 76.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.01,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -68.71,
+    "visual": "lullaby_moon"
+  }
+}

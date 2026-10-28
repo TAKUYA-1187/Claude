@@ -1,0 +1,31 @@
+{
+  "slug": "n03_row_your_boat_lullaby_musicbox",
+  "title": "Row Row Row Your Boat 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+  "description": "🎵 ROW, ROW, ROW YOUR BOAT — 1 hour of music box lullaby\n\nThe same gentle lullaby as our piano version, played this time on a music box,\nhigh and soft like the little tune inside a toy, with a quiet piano underneath.\nIt stays in one key and one calm tempo the whole way through, with nothing\nsudden and no background noise of any kind — a duckling asleep in a little boat sets the mood.\n\n▸ Music box melody with a soft piano — no rain, no hiss\n▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)\n▸ Traditional melody; arrangement and sound made for this channel\n\nFor bedtime, naptime, and quiet evenings.\n",
+  "tags": [
+    "row row row your boat music box",
+    "music box lullaby",
+    "baby sleep music",
+    "lullaby for babies",
+    "nursery rhymes music box",
+    "music box"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": true,
+  "specs": {
+    "genre_ja": "こげこげボート（オルゴール）",
+    "use_case": "sleep",
+    "bpm": 84.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -64.09,
+    "visual": "lullaby_moon"
+  }
+}
