@@ -1,18 +1,18 @@
 {
-  "total_seconds": 8640,
+  "total_seconds": 3600.0,
   "tracks": [
     {
-      "slug": "07_fireplace_winter_jazz",
-      "title": "Fireplace Jazz 🔥 2 Hours of Warm Winter Jazz & Crackling Fire",
-      "bpm": 88.0,
-      "bars": 528,
-      "lufs": -14.00163322521487,
+      "slug": "n01_twinkle_lullaby_musicbox",
+      "title": "Twinkle Twinkle Little Star 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+      "bpm": 66.0,
+      "bars": 198,
+      "lufs": -14.000068570629209,
       "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -50.81160522084833,
-      "loop_seconds": 1440,
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "elapsed_s": 130.1
+      "loop_seam_db": -68.20653221830375,
+      "loop_seconds": 720.0,
+      "total_seconds": 3600.0,
+      "total_hhmmss": "1:00:00",
+      "elapsed_s": 35.8
     }
   ]
 }
