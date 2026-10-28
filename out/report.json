@@ -12,7 +12,29 @@
       "loop_seconds": 1800.0,
       "total_seconds": 10800.0,
       "total_hhmmss": "3:00:00",
-      "elapsed_s": 125.1
+      "video": "out/video/g01_gentle_piano_sleep.mp4",
+      "probe": {
+        "duration_s": 10800.0,
+        "size_mb": 664.260671,
+        "bitrate_kbps": 492.044,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "rate": "1920x1080",
+            "fps": "24/1",
+            "duration": 10800.0
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "rate": "48000",
+            "fps": "0/0",
+            "duration": 10800.0
+          }
+        ]
+      },
+      "elapsed_s": 525.3
     }
   ]
 }
