@@ -318,6 +318,24 @@ KIDS_THUMB = {
 }
 
 
+# 大きな白い文字 2 行 + 長さのバッジ + 1 行の約束。2026-10-28 から BGM もこの型に統一
+# (旧来の「暗い映像に細い文字」はスマホの一覧で読めず、クリック率 0% が続いた)
+SLEEP_BADGE = (246, 214, 140)
+JAZZ_BADGE = (240, 168, 96)
+SEASON_BADGE = (232, 120, 120)
+BOLD_THUMB = {
+    "g01_gentle_piano_sleep": (["SLEEP", "PIANO"], "No rain · No noise · Just piano", SLEEP_BADGE),
+    "g02_deep_sleep_piano": (["DEEP SLEEP", "PIANO"], "No rain · No noise · Just piano", SLEEP_BADGE),
+    "g03_emotional_sleep_piano": (["BEAUTIFUL", "SLEEP PIANO"], "No rain · No noise · Just piano", SLEEP_BADGE),
+    "03_piano_and_rain": (["PIANO", "& RAIN"], "Soft piano · Gentle rain", SLEEP_BADGE),
+    "04_cozy_coffee_jazz": (["COFFEE", "JAZZ"], "Warm piano for work & study", JAZZ_BADGE),
+    "05_bossa_nova_cafe": (["BOSSA NOVA", "CAFE"], "Smooth guitar · Good mood", JAZZ_BADGE),
+    "07_fireplace_winter_jazz": (["FIREPLACE", "JAZZ"], "Warm jazz · Crackling fire", SEASON_BADGE),
+    "17_christmas_jazz": (["CHRISTMAS", "JAZZ"], "Cozy holiday piano", SEASON_BADGE),
+    "21_halloween_night": (["HALLOWEEN", "NIGHT"], "Spooky, not scary · Music box", SEASON_BADGE),
+}
+
+
 def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
     if spec.slug in KIDS_THUMB:
         from bgm_studio import kids_visuals as KV
@@ -328,11 +346,14 @@ def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
         badge = f"{length} LULLABY" if spec.slug != "n11_lullaby_medley" else f"{length} · 10 SONGS"
         return KV.kids_thumbnail(KIDS_THUMB[spec.slug], badge,
                                  "for Babies & Sleep", scene=spec.visual, seed=spec.seed)
-    if spec.visual == "moon_lake":
+    if spec.slug in BOLD_THUMB:
         from bgm_studio import sleep_visuals as SV
-        hrs = int(round(total_seconds / 3600.0))
-        return SV.calm_thumbnail(["SLEEP", "PIANO"], f"{hrs} HOURS",
-                                 "No rain · No noise · Just piano", seed=spec.seed)
+        lines, promise, color = BOLD_THUMB[spec.slug]
+        hrs = int(total_seconds // 3600)
+        # 暖炉・ハロウィン・雨の映像は暗いので、サムネだけ明るく持ち上げる
+        bright = 1.12 if spec.visual.startswith("moon_lake") else 1.4
+        return SV.calm_thumbnail(lines, f"{hrs} HOURS", promise, scene=spec.visual,
+                                 seed=spec.seed, badge_color=color, brighten=bright)
     return VIS.thumbnail(spec.visual, _thumb_lines(spec, total_seconds), seed=spec.seed)
 
 

@@ -791,6 +791,40 @@ For falling asleep, staying asleep, reading in bed, or a quiet room.
 #   楽器はやわらかいピアノとオルゴールだけ / 調とテンポは最後まで同じ /
 #   やさしい 4 つの弾き方を 2 コーラスずつ回す / 映像はオリジナルキャラ Luna。
 
+DESCRIPTIONS["g02_deep_sleep_piano"] = """\
+🌙 DEEP SLEEP PIANO — {duration} of calm piano, with no rain and no noise
+
+The second in our Sleep Piano series, slower than the first: 54 beats a minute,
+long chords that change only every few bars, and a melody that returns like a
+song you already know. A soft piano and a quiet pad, with an occasional
+music-box note — and nothing else. No rain, no wind, no white noise.
+
+▸ No ambience layer of any kind — only instruments and their reverb
+▸ Same low, even dynamics for the whole {duration}
+▸ Loops seamlessly through the night
+
+For falling asleep, staying asleep, and quiet late nights.
+
+— Composed, arranged and animated for this channel.
+"""
+
+DESCRIPTIONS["g03_emotional_sleep_piano"] = """\
+🌙 BEAUTIFUL SLEEP PIANO — {duration} of gentle, emotional piano
+
+The third in our Sleep Piano series. This one uses the warm, slightly
+bittersweet chord changes you hear in Japanese film and anime soundtracks,
+slowed right down for sleep. The melody is soft and comes back again and again,
+so there is always something familiar to hold on to and nothing to wait for.
+
+▸ Soft piano and a quiet pad — no rain, no ambience, no hiss
+▸ A steady, resting 60 beats a minute
+▸ Loops seamlessly for the whole {duration}
+
+For bedtime, reading in bed, or a calm evening.
+
+— Composed, arranged and animated for this channel.
+"""
+
 DESCRIPTIONS["n11_lullaby_medley"] = """\
 🌙 10 LULLABIES FOR BABIES — {duration}, one song after another
 

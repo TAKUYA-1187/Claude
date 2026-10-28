@@ -333,14 +333,14 @@ def build_cafe_jazz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
                 gain=0.30, octave=-2, rng=rng,
                 scale_root=spec.key_root, scale=spec.scale)
     A.play_jazz_brushes(buf, spans, clock, bank, gain=0.22, rng=rng)
-    A.play_melody(buf, spans, clock, bank, inst="piano", gain=0.22,
+    A.play_melody(buf, spans, clock, bank, inst="soft_piano", gain=0.22,
                   scale_root=spec.key_root, scale=spec.scale,
                   lo=64, hi=86, density=0.5, rng=rng, rest_prob=0.34, pan=0.15)
 
     ir = dsp.make_reverb_ir(2.2, rt60=1.5, damp=0.5, predelay=0.015, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        (lambda: NT.cafe_ambience(n, seed=spec.seed + 1), -20.0),
+        (lambda: NT.cafe_ambience(n, seed=spec.seed + 1), -26.0),   # 旧 -20。雑音っぽさを避ける
         (lambda: NT.room_tone(n, seed=spec.seed + 2), -32.0),
     ]
 
@@ -376,7 +376,7 @@ def build_bossa(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict]:
     ir = dsp.make_reverb_ir(2.0, rt60=1.3, damp=0.45, seed=spec.seed)
     n = clock.n_samples
     beds = [
-        (lambda: NT.cafe_ambience(n, seed=spec.seed + 1), -24.0),
+        (lambda: NT.cafe_ambience(n, seed=spec.seed + 1), -29.0),   # 旧 -24
         (lambda: NT.room_tone(n, seed=spec.seed + 2), -34.0),
     ]
 
@@ -849,7 +849,7 @@ def build_christmas_jazz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, d
 
     A.play_comp(buf, spans, clock, bank, inst="piano", style="jazz",
                 gain=0.24, voicing="rootless", center=62, swing=0.55, rng=rng)
-    A.play_melody(buf, spans, clock, bank, inst="celesta", gain=0.18,
+    A.play_melody(buf, spans, clock, bank, inst="music_box", gain=0.18,
                   scale_root=spec.key_root, scale=spec.scale,
                   lo=72, hi=93, density=0.40, rng=rng, rest_prob=0.42)
     A.play_bass(buf, spans, clock, bank, inst="upright", style="walk",
@@ -857,13 +857,13 @@ def build_christmas_jazz(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, d
                 scale_root=spec.key_root, scale=spec.scale)
     A.play_jazz_brushes(buf, spans, clock, bank, gain=0.15, rng=rng,
                         ride_prob=0.35)
-    A.play_sleigh(buf, spans, clock, bank, gain=0.10, rng=rng)
+    A.play_sleigh(buf, spans, clock, bank, gain=0.06, rng=rng)   # 鈴はノイズ成分が多いので控えめに
 
     ir = dsp.make_reverb_ir(2.6, rt60=2.0, damp=0.5, predelay=0.02,
                             seed=spec.seed)
     n = clock.n_samples
     beds = [
-        (lambda: NT.fireplace(n, seed=spec.seed + 1), -18.0),
+        (lambda: NT.fireplace(n, seed=spec.seed + 1), -23.0),   # 旧 -18
         (lambda: NT.room_tone(n, seed=spec.seed + 2), -33.0),
     ]
 
@@ -1749,6 +1749,34 @@ TRACKS: list[TrackSpec] = [
             keywords=["sleep piano", "sleep music", "piano music for sleep",
                       "relaxing piano", "deep sleep music", "calm piano",
                       "sleep music no rain", "3 hours sleep music"],
+        ),
+    ),
+    TrackSpec(
+        slug="g02_deep_sleep_piano",
+        title_en="Deep Sleep Piano",
+        genre_ja="深い眠りのピアノ（雨音・雑音なし／第2弾）",
+        use_case="sleep", bpm=54.0, key="D", key_root=2, scale="major",
+        prog_key="ambient", visual="moon_lake_violet", seed=7202,
+        build=build_gentle_piano,
+        seo=dict(
+            title="Deep Sleep Piano 🌙 3 Hours of Calm Piano Music | No Rain, No Noise",
+            keywords=["deep sleep piano", "sleep music", "calm piano", "piano music for sleep",
+                      "relaxing sleep music", "sleep music no rain", "3 hours sleep music",
+                      "soft piano"],
+        ),
+    ),
+    TrackSpec(
+        slug="g03_emotional_sleep_piano",
+        title_en="Emotional Sleep Piano",
+        genre_ja="心に残る旋律の睡眠ピアノ（雨音・雑音なし／第3弾）",
+        use_case="sleep", bpm=60.0, key="C", key_root=0, scale="major",
+        prog_key="anime", visual="moon_lake_teal", seed=7303,
+        build=build_gentle_piano,
+        seo=dict(
+            title="Beautiful Sleep Piano 🌙 3 Hours of Emotional Piano for Sleep | No Rain, No Noise",
+            keywords=["sleep piano", "emotional piano", "beautiful piano music", "sleep music",
+                      "anime piano sleep", "relaxing piano", "piano music for sleep",
+                      "sleep music no rain"],
         ),
     ),
     TrackSpec(

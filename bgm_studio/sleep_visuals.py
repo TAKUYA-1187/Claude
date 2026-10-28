@@ -19,12 +19,24 @@ from .kids_visuals import _font, _outlined, moon_sprite, sparkle_sprite
 from .visuals import H, TWO_PI, W, _upscale, static_grain, vgrad
 
 
-def scene_moon_lake(seed: int = 90):
+# Sleep Piano シリーズの色違い。同じ構図で色だけ変え、シリーズとして並んだときに
+# 「同じチャンネルの別の回」と一目で分かるようにする
+PALETTES = {
+    "blue": dict(sky=[(14, 22, 58), (30, 42, 92), (62, 74, 134), (104, 104, 160)],
+                 ridge=[(36, 40, 82), (24, 28, 62)]),
+    "violet": dict(sky=[(28, 16, 58), (58, 36, 104), (112, 74, 150), (176, 120, 170)],
+                   ridge=[(62, 40, 96), (42, 26, 72)]),
+    "teal": dict(sky=[(8, 26, 46), (18, 54, 78), (40, 96, 116), (92, 140, 150)],
+                 ridge=[(20, 52, 66), (12, 36, 50)]),
+}
+
+
+def scene_moon_lake(seed: int = 90, palette: str = "blue"):
     """静かな湖に映る三日月。揺れるのは月の映り込みと星だけ"""
     rng = np.random.default_rng(seed)
+    pal = PALETTES[palette]
     horizon = 0.66
-    sky = vgrad([(14, 22, 58), (30, 42, 92), (62, 74, 134), (104, 104, 160)],
-                stops=[0.0, 0.40, 0.56, horizon])
+    sky = vgrad(pal["sky"], stops=[0.0, 0.40, 0.56, horizon])
     y = np.linspace(0, 1, H, dtype=np.float32)[:, None]
     x = np.linspace(0, 1, W, dtype=np.float32)[None, :]
     mx, my = 0.64, 0.28
@@ -37,8 +49,8 @@ def scene_moon_lake(seed: int = 90):
     ridge2 = horizon - 0.020 - 0.018 * np.sin(TWO_PI * (xs * 3.1 + 0.4))
     m1 = ((y >= ridge1[None, :]) & (y < horizon)).astype(np.float32)
     m2 = ((y >= ridge2[None, :]) & (y < horizon)).astype(np.float32)
-    sky = sky * (1 - m1[:, :, None]) + m1[:, :, None] * np.array([36, 40, 82])
-    sky = sky * (1 - m2[:, :, None]) + m2[:, :, None] * np.array([24, 28, 62])
+    sky = sky * (1 - m1[:, :, None]) + m1[:, :, None] * np.array(pal["ridge"][0])
+    sky = sky * (1 - m2[:, :, None]) + m2[:, :, None] * np.array(pal["ridge"][1])
     # 湖面 (空を上下反転して暗くしたもの)
     water_rows = H - int(horizon * H)
     top = int(horizon * H)
@@ -89,19 +101,25 @@ def scene_moon_lake(seed: int = 90):
     return frame
 
 
-SLEEP_SCENES = {"moon_lake": scene_moon_lake}
+SLEEP_SCENES = {
+    "moon_lake": scene_moon_lake,
+    "moon_lake_violet": lambda seed=90: scene_moon_lake(seed, "violet"),
+    "moon_lake_teal": lambda seed=90: scene_moon_lake(seed, "teal"),
+}
 
 
 def calm_thumbnail(title_lines: list[str], badge: str, promise: str,
                    scene: str = "moon_lake", seed: int = 90,
-                   size=(1280, 720)) -> Image.Image:
+                   size=(1280, 720), badge_color=(246, 214, 140),
+                   brighten: float = 1.12) -> Image.Image:
     """
     大人向け睡眠動画のサムネ: 左に大きな白い文字 2 行、その下に長さのバッジと「約束」の 1 行。
     子ども向けの黄色い文字とは色を変えて、同じチャンネルでも棚が分かれて見えるようにする
     """
-    frame = SLEEP_SCENES[scene](seed=seed)(0.2)
+    from .visuals import scene_maker
+    frame = scene_maker(scene)(seed=seed)(0.2)
     im = Image.fromarray(np.clip(frame, 0, 255).astype(np.uint8)).resize(size, Image.LANCZOS)
-    im = ImageEnhance.Brightness(im).enhance(1.12)
+    im = ImageEnhance.Brightness(im).enhance(brighten)
     im = ImageEnhance.Color(im).enhance(1.12).convert("RGBA")
     w, h = size
     d = ImageDraw.Draw(im)
@@ -120,7 +138,7 @@ def calm_thumbnail(title_lines: list[str], badge: str, promise: str,
     bw, bh = bb[2] - bb[0], bb[3] - bb[1]
     by = y + int(h * 0.04)
     d.rounded_rectangle([x0, by, x0 + bw + int(h * 0.08), by + bh + int(h * 0.06)],
-                        radius=int(h * 0.05), fill=(246, 214, 140))
+                        radius=int(h * 0.05), fill=badge_color)
     d.text((x0 + int(h * 0.04), by + int(h * 0.025) - bb[1]), badge, font=bf,
            fill=(28, 32, 74))
     pf = _font(int(h * 0.058), "Medium")

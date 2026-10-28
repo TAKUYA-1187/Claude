@@ -244,7 +244,8 @@ def kids_thumbnail(title_lines: list[str], badge: str, sub: str = "",
       左下: 用途のバッジ (桃色の角丸)
       右: キャラクター (映像の 1 コマ)
     """
-    frame = KIDS_SCENES[scene](seed=seed)(0.18)
+    from .visuals import scene_maker
+    frame = scene_maker(scene)(seed=seed)(0.18)
     im = Image.fromarray(np.clip(frame, 0, 255).astype(np.uint8)).resize(size, Image.LANCZOS)
     # 彩度を少し上げる (小さい表示でも目に留まる)
     from PIL import ImageEnhance
