@@ -2,21 +2,21 @@
   "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "07_fireplace_winter_jazz",
-      "title": "Fireplace Jazz 🔥 2 Hours of Warm Winter Jazz & Crackling Fire",
-      "bpm": 88.0,
-      "bars": 528,
-      "lufs": -14.000000247491503,
-      "true_peak_db": -2.499999397372391,
-      "loop_seam_db": -41.009041467424666,
+      "slug": "17_christmas_jazz",
+      "title": "Christmas Jazz 🎄 Cozy Holiday Music by the Fireplace",
+      "bpm": 92.0,
+      "bars": 552,
+      "lufs": -14.000000114115277,
+      "true_peak_db": -2.431449790236102,
+      "loop_seam_db": -21.867355805284387,
       "loop_seconds": 1440,
       "total_seconds": 8640,
       "total_hhmmss": "2:24:00",
-      "video": "out/video/07_fireplace_winter_jazz.mp4",
+      "video": "out/video/17_christmas_jazz.mp4",
       "probe": {
         "duration_s": 8640.0,
-        "size_mb": 798.084521,
-        "bitrate_kbps": 738.967,
+        "size_mb": 803.332863,
+        "bitrate_kbps": 743.826,
         "streams": [
           {
             "type": "video",
@@ -34,7 +34,7 @@
           }
         ]
       },
-      "elapsed_s": 658.2
+      "elapsed_s": 1806.0
     }
   ]
 }
