@@ -103,13 +103,13 @@ def scene_from_image(path: str | Path, seed: int = 0, sky_frac: float = 0.42,
                      n_stars: int = 36, n_motes: int = 22, glows: list | None = None):
     """
     静止画 → フレーム関数 (t01 ∈ [0,1) で完全ループ)。
-      - 1.00〜1.035 倍の呼吸のようなズームと、ごくわずかな横移動 (20 秒で 1 往復)
+      - 絵は動かさない (細かい絵を動かすと画面全体が動いて落ち着かず、低いビットレートで崩れる)
       - 画面上部 (空) に、絵の明るさに合わせた星のまたたき
       - 下半分に、ゆっくり漂って明滅する光の粒
     """
     rng = np.random.default_rng(seed)
     src = Image.open(path).convert("RGB")
-    over = 1.06
+    over = 1.0          # 動かさないので余白はいらない (文字やバッジを端で切らない)
     big = _cover(src, int(W * over), int(H * over))
     lum = np.asarray(big.convert("L"), dtype=np.float32)
 
@@ -132,14 +132,16 @@ def scene_from_image(path: str | Path, seed: int = 0, sky_frac: float = 0.42,
 
     glow_fields: dict = {}
 
+    # 絵そのものは動かさない。ゆっくりズームさせると、描き込みの細かい絵では画面全体が
+    # 動き (QA「動きすぎ」0.07)、送信用に容量を落とした版では細部がつぶれて汚く見えた。
+    # 動くのは星・光の粒・炎の明かりだけにする
+    cw, ch = int(W * over), int(H * over)
+    cx, cy = (big.width - W) / 2, (big.height - H) / 2
+    still = big.crop((int(cx), int(cy), int(cx) + W, int(cy) + H)).convert("RGBA")
+
     def frame(t01: float) -> np.ndarray:
-        z = 1.0 + 0.0175 * (1 - np.cos(TWO_PI * t01))          # 1.0 → 1.035 → 1.0
-        cw, ch = int(W * over / z), int(H * over / z)
-        cx = (big.width - cw) / 2 + 8 * np.sin(TWO_PI * t01)
-        cy = (big.height - ch) / 2
-        im = big.crop((int(cx), int(cy), int(cx) + cw, int(cy) + ch)).resize((W, H), Image.BICUBIC)
-        im = im.convert("RGBA")
-        sx, sy = W / cw, H / ch
+        im = still.copy()
+        sx, sy = 1.0, 1.0
         for (x, y, s, ph, cyc) in stars:
             k = 0.5 + 0.5 * np.sin(TWO_PI * cyc * t01 + ph)
             sz = max(int(s * (0.6 + 0.4 * k)), 4)

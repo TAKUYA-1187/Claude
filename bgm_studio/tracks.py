@@ -455,7 +455,11 @@ def build_winter_fire(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict
     ]
 
     def master(x):
-        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-3.5)
+        # 旋律と伴奏を録音ピアノにして暗くなった分 (1-4kHz がこもり判定)、
+        # 暗くする傾きを弱め、ピアノの明るさが出る 1.5kHz 以上を少し戻す
+        x = dsp.tilt_eq(x, pivot=700.0, gain_db=-1.0)
+        x = dsp.shelf(x, 1000.0, 4.5, kind="high")
+        x = dsp.peak_eq(x, 2200.0, 2.5, q=1.0)       # ピアノの輪郭 (2kHz 帯 -22.6 → 窓内へ)
         x = dsp.shelf(x, 150.0, 2.0, kind="low")
         x = dsp.lowpass(x, 14000.0, order=2)
         return dsp.saturate(x, drive=1.25, mix=0.35)

@@ -1,31 +1,18 @@
 {
-  "total_seconds": 3600.0,
+  "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "n02_mary_lamb_lullaby",
-      "title": "Mary Had a Little Lamb 🐑 1 Hour Baby Lullaby | Soft Piano & Music Box for Sleep",
-      "bpm": 72.0,
-      "bars": 216,
-      "lufs": -14.203159541299012,
+      "slug": "07_fireplace_winter_jazz",
+      "title": "Fireplace Jazz 🔥 2 Hours of Warm Winter Jazz & Crackling Fire",
+      "bpm": 88.0,
+      "bars": 528,
+      "lufs": -14.00163322521487,
       "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -58.914824207813716,
-      "loop_seconds": 720.0,
-      "total_seconds": 3600.0,
-      "total_hhmmss": "1:00:00",
-      "elapsed_s": 41.3
-    },
-    {
-      "slug": "n04_frere_jacques_lullaby",
-      "title": "Frère Jacques 🔔 1 Hour Bedtime Lullaby for Babies | Soft Piano & Music Box",
-      "bpm": 76.0,
-      "bars": 228,
-      "lufs": -14.007218111618261,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -65.13573082232641,
-      "loop_seconds": 720.0,
-      "total_seconds": 3600.0,
-      "total_hhmmss": "1:00:00",
-      "elapsed_s": 45.8
+      "loop_seam_db": -50.81160522084833,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "elapsed_s": 130.1
     }
   ]
 }
