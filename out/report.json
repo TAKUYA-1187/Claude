@@ -1,40 +1,31 @@
 {
-  "total_seconds": 8640,
+  "total_seconds": 3600.0,
   "tracks": [
     {
-      "slug": "17_christmas_jazz",
-      "title": "Christmas Jazz 🎄 Cozy Holiday Music by the Fireplace",
-      "bpm": 92.0,
-      "bars": 552,
-      "lufs": -14.000000114115277,
-      "true_peak_db": -2.431449790236102,
-      "loop_seam_db": -21.867355805284387,
-      "loop_seconds": 1440,
-      "total_seconds": 8640,
-      "total_hhmmss": "2:24:00",
-      "video": "out/video/17_christmas_jazz.mp4",
-      "probe": {
-        "duration_s": 8640.0,
-        "size_mb": 803.332863,
-        "bitrate_kbps": 743.826,
-        "streams": [
-          {
-            "type": "video",
-            "codec": "h264",
-            "rate": "1920x1080",
-            "fps": "24/1",
-            "duration": 8640.0
-          },
-          {
-            "type": "audio",
-            "codec": "aac",
-            "rate": "48000",
-            "fps": "0/0",
-            "duration": 8640.0
-          }
-        ]
-      },
-      "elapsed_s": 1806.0
+      "slug": "n02_mary_lamb_lullaby",
+      "title": "Mary Had a Little Lamb 🐑 1 Hour Baby Lullaby | Soft Piano & Music Box for Sleep",
+      "bpm": 72.0,
+      "bars": 216,
+      "lufs": -14.203159541299012,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -58.914824207813716,
+      "loop_seconds": 720.0,
+      "total_seconds": 3600.0,
+      "total_hhmmss": "1:00:00",
+      "elapsed_s": 41.3
+    },
+    {
+      "slug": "n04_frere_jacques_lullaby",
+      "title": "Frère Jacques 🔔 1 Hour Bedtime Lullaby for Babies | Soft Piano & Music Box",
+      "bpm": 76.0,
+      "bars": 228,
+      "lufs": -14.007218111618261,
+      "true_peak_db": -1.0000002900227403,
+      "loop_seam_db": -65.13573082232641,
+      "loop_seconds": 720.0,
+      "total_seconds": 3600.0,
+      "total_hhmmss": "1:00:00",
+      "elapsed_s": 45.8
     }
   ]
 }
