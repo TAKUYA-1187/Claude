@@ -441,7 +441,7 @@ def build_winter_fire(spec: TrackSpec, seconds: float) -> tuple[np.ndarray, dict
                 gain=0.26, octave=-2, rng=rng,
                 scale_root=spec.key_root, scale=spec.scale)
     A.play_jazz_brushes(buf, spans, clock, bank, gain=0.16, rng=rng, ride_prob=0.35)
-    A.play_melody(buf, spans, clock, bank, inst="music_box", gain=0.16,
+    A.play_melody(buf, spans, clock, bank, inst="piano", gain=0.16,
                   scale_root=spec.key_root, scale=spec.scale,
                   lo=72, hi=93, density=0.34, rng=rng, rest_prob=0.5, pan=0.2)
     A.play_pad(buf, spans, clock, bank, gain=0.07, brightness=0.6,

@@ -1637,9 +1637,16 @@ def scene_maker(name: str):
     このモジュールを import して作られているので、循環 import を避けて遅延で取り込む
     """
     if name.startswith("illust:"):
+        import json
+        from pathlib import Path
         from .illustrated import scene_from_image
-        path = name.split(":", 1)[1]
-        return lambda seed=0: scene_from_image(path, seed=seed)
+        path = Path(name.split(":", 1)[1])
+        cfg = path.with_suffix(".json")
+        opt = json.loads(cfg.read_text(encoding="utf-8")) if cfg.exists() else {}
+        return lambda seed=0: scene_from_image(path, seed=seed,
+                                               n_stars=int(opt.get("stars", 36)),
+                                               n_motes=int(opt.get("motes", 22)),
+                                               glows=opt.get("glows"))
     if name not in SCENES:
         from .kids_visuals import KIDS_SCENES
         from .sleep_visuals import SLEEP_SCENES

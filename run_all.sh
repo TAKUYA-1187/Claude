@@ -31,10 +31,18 @@ df -h . | tail -1
 echo ""
 
 echo "▶ [1/5] 必要なライブラリを確認しています..."
-"$PY" -m pip install --quiet --upgrade numpy pillow imageio-ffmpeg || {
+"$PY" -m pip install --quiet --upgrade numpy pillow imageio-ffmpeg scipy || {
   echo "ライブラリのインストールに失敗しました。"; exit 1; }
 echo "   OK"
 echo ""
+
+# 本物のピアノの録音 (University of Iowa MIS, 用途の制限なし) を取り込む。
+# 無くても動く (合成ピアノに戻る) が、音質が大きく違うので最初に一度だけ実行する
+if [ ! -d samples/piano_clean ]; then
+  echo "▶ [1.5/5] ピアノの録音を取り込んでいます (初回だけ・約 3 分)..."
+  "$PY" prepare_piano_samples.py || echo "   取り込みに失敗しました。合成ピアノで続けます。"
+  echo ""
+fi
 
 echo "▶ [2/5] 2時間24分の動画を 25 本作ります (いちばん時間がかかります)"
 "$PY" render_bgm.py --tracks \

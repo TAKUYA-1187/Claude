@@ -100,7 +100,7 @@ def _mote(px: int) -> Image.Image:
 
 
 def scene_from_image(path: str | Path, seed: int = 0, sky_frac: float = 0.42,
-                     n_stars: int = 36, n_motes: int = 22):
+                     n_stars: int = 36, n_motes: int = 22, glows: list | None = None):
     """
     静止画 → フレーム関数 (t01 ∈ [0,1) で完全ループ)。
       - 1.00〜1.035 倍の呼吸のようなズームと、ごくわずかな横移動 (20 秒で 1 往復)
@@ -130,6 +130,8 @@ def scene_from_image(path: str | Path, seed: int = 0, sky_frac: float = 0.42,
              for _ in range(n_motes)]
     mote_spr = {s: _mote(s) for s in {m[2] for m in motes}}
 
+    glow_fields: dict = {}
+
     def frame(t01: float) -> np.ndarray:
         z = 1.0 + 0.0175 * (1 - np.cos(TWO_PI * t01))          # 1.0 → 1.035 → 1.0
         cw, ch = int(W * over / z), int(H * over / z)
@@ -157,8 +159,23 @@ def scene_from_image(path: str | Path, seed: int = 0, sky_frac: float = 0.42,
             spr = spr.copy()
             spr.putalpha(Image.fromarray(al))
             im.alpha_composite(spr, (int(mx * W) - s // 2, int(my * H) - s // 2))
-        return np.asarray(im.convert("RGB"), dtype=np.float32)
+        arr = np.asarray(im.convert("RGB"), dtype=np.float32)
+        # 炎・ランプのゆらめき: 位置 (画面比) と半径を指定した暖かい光を、
+        # 整数周期の正弦波の重ね合わせで明滅させる (ループする)
+        for (gx, gy, gr) in (glows or []):
+            fl = 0.5 + 0.25 * np.sin(TWO_PI * 7 * t01) + 0.15 * np.sin(TWO_PI * 13 * t01 + 1.3) \
+                + 0.10 * np.sin(TWO_PI * 29 * t01 + 0.4)
+            g = glow_fields.setdefault((gx, gy, gr), _glow_field(gx, gy, gr))
+            arr = 255.0 - (255.0 - arr) * (255.0 - g * (22.0 * fl)) / 255.0
+        return arr
     return frame
+
+
+def _glow_field(gx: float, gy: float, gr: float) -> np.ndarray:
+    y = np.linspace(0, 1, H, dtype=np.float32)[:, None]
+    x = np.linspace(0, 1, W, dtype=np.float32)[None, :]
+    d = np.sqrt(((x - gx) * (W / H)) ** 2 + (y - gy) ** 2) / gr
+    return (np.exp(-d ** 2))[:, :, None] * np.array([1.0, 0.62, 0.25], dtype=np.float32)
 
 
 # ──────────────────────────────────────────────────────────────

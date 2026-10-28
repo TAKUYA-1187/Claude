@@ -64,8 +64,6 @@ NURSERY: dict[str, dict] = {
              "C/1 C/1 G/1 G/1 A/1 A/1 G/2 F/1 F/1 E/1 E/1 D/1 D/1 C/2"),
     "n02_mary_lamb_lullaby": dict(
         title="Mary Had a Little Lamb", bar=4, bpm=72, visual="morning_meadow",
-        bright=5.5,    # 旋律が E4-G4 と低く倍音が少ないため、1kHz 以上を少し戻す (QA 1kHz -23)
-        lowmid_cut=4.5,  # 1 時間版でも 1kHz -24 とこもった。旋律と伴奏が重なる 350Hz 付近を浅く削る
         tune="E/1 D/1 C/1 D/1 E/1 E/1 E/2 D/1 D/1 D/2 E/1 G/1 G/2 "
              "E/1 D/1 C/1 D/1 E/1 E/1 E/1 E/1 D/1 D/1 E/1 D/1 C/4"),
     "n03_row_your_boat_lullaby": dict(
@@ -75,13 +73,11 @@ NURSERY: dict[str, dict] = {
              "G/1 F/.5 E/1 D/.5 C/3"),
     "n04_frere_jacques_lullaby": dict(
         title="Frère Jacques", bar=4, bpm=76, visual="minimal_gradient",
-        bright=4.5,    # G3-A4 と低く、こもった (QA 1kHz -21)
         tune="C/1 D/1 E/1 C/1 C/1 D/1 E/1 C/1 E/1 F/1 G/2 E/1 F/1 G/2 "
              "G/.5 A/.5 G/.5 F/.5 E/1 C/1 G/.5 A/.5 G/.5 F/.5 E/1 C/1 "
              "C/1 G3/1 C/2 C/1 G3/1 C/2"),
     "n05_london_bridge_lullaby": dict(
         title="London Bridge Is Falling Down", bar=4, bpm=80, visual="night_skyline",
-        bright=4.5,    # C4-A4 と低く、こもった (QA 1kHz -22)
         tune="G/1.5 A/.5 G/1 F/1 E/1 F/1 G/2 D/1 E/1 F/2 E/1 F/1 G/2 "
              "G/1.5 A/.5 G/1 F/1 E/1 F/1 G/2 D/2 G/2 E/2 C/2"),
     "n06_old_macdonald_lullaby": dict(
@@ -107,7 +103,6 @@ NURSERY: dict[str, dict] = {
              "E/1 E/1 F/1 G/1 G/1 F/1 E/1 D/1 C/1 C/1 D/1 E/1 D/1.5 C/.5 C/2"),
     "n10_jingle_bells_lullaby": dict(
         title="Jingle Bells", bar=4, bpm=92, visual="snow_cabin",
-        mid_cut=2.0,   # 500Hz 帯が窓を 0.9dB 超えた。700Hz 付近を浅く削る
         tune="E/1 E/1 E/2 E/1 E/1 E/2 E/1 G/1 C/1.5 D/.5 E/4 "
              "F/1 F/1 F/1.5 F/.5 F/1 E/1 E/1 E/.5 E/.5 E/1 D/1 D/1 E/1 D/2 G/2 "
              "E/1 E/1 E/2 E/1 E/1 E/2 E/1 G/1 C/1.5 D/.5 E/4 "
@@ -214,13 +209,18 @@ def harmonize(tune: list, bar_beats: int) -> list[tuple[float, float, str]]:
 #   - 伴奏は中音域のパッドか、ゆっくりした分散和音だけ (C2 の低音を鳴らさない)
 #   - 切り替えは 2 コーラスごと (約 1 分半) に減らす
 
+#
+# 2026-10-28 追記: オーナーの評価「メロディーが機械音で聞きにくい」。ピアノを録音に
+# 置き換えたうえで、電子的に聞こえる合成パッドの伴奏とオルゴールの主旋律をやめ、
+# ピアノだけの演奏にした (オルゴールは 1 オクターブ上でごく小さく重ねるときだけ)。
+
 ARRANGEMENTS = [
-    dict(lead="soft_piano", acc="pad", lg=0.44, ag=0.065),
-    dict(lead="music_box", acc="pad", lg=0.34, ag=0.065),
-    dict(lead="soft_piano", acc="broken", lg=0.42, ag=0.12),
+    dict(lead="soft_piano", acc="broken", lg=0.44, ag=0.11),
+    dict(lead="soft_piano", acc="block", lg=0.44, ag=0.10),
     # ピアノの 1 オクターブ上でオルゴールがそっと重なる
-    dict(lead="soft_piano", acc="pad", lg=0.42, ag=0.065,
+    dict(lead="soft_piano", acc="broken", lg=0.42, ag=0.11,
          double=12, double_inst="music_box"),
+    dict(lead="soft_piano", acc="block", lg=0.42, ag=0.10),
 ]
 CHORUSES_PER_ARRANGEMENT = 2
 BREATH_S = 2.4                           # コーラス間の息継ぎ
@@ -311,6 +311,15 @@ def build_nursery(spec, seconds: float):
                 for si in range(int(seg_len)):
                     A.add_panned(buf, bank.note("soft_piano", notes[si % 4], 0.32),
                                  int(round((seg_t + si * beat_s) * sr)), ag, 0.08)
+            elif arr["acc"] == "block":
+                # やわらかい和音を区間の頭で 1 回 (長い区間は半分の位置でもう 1 回)。
+                # 下から少しずらして弾くと、機械的な「ジャーン」にならない
+                hits = [0.0] + ([seg_len / 2] if seg_len >= 4 else [])
+                for h in hits:
+                    for ci, m in enumerate([bass + 12] + mids):
+                        A.add_panned(buf, bank.note("soft_piano", m, 0.30 - 0.02 * ci),
+                                     int(round((seg_t + h * beat_s + 0.018 * ci) * sr)),
+                                     ag, (-0.15, -0.05, 0.05, 0.15)[ci % 4])
             else:
                 dur = seg_len * beat_s * 1.35
                 for ci, m in enumerate([bass + 12] + mids[:2]):
@@ -326,13 +335,16 @@ def build_nursery(spec, seconds: float):
         # 以前は QA の「こもり」判定に合わせて 900Hz 以上を +3.5dB 持ち上げて
         # いたが、それが硬さ (雑音っぽさ) の一因だった。子守唄は暖かい方が正しい
         # ので持ち上げはやめ、12kHz より上をなだらかに落とす。
-        # 旋律が低い曲だけ、曲ごとに 1kHz 以上を少し戻す / 中域を浅く削る
+        # 曲ごとの補正 (合成ピアノ時代の bright / lowmid_cut / mid_cut)。録音ピアノでは
+        # 不要になったので今は使っていないが、将来の曲のために仕組みは残す
         if song.get("bright"):
             x = dsp.shelf(x, 1000.0, float(song["bright"]), kind="high")
         if song.get("lowmid_cut"):
             x = dsp.peak_eq(x, 350.0, -float(song["lowmid_cut"]), q=1.2)
         if song.get("mid_cut"):
             x = dsp.peak_eq(x, 700.0, -float(song["mid_cut"]), q=1.0)
+        # 録音ピアノ (2026-10-28〜) は 3kHz より上が少ない。空気感だけ少し足す
+        x = dsp.shelf(x, 3000.0, 4.0, kind="high")
         x = dsp.lowpass(x, 12000.0, order=2)
         return dsp.highpass(x, 50.0, order=2)
 

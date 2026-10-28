@@ -13,6 +13,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from pathlib import Path
+
 import numpy as np
 
 from . import dsp
@@ -306,6 +308,70 @@ def soft_piano(m: int, vel: float = 0.8, sr: int = SR,
     return (y * (0.30 + 0.70 * vel)).astype(np.float32)
 
 
+# ──────────────────────────────────────────────────────────────
+# 録音したピアノ (2026-10-28〜)
+# ──────────────────────────────────────────────────────────────
+#
+# オーナーの評価「メロディーが機械音で聞きにくい」を受けて、合成ピアノから
+# 実際のピアノの録音 (University of Iowa MIS, 用途の制限なし) に置き換えた。
+# 素材は prepare_piano_samples.py で雑音を取り除いて samples/piano_clean/ に置く。
+# 素材が無い環境では、これまでの合成ピアノに自動で戻る。
+
+_PIANO_DIR = Path(__file__).resolve().parent.parent / "samples" / "piano_clean"
+_PIANO: dict[int, np.ndarray] | None = None
+# 合成の soft_piano (C4, vel 0.55) と最初の 1 秒の RMS が同じになる倍率。
+# 曲ごとに決めてある楽器間のバランスを崩さないため
+_PIANO_CAL = 10.0
+
+
+def _piano_samples() -> dict[int, np.ndarray]:
+    global _PIANO
+    if _PIANO is None:
+        _PIANO = {}
+        if _PIANO_DIR.exists():
+            for p in _PIANO_DIR.glob("m*.npy"):
+                x = np.load(p)
+                _PIANO[int(p.stem[1:])] = (x.mean(axis=1) if x.ndim == 2 else x).astype(np.float32)
+    return _PIANO
+
+
+def real_piano(m: int, vel: float = 0.8, sr: int = SR,
+               rng: np.random.Generator | None = None, bright: float = 1.0) -> np.ndarray:
+    """
+    録音したピアノの 1 音。基準ピッチ (432/440Hz) と録音に無い音域は再サンプリングで合わせ、
+    弱く弾くほど高域を落として、本物のピアノと同じく「弱い音ほど丸い」音にする
+    """
+    S = _piano_samples()
+    if not S:
+        return soft_piano(m, vel, sr=sr, rng=rng) if bright <= 1.0 else piano(m, vel, sr=sr, rng=rng)
+    from fractions import Fraction
+    from scipy import signal as _sig
+    base = int(np.clip(m, min(S), max(S)))
+    x = S[base]
+    r = float(midi2hz(m)) / (440.0 * 2.0 ** ((base - 69) / 12.0))
+    if abs(r - 1.0) > 1e-4:
+        fr = Fraction(1.0 / r).limit_denominator(2000)
+        x = _sig.resample_poly(x, fr.numerator, fr.denominator).astype(np.float32)
+    # 録音自体が mf (中くらい) なので、削りすぎるとこもる (初回: 4kHz -67dB)。
+    # 1 次 (6dB/oct) のゆるい傾きで、弱い音だけ少し丸める
+    cutoff = min((3000.0 + 12000.0 * vel ** 2) * bright, sr * 0.45)
+    sos = _sig.butter(1, cutoff, "lowpass", fs=sr, output="sos")
+    y = _sig.sosfilt(sos, x).astype(np.float32)
+    return (y * _PIANO_CAL * (vel / 0.55) ** 1.3).astype(np.float32)
+
+
+def soft_piano_any(m: int, vel: float = 0.8, sr: int = SR,
+                   rng: np.random.Generator | None = None) -> np.ndarray:
+    """やわらかいピアノ。録音があれば録音、無ければ合成"""
+    return real_piano(m, vel, sr=sr, rng=rng, bright=1.0)
+
+
+def bright_piano_any(m: int, vel: float = 0.8, sr: int = SR,
+                     rng: np.random.Generator | None = None) -> np.ndarray:
+    """ジャズなどの明るめのピアノ。録音があれば録音 (高域を多めに残す)、無ければ合成"""
+    return real_piano(m, vel, sr=sr, rng=rng, bright=1.6)
+
+
 def music_box(m: int, vel: float = 0.8, sr: int = SR,
               rng: np.random.Generator | None = None) -> np.ndarray:
     """
@@ -594,13 +660,15 @@ def vinyl_crackle(n: int, rng: np.random.Generator, density: float = 42.0,
 
 PITCHED = {
     "rhodes": rhodes,
-    "piano": piano,
+    "piano": bright_piano_any,
+    "synth_piano": piano,
     "nylon": nylon_guitar,
     "harp": harp,
     "koto": koto,
     "synth": synth_pluck,
     "celesta": celesta,
-    "soft_piano": soft_piano,
+    "soft_piano": soft_piano_any,
+    "synth_soft_piano": soft_piano,
     "music_box": music_box,
     "bowl": singing_bowl,
     "marimba": marimba,

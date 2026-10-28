@@ -372,6 +372,14 @@ def _length_badge(total_seconds: float) -> str:
 
 
 def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
+    art = TR.art_for(spec)
+    if art is not None:
+        import json
+        from PIL import Image
+        cfg = art.with_suffix(".json")
+        if cfg.exists() and json.loads(cfg.read_text(encoding="utf-8")).get("has_text"):
+            # ChatGPT が文字まで入れて仕上げたサムネは、そのまま使う
+            return Image.open(art).convert("RGB").resize((1280, 720), Image.LANCZOS)
     if spec.slug in ELEGANT:
         from PIL import Image
         import numpy as np
