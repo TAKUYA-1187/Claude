@@ -128,7 +128,7 @@ def calm_thumbnail(title_lines: list[str], badge: str, promise: str,
     for line in title_lines:
         px = int(h * 0.19)
         f = _font(px, "SemiBold")
-        while d.textbbox((0, 0), line, font=f)[2] > w * 0.56 and px > 40:
+        while d.textbbox((0, 0), line, font=f)[2] > w * 0.50 and px > 40:   # 月 (横 64%) に重ねない
             px -= 4
             f = _font(px, "SemiBold")
         _outlined(d, (x0, y), line, f, (255, 255, 255), (16, 22, 60), int(px * 0.07))

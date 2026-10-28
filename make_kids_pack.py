@@ -59,6 +59,47 @@ A=432Hz で調律しています（少し低めの基準音で、効能をうた
 お昼寝、寝かしつけ、静かな時間のお供にどうぞ。"""
 
 
+# 中国語・韓国語・スペイン語の翻訳 (ChatGPT 側の提案「5 言語の説明文」を取り入れた)。
+# 曲名はそれぞれの言語で一般に通じる呼び名にする
+NAMES = {
+    "n01_twinkle_lullaby": ("小星星", "반짝반짝 작은 별", "Estrellita, ¿dónde estás?"),
+    "n02_mary_lamb_lullaby": ("玛丽有只小羊羔", "메리의 어린 양", "María tenía un corderito"),
+    "n03_row_your_boat_lullaby": ("划呀划小船", "노를 저어라 (Row Your Boat)", "Rema, rema tu barquito"),
+    "n04_frere_jacques_lullaby": ("两只老虎（雅克兄弟）", "프레르 자크", "Martinillo (Frère Jacques)"),
+    "n05_london_bridge_lullaby": ("伦敦桥要倒了", "런던 다리", "El puente de Londres"),
+    "n06_old_macdonald_lullaby": ("王老先生有块地", "맥도날드 할아버지", "La granja (Old MacDonald)"),
+    "n07_au_clair_lullaby": ("在月光下", "달빛 아래서 (Au Clair de la Lune)", "Au Clair de la Lune"),
+    "n08_silent_night_lullaby": ("平安夜", "고요한 밤 거룩한 밤", "Noche de paz"),
+    "n09_ode_to_joy_lullaby": ("欢乐颂", "환희의 송가", "Himno de la alegría"),
+    "n10_jingle_bells_lullaby": ("铃儿响叮当", "징글벨", "Jingle Bells (Cascabel)"),
+    "n11_lullaby_medley": ("宝宝摇篮曲10首", "아기 자장가 10곡", "10 canciones de cuna"),
+}
+
+
+def multi(slug: str) -> list[tuple[str, str, str]]:
+    """(言語名, タイトル, 説明) を 3 言語ぶん返す"""
+    zh, ko, es = NAMES[slug]
+    hours = 2 if slug == "n11_lullaby_medley" else 1
+    return [
+        ("中国語（簡体字）",
+         f"{zh} 🌙 宝宝睡眠摇篮曲 {hours}小时｜柔和钢琴与八音盒",
+         f"用柔和的钢琴和八音盒演奏的摇篮曲，共{hours}小时。\n戴着睡帽的月亮“露娜”在星空下轻轻摇晃。\n"
+         "没有雨声、环境音或杂音，调性和速度从头到尾保持不变。\n"
+         "旋律为传统曲目（公有领域），编曲、声音和画面均为本频道原创。"),
+        ("韓国語",
+         f"{ko} 🌙 아기 자장가 {hours}시간｜부드러운 피아노와 오르골",
+         f"부드러운 피아노와 오르골로 연주한 자장가, {hours}시간입니다.\n나이트캡을 쓴 달 '루나'가 별빛 아래에서 살랑살랑 흔들립니다.\n"
+         "빗소리나 환경음 같은 잡음은 없으며, 조와 템포는 처음부터 끝까지 같습니다.\n"
+         "멜로디는 전래곡(퍼블릭 도메인)이며, 편곡·소리·영상은 이 채널의 오리지널입니다."),
+        ("スペイン語",
+         f"{es} 🌙 Canción de cuna para bebés {hours} hora{'s' if hours > 1 else ''} | Piano suave y caja de música",
+         f"{hours} hora{'s' if hours > 1 else ''} de canciones de cuna con un piano suave y una caja de música.\n"
+         "Luna, nuestra luna dormilona con gorro de dormir, se mece entre las estrellas.\n"
+         "Sin lluvia, sin sonidos de fondo y sin ruido; el tono y el tempo no cambian de principio a fin.\n"
+         "Melodías tradicionales (dominio público); arreglo, sonido y animación originales de este canal."),
+    ]
+
+
 def main() -> int:
     L = [
         "# 子守唄シリーズ 投稿パック v2（1時間・キャラクター映像）",
@@ -74,8 +115,13 @@ def main() -> int:
         "5. 「視聴者」：**［はい、子ども向けです］**",
         "6. ［すべて表示］→ AI の使用：**はい**／タグ：下の【タグ】／動画の言語：英語／カテゴリ：音楽",
         "7. ［次へ］を3回 → 公開設定で［スケジュールを設定］→ 下の公開日時 →［スケジュールを設定］",
-        "8. **日本語の翻訳を追加する**：Studio 左メニュー［言語］→ その動画 →［言語を追加］→「日本語」→",
-        "   「タイトルと説明」の［追加］→ 下の【日本語タイトル】【日本語の説明】を貼り付けて［公開］",
+        "8. **翻訳を追加する（4言語）**：Studio 左メニュー［言語］→ その動画 →［言語を追加］→「日本語」→",
+        "   「タイトルと説明」の［追加］→ 下の【日本語タイトル】【日本語の説明】を貼り付けて［公開］。",
+        "   同じように「中国語（簡体字）」「韓国語」「スペイン語」も追加する（英語と合わせて5言語）",
+        "9. **動画どうしをつなぐ**：再生リスト `Lullabies for Babies` を開き、右上の［共有］で URL をコピーし、",
+        "   英語の説明の最後に `▶ More lullabies: （コピーしたURL）` の1行を足す（ほかの曲へ続けて流れやすくなる）",
+        "",
+        "> 予約投稿の代わりに「非公開」で保存し、YouTube 上で音を数か所聞いて確認してから公開しても構いません（ChatGPT 側の提案）。",
         "",
         "## 公開スケジュール",
         "",
@@ -96,8 +142,12 @@ def main() -> int:
               "【英語の説明】", "```", meta["description"].rstrip(), "```", "",
               "【タグ】", "```", ", ".join(meta["tags"]), "```", "",
               "【日本語タイトル】（翻訳用）", "```", jt, "```", "",
-              "【日本語の説明】（翻訳用）", "```", jp_description(song), "```", "",
-              "---", ""]
+              "【日本語の説明】（翻訳用）", "```", jp_description(song), "```", ""]
+        for lang, t, d in multi(slug):
+            assert len(t) <= 100, t
+            L += [f"【{lang}タイトル】（翻訳用）", "```", t, "```", "",
+                  f"【{lang}の説明】（翻訳用）", "```", d.replace("\\n", "\n"), "```", ""]
+        L += ["---", ""]
     path = OUT / "子守唄_投稿パック_v2.md"
     path.write_text("\n".join(L), encoding="utf-8")
     print(path)

@@ -294,7 +294,10 @@ def soft_piano(m: int, vel: float = 0.8, sr: int = SR,
     if len(amps) > 1:
         amps[1] *= 1.15
     taus = [dur * 0.38 / (1.0 + 0.25 * (k - 1)) for k in ks]
-    y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.006, rng=rng)
+    # 1 音に 2〜3 本張られた弦がわずかにずれて生まれる「うなり」。これがあると
+    # 電子音らしさが消えて、生のピアノの減衰に近づく (2026-10-28 追加)
+    y = additive(f0, dur, ratios, amps, taus, sr=sr, attack=0.006, rng=rng,
+                 beat_hz=0.35)
 
     n_h = int(0.03 * sr)
     hm = dsp.bandpass(rng.standard_normal(n_h).astype(np.float32), 300, 1800, taps=257)

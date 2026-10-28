@@ -1636,6 +1636,10 @@ def scene_maker(name: str):
     シーン名 → 生成関数。キャラクター入りのシーン (kids_visuals / sleep_visuals) は
     このモジュールを import して作られているので、循環 import を避けて遅延で取り込む
     """
+    if name.startswith("illust:"):
+        from .illustrated import scene_from_image
+        path = name.split(":", 1)[1]
+        return lambda seed=0: scene_from_image(path, seed=seed)
     if name not in SCENES:
         from .kids_visuals import KIDS_SCENES
         from .sleep_visuals import SLEEP_SCENES

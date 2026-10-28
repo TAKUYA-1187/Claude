@@ -350,13 +350,152 @@ def play_bass(buf: np.ndarray, spans: list[Span], clock: Clock, bank,
 # プレイヤー: メロディ / 装飾
 # ──────────────────────────────────────────────────────────────
 
+# ──────────────────────────────────────────────────────────────
+# 作曲型の旋律 (v2)
+# ──────────────────────────────────────────────────────────────
+#
+# 2026-10-28: オーナーの評価「メロディは良いが高評価とは言えない。聞きやすく高品質に」。
+# v1 (motif) は進行ごとに作ったフレーズを繰り返していたが、フレーズの中身は
+# 1 音ずつの酔歩で、歌の形 (動機・問いと答え・終止) を持っていなかった。
+# v2 は作曲の定石どおりに組み立てる:
+#   - 1 小節の動機 a を作り、次の小節で高さを変えて模倣する (a')
+#   - 8 小節を「問い (4 小節目で 2 度か 5 度に半終止)」+「答え (8 小節目で主音に終止)」にする
+#   - 6 小節目あたりを頂点にした山形の旋律線
+#   - 強拍は必ずコードトーン、弱拍は順次進行。跳躍は動機の頭だけ
+#   - 終止の音は長く伸ばして、次のフレーズの前に息継ぎを入れる
+
+_MOTIFS_SPARSE = [[2.0, 2.0], [3.0, 1.0], [2.0, 1.0, 1.0], [1.0, 1.0, 2.0]]
+_MOTIFS = [[1.0, 1.0, 2.0], [2.0, 1.0, 1.0], [1.5, 0.5, 2.0], [1.0, 1.0, 1.0, 1.0],
+           [1.0, 0.5, 0.5, 2.0], [2.0, 2.0], [3.0, 1.0]]
+# 8 小節の役割と、旋律線の高さ (中心からの音階の段数)
+_PERIOD_ROLES = ["a", "a2", "b", "H", "a", "a2", "b2", "F"]
+_PERIOD_CONTOUR = [0, 1, 2, 1, 1, 3, 2, 0]
+
+
+def _compose_phrase(prog, bpb: int, allowed: list[int], tonic_pc: int,
+                    rng: np.random.Generator, sparse: bool) -> list[tuple[float, int, float]]:
+    """進行 1 周ぶんの旋律を作る。戻り値は (進行頭からの拍, 音高, ベロシティ) の列"""
+    arr = np.asarray(allowed)
+    n_bars = max(int(round(sum(c.bars for c in prog))), 1)
+    edges, b = [], 0.0
+    for c in prog:
+        edges.append((b * bpb, (b + c.bars) * bpb, c))
+        b += c.bars
+
+    def chord_at(beat):
+        for s0, s1, c in edges:
+            if s0 <= beat < s1:
+                return c
+        return prog[-1]
+
+    def idx(p):
+        return int(np.argmin(np.abs(arr - p)))
+
+    def chord_tone_near(target, chord):
+        cands = [p for p in allowed if p % 12 in chord.pcs]
+        return min(cands, key=lambda p: abs(p - target)) if cands else target
+
+    def degree_near(target, pcs, chord):
+        """pcs (音階の度数) のうち、コードに含まれるものを優先して target 近くを選ぶ"""
+        want = [p for p in allowed if p % 12 in pcs and p % 12 in chord.pcs]
+        if not want:
+            want = [p for p in allowed if p % 12 in pcs] or allowed
+        return min(want, key=lambda p: abs(p - target))
+
+    pool = _MOTIFS_SPARSE if sparse else _MOTIFS
+    ra = pool[int(rng.integers(len(pool)))]
+    rb = pool[int(rng.integers(len(pool)))]
+    if rb == ra and len(pool) > 1:
+        rb = pool[(pool.index(ra) + 1) % len(pool)]
+    center = len(allowed) // 2
+
+    # 役割を小節に割り当てる (8 小節単位。最後の小節は必ず終止)
+    roles, contour = [], []
+    for i in range(n_bars):
+        roles.append(_PERIOD_ROLES[i % 8])
+        contour.append(_PERIOD_CONTOUR[i % 8])
+    roles[-1] = "F"
+    if n_bars >= 8 and n_bars % 8 == 0 and n_bars > 8:
+        for i in range(7, n_bars - 1, 8):
+            roles[i] = "H"          # 途中の周期の終わりは半終止にして先へつなぐ
+
+    shapes: dict[str, list[int]] = {}
+    notes: list[tuple[float, int, float]] = []
+    second_pcs = {(tonic_pc + 2) % 12, (tonic_pc + 7) % 12}
+    for bar, role in enumerate(roles):
+        t0 = bar * bpb
+        target = allowed[int(np.clip(center + contour[bar], 0, len(allowed) - 1))]
+        climax = 0.05 if contour[bar] >= 2 else 0.0
+        if role in ("H", "F"):
+            ch = chord_at(t0)
+            # 終止音は直前の音の近くに置く (オクターブ跳んで終わると唐突に聞こえた)
+            prev = notes[-1][1] if notes else target
+            land = degree_near(prev if role == "H" else prev - 1,
+                               second_pcs if role == "H" else {tonic_pc}, ch)
+            if role == "H" and not sparse:
+                # 半終止の前に 1 音だけ経過音を置く
+                pre = allowed[int(np.clip(idx(land) + 1, 0, len(allowed) - 1))]
+                notes.append((t0, pre, 0.50))
+                notes.append((t0 + bpb / 2, land, 0.48))
+            else:
+                notes.append((t0, land, 0.46 if role == "F" else 0.5))
+            continue
+        rhythm = ra if role in ("a", "a2") else rb
+        base = role.rstrip("2")
+        beat, pitches = 0.0, []
+        start = chord_tone_near(target, chord_at(t0))
+        if base in shapes:
+            # 模倣: 同じ動機の音程の形 (音階の段数) を、この小節の和音に合わせて置き直す
+            steps = shapes[base]
+            if role.endswith("2"):
+                steps = steps[:-1] + [steps[-1] + int(rng.choice([-1, 1]))]
+            cur = idx(start)
+            for k, dur in enumerate(rhythm):
+                if k > 0:
+                    cur = int(np.clip(cur + steps[min(k - 1, len(steps) - 1)], 0, len(allowed) - 1))
+                p = allowed[cur]
+                strong = abs((beat % 2.0)) < 1e-6
+                if strong and p % 12 not in chord_at(t0 + beat).pcs:
+                    p = chord_tone_near(p, chord_at(t0 + beat))
+                    cur = idx(p)
+                pitches.append(p)
+                beat += dur
+        else:
+            # 新しい動機: b は頭で少し跳んでから順次に下りる、a は順次で目標へ向かう
+            cur = idx(start) + (2 if base == "b" else 0)
+            cur = int(np.clip(cur, 0, len(allowed) - 1))
+            steps = []
+            for k, dur in enumerate(rhythm):
+                if k > 0:
+                    st = int(rng.choice([-1, 1, -2, 1] if base == "b" else [1, -1, 1, 2]))
+                    if base == "b":
+                        st = -abs(st) if rng.random() < 0.7 else abs(st)
+                    steps.append(st)
+                    cur = int(np.clip(cur + st, 0, len(allowed) - 1))
+                p = allowed[cur]
+                strong = abs((beat % 2.0)) < 1e-6
+                if strong and p % 12 not in chord_at(t0 + beat).pcs:
+                    p = chord_tone_near(p, chord_at(t0 + beat))
+                    cur = idx(p)
+                pitches.append(p)
+                beat += dur
+            shapes[base] = steps or [0]
+        beat = 0.0
+        for p, dur in zip(pitches, rhythm):
+            strong = abs(beat % 2.0) < 1e-6
+            vel = 0.52 + (0.06 if strong else 0.0) + climax + float(rng.normal(0, 0.025))
+            notes.append((t0 + beat, p, float(np.clip(vel, 0.3, 0.8))))
+            beat += dur
+    return notes
+
+
 def play_melody(buf: np.ndarray, spans: list[Span], clock: Clock, bank,
                 inst: str = "piano", gain: float = 0.20,
                 scale_root: int = 0, scale: str = "major",
                 lo: int = 62, hi: int = 86, density: float = 0.45,
                 rng: np.random.Generator | None = None,
                 pan: float = 0.12, rest_prob: float = 0.35,
-                motif: bool = True) -> None:
+                motif: bool = True, composed: bool = True) -> None:
     """
     生成メロディ。
 
@@ -386,6 +525,35 @@ def play_melody(buf: np.ndarray, spans: list[Span], clock: Clock, bank,
         return int(np.argmin(np.abs(arr - p)))
 
     cur = allowed[len(allowed) // 2]
+
+    if composed:
+        # v2: 進行 1 周ごとに作曲した旋律を、同じ進行が戻るたびにそのまま弾く
+        bpb = clock.beats_per_bar
+        phrases2: dict[int, list] = {}
+        pass_start = 0.0
+        for sp in spans:
+            prog = sp.section.prog
+            slot = next((i for i, c in enumerate(prog) if c is sp.chord), 0)
+            if slot == 0:
+                pass_start = sp.start_beat
+            ph = phrases2.get(id(prog))
+            if ph is None:
+                ph = _compose_phrase(prog, bpb, allowed, scale_root % 12, rng,
+                                     sparse=density < 0.45)
+                phrases2[id(prog)] = ph
+            dens = sp.section.density
+            keep = 0.45 + 0.55 * min(dens / 0.85, 1.0)
+            lo_b, hi_b = sp.start_beat - pass_start, sp.end_beat - pass_start
+            for off, pitch, vel in ph:
+                if not (lo_b <= off < hi_b):
+                    continue
+                if abs(off % bpb) > 1e-6 and rng.random() > keep:
+                    continue
+                v = float(np.clip(vel * density * 1.6, 0.2, 0.95))
+                add_panned(buf, bank.note(inst, pitch, v),
+                           clock.at(pass_start + off) + humanize(rng, 12.0),
+                           gain * (0.55 + 0.45 * min(dens, 1.0)), pan)
+        return
 
     if motif:
         phrases: dict[tuple, list[tuple[float, int, float]]] = {}

@@ -63,7 +63,8 @@ def pack(slug: str) -> Path:
     v_kbps = min(v_kbps, 400)
 
     vis = tmp / f"{slug}.chat_visual.mp4"
-    VID.encode_visual_loop(spec.visual, vis, seed=spec.seed,
+    from bgm_studio.tracks import visual_for
+    VID.encode_visual_loop(visual_for(spec), vis, seed=spec.seed,
                            crf=24, maxrate=f"{v_kbps}k",
                            # 既定の 4M だと 20 秒ループ全体より大きく、上限が効かない。
                            # 1 秒ぶんにして実際に頭打ちさせる

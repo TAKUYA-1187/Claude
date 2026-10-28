@@ -68,6 +68,18 @@ NURSERY_BAND_WINDOW = {
     8000: (-58.0, -34.0),
 }
 
+# 環境音を敷かないピアノ曲 (Sleep Piano シリーズ g01〜) 用。
+# BGM の窓は雨・風などのベッドが高域を足す前提で下限を決めてあり、ピアノだけの曲は
+# 自然に「こもり」と判定されてしまう (g02: 8kHz -48)。下限は童謡と同じ暖かい側に広げ、
+# 上限 (耳障りさ) は BGM と同じ厳しさのまま残す
+PURE_PIANO_BAND_WINDOW = {
+    500: (-14.0, +3.0),
+    1000: (-21.0, -1.0),
+    2000: (-30.0, -5.0),
+    4000: (-40.0, -10.0),
+    8000: (-58.0, -16.0),
+}
+
 BAND_WINDOW = {
     500: (-8.0, +3.0),
     1000: (-14.0, -1.0),
@@ -313,7 +325,10 @@ def audio_qa(slug: str) -> dict:
     if r["repeat_corr"] > TILE_REPEAT_MAX and not is_nursery and not _is_melodic(slug):
         issues.append(f"★{r['repeat_lag_s']:.1f}s周期でノイズが反復"
                       f"({r['repeat_corr']:.2f})")
-    for lo, (mn, mx) in (NURSERY_BAND_WINDOW if is_nursery else BAND_WINDOW).items():
+    is_pure_piano = slug[:1] == "g" and slug[1:3].isdigit()
+    window = (NURSERY_BAND_WINDOW if is_nursery else
+              PURE_PIANO_BAND_WINDOW if is_pure_piano else BAND_WINDOW)
+    for lo, (mn, mx) in window.items():
         v = r["bands"][lo]
         if v < mn:
             issues.append(f"{lo}Hz こもり({v:+.0f})")

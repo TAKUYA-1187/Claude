@@ -12,6 +12,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from dataclasses import dataclass, field
 from typing import Callable
 
@@ -1916,6 +1918,25 @@ TRACKS: list[TrackSpec] = [
 ]
 
 BY_SLUG = {t.slug: t for t in TRACKS}
+
+# ChatGPT が描いた文字なしのイラストを置く場所。art/<slug>.png (または .jpg) があれば、
+# 映像はその絵を動かしたものになり、サムネもその絵で作る (2026-10-28 からの標準)
+ART_DIR = Path(__file__).resolve().parent.parent / "art"
+
+
+def art_for(spec: TrackSpec) -> Path | None:
+    for ext in (".png", ".jpg", ".jpeg", ".webp"):
+        p = ART_DIR / f"{spec.slug}{ext}"
+        if p.exists():
+            return p
+    return None
+
+
+def visual_for(spec: TrackSpec) -> str:
+    """映像に使うシーン名。イラストがあればそれを優先する"""
+    art = art_for(spec)
+    return f"illust:{art}" if art else spec.visual
+
 
 
 def render(spec: TrackSpec, seconds: float = LOOP_SECONDS) -> tuple[np.ndarray, dict]:

@@ -233,8 +233,8 @@ def process(spec: TR.TrackSpec, args) -> dict:
     log("  映像ループを描画中...")
     t = time.time()
     vis = VID.encode_visual_loop(
-        spec.visual, OUT / "visual" / f"{spec.slug}.mp4", seed=spec.seed,
-        progress=lambda i, n: bar(i, n, spec.visual))
+        TR.visual_for(spec), OUT / "visual" / f"{spec.slug}.mp4", seed=spec.seed,
+        progress=lambda i, n: bar(i, n, spec.slug))
     print()
     log(f"    {VIS.LOOP_SECONDS}s @ {VIS.FPS}fps  "
         f"{vis.stat().st_size / 1e6:.1f} MB   ({time.time() - t:.0f}s)")
@@ -274,8 +274,8 @@ def process_visual_only(spec: TR.TrackSpec, args, t_start: float) -> dict:
     log("  映像ループを描画中...")
     t = time.time()
     vis = VID.encode_visual_loop(
-        spec.visual, OUT / "visual" / f"{spec.slug}.mp4", seed=spec.seed,
-        progress=lambda i, n: bar(i, n, spec.visual))
+        TR.visual_for(spec), OUT / "visual" / f"{spec.slug}.mp4", seed=spec.seed,
+        progress=lambda i, n: bar(i, n, spec.slug))
     print()
     log(f"    {spec.visual}  {vis.stat().st_size / 1e6:.1f} MB  ({time.time() - t:.0f}s)")
 
@@ -336,7 +336,59 @@ BOLD_THUMB = {
 }
 
 
+# 2026-10-28 からの標準サムネ (ChatGPT のサムネに倣った、セリフ体の上品な文字組み)。
+# art/<slug>.png (ChatGPT の文字なしイラスト) があればその絵に、無ければこちらの
+# シーンを水彩風にした絵に載せる。(タイトル 2 行, 副題)
+ELEGANT = {
+    "g01_gentle_piano_sleep": (["SLEEP", "PIANO"], "NO RAIN · NO NOISE"),
+    "g02_deep_sleep_piano": (["DEEP SLEEP", "PIANO"], "NO RAIN · NO NOISE"),
+    "g03_emotional_sleep_piano": (["BEAUTIFUL", "SLEEP PIANO"], "NO RAIN · NO NOISE"),
+    "03_piano_and_rain": (["PIANO", "& RAIN"], "FOR SLEEP & STUDY"),
+    "04_cozy_coffee_jazz": (["COFFEE", "SHOP JAZZ"], "WARM PIANO"),
+    "05_bossa_nova_cafe": (["BOSSA NOVA", "CAFÉ"], "SMOOTH GUITAR"),
+    "07_fireplace_winter_jazz": (["FIREPLACE", "JAZZ"], "WARM WINTER NIGHT"),
+    "17_christmas_jazz": (["CHRISTMAS", "JAZZ"], "COZY HOLIDAY PIANO"),
+    "21_halloween_night": (["HALLOWEEN", "NIGHT"], "SPOOKY, NOT SCARY"),
+    "n01_twinkle_lullaby": (["TWINKLE", "TWINKLE"], "LULLABY FOR BABIES"),
+    "n02_mary_lamb_lullaby": (["MARY HAD A", "LITTLE LAMB"], "LULLABY FOR BABIES"),
+    "n03_row_your_boat_lullaby": (["ROW ROW", "YOUR BOAT"], "LULLABY FOR BABIES"),
+    "n04_frere_jacques_lullaby": (["FRÈRE", "JACQUES"], "LULLABY FOR BABIES"),
+    "n05_london_bridge_lullaby": (["LONDON", "BRIDGE"], "MUSIC BOX LULLABY"),
+    "n06_old_macdonald_lullaby": (["OLD", "MACDONALD"], "LULLABY FOR NAPTIME"),
+    "n07_au_clair_lullaby": (["AU CLAIR", "DE LA LUNE"], "FRENCH LULLABY"),
+    "n08_silent_night_lullaby": (["SILENT", "NIGHT"], "CHRISTMAS LULLABY"),
+    "n09_ode_to_joy_lullaby": (["ODE TO", "JOY"], "MUSIC BOX LULLABY"),
+    "n10_jingle_bells_lullaby": (["JINGLE", "BELLS"], "SLOW LULLABY"),
+    "n11_lullaby_medley": (["10 BABY", "LULLABIES"], "SOFT PIANO & MUSIC BOX"),
+}
+
+
+def _length_badge(total_seconds: float) -> str:
+    h = total_seconds / 3600.0
+    if h >= 0.99:
+        n = int(total_seconds // 3600)
+        return "1 HOUR" if n == 1 else f"{n} HOURS"
+    return f"{int(round(total_seconds / 60))} MIN"
+
+
 def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
+    if spec.slug in ELEGANT:
+        from PIL import Image
+        import numpy as np
+        from bgm_studio import illustrated as IL
+        lines, sub = ELEGANT[spec.slug]
+        art = TR.art_for(spec)
+        if art:
+            bg = Image.open(art)
+        else:
+            fr = VIS.scene_maker(spec.visual)(seed=spec.seed)(0.2)
+            bg = IL.watercolor(Image.fromarray(np.clip(fr, 0, 255).astype(np.uint8)),
+                               seed=spec.seed)
+        return IL.elegant_thumbnail(bg, lines, sub, _length_badge(total_seconds))
+    return _make_thumbnail_v1(spec, total_seconds)
+
+
+def _make_thumbnail_v1(spec: TR.TrackSpec, total_seconds: float):
     if spec.slug in KIDS_THUMB:
         from bgm_studio import kids_visuals as KV
         h = total_seconds / 3600.0
