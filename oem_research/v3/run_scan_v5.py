@@ -3,11 +3,13 @@
   run_scan_v5.py amazon out_amazon.json   - Amazon.co.jp search pages 1-2 for every keyword
   run_scan_v5.py 1688   out_1688.json     - 1688 market page for every keyword's Chinese term
 merge_scan() joins them into the scan dict used by analyze_final (keyword -> items + offers)."""
+import importlib
 import json
 import os
 import sys
 
-from keywords_v5 import K
+
+K = importlib.import_module(os.environ.get("OEM_KW", "keywords_v5")).K  # keywords_v6 adds 130 more
 
 
 def merge_scan(amazon_path, cn_path):

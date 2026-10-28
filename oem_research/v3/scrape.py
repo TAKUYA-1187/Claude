@@ -71,8 +71,9 @@ def _fetch(url, path, accept_lang="ja-JP,ja;q=0.9", tries=3):
         body = r.stdout.decode("utf-8", errors="ignore")
         blocked = ("captcha" in body.lower() and "amazon" in url and "s-search-result" not in body
                    and "productTitle" not in body) or "punish" in body[:3000]
-        if jp and re.search(r'a-price-symbol">(USD|\$)', body):
-            # the session fell back to an overseas view (USD prices, fewer listings): reset it and retry
+        if jp and len(re.findall(r'a-price-symbol">(?:USD|\$)', body)) > len(re.findall(r'a-price-symbol">￥', body)):
+            # the session fell back to an overseas view (mostly USD prices, fewer listings): reset it and retry.
+            # A single "$" is normal: product pages carry a "$00" placeholder in the bought-together total.
             session_init()
             continue
         if len(body) > 5000 and not blocked:
@@ -120,7 +121,7 @@ def amazon_search(kw, page=1):
         if m:
             price = _num(m.group(1))
         rating = None
-        m = re.search(r"5つ星のうち([\d.]+)", p)
+        m = re.search(r"5つ星のうち(\d(?:\.\d)?)", p)
         if m:
             rating = float(m.group(1))
         reviews = 0
@@ -161,7 +162,7 @@ def amazon_detail(asin):
     d["price"] = price
     m = re.search(r'id="acrCustomerReviewText"[^>]*>([^<]+)', s)
     d["reviews"] = int(_num(m.group(1))) if m else 0
-    m = re.search(r"5つ星のうち([\d.]+)", s)
+    m = re.search(r"5つ星のうち(\d(?:\.\d)?)", s)
     d["rating"] = float(m.group(1)) if m else None
     d["bought"] = _badge(s)
     flat = text(s[:2_000_000])
@@ -189,7 +190,7 @@ def amazon_detail(asin):
     revs = []
     for blk in re.split(r'data-hook="review" class=', s)[1:]:
         blk = blk[:30000]
-        m = re.search(r"a-star-(\d)|5つ星のうち([\d.]+)|星5つ中([\d.]+)つ", blk)
+        m = re.search(r"a-star-(\d)|5つ星のうち(\d(?:\.\d)?)|星5つ中(\d(?:\.\d)?)つ", blk)
         k = blk.find('data-hook="reviewText"')
         title = re.search(r'<h5[^>]*>(.*?)</h5>', blk, re.S)
         if m and k >= 0:

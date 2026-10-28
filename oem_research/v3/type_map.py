@@ -117,3 +117,8 @@ KW_PKG = {
     "麻雀卓 全自動": (100, 100, 40, 90), "コックピット レーシング": (120, 60, 30, 40), "ゲーミングデスク 大型": (150, 70, 15, 40),
     "プロジェクタースクリーン 自立式": (120, 20, 20, 12), "望遠鏡 大型": (100, 40, 30, 15),
 }
+
+# v6 keywords: cartons defined next to the keywords
+from keywords_v6 import PKG6  # noqa: E402
+
+KW_PKG.update(PKG6)

@@ -35,6 +35,15 @@ CONCEPTS = [
     ("steelwardrobe", "CN", "1688 2026新款 钢制衣柜 推拉门（月销125）", "スチール ワードローブ 引き戸", r"ワードローブ|クローゼット|ロッカー", ""),
     ("cloudsofabed", "CN", "1688 2026新款 云朵沙发床 折叠两用（月销20〜92）", "ソファベッド 折りたたみ 雲", r"ソファ", ""),
     ("deskbike", "CN", "1688 专利新款 带桌板磁控动感单车（月销50）", "デスクバイク フィットネスバイク 机付き", r"バイク|デスク", ""),
+    # v6 additions (US new releases 2026)
+    ("futonboneless", "US", "78in 5-in-1 Convertible Futon Sofa Bed, Boneless Couch ($259.99, 900+/mo)", "ソファベッド 5way 圧縮 ボーンレス", r"ソファ", "B0HK78CFR2"),
+    ("floorbedrail", "US", "Twin Upholstered Montessori Floor Bed with Full Surround Safety Rails ($219.99)", "フロアベッド 柵付き 子供 モンテッソーリ", r"ベッド", "B0H8SNLTLP"),
+    ("sensorychair", "US", "Antibacterial Spinning Chair for Autistic Kids, Sensory ($109.99, 100+/mo)", "回転 椅子 子供 感覚統合 スピン", r"椅子|チェア|スピン", "B0HCMPFJZT"),
+    ("airbedframe", "US", "Queen Air Mattress with Steel Frame and Rolling Case ($369.99)", "エアベッド フレーム付き 来客用 キャスター", r"エアベッド|ベッド", "B0HHF1RFD1"),
+    ("tiltcabinet", "US", "13 Gallon Tilt Out Trash Can Cabinet, Wood ($109.99)", "ゴミ箱 キャビネット 木製 隠す 傾斜", r"ゴミ箱|ダストボックス|キャビネット", "B0HF7T2X8M"),
+    ("crisscross", "US", "Criss Cross Office Chair with Foot Rest, Big and Tall ($209.99, 400+/mo)", "あぐら チェア オフィス フットレスト", r"チェア|椅子", "B0HGLLQ7NK"),
+    ("bedstorage", "US", "Queen Bed Frame with Storage Drawers and Charging Station ($139.99, 2,000+/mo)", "収納ベッド 引き出し コンセント付き ダブル", r"ベッド", "B0HGY9TSG5"),
+    ("fluteshoe", "US", "Fluted Shoe Cabinet for Entryway, Flip Drawers ($109.99)", "下駄箱 フルート 扉 スリム 薄型", r"下駄箱|シューズ|靴", "B0HF49X8HG"),
 ]
 
 def jp_status(body):
