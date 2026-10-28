@@ -1,40 +1,40 @@
 {
-  "total_seconds": 10800.0,
+  "total_seconds": 8640,
   "tracks": [
     {
-      "slug": "g01_gentle_piano_sleep",
-      "title": "Sleep Piano 🌙 3 Hours of Gentle Piano Music | No Rain, No Noise — Deep Sleep",
-      "bpm": 58.0,
-      "bars": 435,
-      "lufs": -14.009736032378795,
-      "true_peak_db": -1.0000002900227403,
-      "loop_seam_db": -19.995521013764836,
-      "loop_seconds": 1800.0,
-      "total_seconds": 10800.0,
-      "total_hhmmss": "3:00:00",
-      "video": "out/video/g01_gentle_piano_sleep.mp4",
+      "slug": "07_fireplace_winter_jazz",
+      "title": "Fireplace Jazz 🔥 2 Hours of Warm Winter Jazz & Crackling Fire",
+      "bpm": 88.0,
+      "bars": 528,
+      "lufs": -14.000000247491503,
+      "true_peak_db": -2.499999397372391,
+      "loop_seam_db": -41.009041467424666,
+      "loop_seconds": 1440,
+      "total_seconds": 8640,
+      "total_hhmmss": "2:24:00",
+      "video": "out/video/07_fireplace_winter_jazz.mp4",
       "probe": {
-        "duration_s": 10800.0,
-        "size_mb": 664.260671,
-        "bitrate_kbps": 492.044,
+        "duration_s": 8640.0,
+        "size_mb": 798.084521,
+        "bitrate_kbps": 738.967,
         "streams": [
           {
             "type": "video",
             "codec": "h264",
             "rate": "1920x1080",
             "fps": "24/1",
-            "duration": 10800.0
+            "duration": 8640.0
           },
           {
             "type": "audio",
             "codec": "aac",
             "rate": "48000",
             "fps": "0/0",
-            "duration": 10800.0
+            "duration": 8640.0
           }
         ]
       },
-      "elapsed_s": 525.3
+      "elapsed_s": 658.2
     }
   ]
 }
