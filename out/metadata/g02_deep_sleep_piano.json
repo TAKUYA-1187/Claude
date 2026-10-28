@@ -1,0 +1,33 @@
+{
+  "slug": "g02_deep_sleep_piano",
+  "title": "Deep Sleep Piano 🌙 3 Hours of Calm Piano Music | No Rain, No Noise",
+  "description": "🌙 DEEP SLEEP PIANO — 3 hours of calm piano, with no rain and no noise\n\nThe second in our Sleep Piano series, slower than the first: 54 beats a minute,\nlong chords that change only every few bars, and a melody that returns like a\nsong you already know. A soft piano and a quiet pad, with an occasional\nmusic-box note — and nothing else. No rain, no wind, no white noise.\n\n▸ No ambience layer of any kind — only instruments and their reverb\n▸ Same low, even dynamics for the whole 3 hours\n▸ Loops seamlessly through the night\n\nFor falling asleep, staying asleep, and quiet late nights.\n\n— Composed, arranged and animated for this channel.\n",
+  "tags": [
+    "deep sleep piano",
+    "sleep music",
+    "calm piano",
+    "piano music for sleep",
+    "relaxing sleep music",
+    "sleep music no rain",
+    "3 hours sleep music",
+    "soft piano"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "深い眠りのピアノ（雨音・雑音なし／第2弾）",
+    "use_case": "sleep",
+    "bpm": 54.0,
+    "key": "D",
+    "a4_hz": 440.0,
+    "loop_seconds": 1800.0,
+    "total_seconds": 10800.0,
+    "total_hhmmss": "3 hours",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -25.39,
+    "visual": "moon_lake_violet"
+  }
+}

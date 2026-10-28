@@ -1,0 +1,33 @@
+{
+  "slug": "g03_emotional_sleep_piano",
+  "title": "Beautiful Sleep Piano 🌙 3 Hours of Emotional Piano for Sleep | No Rain, No Noise",
+  "description": "🌙 BEAUTIFUL SLEEP PIANO — 3 hours of gentle, emotional piano\n\nThe third in our Sleep Piano series. This one uses the warm, slightly\nbittersweet chord changes you hear in Japanese film and anime soundtracks,\nslowed right down for sleep. The melody is soft and comes back again and again,\nso there is always something familiar to hold on to and nothing to wait for.\n\n▸ Soft piano and a quiet pad — no rain, no ambience, no hiss\n▸ A steady, resting 60 beats a minute\n▸ Loops seamlessly for the whole 3 hours\n\nFor bedtime, reading in bed, or a calm evening.\n\n— Composed, arranged and animated for this channel.\n",
+  "tags": [
+    "sleep piano",
+    "emotional piano",
+    "beautiful piano music",
+    "sleep music",
+    "anime piano sleep",
+    "relaxing piano",
+    "piano music for sleep",
+    "sleep music no rain"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "心に残る旋律の睡眠ピアノ（雨音・雑音なし／第3弾）",
+    "use_case": "sleep",
+    "bpm": 60.0,
+    "key": "C",
+    "a4_hz": 440.0,
+    "loop_seconds": 1800.0,
+    "total_seconds": 10800.0,
+    "total_hhmmss": "3 hours",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -34.7,
+    "visual": "moon_lake_teal"
+  }
+}
