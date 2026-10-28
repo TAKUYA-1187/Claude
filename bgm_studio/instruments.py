@@ -360,6 +360,44 @@ def real_piano(m: int, vel: float = 0.8, sr: int = SR,
     return (y * _PIANO_CAL * (vel / 0.55) ** 1.3).astype(np.float32)
 
 
+_BELLS_DIR = Path(__file__).resolve().parent.parent / "samples" / "bells_clean"
+_BELLS: dict[int, np.ndarray] | None = None
+_BELLS_CAL = 1.8      # 合成の music_box (G5, vel 0.55) と同じ RMS になる倍率
+
+
+def real_music_box(m: int, vel: float = 0.8, sr: int = SR,
+                   rng: np.random.Generator | None = None) -> np.ndarray:
+    """
+    オルゴールの 1 音。自由に使えるオルゴールの録音が無いため、同じ「鋼の棒が鳴る」
+    鉄琴 (グロッケンシュピール, プラスチックのマレット) の録音で代える。
+    録音が無い環境では合成の music_box に戻る
+    """
+    global _BELLS
+    if _BELLS is None:
+        _BELLS = {}
+        if _BELLS_DIR.exists():
+            for p in _BELLS_DIR.glob("m*.npy"):
+                x = np.load(p)
+                _BELLS[int(p.stem[1:])] = (x.mean(axis=1) if x.ndim == 2 else x).astype(np.float32)
+    if not _BELLS:
+        return music_box(m, vel, sr=sr, rng=rng)
+    from fractions import Fraction
+    from scipy import signal as _sig
+    base = int(np.clip(m, min(_BELLS), max(_BELLS)))
+    x = _BELLS[base]
+    r = float(midi2hz(m)) / (440.0 * 2.0 ** ((base - 69) / 12.0))
+    if abs(r - 1.0) > 1e-4:
+        fr = Fraction(1.0 / r).limit_denominator(2000)
+        x = _sig.resample_poly(x, fr.numerator, fr.denominator).astype(np.float32)
+    # 強く叩いた録音 (ff) で、鉄琴は 2〜4kHz の倍音が強い。そのままでは耳に刺さった
+    # (子守唄で 2kHz・4kHz が基準帯と同じ大きさ)。2 次でしっかり丸めて、オルゴールの
+    # 小さくやわらかい音に寄せる
+    cutoff = min(1900.0 + 3200.0 * vel ** 2, sr * 0.45)
+    sos = _sig.butter(2, cutoff, "lowpass", fs=sr, output="sos")
+    y = _sig.sosfilt(sos, x).astype(np.float32)
+    return (y * _BELLS_CAL * (vel / 0.55) ** 1.3).astype(np.float32)
+
+
 def soft_piano_any(m: int, vel: float = 0.8, sr: int = SR,
                    rng: np.random.Generator | None = None) -> np.ndarray:
     """やわらかいピアノ。録音があれば録音、無ければ合成"""
@@ -669,7 +707,8 @@ PITCHED = {
     "celesta": celesta,
     "soft_piano": soft_piano_any,
     "synth_soft_piano": soft_piano,
-    "music_box": music_box,
+    "music_box": real_music_box,
+    "synth_music_box": music_box,
     "bowl": singing_bowl,
     "marimba": marimba,
     "upright": upright_bass,

@@ -852,6 +852,66 @@ All melodies are traditional or in the public domain. Arrangement, sound and
 animation are made for this channel.
 """
 
+DESCRIPTIONS["n01_twinkle_lullaby_musicbox"] = """\
+🎵 TWINKLE, TWINKLE, LITTLE STAR — {duration} of music box lullaby
+
+The same gentle lullaby as our piano version, played this time on a music box,
+high and soft like the little tune inside a toy, with a quiet piano underneath.
+It stays in one key and one calm tempo the whole way through, with nothing
+sudden and no background noise of any kind — a kitten asleep by a moonlit window sets the mood.
+
+▸ Music box melody with a soft piano — no rain, no hiss
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional melody; arrangement and sound made for this channel
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n02_mary_lamb_lullaby_musicbox"] = """\
+🎵 MARY HAD A LITTLE LAMB — {duration} of music box lullaby
+
+The same gentle lullaby as our piano version, played this time on a music box,
+high and soft like the little tune inside a toy, with a quiet piano underneath.
+It stays in one key and one calm tempo the whole way through, with nothing
+sudden and no background noise of any kind — a lamb asleep under a big tree sets the mood.
+
+▸ Music box melody with a soft piano — no rain, no hiss
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional melody; arrangement and sound made for this channel
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n03_row_your_boat_lullaby_musicbox"] = """\
+🎵 ROW, ROW, ROW YOUR BOAT — {duration} of music box lullaby
+
+The same gentle lullaby as our piano version, played this time on a music box,
+high and soft like the little tune inside a toy, with a quiet piano underneath.
+It stays in one key and one calm tempo the whole way through, with nothing
+sudden and no background noise of any kind — a duckling asleep in a little boat sets the mood.
+
+▸ Music box melody with a soft piano — no rain, no hiss
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional melody; arrangement and sound made for this channel
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n04_frere_jacques_lullaby_musicbox"] = """\
+🎵 FRÈRE JACQUES — {duration} of music box lullaby
+
+The same gentle lullaby as our piano version, played this time on a music box,
+high and soft like the little tune inside a toy, with a quiet piano underneath.
+It stays in one key and one calm tempo the whole way through, with nothing
+sudden and no background noise of any kind — a bunny asleep by a village window sets the mood.
+
+▸ Music box melody with a soft piano — no rain, no hiss
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional melody; arrangement and sound made for this channel
+
+For bedtime, naptime, and quiet evenings.
+"""
+
 DESCRIPTIONS["n01_twinkle_lullaby"] = """\
 {duration} of "Twinkle, Twinkle, Little Star", played softly on piano and music box.
 

@@ -85,6 +85,16 @@ PURE_PIANO_BAND_WINDOW = {
     8000: (-80.0, -16.0),
 }
 
+# 子守唄のオルゴール版 (…_musicbox)。旋律が 1 オクターブ上 (C5〜A5) にあるので
+# 500Hz〜1kHz 帯が基準帯より大きいのは正常。耳に刺さるかは 2〜8kHz の上限で見る
+MUSIC_BOX_BAND_WINDOW = {
+    500: (-6.0, +14.0),
+    1000: (-14.0, +4.0),
+    2000: (-26.0, -6.0),
+    4000: (-40.0, -14.0),
+    8000: (-60.0, -24.0),
+}
+
 BAND_WINDOW = {
     500: (-8.0, +3.0),
     1000: (-14.0, -1.0),
@@ -331,7 +341,8 @@ def audio_qa(slug: str) -> dict:
         issues.append(f"★{r['repeat_lag_s']:.1f}s周期でノイズが反復"
                       f"({r['repeat_corr']:.2f})")
     is_pure_piano = slug[:1] == "g" and slug[1:3].isdigit()
-    window = (NURSERY_BAND_WINDOW if is_nursery else
+    window = (MUSIC_BOX_BAND_WINDOW if slug.endswith("_musicbox") else
+              NURSERY_BAND_WINDOW if is_nursery else
               PURE_PIANO_BAND_WINDOW if is_pure_piano else BAND_WINDOW)
     for lo, (mn, mx) in window.items():
         v = r["bands"][lo]

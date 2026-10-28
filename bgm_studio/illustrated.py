@@ -283,3 +283,24 @@ def elegant_thumbnail(background: Image.Image, title_lines: list[str], subtitle:
     _draw_spaced(d, (bx0 + int(h * 0.065), by1 + int(h * 0.022)), brand, nf, CREAM,
                  int(h * 0.006))
     return im
+
+
+def corner_badge(im: Image.Image, text: str) -> Image.Image:
+    """右上に、絵になじむ枠線のバッジ (濃い半透明の地 + クリーム色の文字) を重ねる"""
+    w, h = im.size
+    f = _font("CormorantGaramond", int(h * 0.062), "Bold")
+    d0 = ImageDraw.Draw(im)
+    sp = int(h * 0.010)
+    tw = _spaced_width(d0, text, f, sp)
+    bx1, by0 = int(w * 0.965), int(h * 0.045)
+    bx0, by1 = int(bx1 - tw - h * 0.09), int(by0 + h * 0.10)
+    ov = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    od = ImageDraw.Draw(ov)
+    od.rounded_rectangle([bx0, by0, bx1, by1], radius=int(h * 0.05),
+                         fill=(18, 22, 46, 190), outline=CREAM + (255,), width=3)
+    out = Image.alpha_composite(im.convert("RGBA"), ov).convert("RGB")
+    d = ImageDraw.Draw(out)
+    tb = d.textbbox((0, 0), text, font=f)
+    _draw_spaced(d, ((bx0 + bx1) / 2 - tw / 2, (by0 + by1) / 2 - (tb[3] - tb[1]) / 2 - tb[1]),
+                 text, f, CREAM, sp)
+    return out

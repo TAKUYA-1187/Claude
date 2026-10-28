@@ -222,6 +222,15 @@ ARRANGEMENTS = [
          double=12, double_inst="music_box"),
     dict(lead="soft_piano", acc="block", lg=0.42, ag=0.10),
 ]
+# オルゴール版 (2026-10-28 追加。オーナーの依頼「ピアノ版とオルゴール版の 2 パターン」)。
+# 旋律はオルゴール (鉄琴の録音) で 1 オクターブ上の、オルゴールらしい高い音域に置き、
+# 伴奏はやわらかいピアノでごく小さく支える。調・テンポはピアノ版と同じ
+MUSIC_BOX_ARRANGEMENTS = [
+    dict(lead="music_box", octave=12, acc="broken", lg=0.34, ag=0.12),
+    dict(lead="music_box", octave=12, acc="block", lg=0.34, ag=0.11),
+]
+MUSIC_BOX_SUFFIX = "_musicbox"
+
 CHORUSES_PER_ARRANGEMENT = 2
 BREATH_S = 2.4                           # コーラス間の息継ぎ
 
@@ -254,7 +263,9 @@ def build_nursery(spec, seconds: float):
     """童謡 1 曲を、アレンジを変えながら `seconds` の間くり返す"""
     from . import tracks as TR
 
-    song = NURSERY[spec.slug]
+    is_mb = spec.slug.endswith(MUSIC_BOX_SUFFIX)
+    song = NURSERY[spec.slug.removesuffix(MUSIC_BOX_SUFFIX)]
+    arrangements = MUSIC_BOX_ARRANGEMENTS if is_mb else ARRANGEMENTS
     tune = parse_tune(song["tune"])
     bar_beats = song["bar"]
     chords = harmonize(tune, bar_beats)
@@ -282,7 +293,7 @@ def build_nursery(spec, seconds: float):
 
     t = head
     for k in range(n_pass):
-        arr = ARRANGEMENTS[(k // CHORUSES_PER_ARRANGEMENT) % len(ARRANGEMENTS)]
+        arr = arrangements[(k // CHORUSES_PER_ARRANGEMENT) % len(arrangements)]
 
         # ── 旋律 ───────────────────────────────────────
         b = 0.0
@@ -291,11 +302,12 @@ def build_nursery(spec, seconds: float):
                 tt = t + b * beat_s + float(rng.normal(0, 0.006))
                 vel = float(np.clip(rng.normal(0.50, 0.04), 0.38, 0.62))
                 pos = int(round(tt * sr))
-                A.add_panned(buf, bank.note(arr["lead"], midi, vel), pos,
+                lm = midi + arr.get("octave", 0)
+                A.add_panned(buf, bank.note(arr["lead"], lm, vel), pos,
                              arr["lg"], -0.05)
                 if arr.get("double"):
                     A.add_panned(buf, bank.note(arr["double_inst"],
-                                                midi + arr["double"], vel * 0.6),
+                                                lm + arr["double"], vel * 0.6),
                                  pos, arr["lg"] * 0.40, 0.12)
             b += d
 
@@ -344,13 +356,18 @@ def build_nursery(spec, seconds: float):
         if song.get("mid_cut"):
             x = dsp.peak_eq(x, 700.0, -float(song["mid_cut"]), q=1.0)
         # 録音ピアノ (2026-10-28〜) は 3kHz より上が少ない。空気感だけ少し足す
-        x = dsp.shelf(x, 3000.0, 4.0, kind="high")
+        if not is_mb:                     # オルゴール版は元から明るいので足さない
+            x = dsp.shelf(x, 3000.0, 4.0, kind="high")
+        else:
+            # 鉄琴は基音の約 2.8 倍・5.4 倍に強い倍音がある (旋律 C5〜A5 なら 1.5〜4.7kHz)。
+            # そこを棚で下げて、耳に刺さらないオルゴールにする
+            x = dsp.shelf(x, 2200.0, -5.0, kind="high")
         x = dsp.lowpass(x, 12000.0, order=2)
         return dsp.highpass(x, 50.0, order=2)
 
     # beds=[]: 環境音ノイズは敷かない。ここがノイズゼロの核心
     out, info = TR._finish(buf, clock, spec, ir, 0.30, [], master)
     info["passes"] = k
-    info["arrangements"] = len(ARRANGEMENTS)
+    info["arrangements"] = len(arrangements)
     info["chords"] = " ".join(c for _, _, c in chords)
     return out, info

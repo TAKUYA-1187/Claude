@@ -117,10 +117,46 @@ def clean(x: np.ndarray) -> np.ndarray:
     return yc
 
 
+# ── オルゴール用: グロッケンシュピール (プラスチックのマレット) ──────────
+# 無料で自由に使えるオルゴールの録音は見つからなかった。オルゴールと同じく「鋼の棒が
+# 鳴る」楽器の録音で代える (同じ Iowa MIS, 2014 年収録, C5〜E8)。
+BELLS_RAW = ROOT / "samples" / "iowa_bells"
+BELLS_CLEAN = ROOT / "samples" / "bells_clean"
+BELLS_URL = ("https://theremin.music.uiowa.edu/sound%20files/MIS%20Pitches%20-%202014/"
+             "Percussion/Bells/bells.plastic.ff.{}.stereo.aif")
+BELLS_LO, BELLS_HI = 72, 100      # C5〜E8
+
+
+def prepare_bells(skip_download: bool) -> None:
+    BELLS_RAW.mkdir(parents=True, exist_ok=True)
+    BELLS_CLEAN.mkdir(parents=True, exist_ok=True)
+
+    def get(m: int) -> None:
+        dst = BELLS_RAW / f"bells.{note_name(m)}.aif"
+        if not dst.exists():
+            subprocess.run(["curl", "-sS", "--retry", "3", "-o", str(dst),
+                            BELLS_URL.format(note_name(m))], check=True)
+    if not skip_download:
+        with ThreadPoolExecutor(8) as ex:
+            list(ex.map(get, range(BELLS_LO, BELLS_HI + 1)))
+    out = {m: clean(load(BELLS_RAW / f"bells.{note_name(m)}.aif"))
+           for m in range(BELLS_LO, BELLS_HI + 1)
+           if (BELLS_RAW / f"bells.{note_name(m)}.aif").exists()}
+    peak = max(float(np.abs(v).max()) for v in out.values())
+    for m, v in out.items():
+        np.save(BELLS_CLEAN / f"m{m}.npy", (v * (0.9 / peak)).astype(np.float32))
+    lens = [len(v) / SR for v in out.values()]
+    print(f"{len(out)} 音を {BELLS_CLEAN} に保存 (長さ {min(lens):.1f}〜{max(lens):.1f} 秒)")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--skip-download", action="store_true")
+    ap.add_argument("--bells", action="store_true", help="オルゴール用の鉄琴だけを処理する")
     args = ap.parse_args()
+    if args.bells:
+        prepare_bells(args.skip_download)
+        return 0
     if not args.skip_download:
         download()
     CLEAN.mkdir(parents=True, exist_ok=True)

@@ -379,7 +379,12 @@ def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
         cfg = art.with_suffix(".json")
         if cfg.exists() and json.loads(cfg.read_text(encoding="utf-8")).get("has_text"):
             # ChatGPT が文字まで入れて仕上げたサムネは、そのまま使う
-            return Image.open(art).convert("RGB").resize((1280, 720), Image.LANCZOS)
+            im = Image.open(art).convert("RGB").resize((1280, 720), Image.LANCZOS)
+            if spec.slug.endswith("_musicbox"):
+                # オルゴール版は同じ絵なので、右上にバッジを重ねてピアノ版と見分けられるようにする
+                from bgm_studio import illustrated as IL
+                im = IL.corner_badge(im, "MUSIC BOX")
+            return im
     if spec.slug in ELEGANT:
         from PIL import Image
         import numpy as np

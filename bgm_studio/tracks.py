@@ -1786,6 +1786,54 @@ TRACKS: list[TrackSpec] = [
         ),
     ),
     TrackSpec(
+        slug="n01_twinkle_lullaby_musicbox",
+        title_en="Twinkle Twinkle Little Star (Music Box)",
+        genre_ja="きらきら星（オルゴール）",
+        use_case="sleep", bpm=66.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="lullaby_moon", seed=5037, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Twinkle Twinkle Little Star 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+            keywords=['twinkle twinkle little star music box', 'music box lullaby', 'baby sleep music', 'lullaby for babies', 'twinkle twinkle little star', 'music box'],
+        ),
+    ),
+    TrackSpec(
+        slug="n02_mary_lamb_lullaby_musicbox",
+        title_en="Mary Had a Little Lamb (Music Box)",
+        genre_ja="メリーさんのひつじ（オルゴール）",
+        use_case="sleep", bpm=72.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="lullaby_moon", seed=5074, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Mary Had a Little Lamb 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+            keywords=['mary had a little lamb music box', 'music box lullaby', 'baby sleep music', 'lullaby for babies', 'nursery rhymes music box', 'music box'],
+        ),
+    ),
+    TrackSpec(
+        slug="n03_row_your_boat_lullaby_musicbox",
+        title_en="Row Row Row Your Boat (Music Box)",
+        genre_ja="こげこげボート（オルゴール）",
+        use_case="sleep", bpm=84.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="lullaby_moon", seed=5111, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Row Row Row Your Boat 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+            keywords=['row row row your boat music box', 'music box lullaby', 'baby sleep music', 'lullaby for babies', 'nursery rhymes music box', 'music box'],
+        ),
+    ),
+    TrackSpec(
+        slug="n04_frere_jacques_lullaby_musicbox",
+        title_en="Frère Jacques (Music Box)",
+        genre_ja="フレール・ジャック（オルゴール）",
+        use_case="sleep", bpm=76.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="lullaby_moon", seed=5148, a4=432.0,
+        build=build_nursery_proxy,
+        seo=dict(
+            title="Frère Jacques 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+            keywords=['frere jacques music box', 'music box lullaby', 'baby sleep music', 'lullaby for babies', 'nursery rhymes music box', 'music box'],
+        ),
+    ),
+    TrackSpec(
         slug="n11_lullaby_medley",
         title_en="10 Lullabies for Babies",
         genre_ja="子守唄10曲のまとめ版（2時間）",
@@ -1929,10 +1977,12 @@ ART_DIR = Path(__file__).resolve().parent.parent / "art"
 
 
 def art_for(spec: TrackSpec) -> Path | None:
-    for ext in (".png", ".jpg", ".jpeg", ".webp"):
-        p = ART_DIR / f"{spec.slug}{ext}"
-        if p.exists():
-            return p
+    # オルゴール版 (…_musicbox) は、絵が無ければピアノ版と同じ絵を使う
+    for slug in (spec.slug, spec.slug.removesuffix("_musicbox")):
+        for ext in (".png", ".jpg", ".jpeg", ".webp"):
+            p = ART_DIR / f"{slug}{ext}"
+            if p.exists():
+                return p
     return None
 
 
