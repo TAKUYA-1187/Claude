@@ -912,6 +912,160 @@ sudden and no background noise of any kind — a bunny asleep by a village windo
 For bedtime, naptime, and quiet evenings.
 """
 
+
+# 2026-10-29 海外でよく知られた子守唄 (ピアノ版とオルゴール版)
+DESCRIPTIONS["n12_brahms_lullaby"] = """\
+🌙 BRAHMS' LULLABY — {duration} of soft piano lullaby
+
+Brahms' Lullaby ("Lullaby and Goodnight"), played slowly on a real, gently-played piano.
+Johannes Brahms wrote this cradle song in 1868, and it is still the tune most
+parents around the world hum at bedtime.
+
+Luna, our sleepy little moon, rocks softly among the stars. The tune stays in one
+key and one calm tempo the whole way through, with nothing sudden and no
+background noise of any kind.
+
+▸ Soft piano only — no rain, no hiss, no room tone
+▸ Loops seamlessly for the whole {duration}
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Music by Johannes Brahms (1868), in the public domain. Arrangement and sound made for this channel.
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n12_brahms_lullaby_musicbox"] = """\
+🎵 BRAHMS' LULLABY — {duration} of music box lullaby
+
+Brahms' Lullaby ("Lullaby and Goodnight"), played on a music box, high and soft like the little tune inside a toy,
+with a quiet piano underneath.
+Johannes Brahms wrote this cradle song in 1868, and it is still the tune most
+parents around the world hum at bedtime.
+
+It stays in one key and one calm tempo the whole way through, with nothing
+sudden and no background noise of any kind.
+
+▸ Music box melody with a soft piano — no rain, no hiss
+▸ Loops seamlessly for the whole {duration}
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Music by Johannes Brahms (1868), in the public domain. Arrangement and sound made for this channel.
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n13_rockabye_baby"] = """\
+🌙 ROCK-A-BYE BABY — {duration} of soft piano lullaby
+
+"Rock-a-bye Baby", played slowly on a real, gently-played piano.
+A gentle rocking lullaby in a slow, swaying rhythm, sung to babies in English
+for well over a century.
+
+Luna, our sleepy little moon, rocks softly among the stars. The tune stays in one
+key and one calm tempo the whole way through, with nothing sudden and no
+background noise of any kind.
+
+▸ Soft piano only — no rain, no hiss, no room tone
+▸ Loops seamlessly for the whole {duration}
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional melody, in the public domain. Arrangement and sound made for this channel.
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n13_rockabye_baby_musicbox"] = """\
+🎵 ROCK-A-BYE BABY — {duration} of music box lullaby
+
+"Rock-a-bye Baby", played on a music box, high and soft like the little tune inside a toy,
+with a quiet piano underneath.
+A gentle rocking lullaby in a slow, swaying rhythm, sung to babies in English
+for well over a century.
+
+It stays in one key and one calm tempo the whole way through, with nothing
+sudden and no background noise of any kind.
+
+▸ Music box melody with a soft piano — no rain, no hiss
+▸ Loops seamlessly for the whole {duration}
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional melody, in the public domain. Arrangement and sound made for this channel.
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n14_amazing_grace_lullaby"] = """\
+🌙 AMAZING GRACE — {duration} of soft piano lullaby
+
+"Amazing Grace", played slowly on a real, gently-played piano.
+One of the best-loved melodies in the English-speaking world, slowed down
+into a quiet lullaby.
+
+Luna, our sleepy little moon, rocks softly among the stars. The tune stays in one
+key and one calm tempo the whole way through, with nothing sudden and no
+background noise of any kind.
+
+▸ Soft piano only — no rain, no hiss, no room tone
+▸ Loops seamlessly for the whole {duration}
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional melody ("New Britain", 1829), in the public domain. Arrangement and sound made for this channel.
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n14_amazing_grace_lullaby_musicbox"] = """\
+🎵 AMAZING GRACE — {duration} of music box lullaby
+
+"Amazing Grace", played on a music box, high and soft like the little tune inside a toy,
+with a quiet piano underneath.
+One of the best-loved melodies in the English-speaking world, slowed down
+into a quiet lullaby.
+
+It stays in one key and one calm tempo the whole way through, with nothing
+sudden and no background noise of any kind.
+
+▸ Music box melody with a soft piano — no rain, no hiss
+▸ Loops seamlessly for the whole {duration}
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional melody ("New Britain", 1829), in the public domain. Arrangement and sound made for this channel.
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n15_all_through_the_night"] = """\
+🌙 ALL THROUGH THE NIGHT — {duration} of soft piano lullaby
+
+"All Through the Night" ("Ar Hyd y Nos"), played slowly on a real, gently-played piano.
+A tender old Welsh lullaby, sung around the world in English as
+"All Through the Night".
+
+Luna, our sleepy little moon, rocks softly among the stars. The tune stays in one
+key and one calm tempo the whole way through, with nothing sudden and no
+background noise of any kind.
+
+▸ Soft piano only — no rain, no hiss, no room tone
+▸ Loops seamlessly for the whole {duration}
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional Welsh melody (first printed 1784), in the public domain. Arrangement and sound made for this channel.
+
+For bedtime, naptime, and quiet evenings.
+"""
+
+DESCRIPTIONS["n15_all_through_the_night_musicbox"] = """\
+🎵 ALL THROUGH THE NIGHT — {duration} of music box lullaby
+
+"All Through the Night" ("Ar Hyd y Nos"), played on a music box, high and soft like the little tune inside a toy,
+with a quiet piano underneath.
+A tender old Welsh lullaby, sung around the world in English as
+"All Through the Night".
+
+It stays in one key and one calm tempo the whole way through, with nothing
+sudden and no background noise of any kind.
+
+▸ Music box melody with a soft piano — no rain, no hiss
+▸ Loops seamlessly for the whole {duration}
+▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)
+▸ Traditional Welsh melody (first printed 1784), in the public domain. Arrangement and sound made for this channel.
+
+For bedtime, naptime, and quiet evenings.
+"""
+
 DESCRIPTIONS["n01_twinkle_lullaby"] = """\
 {duration} of "Twinkle, Twinkle, Little Star", played softly on piano and music box.
 

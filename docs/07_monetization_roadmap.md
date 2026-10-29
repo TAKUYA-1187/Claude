@@ -139,19 +139,31 @@
 | 10/30（金） | 12:00 | **g01 Sleep Piano 3時間（新主力・雨音なし）** | A | **送付済み** |
 | 10/31（土） | 9:00 | n03 Row Row Row Your Boat | D | 送付済み |
 | 11/1（日） | 12:00 | 07 Fireplace Jazz（作り直し版） | C | 送付済み |
+| 11/2（月） | 9:00 | n12 Brahms' Lullaby（ピアノ） | D | 完成 |
 | 11/3（火） | 9:00 | n04 Frère Jacques | D | 送付済み |
 | 11/4（水） | 12:00 | 05 Bossa Nova Cafe | B | 作り直し予定 |
+| 11/5（木） | 9:00 | n01 Twinkle Twinkle（オルゴール版） | D | 送付済み |
 | 11/6（金） | 9:00 | n07 Au clair de la lune | D | 完成（公開の数日前に送付） |
 | 11/7（土） | 12:00 | Sleep Piano 第2弾（別の曲・3時間） | A | 制作予定 |
+| 11/8（日） | 9:00 | n13 Rock-a-bye Baby（ピアノ） | D | 完成 |
 | 11/9（月） | 9:00 | n05 London Bridge | D | 完成 |
+| 11/10（火） | 9:00 | n12 Brahms' Lullaby（オルゴール版） | D | 完成 |
 | 11/11（水） | 12:00 | 04 Cozy Coffee Shop Jazz | B | 作り直し予定 |
 | 11/12（木） | 9:00 | n09 Ode to Joy | D | 完成 |
+| 11/13（金） | 9:00 | n14 Amazing Grace（ピアノ） | D | 完成 |
 | 11/14（土） | 12:00 | 17 Christmas Jazz | C | 作り直し予定 |
 | 11/15（日） | 9:00 | n06 Old MacDonald | D | 完成 |
+| 11/16（月） | 9:00 | n02 Mary Had a Little Lamb（オルゴール版） | D | 送付済み |
+| 11/17（火） | 9:00 | n15 All Through the Night（ピアノ） | D | 完成 |
 | 11/18（水） | 9:00 | n08 Silent Night | D | 完成 |
 | 11/19（木） | 12:00 | Sleep Piano 第3弾（4時間） | A | 制作予定 |
+| 11/20（金） | 9:00 | n13 Rock-a-bye Baby（オルゴール版） | D | 完成 |
 | 11/21（土） | 9:00 | n10 Jingle Bells | D | 完成 |
+| 11/22（日） | 9:00 | n03 Row Your Boat（オルゴール版） | D | 送付済み |
+| 11/23（月） | 9:00 | n14 Amazing Grace（オルゴール版） | D | 完成 |
 | 11/24（火） | 9:00 | **n11 10 Lullabies for Babies（2時間まとめ版）** | D | 完成 |
+| 11/25（水） | 9:00 | n04 Frère Jacques（オルゴール版） | D | 送付済み |
+| 11/26（木） | 9:00 | n15 All Through the Night（オルゴール版） | D | 完成 |
 
 > 8時間版は、音声だけでチャットの送信上限（400MB）を超えるため、チャット経由では渡せません。
 > 4時間版までをチャットで送り、8時間版は Mac で `run_all.sh` を動かせるようになってから作ります。

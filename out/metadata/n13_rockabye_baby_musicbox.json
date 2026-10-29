@@ -1,0 +1,32 @@
+{
+  "slug": "n13_rockabye_baby_musicbox",
+  "title": "Rock-a-bye Baby 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+  "description": "🎵 ROCK-A-BYE BABY — 1 hour of music box lullaby\n\n\"Rock-a-bye Baby\", played on a music box, high and soft like the little tune inside a toy,\nwith a quiet piano underneath.\nA gentle rocking lullaby in a slow, swaying rhythm, sung to babies in English\nfor well over a century.\n\nIt stays in one key and one calm tempo the whole way through, with nothing\nsudden and no background noise of any kind.\n\n▸ Music box melody with a soft piano — no rain, no hiss\n▸ Loops seamlessly for the whole 1 hour\n▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)\n▸ Traditional melody, in the public domain. Arrangement and sound made for this channel.\n\nFor bedtime, naptime, and quiet evenings.\n",
+  "tags": [
+    "rock a bye baby music box",
+    "rockabye baby lullaby",
+    "hush a bye baby",
+    "music box lullaby",
+    "baby sleep music",
+    "lullaby for babies",
+    "music box"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": true,
+  "specs": {
+    "genre_ja": "ロッカバイ・ベイビー（オルゴール）",
+    "use_case": "sleep",
+    "bpm": 84.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.0,
+    "true_peak_db": -1.79,
+    "loop_seam_db": -55.59,
+    "visual": "lullaby_moon"
+  }
+}

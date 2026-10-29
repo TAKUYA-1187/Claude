@@ -1,0 +1,33 @@
+{
+  "slug": "n13_rockabye_baby",
+  "title": "Rock-a-bye Baby 🌙 1 Hour Piano Lullaby for Babies to Sleep | Soft Piano",
+  "description": "🌙 ROCK-A-BYE BABY — 1 hour of soft piano lullaby\n\n\"Rock-a-bye Baby\", played slowly on a real, gently-played piano.\nA gentle rocking lullaby in a slow, swaying rhythm, sung to babies in English\nfor well over a century.\n\nLuna, our sleepy little moon, rocks softly among the stars. The tune stays in one\nkey and one calm tempo the whole way through, with nothing sudden and no\nbackground noise of any kind.\n\n▸ Soft piano only — no rain, no hiss, no room tone\n▸ Loops seamlessly for the whole 1 hour\n▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)\n▸ Traditional melody, in the public domain. Arrangement and sound made for this channel.\n\nFor bedtime, naptime, and quiet evenings.\n",
+  "tags": [
+    "rock a bye baby",
+    "rockabye baby lullaby",
+    "hush a bye baby",
+    "piano lullaby",
+    "baby sleep music",
+    "lullaby for babies",
+    "lullabies",
+    "sleep music for babies"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": true,
+  "specs": {
+    "genre_ja": "ロッカバイ・ベイビー（子守唄ピアノ）",
+    "use_case": "sleep",
+    "bpm": 84.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -64.85,
+    "visual": "lullaby_moon"
+  }
+}

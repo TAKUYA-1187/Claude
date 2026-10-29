@@ -1,0 +1,33 @@
+{
+  "slug": "n15_all_through_the_night_musicbox",
+  "title": "All Through the Night 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
+  "description": "🎵 ALL THROUGH THE NIGHT — 1 hour of music box lullaby\n\n\"All Through the Night\" (\"Ar Hyd y Nos\"), played on a music box, high and soft like the little tune inside a toy,\nwith a quiet piano underneath.\nA tender old Welsh lullaby, sung around the world in English as\n\"All Through the Night\".\n\nIt stays in one key and one calm tempo the whole way through, with nothing\nsudden and no background noise of any kind.\n\n▸ Music box melody with a soft piano — no rain, no hiss\n▸ Loops seamlessly for the whole 1 hour\n▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)\n▸ Traditional Welsh melody (first printed 1784), in the public domain. Arrangement and sound made for this channel.\n\nFor bedtime, naptime, and quiet evenings.\n",
+  "tags": [
+    "all through the night music box",
+    "all through the night lullaby",
+    "ar hyd y nos",
+    "welsh lullaby",
+    "music box lullaby",
+    "baby sleep music",
+    "lullaby for babies",
+    "music box"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": true,
+  "specs": {
+    "genre_ja": "夜もすがら（オール・スルー・ザ・ナイト）（オルゴール）",
+    "use_case": "sleep",
+    "bpm": 66.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -65.4,
+    "visual": "lullaby_moon"
+  }
+}

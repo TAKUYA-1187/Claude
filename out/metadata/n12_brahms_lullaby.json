@@ -1,0 +1,34 @@
+{
+  "slug": "n12_brahms_lullaby",
+  "title": "Brahms' Lullaby 🌙 1 Hour Piano Lullaby for Babies to Sleep | Soft Piano",
+  "description": "🌙 BRAHMS' LULLABY — 1 hour of soft piano lullaby\n\nBrahms' Lullaby (\"Lullaby and Goodnight\"), played slowly on a real, gently-played piano.\nJohannes Brahms wrote this cradle song in 1868, and it is still the tune most\nparents around the world hum at bedtime.\n\nLuna, our sleepy little moon, rocks softly among the stars. The tune stays in one\nkey and one calm tempo the whole way through, with nothing sudden and no\nbackground noise of any kind.\n\n▸ Soft piano only — no rain, no hiss, no room tone\n▸ Loops seamlessly for the whole 1 hour\n▸ Tuned to A = 432 Hz (a softer reference pitch; no health claims)\n▸ Music by Johannes Brahms (1868), in the public domain. Arrangement and sound made for this channel.\n\nFor bedtime, naptime, and quiet evenings.\n",
+  "tags": [
+    "brahms lullaby",
+    "lullaby and goodnight",
+    "cradle song",
+    "wiegenlied",
+    "piano lullaby",
+    "baby sleep music",
+    "lullaby for babies",
+    "lullabies",
+    "sleep music for babies"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": true,
+  "specs": {
+    "genre_ja": "ブラームスの子守唄（子守唄ピアノ）",
+    "use_case": "sleep",
+    "bpm": 66.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.56,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -64.65,
+    "visual": "lullaby_moon"
+  }
+}

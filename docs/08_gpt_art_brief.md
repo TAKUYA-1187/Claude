@@ -59,6 +59,10 @@ Please create a single illustration with these rules:
 | n09_ode_to_joy_lullaby | A cozy nursery by a window at night, an open wooden music box glowing softly on a table on the right, stars outside. |
 | n10_jingle_bells_lullaby | A snowy pine forest at night, a small wooden sleigh with a sleeping puppy wrapped in a blanket on the right, soft moonlight. |
 | n11_lullaby_medley | A child's bedroom window at night seen from inside, a mobile of moons and stars hanging on the right, a teddy bear asleep on the sill. |
+| n12_brahms_lullaby | A cozy nursery at night, a wooden cradle on the right with a soft quilt, a crescent moon and stars through an arched window. |
+| n13_rockabye_baby | A big gentle tree at night, a small cradle swaying from a low branch on the right, soft wind in the leaves, stars above. |
+| n14_amazing_grace_lullaby | A quiet countryside in soft moonlight, a small white chapel on a hill on the right, a sleeping lamb in the grass, soft clouds. |
+| n15_all_through_the_night | A Welsh valley at night with rolling green hills, a small stone cottage with a glowing window on the right, a sheep asleep by the wall, many soft stars. |
 
 ### BGM
 

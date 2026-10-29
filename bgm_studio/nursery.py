@@ -107,13 +107,78 @@ NURSERY: dict[str, dict] = {
              "F/1 F/1 F/1.5 F/.5 F/1 E/1 E/1 E/.5 E/.5 E/1 D/1 D/1 E/1 D/2 G/2 "
              "E/1 E/1 E/2 E/1 E/1 E/2 E/1 G/1 C/1.5 D/.5 E/4 "
              "F/1 F/1 F/1.5 F/.5 F/1 E/1 E/1 E/.5 E/.5 G/1 G/1 F/1 D/1 C/4"),
+
+    # ── 海外で定番の子守唄・愛唱歌 (2026-10-29 追加) ─────────────────────
+    # 記憶で書かず、パブリックドメインの楽譜を ABC 記譜で確認してから C に移した。
+    #   Brahms / Rock-a-bye / All Through the Night: "The Everyday Song Book" (1927)
+    #     (abcnotation.com 経由 trillian.mit.edu の John Chambers による入力)
+    #   Amazing Grace: "New Britain" (1831) (colinhume.com の ABC)
+    # 弱起 (アウフタクト) の曲は、頭に休符を足して小節線をそろえる (伴奏の和声がずれないように)
+    "n12_brahms_lullaby": dict(
+        # 原調 E♭ → C。弱起 1 拍
+        title="Brahms' Lullaby", bar=3, bpm=66, visual="starry_night",
+        # 3 拍子のゆっくりした伴奏は音が少なく、オルゴール版は旋律が前に出すぎた (500Hz +16)
+        mb_lg=0.75,
+        chords="C C C G7 G7 G7 G7 G7 C F C Dm C F C G7 C",
+        tune="R/2 E/.5 E/.5 G/1.5 E/.5 E/1 G/1 R/1 E/.5 G/.5 "
+             "C5/1 B/1.5 A/.5 A/1 G/1 D/.5 E/.5 F/1 D/1 D/.5 E/.5 F/1 R/1 D/.5 F/.5 "
+             "B/.5 A/.5 G/1 B/1 C5/1 R/1 C/.5 C/.5 C5/2 A/.5 F/.5 G/2 E/.5 C/.5 "
+             "F/1 G/1 A/1 G/2 C/.5 C/.5 C5/2 A/.5 F/.5 G/2 E/.5 C/.5 F/1 E/1 D/1 C/2 R/1"),
+    "n13_rockabye_baby": dict(
+        # 原調 B♭ → C。6/8 (付点 4 分 = 1.5 拍で数え、1 小節 = 3 拍)
+        title="Rock-a-bye Baby", bar=3, bpm=84, visual="starry_night",
+        # 旋律が F5 まで上がるので、オルゴール版は G 長調に下げる (最高音 F6 → C6)
+        mb_trans=-5,
+        # 8 分音符が多く旋律の音数が多いので、オルゴール版は旋律を控えめにし、
+        # 伴奏のピアノを少し厚くする (2kHz -5 → -8, 500Hz +18 → 基準内)
+        mb_lg=0.6, mb_ag=1.3,
+        chords="C G G7 C C G F G7,C",
+        tune="E/.75 G/.25 E5/.5 D5/1 C5/.5 E/.75 G/.25 C5/.5 B/1.5 "
+             "F/.75 G/.25 F5/.5 E5/1 D5/.5 D5/.5 C5/.5 A/.5 G/1.5 "
+             "E/.75 G/.25 E5/.5 D5/1 C5/.5 E/.75 G/.25 C5/.5 B/1 A/.5 "
+             "G/.5 C5/.5 F5/.5 E5/.5 C5/1 D5/.5 A/.5 B/.5 C5/1 R/.5"),
+    "n14_amazing_grace_lullaby": dict(
+        # 原調 G → C (4 度上)。弱起 1 拍
+        title="Amazing Grace", bar=3, bpm=72, visual="starry_night",
+        chords="C C C7 F C C Am G G C C7 F C Am G7 C C",
+        tune="R/2 G/1 C5/2 E5/.5 C5/.5 E5/2 D5/1 C5/2 A/1 G/2 G/1 "
+             "C5/2 E5/.5 C5/.5 E5/2 D5/1 G5/5 E5/1 "
+             "G5/2 E5/.5 C5/.5 E5/2 D5/1 C5/2 A/1 G/2 G/1 "
+             "C5/2 E5/.5 C5/.5 E5/2 D5/1 C5/5 R/1"),
+    "n15_all_through_the_night": dict(
+        # 原調 G → C (4 度上)。7 小節目の "E3 F> F" は小節が 5 拍になる入力の誤りと
+        # 判断し、3 小節目と同じ "E2 F> F" にそろえた
+        title="All Through the Night", bar=4, bpm=66, visual="starry_night",
+        chords="C G F,G C C G F,G C F F,C F,G C,G C G F,G C",
+        tune="C5/1.5 B/.5 A/1 C5/1 D5/1.5 C5/.5 B/1 G/1 A/2 B/1.5 B/.5 C5/3 R/1 "
+             "C5/1.5 B/.5 A/1 C5/1 D5/1.5 C5/.5 B/1 G/1 A/2 B/1.5 B/.5 C5/3 R/1 "
+             "F5/1 E5/1 F5/1 G5/1 A5/1 G5/1 F5/1 E5/1 F5/1 E5/1 D5/1 C5/1 E5/1.5 D5/.5 C5/1 B/1 "
+             "C5/1.5 B/.5 A/1 C5/1 D5/1.5 C5/.5 B/1 G/1 A/2 B/1.5 B/.5 C5/3 R/1"),
 }
 
 # 使う和音 (ルート pc, 構成音 pc)。ハ長調の主要三和音 + 副三和音
 _CHORDS = {
     "C": (0, (0, 4, 7)), "Dm": (2, (2, 5, 9)), "Em": (4, (4, 7, 11)),
     "F": (5, (5, 9, 0)), "G": (7, (7, 11, 2)), "Am": (9, (9, 0, 4)),
+    # 手書きの和声 (song["chords"]) で使う属七。5 度を省いて根音・3 度・7 度にする
+    "G7": (7, (7, 11, 5)), "C7": (0, (0, 4, 10)),
 }
+
+
+def chords_from_spec(spec: str, bar_beats: int) -> list[tuple[float, float, str]]:
+    """
+    "C C G7,C ..." (1 小節 1 語。"," で区切るとその小節を等分) を和声区間の列にする。
+    有名な曲は和音の流れまで耳に残っているので、自動の和声付けより標準の和声を優先する
+    """
+    out, t = [], 0.0
+    for tok in spec.split():
+        parts = tok.split(",")
+        seg = bar_beats / len(parts)
+        for name in parts:
+            assert name in _CHORDS, name
+            out.append((t, seg, name))
+            t += seg
+    return out
 
 
 _CAND = ["C", "F", "G", "Am", "Dm"]
@@ -268,8 +333,15 @@ def build_nursery(spec, seconds: float):
     arrangements = MUSIC_BOX_ARRANGEMENTS if is_mb else ARRANGEMENTS
     tune = parse_tune(song["tune"])
     bar_beats = song["bar"]
-    chords = harmonize(tune, bar_beats)
+    chords = (chords_from_spec(song["chords"], bar_beats) if song.get("chords")
+              else harmonize(tune, bar_beats))
     total_beats = sum(d for _, d in tune)
+    # オルゴール版だけの曲ごとの調整。旋律を 1 オクターブ上げると、元の旋律が高い曲
+    # (Rock-a-bye Baby は F5 まで) は F6 に届いて耳に刺さる。そういう曲は曲全体を
+    # 移調して音域を下げる (mb_trans)。旋律と伴奏の音量も曲ごとに変えられる (mb_lg, mb_ag)
+    mb_trans = int(song.get("mb_trans", 0)) if is_mb else 0
+    lg_scale = float(song.get("mb_lg", 1.0)) if is_mb else 1.0
+    ag_scale = float(song.get("mb_ag", 1.0)) if is_mb else 1.0
     rng = np.random.default_rng(spec.seed)
     sr = dsp.SR
 
@@ -302,9 +374,9 @@ def build_nursery(spec, seconds: float):
                 tt = t + b * beat_s + float(rng.normal(0, 0.006))
                 vel = float(np.clip(rng.normal(0.50, 0.04), 0.38, 0.62))
                 pos = int(round(tt * sr))
-                lm = midi + arr.get("octave", 0)
+                lm = midi + arr.get("octave", 0) + mb_trans
                 A.add_panned(buf, bank.note(arr["lead"], lm, vel), pos,
-                             arr["lg"], -0.05)
+                             arr["lg"] * lg_scale, -0.05)
                 if arr.get("double"):
                     A.add_panned(buf, bank.note(arr["double_inst"],
                                                 lm + arr["double"], vel * 0.6),
@@ -314,8 +386,8 @@ def build_nursery(spec, seconds: float):
         # ── 伴奏 (和声区間ごと) ───────────────────────────
         for (seg_start, seg_len, cname) in chords:
             seg_t = t + seg_start * beat_s
-            bass, mids = _chord_notes(cname, 0)
-            ag = arr["ag"]
+            bass, mids = _chord_notes(cname, mb_trans % 12)
+            ag = arr["ag"] * ag_scale
             p0 = int(round(seg_t * sr))
             if arr["acc"] == "broken":
                 # 1 拍に 1 音のゆっくりした分散和音。低音は C3 より下に行かない

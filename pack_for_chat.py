@@ -33,6 +33,19 @@ def _ffmpeg(*args: str) -> None:
         raise RuntimeError(p.stderr[-2000:])
 
 
+def _upload_text(slug: str) -> str | None:
+    meta = OUT / "metadata" / f"{slug}.json"
+    if not meta.exists():
+        return None
+    import json
+    m = json.loads(meta.read_text(encoding="utf-8"))
+    kids = "はい、子ども向けです" if m.get("made_for_kids") else "いいえ、子ども向けではありません"
+    return (f"【タイトル】\n{m['title']}\n\n【説明】\n{m['description']}\n\n"
+            f"【タグ】\n{', '.join(m.get('tags', []))}\n\n"
+            f"【設定】\n視聴者: {kids}\nAI の使用（改変されたコンテンツ）: はい\n"
+            f"動画の言語: 英語 / カテゴリ: 音楽\n")
+
+
 def pack(slug: str) -> Path:
     spec = next(s for s in TRACKS if s.slug == slug)
     src = OUT / "video" / f"{slug}.mp4"
@@ -83,6 +96,10 @@ def pack(slug: str) -> Path:
     with zipfile.ZipFile(zpath, "w", zipfile.ZIP_STORED) as z:
         z.write(mp4, mp4.name)
         z.write(png, png.name)
+        txt = _upload_text(slug)
+        if txt:
+            # スマホで投稿するとき、タイトル・説明・タグを zip の中からそのままコピーできるように
+            z.writestr(f"{slug}.txt", txt.encode("utf-8"))
     for p in (m4a, vis, mp4):
         p.unlink()
 

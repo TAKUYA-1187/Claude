@@ -360,6 +360,14 @@ ELEGANT = {
     "n09_ode_to_joy_lullaby": (["ODE TO", "JOY"], "MUSIC BOX LULLABY"),
     "n10_jingle_bells_lullaby": (["JINGLE", "BELLS"], "SLOW LULLABY"),
     "n11_lullaby_medley": (["10 BABY", "LULLABIES"], "SOFT PIANO & MUSIC BOX"),
+    "n12_brahms_lullaby": (["BRAHMS'", "LULLABY"], "SOFT PIANO FOR BABIES"),
+    "n12_brahms_lullaby_musicbox": (["BRAHMS'", "LULLABY"], "MUSIC BOX LULLABY"),
+    "n13_rockabye_baby": (["ROCK-A-BYE", "BABY"], "SOFT PIANO FOR BABIES"),
+    "n13_rockabye_baby_musicbox": (["ROCK-A-BYE", "BABY"], "MUSIC BOX LULLABY"),
+    "n14_amazing_grace_lullaby": (["AMAZING", "GRACE"], "SOFT PIANO LULLABY"),
+    "n14_amazing_grace_lullaby_musicbox": (["AMAZING", "GRACE"], "MUSIC BOX LULLABY"),
+    "n15_all_through_the_night": (["ALL THROUGH", "THE NIGHT"], "SOFT PIANO LULLABY"),
+    "n15_all_through_the_night_musicbox": (["ALL THROUGH", "THE NIGHT"], "MUSIC BOX LULLABY"),
 }
 
 
@@ -397,7 +405,10 @@ def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
             fr = VIS.scene_maker(spec.visual)(seed=spec.seed)(0.2)
             bg = IL.watercolor(Image.fromarray(np.clip(fr, 0, 255).astype(np.uint8)),
                                seed=spec.seed)
-        return IL.elegant_thumbnail(bg, lines, sub, _length_badge(total_seconds))
+        im = IL.elegant_thumbnail(bg, lines, sub, _length_badge(total_seconds))
+        if spec.slug.endswith("_musicbox"):
+            im = IL.corner_badge(im, "MUSIC BOX")
+        return im
     return _make_thumbnail_v1(spec, total_seconds)
 
 
