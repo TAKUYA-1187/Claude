@@ -1171,14 +1171,29 @@ def scene_autumn_leaves(seed: int = 53):
     return frame
 
 
-def scene_christmas_window(seed: int = 54):
+# クリスマスの窓辺の色違い (2026-10-30)。クリスマス動画を何本も出すので、
+# 一覧で同じ絵が並ばないように、夜空と部屋の光の色を変えられるようにした
+_XMAS_TINTS = {
+    "night": dict(sky=[(10, 14, 34), (16, 22, 46), (24, 32, 60), (14, 18, 40)],
+                  moon=(120, 140, 190), room=(200, 120, 50), room_s=0.5),
+    "warm": dict(sky=[(30, 16, 22), (44, 24, 30), (58, 34, 38), (34, 18, 22)],
+                 moon=(200, 140, 110), room=(230, 140, 60), room_s=0.62),
+    "violet": dict(sky=[(20, 12, 38), (32, 20, 58), (44, 30, 76), (24, 14, 44)],
+                   moon=(170, 140, 220), room=(210, 120, 90), room_s=0.45),
+    "teal": dict(sky=[(6, 22, 30), (10, 34, 44), (16, 48, 58), (8, 26, 34)],
+                 moon=(120, 190, 200), room=(220, 150, 70), room_s=0.5),
+}
+
+
+def scene_christmas_window(seed: int = 54, tint: str = "night"):
     """
     クリスマスの夜の窓辺。雪、ツリーの灯り、暖色の部屋。
     """
     rng = np.random.default_rng(seed)
+    c = _XMAS_TINTS[tint]
     # 夜の屋外 (窓の外) — 深い青
-    bg = vgrad([(10, 14, 34), (16, 22, 46), (24, 32, 60), (14, 18, 40)])
-    base = np.clip(screen(bg, radial_glow(0.30, 0.30, 0.34, (120, 140, 190),
+    bg = vgrad(c["sky"])
+    base = np.clip(screen(bg, radial_glow(0.30, 0.30, 0.34, c["moon"],
                                           0.4, falloff=1.9)), 0, 255)
 
     # ツリーのシルエット (右手前) と灯り
@@ -1207,17 +1222,25 @@ def scene_christmas_window(seed: int = 54):
 
     base = vignette(base, 0.42) + static_grain(seed=seed, amount=2.2)
 
+    # 2026-10-30 高速化 (1 フレーム 2.9 秒 → 20 秒ループに 23 分かかっていた)。
+    # スクリーン合成は順番を入れ替えても結果が同じなので、動かない部分 (ツリー・部屋の光)
+    # は先に 1 回だけ合成し、電飾の光は 1 回だけ計算して、光っている小さな範囲だけを
+    # 毎フレーム明るさを変えて重ねる (範囲の外は 1/255 未満で、見た目は変わらない)
+    still = screen(np.where(tmask, tree, base),
+                   radial_glow(0.06, 0.72, 0.5, c["room"], c["room_s"], falloff=1.8, res_div=3))
+    sprites = []
+    for lx, ly, col, ph in lights:
+        g = radial_glow(lx, ly, 0.012, col, 0.9, falloff=1.2, res_div=3)
+        ys, xs = np.nonzero(g.max(axis=2) > 0.02)
+        y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+        sprites.append((y0, y1, x0, x1, g[y0:y1, x0:x1].copy(), ph))
+
     def frame(t01):
-        img = base.copy()
-        img = np.where(tmask, tree, img)
+        img = still.copy()
         # 電飾: それぞれ位相の違う 2 周期のまたたき
-        for lx, ly, col, ph in lights:
+        for y0, y1, x0, x1, g, ph in sprites:
             tw = 0.55 + 0.45 * np.sin(TWO_PI * (2 * t01) + ph)
-            img = screen(img, radial_glow(lx, ly, 0.012, col, 0.9 * tw,
-                                          falloff=1.2, res_div=3))
-        # 部屋の暖色の光が左から差す
-        img = screen(img, radial_glow(0.06, 0.72, 0.5, (200, 120, 50),
-                                      0.5, falloff=1.8, res_div=3))
+            img[y0:y1, x0:x1] = screen(img[y0:y1, x0:x1], g * tw)
         # 雪 (2 層)
         img = screen(img, _particle_layer(
             t01, 90, seed + 2, H, W, length=0.0, thickness=4.4,
@@ -1613,6 +1636,9 @@ SCENES = {
     "storm_window": scene_storm_window,
     "autumn_leaves": scene_autumn_leaves,
     "christmas_window": scene_christmas_window,
+    "christmas_window_warm": lambda seed=54: scene_christmas_window(seed, "warm"),
+    "christmas_window_violet": lambda seed=54: scene_christmas_window(seed, "violet"),
+    "christmas_window_teal": lambda seed=54: scene_christmas_window(seed, "teal"),
     "anime_dusk": scene_anime_dusk,
     "morning_meadow": scene_morning_meadow,
     "night_drive": scene_night_drive,

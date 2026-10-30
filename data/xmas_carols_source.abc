@@ -1,0 +1,295 @@
+% Paul Hardy's Xmas Tunebook (https://www.pghardy.net/tunebooks/) からの抜粋。
+% すべてパブリックドメインの旋律。bgm_studio/nursery.py の c09〜c21 の元データ
+
+X:10002
+T:Jingle Bells
+R:March
+C:James Lord Pierpont, 1857
+O:USA
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:4/4
+L:1/4
+Q:1/4=200
+K:G
+"G"DB AG|D3 D/2D/2|DB AG|"C"E4|"Am"Ec BA|"D7"F3 z/2 F/2|dd cA|"G"B3 z/2 D/2|
+DB AG|D3 z/2 D/2|DB AG|"C"E3 z/2 E/2|"Am"Ec BA|"G"dd dd|"D7"ed cA|"G"G2 "D7"d2|
+"G"BB B2|BB B2|Bd G3/2A/2|B4|"C"cc c3/2c/2|"G"cB BB/2B/2|"A7"BA AB|"D7"A2 d2|
+"G"BB B2|BB B2|Bd G3/2A/2|B4|"C"cc c3/2c/2|"G"cB BB/2B/2|"D7"dd cA|"G"G2 z2|]
+W:Dashing through the snow
+W:In a one-horse open sleigh
+W:O'er the fields we go
+W:Laughing all the way
+W:Bells on bobtail ring
+W:Making spirits bright
+W:Oh, what fun it is to sing
+W:A sleighing song tonight
+W:
+W:Jingle bells, jingle bells,
+W:Jingle all the way;
+W:Oh! what fun it is to ride
+W:In a one-horse open sleigh.
+W:Jingle bells, jingle bells,
+W:Jingle all the way;
+W:Oh! what fun it is to ride
+W:In a one-horse open sleigh.
+
+X:4001
+T:Ding Dong Merrily on High
+R:March
+C:Arbeau 1589
+O:France
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:2/2
+L:1/4
+Q:1/2=100
+K:G
+"G"GG "D" A/2G/2F/2E/2|"G"D3 D|"C"EG "D7"GF|"G"G2 G2:|
+|:"G"d>c "Em"B/2c/2d/2B/2|"Am"c>B "D7"A/2B/2c/2A/2|"G"B>A "Em"G/2A/2B/2G/2|"Am"A>G "D7"F/2G/2A/2F/2|
+"Em"G>F "C" E/2F/2G/2E/2|"D"F>E DD|"C"EG "D7"GF|"G"G2 G2:|
+W:Ding dong! merrily on high
+W:In heav'n the bells are ringing:
+W:Ding dong! verily the sky
+W:Is riv'n with Angel singing.
+W:Gloria; Hosanna in excelsis!
+W:
+W:(George Ratcliffe Woodward, 1924)
+
+X:9005
+T:I Saw Three Ships Come Sailing In
+R:Jig
+C:Trad.
+O:England
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:6/8
+L:1/8
+Q:3/8=90
+K:G
+D|"G"G2G "D"A2B|"G"d2B "Am"A2c|"G"B2G G2B|"D" A2F D2D|
+"G"G2G "D"A2B|"G"d2B "Am"A2c|"G"B2G GAB|"D"A3 "G"G2|]
+W:I saw three ships come sailing in
+W:On Christmas Day, on Christmas Day;
+W:I saw three ships come sailing in
+W:On Christmas Day in the morning.
+
+X:7004
+T:Good King Wenceslas
+R:March
+C:Trad. - Piae Cantiones, 1582
+O:Sweden
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:4/4
+L:1/4
+Q:1/4=180
+K:G
+"G"G G G A|G G D2|"C"E D "D7"E F|"G"G2 G2:|
+"G"d c B A|"Em"B A G2|"C"E D "D7"E F|"G"G2 G2|
+"D"D D E F|"G"G G "D7"A2|"G"d c B A|"Em"G2 "C"c2|"G"G4|]
+W:Good King Wenceslas looked out
+W:On the feast of Stephen
+W:When the snow lay round about
+W:Deep and crisp and even
+W:
+W:Brightly shone the moon that night
+W:Though the frost was cruel
+W:When a poor man came in sight
+W:Gath'ring winter fuel
+W:
+W:(John Mason Neale, 1853, after Czech poem)
+
+X:7003
+T:God Rest Ye Merry Gentlemen
+R:March
+C:Trad.
+O:England
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:4/4
+L:1/4
+Q:1/4=150
+K:G
+E|"Em" E B B  A| G F E  D|"C" E F G A|"B7" B3 E|
+"Em" E B B  A| G F  E D|"C" E F G A|"B" B2 z B|
+"Am" c A B c|"G" d e B  A|"Em" G E F G|"D" A2  G A|
+"G" B2 c B|"B7"B A G  F|"Em" E2 G/F/ E|"D" A2 G A|"G" B c d  e|"B" B A G  F|"Em" E3|]
+W:God rest you merry, gentlemen,Let nothing you dismay,
+W:Remember Christ, our Savior, Was born on Christmas Day
+W:To save us all from Satan's power When we were gone astray.
+W:O tidings of comfort and joy, comfort and joy, O tidings of comfort and joy.
+
+X:7005
+T:Go Tell It On the Mountain
+R:March
+C:Trad. Negro Spiritual
+O:USA
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:2/2
+L:1/8
+Q:1/4=160
+K:G
+"G"B4 B>A G>E|D4 G4|"D"AA2 AG2 A2|"G"B2 d2 "D7"e2 d2|"G"B4 B>A G>E|D4 G3 A|B2B2 "D7"A>G A2|"G"G6 G2|
+"G"B2d2d2e2|d2B4G2|"D7"A2A2G2A2|"G"B6G2|"G"B2d2d2e2|d2B4G2|"A"A2A2G2E2|"D"D4 "D7"c4|]
+W:Go, tell it on the mountain,
+W:Over the hills and everywhere
+W:Go, tell it on the mountain,
+W:That Jesus Christ is born.
+W:
+W:While shepherds kept their watching
+W:Over silent flocks by night
+W:Behold throughout the heavens
+W:There shone a holy light.
+% --------------------------------- H ---------------------------------------
+
+X:15003
+T:O Holy Night
+T:Cantique de Noël
+R:Jig
+C:Adolphe Adam (1803-1856)
+O:France
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:6/8
+L:1/8
+Q:3/8=100
+K:D
+"D"F3 F2 F|A3- A2 A|"G"B2 B G2 B|"D"d6|A2 A F2 E|D3 F2 G|"A"A3 G2 E|"D"D6-|D4 z2|
+"D"F3 F2 F|A3- A2 A|"G"B2 B G2 B|"D"d6|A2 A ^G2 F|"F#m"c3 A2 B|"C#"c3 d2 c|"F#m"F6-|F3 z2A|
+"A"A3 B3|E3 A3|"D"B2 A d2 F|B3 A2 A|"A"A3 B3|E3 A3|"D"B2 A d2 F|A3- A2 z||
+"Bm"d6-|d2 z c2 B|"F#m"c6-|c2 z c3|"Em"e6-|e z B B2 B|"Bm"d6-|d3 z2 d|
+"D"f6|"A"e3- e2 A|"D"d6-|"G"d2 z c2 B|"D"A6-|"A"A z A B2 A|"D"A6-|A2 z d3|
+"A"e6-|e2 z A3|"D"f6-|f3 "A"e3|"D"d3- d2 z|"A"c3 d2 e|"D"d6-|d4 z2|]
+W:O Holy night, the stars are brightly shining. It is the night of our dear savior's birth.
+W:Long lay the world in sin and error pining,'Til he appeared and the soul felt its worth.
+W:A thrill of hope, the weary world rejoices,For yonder breaks a new and glorious morn.
+W:Fall on your knees. Oh, hear the angels voices.
+W:Oh, night divine. Oh, night when Christ was born.
+W:Oh, night. Oh, holy night. Oh, night divine.
+W:
+W:(Translation by by John Dwight, of Minuit Chrétien by Placide Cappeau, 1847)
+
+X:15004
+T:O Little Town of Bethlehem
+R:March
+C:Trad.= Forest Green
+O:England
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:4/4
+L:1/8
+Q:1/4=120
+K:G
+"D"D2 |"G"G2 G2 "Em"G2 A2 |"Am"BABc "G"d2 B2| "C"c2 BG "D"A2 A2| "G"G6:|
+"G"GB |d3 e dc BA |GA Bc d2 D2 |"Em"G2 B2 "A7"A2 G2 |"D"D4 z2|
+"D"D2 |"G"G2 G2 "Em"G2 A2 |"Am"BABc "G"d2 B2 |"C"c2 BG "D"A2 A2|"G"G6|]
+W:O little town of Bethlehem,
+W:How still we see thee lie!
+W:Above thy deep and dreamless sleep
+W:The silent stars go by.
+W:
+W:Yet in thy dark streets shineth
+W:The everlasting Light;
+W:The hopes and fears of all the years
+W:Are met in thee to-night.
+W:
+W:(Phillips Brooks, 1903)
+
+X:9006
+T:It Came Upon the Midnight Clear
+R:March
+C:A Sullivan after Trad.
+O:England
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:4/4
+L:1/8
+Q:1/4=120
+K:G
+GA|"G"B2 A2 "Em"G2 AB|"C"c2 B2 "D"A2 d2|"G"d2 B2 "C"cd e2|"G"d6|
+"G"Bc|d2 d2 "Em"B2 G2|"C"c2 B2 "D"A2 GA|"G"Bc d2 "D"B2 A2|"G"G6||
+"G"G2|"B7"F2 E2 F2 A2|"Em"G3 F E2 B2|"A7"A2 G2 F2 E2|"D"D6|
+"D"D2|"G"d2 c2 "Em"B2 AB|"C"c2 B2 "D"A2 GA|"G"Bc d2 "D"B2 A2|"G"G6|]
+W:It came upon the midnight clear,
+W:That glorious song of old,
+W:From angels bending near the earth,
+W:To touch their harps of gold:
+W:
+W:Peace on the earth, goodwill to men,
+W:From heaven's all-gracious King.
+W:The world in solemn stillness lay,
+W:To hear the angels sing.
+W:
+W:(Edmund Hamilton Sears, 1849)
+
+X:23003
+T:What Child Is This?
+R:Air
+C:Trad. (Greensleeves, 16C)
+O:England
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:3/4
+L:1/8
+Q:1/4=130
+K:Em
+E2|"Em"G4A2|B3cB2|"D"A4F2|D3EF2|"Em"G4E2|E3^DE2|"B7"F4^D2|B,4E2|
+"Em"G4A2|B3cB2|"D"A4F2|D3EF2|"Em"G3FE2|"B7"^D3^C^D2|"Em"E6-|E4z2|
+"G"d6|d3^cB2|"D"A4F2|D3EF2|"Em"G4E2|E3^DE2|"B7"F4^D2|B,6|
+"G"d6|d3^cB2|"D"A4F2|D3EF2|"Em"G4E2|"B7"^D3^C^D2|"Em"E6-|E4|]
+W:What child is this, who, laid to rest; On Mary's lap is sleeping?
+W:Whom angels greet with anthems sweet; While shepherds watch are keeping?
+W:This, this is Christ the king; Whom shepherds guard and angels sing;
+W:Haste, haste to bring Him laud; The babe, the son of Mary!
+W:
+W:(William Chatterton Dix, 1865)
+
+X:9003
+T:In the Bleak Midwinter
+R:March
+C:Gustav Holst 1906
+O:Germany
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:4/4
+L:1/4
+Q:1/4=120
+K:G
+"G" B>c d B|"Em" A2 G z|"Am" A>B A E|"D" A2-A z|"G" B>c d B|"Em" A2 G z|"Am" A B "D7" A>G|"G" G4|
+"C" c>B c d|"Am"e2 "Em" B2|"G" d B A G|"D" F3 z|"G" B>c d B|"Em" A2 G z|"Am" A B "D" A>G|"G" G4|]
+W:In the bleak midwinter frosty wind made moan,
+W:Earth stood hard as iron, water like a stone;
+W:Snow had fallen, snow on snow, snow on snow,
+W:In the bleak midwinter, long a go.
+W:
+W:(Christina Rosetti, 1872)
+
+X:15005
+T:Once In Royal David's City
+R:March
+C:Henry John Gauntlett, 1849
+O:England
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:2/2
+L:1/8
+Q:1/4=120
+K:G
+"D7"D2F2 "G"G3G|"D7"GFGA "G"A2G2|"Em"G2B2 "G"d3B|"Am"BA"D7"GF "G"G4:|
+"C"e2e2 "G"d3G|"Am"c2"D7"c2 "G"B4|"C"e2e2 "G"d3B|"Am"BA"D7"GF "G"G4|]
+W:Once in royal Davids city,
+W:Stood a lowly cattle shed,
+W:Where a mother laid her Baby,
+W:In a manger for His bed:
+W:Mary was that mother mild,
+W:Jesus Christ, her little Child.
+W:
+W:(Cecil Frances Humphreys Alexander, 1848)
+
+X:9004
+T:Infant Holy, Infant Lowly
+T:Zlobie Lezy
+R:Mazurka
+C:Trad.
+O:Poland
+Z:Paul Hardy's Xmas Tunebook 2019 (see www.paulhardy.net). Creative Commons cc by-nc-sa licenced.
+M:3/4
+L:1/8
+Q:1/4=120
+K:G
+"G"DD G2 G2|"D"FG A2 A2|"G"Bc d2 "C"c2|"G"BA G4|DD G2 G2|"D"FG "D"A2 A2|"G"Bc d2 "C"c2|"G"BA G4|
+"C"GF E2 E2|"D"AG F2 F2|"G"BA G2 G2|"C"cB "D7"A2 A2|"G"Bc d2 "C"c2|"G"BA G4|"G"Bc d2 "C"c2|"G"BA G4|]
+W:Infant holy, Infant lowly, For His bed a cattle stall;
+W:Oxen lowing, Little knowing, Christ the Babe is Lord of all.
+W:Swift are winging, Angels singing, Nowells ringing, Tidings bringing,
+W:Christ the Babe is Lord of all; Christ the Babe is Lord of all.

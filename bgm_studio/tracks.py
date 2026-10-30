@@ -1380,18 +1380,62 @@ CHRISTMAS_ORDER = [
 ]
 
 
+# 2026-10-30 第 2 弾。「もっと心が安らぎ、クリスマスのワクワクが高まる」「鈴の音など
+# より楽しみを感じる動画も」という依頼で、鈴入り (明るい曲) とやすらぎ版 (静かな曲) を足す
+CHRISTMAS_BELLS_ORDER = [
+    "c09_jingle_bells_full", "c02_deck_the_halls", "c10_ding_dong_merrily",
+    "c11_i_saw_three_ships", "c01_we_wish_you", "c12_good_king_wenceslas",
+    "c14_go_tell_it", "c13_god_rest_ye_merry", "c04_joy_to_the_world",
+    "c07_hark_the_herald",
+]
+CHRISTMAS_CALM_ORDER = [
+    "n08_silent_night_lullaby", "c16_o_little_town", "c06_away_in_a_manger",
+    "c18_what_child", "c15_o_holy_night", "c19_bleak_midwinter",
+    "c17_midnight_clear", "c21_infant_holy", "c20_royal_davids_city", "c05_first_noel",
+]
+CHRISTMAS_MUSICBOX_2_ORDER = [
+    "c09_jingle_bells_full", "c16_o_little_town", "c10_ding_dong_merrily",
+    "c18_what_child", "c11_i_saw_three_ships", "c19_bleak_midwinter",
+    "c12_good_king_wenceslas", "c17_midnight_clear", "c21_infant_holy",
+    "c20_royal_davids_city",
+]
+MEDLEY_SONGS = {
+    "x01_christmas_piano": CHRISTMAS_ORDER,
+    "x02_christmas_musicbox": CHRISTMAS_ORDER,
+    "x03_christmas_bells": CHRISTMAS_BELLS_ORDER,
+    "x04_christmas_calm": CHRISTMAS_CALM_ORDER,
+    "x08_christmas_carols_2_musicbox": CHRISTMAS_MUSICBOX_2_ORDER,
+}
+# 1 曲を 1 時間かける版。動画の記号 → 童謡エンジンの曲名 + 編曲 (_bells / _calm)
+CHRISTMAS_SINGLES = {
+    "x05_jingle_bells_sleigh": "c09_jingle_bells_full_bells",
+    "x06_silent_night_piano": "n08_silent_night_lullaby_calm",
+    "x07_o_holy_night_piano": "c15_o_holy_night_calm",
+    "x09_we_wish_you_bells": "c01_we_wish_you_bells",
+}
+
+
+def build_christmas_single(spec, seconds):
+    import dataclasses
+    from .nursery import build_nursery
+    return build_nursery(dataclasses.replace(spec, slug=CHRISTMAS_SINGLES[spec.slug]), seconds)
+
+
 def build_christmas_medley(spec, seconds):
     """
-    クリスマス曲 10 曲のまとめ版。ピアノ版と、slug が _musicbox で終わるオルゴール版。
+    クリスマス曲 10 曲のまとめ版。slug の末尾で編曲が決まる
+    (なし: ピアノ / _musicbox: オルゴール / _bells: 鈴入り / _calm: やすらぎ)。
     各曲は子守唄と同じ build_nursery で作る (録音ピアノ・録音の鉄琴、432Hz、環境音なし)。
     曲ごとに -14 LUFS 済みなので、つないだ後に音量を揃え直す必要はない
     """
     import dataclasses
-    from .nursery import build_nursery, MUSIC_BOX_SUFFIX
-    suffix = MUSIC_BOX_SUFFIX if spec.slug.endswith(MUSIC_BOX_SUFFIX) else ""
-    per_song = seconds / len(CHRISTMAS_ORDER)
+    from .nursery import build_nursery, split_mode
+    mode = split_mode(spec.slug)[1]
+    suffix = f"_{mode}" if mode else ""
+    order = MEDLEY_SONGS[spec.slug]
+    per_song = seconds / len(order)
     parts = []
-    for i, key in enumerate(CHRISTMAS_ORDER):
+    for i, key in enumerate(order):
         sub = dataclasses.replace(spec, slug=key + suffix, seed=spec.seed + 37 * i)
         song, _ = build_nursery(sub, per_song)
         parts.append(dsp.fade(song, fade_in=0.3, fade_out=1.5))
@@ -1404,7 +1448,7 @@ def build_christmas_medley(spec, seconds):
         "seam_db": dsp.check_loop_seam(out),
         "seam_dbfs": dsp.seam_step_dbfs(out),
         "bpm": 0.0, "bars": 0,
-        "songs": len(CHRISTMAS_ORDER),
+        "songs": len(order),
     }
     return out, info
 
@@ -1899,6 +1943,91 @@ TRACKS: list[TrackSpec] = [
             keywords=["christmas music box", "music box christmas songs", "christmas carols music box",
                       "relaxing christmas music", "christmas lullaby", "christmas songs",
                       "christmas music instrumental", "music box"],
+        ),
+    ),
+    # 2026-10-30 クリスマス第 2 弾 (鈴入り・やすらぎ・オルゴール第 2 集・1 曲 1 時間版)
+    TrackSpec(
+        slug="x03_christmas_bells",
+        title_en='Christmas Bells & Piano',
+        genre_ja='クリスマス曲10曲（ピアノと鈴・2時間）',
+        use_case="relax", bpm=88.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window_warm", seed=7303, a4=432.0,
+        build=build_christmas_medley,
+        seo=dict(
+            title='Christmas Piano & Sleigh Bells 🔔 2 Hours of Joyful Christmas Carols | Cozy Christmas Music',
+            keywords=['christmas music', 'sleigh bells', 'jingle bells piano', 'christmas carols', 'cozy christmas music', 'christmas piano', 'happy christmas music', 'christmas background music'],
+        ),
+    ),
+    TrackSpec(
+        slug="x04_christmas_calm",
+        title_en='Calm Christmas Piano',
+        genre_ja='静かなクリスマス曲10曲（やすらぎのピアノ・2時間）',
+        use_case="relax", bpm=66.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window_violet", seed=7404, a4=432.0,
+        build=build_christmas_medley,
+        seo=dict(
+            title='Calm Christmas Piano 🌙 2 Hours of Peaceful Carols | Silent Night, O Holy Night & more',
+            keywords=['calm christmas music', 'peaceful christmas piano', 'christmas sleep music', 'silent night piano', 'o holy night piano', 'relaxing christmas carols', 'quiet christmas music', 'christmas piano'],
+        ),
+    ),
+    TrackSpec(
+        slug="x05_jingle_bells_sleigh",
+        title_en='Jingle Bells (Piano & Sleigh Bells)',
+        genre_ja='ジングルベル（ピアノと鈴・1時間）',
+        use_case="relax", bpm=96.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window_warm", seed=7505, a4=432.0,
+        build=build_christmas_single,
+        seo=dict(
+            title='Jingle Bells 🔔 1 Hour of Piano & Sleigh Bells | Cozy Christmas Music',
+            keywords=['jingle bells', 'jingle bells piano', 'sleigh bells', 'christmas music', 'jingle bells 1 hour', 'christmas songs', 'cozy christmas'],
+        ),
+    ),
+    TrackSpec(
+        slug="x06_silent_night_piano",
+        title_en='Silent Night (Calm Piano)',
+        genre_ja='きよしこの夜（やすらぎのピアノ・1時間）',
+        use_case="relax", bpm=60.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window", seed=7606, a4=432.0,
+        build=build_christmas_single,
+        seo=dict(
+            title='Silent Night 🌙 1 Hour of Calm Christmas Piano | Peaceful Carol for Sleep & Relaxation',
+            keywords=['silent night', 'silent night piano', 'calm christmas music', 'christmas sleep music', 'silent night 1 hour', 'peaceful christmas', 'christmas piano'],
+        ),
+    ),
+    TrackSpec(
+        slug="x07_o_holy_night_piano",
+        title_en='O Holy Night (Calm Piano)',
+        genre_ja='オー・ホーリー・ナイト（やすらぎのピアノ・1時間）',
+        use_case="relax", bpm=66.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window_violet", seed=7707, a4=432.0,
+        build=build_christmas_single,
+        seo=dict(
+            title='O Holy Night 🌟 1 Hour of Calm Christmas Piano | Peaceful Christmas Music',
+            keywords=['o holy night', 'o holy night piano', 'calm christmas music', 'christmas piano', 'o holy night 1 hour', 'peaceful christmas music', 'cantique de noel'],
+        ),
+    ),
+    TrackSpec(
+        slug="x08_christmas_carols_2_musicbox",
+        title_en='Christmas Music Box Vol. 2',
+        genre_ja='クリスマス曲10曲 第2集（オルゴール・2時間）',
+        use_case="relax", bpm=80.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window_teal", seed=7808, a4=432.0,
+        build=build_christmas_medley,
+        seo=dict(
+            title='Christmas Music Box Vol. 2 🎁 2 Hours of Christmas Carols | Soft & Relaxing',
+            keywords=['christmas music box', 'music box christmas songs', 'christmas carols music box', 'what child is this music box', 'relaxing christmas music', 'christmas lullaby', 'music box'],
+        ),
+    ),
+    TrackSpec(
+        slug="x09_we_wish_you_bells",
+        title_en='We Wish You a Merry Christmas (Piano & Bells)',
+        genre_ja='おめでとうクリスマス（ピアノと鈴・1時間）',
+        use_case="relax", bpm=96.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window_teal", seed=7909, a4=432.0,
+        build=build_christmas_single,
+        seo=dict(
+            title='We Wish You a Merry Christmas 🔔 1 Hour of Piano & Sleigh Bells | Happy Christmas Music',
+            keywords=['we wish you a merry christmas', 'merry christmas song', 'christmas music', 'sleigh bells', 'christmas piano', 'happy christmas music', 'christmas songs'],
         ),
     ),
     # 2026-10-29 海外でよく知られた子守唄 (ピアノ版とオルゴール版)

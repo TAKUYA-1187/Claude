@@ -77,14 +77,19 @@ def pack(slug: str) -> Path:
 
     vis = tmp / f"{slug}.chat_visual.mp4"
     from bgm_studio.tracks import visual_for
-    VID.encode_visual_loop(visual_for(spec), vis, seed=spec.seed,
-                           crf=24, maxrate=f"{v_kbps}k",
-                           # 既定の 4M だと 20 秒ループ全体より大きく、上限が効かない。
-                           # 1 秒ぶんにして実際に頭打ちさせる
-                           bufsize=f"{v_kbps}k",
-                           # 400MiB に収めると 1080p では 100kbps 前後しか残らず、縦筋が出た。
-                           # 同じビットレートなら 720p の方がはるかにきれい
-                           out_size=(1280, 720) if v_kbps < 180 else None)
+    enc = dict(crf=24, maxrate=f"{v_kbps}k",
+               # 既定の 4M だと 20 秒ループ全体より大きく、上限が効かない。
+               # 1 秒ぶんにして実際に頭打ちさせる
+               bufsize=f"{v_kbps}k",
+               # 400MiB に収めると 1080p では 100kbps 前後しか残らず、縦筋が出た。
+               # 同じビットレートなら 720p の方がはるかにきれい
+               out_size=(1280, 720) if v_kbps < 180 else None)
+    loop = OUT / "visual" / f"{slug}.mp4"
+    if loop.exists() and loop.stat().st_mtime >= src.stat().st_mtime - 3600:
+        # 本編と同じときに書き出したループがあれば、描き直さずに縮める (20 分 → 数十秒)
+        VID.transcode_visual_loop(loop, vis, **enc)
+    else:
+        VID.encode_visual_loop(visual_for(spec), vis, seed=spec.seed, **enc)
     mp4 = tmp / f"{slug}.mp4"
     VID.mux_looped(vis, m4a, mp4, total_seconds=dur)
     got = VID.probe(mp4)["duration_s"]

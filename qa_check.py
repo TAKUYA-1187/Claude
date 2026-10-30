@@ -95,6 +95,17 @@ MUSIC_BOX_BAND_WINDOW = {
     8000: (-60.0, -24.0),
 }
 
+# クリスマスの鈴入り版 (2026-10-30)。そり鈴が 4〜9kHz を足すのが正しい音なので、
+# 高域の上限は BGM の窓に近いところまで開け、下限 (こもり) は童謡と同じにする
+BELLS_BAND_WINDOW = {
+    500: (-14.0, 2.0),
+    1000: (-21.0, -3.0),
+    2000: (-34.0, -10.0),
+    4000: (-40.0, -18.0),
+    8000: (-50.0, -26.0),
+}
+BELLS_TRACKS = {"x03_christmas_bells", "x05_jingle_bells_sleigh", "x09_we_wish_you_bells"}
+
 BAND_WINDOW = {
     500: (-8.0, +3.0),
     1000: (-14.0, -1.0),
@@ -342,7 +353,8 @@ def audio_qa(slug: str) -> dict:
         issues.append(f"★{r['repeat_lag_s']:.1f}s周期でノイズが反復"
                       f"({r['repeat_corr']:.2f})")
     is_pure_piano = slug[:1] == "g" and slug[1:3].isdigit()
-    window = (MUSIC_BOX_BAND_WINDOW if slug.endswith("_musicbox") else
+    window = (BELLS_BAND_WINDOW if slug in BELLS_TRACKS else
+              MUSIC_BOX_BAND_WINDOW if slug.endswith("_musicbox") else
               NURSERY_BAND_WINDOW if is_nursery else
               PURE_PIANO_BAND_WINDOW if is_pure_piano else BAND_WINDOW)
     for lo, (mn, mx) in window.items():

@@ -398,6 +398,94 @@ def real_music_box(m: int, vel: float = 0.8, sr: int = SR,
     return (y * _BELLS_CAL * (vel / 0.55) ** 1.3).astype(np.float32)
 
 
+# ── クリスマスの鈴 (2026-10-30)。prepare_piano_samples.py --perc で用意する ──
+_SAMPLES = Path(__file__).resolve().parent.parent / "samples"
+_CROTALES: dict[int, np.ndarray] | None = None
+# 録音の大きさをピアノ (vel 0.55) と比べられる大きさにそろえる倍率。0.9 では
+# 旋律に重ねたときピアノより 39dB も小さく、まったく聞こえなかった
+_CROTALE_CAL = 8.0
+_PERC_CACHE: dict[str, np.ndarray] = {}
+
+
+def _perc_sample(name: str) -> np.ndarray | None:
+    if name not in _PERC_CACHE:
+        p = _SAMPLES / "perc_clean" / f"{name}.npy"
+        _PERC_CACHE[name] = np.load(p).astype(np.float32) if p.exists() else None
+    return _PERC_CACHE[name]
+
+
+def real_crotale(m: int, vel: float = 0.8, sr: int = SR,
+                 rng: np.random.Generator | None = None) -> np.ndarray:
+    """
+    クロタル (小さな調律された鈴) の 1 音。録音は C6〜C8 の白鍵だけなので、
+    近い音から音程をずらして作る。強く叩いた録音なので高域を丸め、鳴らすときは小さく
+    """
+    global _CROTALES
+    if _CROTALES is None:
+        _CROTALES = {}
+        d = _SAMPLES / "crotale_clean"
+        if d.exists():
+            for p in d.glob("m*.npy"):
+                _CROTALES[int(p.stem[1:])] = np.load(p).astype(np.float32)
+    if not _CROTALES:
+        return real_music_box(m, vel, sr=sr, rng=rng)
+    from fractions import Fraction
+    from scipy import signal as _sig
+    keys = np.array(sorted(_CROTALES))
+    base = int(keys[np.argmin(np.abs(keys - m))])
+    x = _CROTALES[base]
+    r = float(midi2hz(m)) / (440.0 * 2.0 ** ((base - 69) / 12.0))
+    if abs(r - 1.0) > 1e-4:
+        fr = Fraction(1.0 / r).limit_denominator(2000)
+        x = _sig.resample_poly(x, fr.numerator, fr.denominator).astype(np.float32)
+    x = x[: int(6.0 * sr)]
+    x = dsp.fade(x, fade_out=min(1.5, len(x) / sr / 3))
+    sos = _sig.butter(2, min(2600.0 + 4200.0 * vel ** 2, sr * 0.45), "lowpass",
+                      fs=sr, output="sos")
+    return (_sig.sosfilt(sos, x) * _CROTALE_CAL * vel).astype(np.float32)
+
+
+def sleigh_real(sr: int = SR, rng: np.random.Generator | None = None,
+                length: float = 0.30) -> np.ndarray:
+    """
+    そり鈴 (スレイベル) のひと振り。タンバリンのシェイク・ロールの録音から 0.3 秒を
+    切り出し、振った瞬間の立ち上がりと、すっと消える減衰を付ける。
+    5 度下げたうえで 9kHz で丸め、耳に刺さらないようにする
+    """
+    rng = rng or np.random.default_rng(31)
+    src = _perc_sample(f"roll{int(rng.integers(1, 4))}")
+    if src is None:
+        return sleigh_bells(sr=sr, rng=rng)
+    from scipy import signal as _sig
+    n = int(length * sr)
+    lo = int(0.3 * sr)
+    # タンバリンのジングルはそり鈴より高い (エネルギーの半分が 8kHz より上)。
+    # 5 度 (1.5 倍) 下げて、そり鈴らしい 3〜9kHz に寄せる
+    m = int(n / 1.5) + 8
+    start = int(rng.integers(lo, max(len(src) - m - lo, lo + 1)))
+    x = _sig.resample_poly(src[start:start + m], 3, 2)[:n].astype(np.float32)
+    if len(x) < n:
+        x = np.pad(x, (0, n - len(x)))
+    t = np.arange(n, dtype=np.float32) / sr
+    env = np.minimum(t / 0.006, 1.0) * (0.25 + 0.75 * np.exp(-t / 0.07))
+    env *= np.clip((length - t) / 0.08, 0.0, 1.0)
+    sos = _sig.butter(2, 9000.0, "lowpass", fs=sr, output="sos")
+    y = _sig.sosfilt(sos, x * env).astype(np.float32)
+    return (y * 3.2).astype(np.float32)        # 0.5 では音楽より 30dB 小さく聞こえなかった
+
+
+def triangle_real(sr: int = SR, rng: np.random.Generator | None = None,
+                  size: int = 6) -> np.ndarray:
+    """トライアングルを 1 回鳴らす。余韻は 5 秒で切り、7kHz で丸める"""
+    x = _perc_sample(f"triangle{size}")
+    if x is None:
+        return np.zeros(int(0.1 * sr), dtype=np.float32)
+    from scipy import signal as _sig
+    x = dsp.fade(x[: int(5.0 * sr)].copy(), fade_out=1.5)
+    sos = _sig.butter(2, 7000.0, "lowpass", fs=sr, output="sos")
+    return (_sig.sosfilt(sos, x) * 4.0).astype(np.float32)
+
+
 def soft_piano_any(m: int, vel: float = 0.8, sr: int = SR,
                    rng: np.random.Generator | None = None) -> np.ndarray:
     """やわらかいピアノ。録音があれば録音、無ければ合成"""
@@ -708,6 +796,7 @@ PITCHED = {
     "soft_piano": soft_piano_any,
     "synth_soft_piano": soft_piano,
     "music_box": real_music_box,
+    "crotale": real_crotale,
     "synth_music_box": music_box,
     "bowl": singing_bowl,
     "marimba": marimba,
@@ -724,6 +813,8 @@ PERC = {
     "ride": ride,
     "shaker": shaker,
     "sleigh": sleigh_bells,
+    "sleigh_real": sleigh_real,
+    "triangle": triangle_real,
 }
 
 

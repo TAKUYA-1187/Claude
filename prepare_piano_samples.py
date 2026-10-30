@@ -149,13 +149,78 @@ def prepare_bells(skip_download: bool) -> None:
     print(f"{len(out)} 音を {BELLS_CLEAN} に保存 (長さ {min(lens):.1f}〜{max(lens):.1f} 秒)")
 
 
+# ── クリスマスの鈴 (2026-10-30) ─────────────────────────────────────
+# 「鈴の音などの楽しい動画も」という依頼に応える。同じ Iowa MIS (2014 年収録) の
+# ・クロタル (小さな調律された鈴, C6〜C8)       → 長い音にきらめきを添える
+# ・トライアングル                               → フレーズの頭に 1 回だけ
+# ・タンバリンのシェイク・ロール (ジングルの音)  → そり鈴 (スレイベル) の代わり
+# pp の録音は雑音との差が 20dB ほどしかなく、上げるとサーという音が出るので、
+# 雑音の少ない ff (差 60〜75dB) を使い、鳴らすときに音量と高域を下げる。
+PERC_RAW = ROOT / "samples" / "iowa_perc"
+PERC_CLEAN = ROOT / "samples" / "perc_clean"
+CROTALE_CLEAN = ROOT / "samples" / "crotale_clean"
+PERC_URL = "https://theremin.music.uiowa.edu/sound%20files/MIS%20Pitches%20-%202014/Percussion/"
+CROTALE_NOTES = ["C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7", "D7", "E7", "F7", "G7",
+                 "A7", "B7", "C8"]
+PERC_FILES = {
+    "triangle6": "Hand%20Percussion/Triangles/6triangle.ff.stereo.aif",
+    "triangle8": "Hand%20Percussion/Triangles/8triangle.ff.stereo.aif",
+    "roll1": "Tambourines/tambourine1.shakeroll.ff.stereo.aif",
+    "roll2": "Tambourines/tambourine2.shakeroll.ff.stereo.aif",
+    "roll3": "Tambourines/tambourine3.shakeroll.ff.stereo.aif",
+}
+
+
+def _midi_of(name: str) -> int:
+    return NAMES.index(name[:-1]) + 12 * (int(name[-1]) + 1)
+
+
+def prepare_perc(skip_download: bool) -> None:
+    PERC_RAW.mkdir(parents=True, exist_ok=True)
+    PERC_CLEAN.mkdir(parents=True, exist_ok=True)
+    CROTALE_CLEAN.mkdir(parents=True, exist_ok=True)
+    jobs = {f"Crotale.ff.{n}.stereo.aif": PERC_URL + f"Crotales/Crotale.ff.{n}.stereo.aif"
+            for n in CROTALE_NOTES}
+    jobs.update({f"{k}.aif": PERC_URL + v for k, v in PERC_FILES.items()})
+    if not skip_download:
+        def get(item):
+            dst = PERC_RAW / item[0]
+            if not dst.exists():
+                subprocess.run(["curl", "-sS", "--retry", "3", "-o", str(dst), item[1]],
+                               check=True)
+        with ThreadPoolExecutor(8) as ex:
+            list(ex.map(get, jobs.items()))
+
+    crot = {_midi_of(n): clean(load(PERC_RAW / f"Crotale.ff.{n}.stereo.aif")).mean(axis=1)
+            for n in CROTALE_NOTES}
+    peak = max(float(np.abs(v).max()) for v in crot.values())
+    for m, v in crot.items():
+        np.save(CROTALE_CLEAN / f"m{m}.npy", (v * (0.9 / peak)).astype(np.float32))
+
+    hp = signal.butter(2, 2000.0, "highpass", fs=SR, output="sos")
+    for k in PERC_FILES:
+        x = load(PERC_RAW / f"{k}.aif")
+        if k.startswith("roll"):
+            # シェイク・ロールは鳴り続けている録音なので、頭そろえ・末尾の切り詰めはしない。
+            # 皮 (ヘッド) の低い鳴りを 2kHz の高域通過で落として、ジングルの音だけにする
+            y = signal.sosfilt(hp, x.mean(axis=1)).astype(np.float32)
+        else:
+            y = clean(x).mean(axis=1)
+        np.save(PERC_CLEAN / f"{k}.npy", (y * (0.9 / float(np.abs(y).max()))).astype(np.float32))
+    print(f"クロタル {len(crot)} 音 → {CROTALE_CLEAN} / 鈴・トライアングル {len(PERC_FILES)} 本 → {PERC_CLEAN}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--skip-download", action="store_true")
     ap.add_argument("--bells", action="store_true", help="オルゴール用の鉄琴だけを処理する")
+    ap.add_argument("--perc", action="store_true", help="クリスマスの鈴 (クロタル・トライアングル・そり鈴)")
     args = ap.parse_args()
     if args.bells:
         prepare_bells(args.skip_download)
+        return 0
+    if args.perc:
+        prepare_perc(args.skip_download)
         return 0
     if not args.skip_download:
         download()

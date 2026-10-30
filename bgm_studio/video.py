@@ -139,6 +139,32 @@ def encode_visual_loop(scene: str, out_path: str | Path, seed: int = 0,
     return out_path
 
 
+def transcode_visual_loop(src: str | Path, out_path: str | Path, crf: int = 24,
+                          maxrate: str = "400k", bufsize: str = "4M",
+                          out_size: tuple[int, int] | None = None) -> Path:
+    """
+    書き出し済みのループ映像を、別のビットレート・大きさで作り直す。
+    シーンを描き直すと 1 本 20 分かかる (雪のクリスマスの窓) が、これなら数十秒で済む。
+    IDR の位置は encode_visual_loop と同じ決め方にする (コピー連結で崩れないように)
+    """
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    keyint = max(V.FPS * 10, 1)
+    cmd = [
+        ffmpeg_exe(), "-y", "-hide_banner", "-loglevel", "error", "-i", str(src),
+        *(["-vf", f"scale={out_size[0]}:{out_size[1]}:flags=lanczos"] if out_size else []),
+        "-an", "-c:v", "libx264", "-preset", "slow",
+        "-crf", str(crf), "-maxrate", maxrate, "-bufsize", bufsize,
+        "-pix_fmt", "yuv420p",
+        "-g", str(keyint), "-keyint_min", str(keyint), "-sc_threshold", "0",
+        "-movflags", "+faststart", str(out_path),
+    ]
+    p = subprocess.run(cmd, capture_output=True, text=True)
+    if p.returncode != 0:
+        raise RuntimeError(f"x264 transcode failed:\n{p.stderr[-2000:]}")
+    return out_path
+
+
 def mux_looped(visual_mp4: str | Path, audio_m4a: str | Path,
                out_path: str | Path, total_seconds: float,
                visual_seconds: int = V.LOOP_SECONDS) -> Path:

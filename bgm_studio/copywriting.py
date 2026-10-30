@@ -969,6 +969,155 @@ minutes each.
 For Christmas Eve, decorating the tree, bedtime in December, or a cozy winter night.
 """
 
+# 2026-10-30 クリスマス第 2 弾
+DESCRIPTIONS["x03_christmas_bells"] = """\
+🔔 CHRISTMAS PIANO & SLEIGH BELLS — {duration} of joyful Christmas carols
+
+Ten cheerful Christmas carols on a warm piano, with soft sleigh bells keeping time,
+a little bell sparkling on the long notes, and a triangle at the start of each verse.
+About twelve minutes each, while snow falls around a glowing Christmas tree.
+
+00:00 Jingle Bells
+12:00 Deck the Halls
+24:00 Ding Dong Merrily on High
+36:00 I Saw Three Ships
+48:00 We Wish You a Merry Christmas
+1:00:00 Good King Wenceslas
+1:12:00 Go Tell It on the Mountain
+1:24:00 God Rest Ye Merry, Gentlemen
+1:36:00 Joy to the World
+1:48:00 Hark! The Herald Angels Sing
+
+▸ Real recorded piano and bells — no synthesizers, no background noise
+▸ The bells rest every few verses, so it stays easy to listen to for hours
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are traditional or in the public domain. Arrangement and sound
+  made for this channel.
+
+For decorating the tree, baking cookies, wrapping presents, or a cozy Christmas morning.
+"""
+
+DESCRIPTIONS["x04_christmas_calm"] = """\
+🌙 CALM CHRISTMAS PIANO — {duration} of peaceful carols
+
+Ten of the gentlest Christmas carols, played slowly and softly on a real piano,
+with a long, warm reverb and a tiny bell on the last note of each verse.
+About twelve minutes each.
+
+00:00 Silent Night
+12:00 O Little Town of Bethlehem
+24:00 Away in a Manger
+36:00 What Child Is This
+48:00 O Holy Night
+1:00:00 In the Bleak Midwinter
+1:12:00 It Came Upon the Midnight Clear
+1:24:00 Infant Holy, Infant Lowly
+1:36:00 Once in Royal David's City
+1:48:00 The First Noel
+
+▸ Soft piano only — no drums, no rain, no background noise
+▸ Slow, steady tempo with nothing sudden, for relaxing or falling asleep
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are traditional or in the public domain. Arrangement and sound
+  made for this channel.
+
+For a quiet Christmas Eve, reading by the tree, or winding down on a December night.
+"""
+
+DESCRIPTIONS["x08_christmas_carols_2_musicbox"] = """\
+🎁 CHRISTMAS MUSIC BOX VOL. 2 — {duration} of Christmas carols
+
+Ten more Christmas carols on a music box, high and soft like the tune inside a
+snow globe, with a quiet piano underneath. About twelve minutes each.
+(Vol. 1 has Silent Night, Jingle Bells, Joy to the World and more.)
+
+00:00 Jingle Bells
+12:00 O Little Town of Bethlehem
+24:00 Ding Dong Merrily on High
+36:00 What Child Is This
+48:00 I Saw Three Ships
+1:00:00 In the Bleak Midwinter
+1:12:00 Good King Wenceslas
+1:24:00 It Came Upon the Midnight Clear
+1:36:00 Infant Holy, Infant Lowly
+1:48:00 Once in Royal David's City
+
+▸ Music box with a soft piano — no rain, no crackle, no background noise
+▸ Every carol stays in one calm tempo, then moves gently into the next
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are traditional or in the public domain. Arrangement and sound
+  made for this channel.
+
+For Christmas Eve, bedtime in December, or a cozy winter night.
+"""
+
+DESCRIPTIONS["x05_jingle_bells_sleigh"] = """\
+🔔 JINGLE BELLS — {duration} of piano & sleigh bells
+
+The whole song — "Dashing through the snow" and the famous chorus — on a warm
+piano, with soft sleigh bells, a little bell sparkle and a triangle, for a full hour.
+
+▸ Real recorded piano and bells — no synthesizers, no background noise
+▸ The arrangement changes every couple of choruses; the key and tempo stay the same
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are traditional or in the public domain. Arrangement and sound
+  made for this channel.
+
+For decorating, holiday baking, Christmas parties, or a happy December morning.
+"""
+
+DESCRIPTIONS["x09_we_wish_you_bells"] = """\
+🔔 WE WISH YOU A MERRY CHRISTMAS — {duration} of piano & sleigh bells
+
+The best-known Christmas greeting song, on a warm piano with soft sleigh bells,
+a little bell sparkle and a triangle, for a full hour.
+
+▸ Real recorded piano and bells — no synthesizers, no background noise
+▸ The arrangement changes every couple of choruses; the key and tempo stay the same
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are traditional or in the public domain. Arrangement and sound
+  made for this channel.
+
+For Christmas parties, wrapping presents, or a cheerful December afternoon.
+"""
+
+DESCRIPTIONS["x06_silent_night_piano"] = """\
+🌙 SILENT NIGHT — {duration} of calm Christmas piano
+
+"Silent Night" (Franz Gruber, 1818), played very slowly and softly on a real piano,
+with a long, warm reverb and a tiny bell on the last note of each verse.
+
+▸ Soft piano only — no rain, no hiss, no background noise
+▸ One calm key and tempo for the whole hour, with nothing sudden
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are traditional or in the public domain. Arrangement and sound
+  made for this channel.
+
+For a quiet Christmas Eve, prayer and reflection, or falling asleep on a winter night.
+"""
+
+DESCRIPTIONS["x07_o_holy_night_piano"] = """\
+🌟 O HOLY NIGHT — {duration} of calm Christmas piano
+
+"O Holy Night" (Adolphe Adam, 1847), played slowly and softly on a real piano,
+with a long, warm reverb and a tiny bell on the last note of each verse.
+
+▸ Soft piano only — no rain, no hiss, no background noise
+▸ One calm key and tempo for the whole hour, with nothing sudden
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are traditional or in the public domain. Arrangement and sound
+  made for this channel.
+
+For a quiet Christmas Eve, candlelight, or a peaceful December night.
+"""
+
 # 2026-10-29 海外でよく知られた子守唄 (ピアノ版とオルゴール版)
 DESCRIPTIONS["n12_brahms_lullaby"] = """\
 🌙 BRAHMS' LULLABY — {duration} of soft piano lullaby

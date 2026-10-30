@@ -96,6 +96,8 @@ NURSERY: dict[str, dict] = {
         # 旋律が F5 まで上がるので、オルゴール版は G 長調に下げ (最高音 F6 → C6)、
         # 旋律を控えめにする (2 分の試作で 500Hz +16 / 4kHz -14 と前に出すぎた)
         mb_trans=-5, mb_lg=0.75,
+        # 1 拍 = 8 分音符で書いてあり、もとからゆっくりなので、やすらぎ版でも遅くしない
+        calm_tempo=1.0,
         tune="G/1.5 A/.5 G/1 E/3 G/1.5 A/.5 G/1 E/3 D5/2 D5/1 B/3 C5/2 C5/1 G/3 "
              "A/2 A/1 C5/1.5 B/.5 A/1 G/1.5 A/.5 G/1 E/3 "
              "A/2 A/1 C5/1.5 B/.5 A/1 G/1.5 A/.5 G/1 E/3 "
@@ -258,6 +260,153 @@ NURSERY: dict[str, dict] = {
              "C5/1 B/1 C5/1 D5/1 C5/2 G/1 E5/1 "
              "E5/1 D5/1 E5/1 F5/1 E5/2 D5/1 E5/1 F5/1 E5/1 D5/1 C5/1 B/2 C5/1 F5/1 "
              "E5/2 D5/1.5 C5/.5 C5/3 R/1"),
+    # ── クリスマス曲 第 2 弾 (2026-10-30 追加) ─────────────────────────
+    # Paul Hardy's Xmas Tunebook (pghardy.net, ABC 記譜) の旋律と和音記号を
+    # abc_import.py で機械的に読み込んだもの (手で書き写さない)。元の ABC は
+    # data/xmas_carols_source.abc に保存。trans はピアノ版を元の調の高さに、
+    # mb_trans はオルゴール版の旋律を C5〜D6 あたりに収めるための移調
+    "c09_jingle_bells_full": dict(
+        # 原調 G。前奏の歌 (Dashing through the snow) からの全曲 (X:10002)
+        title='Jingle Bells', bar=4, bpm=96, visual="christmas_window",
+        trans=-6, mb_trans=-3,
+        chords="C C C F Dm G7 G7 C C C C F Dm C G7 C,G7 C C C C F C D7 G7 C C C C F C G7 C",
+        tune="G4/1 E5/1 D5/1 C5/1 G4/3 G4/0.5 G4/0.5 G4/1 E5/1 D5/1 C5/1 A4/4 A4/1 F5/1 E5/1 D5/1 "
+             "B4/3 R/0.5 B4/0.5 G5/1 G5/1 F5/1 D5/1 E5/3 R/0.5 G4/0.5 G4/1 E5/1 D5/1 C5/1 G4/3 "
+             "R/0.5 G4/0.5 G4/1 E5/1 D5/1 C5/1 A4/3 R/0.5 A4/0.5 A4/1 F5/1 E5/1 D5/1 G5/1 G5/1 "
+             "G5/1 G5/1 A5/1 G5/1 F5/1 D5/1 C5/2 G5/2 E5/1 E5/1 E5/2 E5/1 E5/1 E5/2 E5/1 G5/1 "
+             "C5/1.5 D5/0.5 E5/4 F5/1 F5/1 F5/1.5 F5/0.5 F5/1 E5/1 E5/1 E5/0.5 E5/0.5 E5/1 D5/1 "
+             "D5/1 E5/1 D5/2 G5/2 E5/1 E5/1 E5/2 E5/1 E5/1 E5/2 E5/1 G5/1 C5/1.5 D5/0.5 E5/4 F5/1 "
+             "F5/1 F5/1.5 F5/0.5 F5/1 E5/1 E5/1 E5/0.5 E5/0.5 G5/1 G5/1 F5/1 D5/1 C5/2 R/2"),
+    "c10_ding_dong_merrily": dict(
+        # 原調 G。16 世紀フランスの舞曲 (Branle de l'Official) (X:4001)
+        title='Ding Dong Merrily on High', bar=4, bpm=80, visual="christmas_window",
+        trans=-2, mb_trans=-5,
+        chords="C,G C F,G7 C C,G C F,G7 C C,Am Dm,G7 C,Am Dm,G7 Am,F G F,G7 C C,Am Dm,G7 C,Am Dm,G7 "
+               "Am,F G F,G7 C",
+        tune="C5/1 C5/1 D5/0.5 C5/0.5 B4/0.5 A4/0.5 G4/3 G4/1 A4/1 C5/1 C5/1 B4/1 C5/2 C5/2 C5/1 "
+             "C5/1 D5/0.5 C5/0.5 B4/0.5 A4/0.5 G4/3 G4/1 A4/1 C5/1 C5/1 B4/1 C5/2 C5/2 G5/1.5 "
+             "F5/0.5 E5/0.5 F5/0.5 G5/0.5 E5/0.5 F5/1.5 E5/0.5 D5/0.5 E5/0.5 F5/0.5 D5/0.5 E5/1.5 "
+             "D5/0.5 C5/0.5 D5/0.5 E5/0.5 C5/0.5 D5/1.5 C5/0.5 B4/0.5 C5/0.5 D5/0.5 B4/0.5 C5/1.5 "
+             "B4/0.5 A4/0.5 B4/0.5 C5/0.5 A4/0.5 B4/1.5 A4/0.5 G4/1 G4/1 A4/1 C5/1 C5/1 B4/1 C5/2 "
+             "C5/2 G5/1.5 F5/0.5 E5/0.5 F5/0.5 G5/0.5 E5/0.5 F5/1.5 E5/0.5 D5/0.5 E5/0.5 F5/0.5 "
+             "D5/0.5 E5/1.5 D5/0.5 C5/0.5 D5/0.5 E5/0.5 C5/0.5 D5/1.5 C5/0.5 B4/0.5 C5/0.5 D5/0.5 "
+             "B4/0.5 C5/1.5 B4/0.5 A4/0.5 B4/0.5 C5/0.5 A4/0.5 B4/1.5 A4/0.5 G4/1 G4/1 A4/1 C5/1 "
+             "C5/1 B4/1 C5/2 C5/2"),
+    "c11_i_saw_three_ships": dict(
+        # 原調 G。6/8 (X:9005)
+        title='I Saw Three Ships', bar=3, bpm=90, visual="christmas_window",
+        six8=True, trans=-4, mb_trans=-3,
+        chords="C C,G C,Dm C G C,G C,Dm C G,C",
+        tune="R/2.5 G4/0.5 C5/1 C5/0.5 D5/1 E5/0.5 G5/1 E5/0.5 D5/1 F5/0.5 E5/1 C5/0.5 C5/1 E5/0.5 "
+             "D5/1 B4/0.5 G4/1 G4/0.5 C5/1 C5/0.5 D5/1 E5/0.5 G5/1 E5/0.5 D5/1 F5/0.5 E5/1 C5/0.5 "
+             "C5/0.5 D5/0.5 E5/0.5 D5/1.5 C5/1 R/0.5"),
+    "c12_good_king_wenceslas": dict(
+        # 原調 G。旋律は Piae Cantiones (1582) (X:7004)
+        title='Good King Wenceslas', bar=4, bpm=84, visual="christmas_window",
+        trans=-2, mb_trans=-5,
+        chords="C C F,G7 C C C F,G7 C C Am F,G7 C G C,G7 C Am,F C",
+        tune="C5/1 C5/1 C5/1 D5/1 C5/1 C5/1 G4/2 A4/1 G4/1 A4/1 B4/1 C5/2 C5/2 C5/1 C5/1 C5/1 D5/1 "
+             "C5/1 C5/1 G4/2 A4/1 G4/1 A4/1 B4/1 C5/2 C5/2 G5/1 F5/1 E5/1 D5/1 E5/1 D5/1 C5/2 A4/1 "
+             "G4/1 A4/1 B4/1 C5/2 C5/2 G4/1 G4/1 A4/1 B4/1 C5/1 C5/1 D5/2 G5/1 F5/1 E5/1 D5/1 C5/2 "
+             "F5/2 C5/4"),
+    "c13_god_rest_ye_merry": dict(
+        # 原調 E 短調 → A 短調 (X:7003)
+        title='God Rest Ye Merry, Gentlemen', bar=4, bpm=84, visual="christmas_window",
+        trans=-4, mb_trans=-5,
+        chords="Am Am Am,G F,G E7,E7,E7,Am Am Am,G F,G E Dm C Am G C E7 Am G C E7 Am",
+        # 元の和音記号は 4 小節ごとに 1 つだけで、下降する旋律 (C B A G) の下で Am が
+        # 鳴り続けてぶつかった。前半 8 小節だけ 2 拍ごとの和音に補った
+        tune="R/3 A4/1 A4/1 E5/1 E5/1 D5/1 C5/1 B4/1 A4/1 G4/1 A4/1 B4/1 C5/1 D5/1 E5/3 A4/1 A4/1 "
+             "E5/1 E5/1 D5/1 C5/1 B4/1 A4/1 G4/1 A4/1 B4/1 C5/1 D5/1 E5/2 R/1 E5/1 F5/1 D5/1 E5/1 "
+             "F5/1 G5/1 A5/1 E5/1 D5/1 C5/1 A4/1 B4/1 C5/1 D5/2 C5/1 D5/1 E5/2 F5/1 E5/1 E5/1 D5/1 "
+             "C5/1 B4/1 A4/2 C5/0.5 B4/0.5 A4/1 D5/2 C5/1 D5/1 E5/1 F5/1 G5/1 A5/1 E5/1 D5/1 C5/1 "
+             "B4/1 A4/3 R/1"),
+    "c14_go_tell_it": dict(
+        # 原調 G。アフリカ系アメリカ人の霊歌 (X:7005)
+        title='Go Tell It on the Mountain', bar=4, bpm=84, visual="christmas_window",
+        trans=-4, mb_trans=-5,
+        chords="C C G C,G7 C C C,G7 C C C G7 C C C D G,G7",
+        tune="E5/2 E5/0.75 D5/0.25 C5/0.75 A4/0.25 G4/2 C5/2 D5/0.5 D5/1 D5/0.5 C5/1 D5/1 E5/1 "
+             "G5/1 A5/1 G5/1 E5/2 E5/0.75 D5/0.25 C5/0.75 A4/0.25 G4/2 C5/1.5 D5/0.5 E5/1 E5/1 "
+             "D5/0.75 C5/0.25 D5/1 C5/3 C5/1 E5/1 G5/1 G5/1 A5/1 G5/1 E5/2 C5/1 D5/1 D5/1 C5/1 "
+             "D5/1 E5/3 C5/1 E5/1 G5/1 G5/1 A5/1 G5/1 E5/2 C5/1 D5/1 D5/1 C5/1 A4/1 G4/2 F5/2"),
+    "c15_o_holy_night": dict(
+        # 原調 D。Adolphe Adam (1847)。6/8 (X:15003)
+        title='O Holy Night', bar=3, bpm=66, visual="christmas_window",
+        six8=True, trans=3, mb_trans=-7,
+        chords="C C F C C C G C C C C F C C Em B Em Em G G C C G G C C Am Am Em Em Dm Dm Am Am C G C "
+               "F C G C C G G C C,G C G C C",
+        tune="E4/1.5 E4/1 E4/0.5 G4/2.5 G4/0.5 A4/1 A4/0.5 F4/1 A4/0.5 C5/3 G4/1 G4/0.5 E4/1 "
+             "D4/0.5 C4/1.5 E4/1 F4/0.5 G4/1.5 F4/1 D4/0.5 C4/5 R/1 E4/1.5 E4/1 E4/0.5 G4/2.5 "
+             "G4/0.5 A4/1 A4/0.5 F4/1 A4/0.5 C5/3 G4/1 G4/0.5 F#4/1 E4/0.5 B4/1.5 G4/1 A4/0.5 "
+             "B4/1.5 C5/1 B4/0.5 E4/4.5 R/1 G4/0.5 G4/1.5 A4/1.5 D4/1.5 G4/1.5 A4/1 G4/0.5 C5/1 "
+             "E4/0.5 A4/1.5 G4/1 G4/0.5 G4/1.5 A4/1.5 D4/1.5 G4/1.5 A4/1 G4/0.5 C5/1 E4/0.5 G4/2.5 "
+             "R/0.5 C5/4 R/0.5 B4/1 A4/0.5 B4/4 R/0.5 B4/1.5 D5/3.5 R/0.5 A4/0.5 A4/1 A4/0.5 "
+             "C5/4.5 R/1 C5/0.5 E5/3 D5/2.5 G4/0.5 C5/4 R/0.5 B4/1 A4/0.5 G4/3.5 R/0.5 G4/0.5 A4/1 "
+             "G4/0.5 G4/4 R/0.5 C5/1.5 D5/4 R/0.5 G4/1.5 E5/4.5 D5/1.5 C5/2.5 R/0.5 B4/1.5 C5/1 "
+             "D5/0.5 C5/5 R/1"),
+    "c16_o_little_town": dict(
+        # 原調 G。Lewis Redner (1868) (X:15004)
+        title='O Little Town of Bethlehem', bar=4, bpm=66, visual="christmas_window",
+        trans=-4, mb_trans=-5,
+        chords="G C,Am Dm,C F,G C,C,C,G C,Am Dm,C F,G C C C Am,D7 G C,Am Dm,C F,G C",
+        tune="R/3 G4/1 C5/1 C5/1 C5/1 D5/1 E5/0.5 D5/0.5 E5/0.5 F5/0.5 G5/1 E5/1 F5/1 E5/0.5 "
+             "C5/0.5 D5/1 D5/1 C5/3 G4/1 C5/1 C5/1 C5/1 D5/1 E5/0.5 D5/0.5 E5/0.5 F5/0.5 G5/1 E5/1 "
+             "F5/1 E5/0.5 C5/0.5 D5/1 D5/1 C5/3 C5/0.5 E5/0.5 G5/1.5 A5/0.5 G5/0.5 F5/0.5 E5/0.5 "
+             "D5/0.5 C5/0.5 D5/0.5 E5/0.5 F5/0.5 G5/1 G4/1 C5/1 E5/1 D5/1 C5/1 G4/2 R/1 G4/1 C5/1 "
+             "C5/1 C5/1 D5/1 E5/0.5 D5/0.5 E5/0.5 F5/0.5 G5/1 E5/1 F5/1 E5/0.5 C5/0.5 D5/1 D5/1 "
+             "C5/3 R/1"),
+    "c17_midnight_clear": dict(
+        # 原調 G。Richard Willis (1850) (X:9006)
+        title='It Came Upon the Midnight Clear', bar=4, bpm=72, visual="christmas_window",
+        trans=-6, mb_trans=-3,
+        chords="C C,Am F,G C,F C C,Am F,G C,G C E7 Am D7 G C,Am F,G C,G C",
+        tune="R/3 C5/0.5 D5/0.5 E5/1 D5/1 C5/1 D5/0.5 E5/0.5 F5/1 E5/1 D5/1 G5/1 G5/1 E5/1 F5/0.5 "
+             "G5/0.5 A5/1 G5/3 E5/0.5 F5/0.5 G5/1 G5/1 E5/1 C5/1 F5/1 E5/1 D5/1 C5/0.5 D5/0.5 "
+             "E5/0.5 F5/0.5 G5/1 E5/1 D5/1 C5/3 C5/1 B4/1 A4/1 B4/1 D5/1 C5/1.5 B4/0.5 A4/1 E5/1 "
+             "D5/1 C5/1 B4/1 A4/1 G4/3 G4/1 G5/1 F5/1 E5/1 D5/0.5 E5/0.5 F5/1 E5/1 D5/1 C5/0.5 "
+             "D5/0.5 E5/0.5 F5/0.5 G5/1 E5/1 D5/1 C5/3 R/1"),
+    "c18_what_child": dict(
+        # 原調 E 短調 → A 短調。旋律は Greensleeves (X:23003)
+        title='What Child Is This', bar=3, bpm=78, visual="christmas_window",
+        trans=-1, mb_trans=-6,
+        chords="Am Am Am G G Am Am E7 E7 Am Am G G Am E7 Am Am C C G G Am Am E7 E7 C C G G Am E7 Am "
+               "Am",
+        tune="R/2 A4/1 C5/2 D5/1 E5/1.5 F5/0.5 E5/1 D5/2 B4/1 G4/1.5 A4/0.5 B4/1 C5/2 A4/1 A4/1.5 "
+             "Ab4/0.5 A4/1 B4/2 Ab4/1 E4/2 A4/1 C5/2 D5/1 E5/1.5 F5/0.5 E5/1 D5/2 B4/1 G4/1.5 "
+             "A4/0.5 B4/1 C5/1.5 B4/0.5 A4/1 Ab4/1.5 F#4/0.5 Ab4/1 A4/5 R/1 G5/3 G5/1.5 F#5/0.5 "
+             "E5/1 D5/2 B4/1 G4/1.5 A4/0.5 B4/1 C5/2 A4/1 A4/1.5 Ab4/0.5 A4/1 B4/2 Ab4/1 E4/3 G5/3 "
+             "G5/1.5 F#5/0.5 E5/1 D5/2 B4/1 G4/1.5 A4/0.5 B4/1 C5/2 A4/1 Ab4/1.5 F#4/0.5 Ab4/1 "
+             "A4/5 R/1"),
+    "c19_bleak_midwinter": dict(
+        # 原調 G。Gustav Holst (1906、作曲者は 1934 年没) (X:9003)
+        title='In the Bleak Midwinter', bar=4, bpm=60, visual="christmas_window",
+        trans=-6, mb_trans=-3,
+        chords="C Am Dm G C Am Dm,G7 C F Dm,Am C G C Am Dm,G C",
+        tune="E5/1.5 F5/0.5 G5/1 E5/1 D5/2 C5/1 R/1 D5/1.5 E5/0.5 D5/1 A4/1 D5/3 R/1 E5/1.5 F5/0.5 "
+             "G5/1 E5/1 D5/2 C5/1 R/1 D5/1 E5/1 D5/1.5 C5/0.5 C5/4 F5/1.5 E5/0.5 F5/1 G5/1 A5/2 "
+             "E5/2 G5/1 E5/1 D5/1 C5/1 B4/3 R/1 E5/1.5 F5/0.5 G5/1 E5/1 D5/2 C5/1 R/1 D5/1 E5/1 "
+             "D5/1.5 C5/0.5 C5/4"),
+    "c20_royal_davids_city": dict(
+        # 原調 G。Henry Gauntlett (1849) (X:15005)
+        title="Once in Royal David's City", bar=4, bpm=66, visual="christmas_window",
+        trans=-2, mb_trans=-7,
+        chords="G7,C G7,C Am,C Dm,G7,C,C G7,C G7,C Am,C Dm,G7,C,C F,C Dm,G7,C,C F,C Dm,G7,C,C",
+        tune="G4/1 B4/1 C5/1.5 C5/0.5 C5/0.5 B4/0.5 C5/0.5 D5/0.5 D5/1 C5/1 C5/1 E5/1 G5/1.5 "
+             "E5/0.5 E5/0.5 D5/0.5 C5/0.5 B4/0.5 C5/2 G4/1 B4/1 C5/1.5 C5/0.5 C5/0.5 B4/0.5 C5/0.5 "
+             "D5/0.5 D5/1 C5/1 C5/1 E5/1 G5/1.5 E5/0.5 E5/0.5 D5/0.5 C5/0.5 B4/0.5 C5/2 A5/1 A5/1 "
+             "G5/1.5 C5/0.5 F5/1 F5/1 E5/2 A5/1 A5/1 G5/1.5 E5/0.5 E5/0.5 D5/0.5 C5/0.5 B4/0.5 "
+             "C5/2"),
+    "c21_infant_holy": dict(
+        # 原調 G。ポーランドの伝承曲 (X:9004)
+        title='Infant Holy, Infant Lowly', bar=3, bpm=72, visual="christmas_window",
+        trans=-4, mb_trans=-3,
+        chords="C G C,C,F C C G C,C,F C F G C F,G7,G7 C,C,F C C,C,F C",
+        tune="G4/0.5 G4/0.5 C5/1 C5/1 B4/0.5 C5/0.5 D5/1 D5/1 E5/0.5 F5/0.5 G5/1 F5/1 E5/0.5 "
+             "D5/0.5 C5/2 G4/0.5 G4/0.5 C5/1 C5/1 B4/0.5 C5/0.5 D5/1 D5/1 E5/0.5 F5/0.5 G5/1 F5/1 "
+             "E5/0.5 D5/0.5 C5/2 C5/0.5 B4/0.5 A4/1 A4/1 D5/0.5 C5/0.5 B4/1 B4/1 E5/0.5 D5/0.5 "
+             "C5/1 C5/1 F5/0.5 E5/0.5 D5/1 D5/1 E5/0.5 F5/0.5 G5/1 F5/1 E5/0.5 D5/0.5 C5/2 E5/0.5 "
+             "F5/0.5 G5/1 F5/1 E5/0.5 D5/0.5 C5/2"),
 }
 
 # 使う和音 (ルート pc, 構成音 pc)。ハ長調の主要三和音 + 副三和音
@@ -271,6 +420,24 @@ _CHORDS = {
 }
 
 
+_ROOTS = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
+_QUALITY = {"": (0, 4, 7), "m": (0, 3, 7), "7": (0, 4, 10), "m7": (0, 3, 10),
+            "maj7": (0, 4, 11), "dim": (0, 3, 6), "6": (0, 4, 9), "sus4": (0, 5, 7)}
+
+
+def _chord_def(name: str) -> tuple[int, tuple[int, int, int]]:
+    """和音名 → (根音, 構成音 3 つ)。表に無い名前 ("E" "B" "F#m" など) は名前から作る"""
+    if name in _CHORDS:
+        return _CHORDS[name]
+    root = _ROOTS[name[0]]
+    rest = name[1:]
+    if rest[:1] in ("#", "b"):
+        root += 1 if rest[0] == "#" else -1
+        rest = rest[1:]
+    root %= 12
+    return root, tuple((root + iv) % 12 for iv in _QUALITY[rest])
+
+
 def chords_from_spec(spec: str, bar_beats: int) -> list[tuple[float, float, str]]:
     """
     "C C G7,C ..." (1 小節 1 語。"," で区切るとその小節を等分) を和声区間の列にする。
@@ -281,7 +448,7 @@ def chords_from_spec(spec: str, bar_beats: int) -> list[tuple[float, float, str]
         parts = tok.split(",")
         seg = bar_beats / len(parts)
         for name in parts:
-            assert name in _CHORDS, name
+            _chord_def(name)            # 知らない和音名ならここで落とす
             out.append((t, seg, name))
             t += seg
     return out
@@ -323,7 +490,7 @@ def harmonize(tune: list, bar_beats: int) -> list[tuple[float, float, str]]:
         t += d
 
     def emit(si: int, name: str) -> float:
-        pcs = _CHORDS[name][1]
+        pcs = _chord_def(name)[1]
         sc = 0.0
         for pc, ov, pos in segs[si]:
             strong = pos < 1e-6
@@ -402,13 +569,52 @@ MUSIC_BOX_ARRANGEMENTS = [
 ]
 MUSIC_BOX_SUFFIX = "_musicbox"
 
+# 鈴入り版 (…_bells, 2026-10-30)。オーナーの依頼「ピアノやオルゴールに加えて、鈴の音など
+# より楽しみを感じる動画も」。旋律はピアノのまま、
+#   ・そり鈴 (タンバリンのジングルの録音) を拍に合わせて軽く振る
+#   ・伴奏を「ベース → 和音」の弾む形 (bounce) にする
+#   ・長くのばす旋律の音に、小さな鈴 (クロタル) のきらめきを 2 オクターブ上で添える
+#   ・コーラスの頭でトライアングルを 1 回
+# ずっと鳴らし続けると疲れるので、4 つの編曲のうち 1 つは鈴を休む
+BELLS_SUFFIX = "_bells"
+BELLS_ARRANGEMENTS = [
+    dict(lead="soft_piano", acc="bounce", lg=0.42, ag=0.12, sleigh="beat", sparkle=True,
+         double=12, double_inst="music_box"),
+    dict(lead="soft_piano", acc="broken", lg=0.44, ag=0.11, sleigh="back"),
+    dict(lead="soft_piano", acc="bounce", lg=0.42, ag=0.12, sleigh="beat", sparkle=True),
+    dict(lead="soft_piano", acc="block", lg=0.44, ag=0.10),
+]
+# やすらぎ版 (…_calm)。依頼「もっと心が安らぐ」。同じピアノを 1 割ゆっくり、少し弱く、
+# 響きを長くし、曲の終わりの音にだけ小さな鈴を添える
+CALM_SUFFIX = "_calm"
+CALM_ARRANGEMENTS = [
+    dict(lead="soft_piano", acc="broken", lg=0.42, ag=0.10, sparkle_last=True),
+    dict(lead="soft_piano", acc="block", lg=0.42, ag=0.09, double=12, double_inst="music_box",
+         sparkle_last=True),
+]
+CALM_TEMPO = 0.9
+# 鈴の音量 (旋律のピアノに対する倍率)。2 分の試作で 0.10 ではそり鈴が聞こえないほど小さく
+# (4〜8kHz 帯が基準帯の -48dB)、市販のクリスマス曲の「後ろで鳴っている鈴」くらいに上げた
+SLEIGH_GAIN = 0.32
+TRIANGLE_GAIN = 0.075
+SPARKLE_GAIN = 0.75
+
+
+def split_mode(slug: str) -> tuple[str, str]:
+    """'c09_jingle_bells_full_bells' → ('c09_jingle_bells_full', 'bells')"""
+    for suf, mode in ((MUSIC_BOX_SUFFIX, "musicbox"), (BELLS_SUFFIX, "bells"),
+                      (CALM_SUFFIX, "calm")):
+        if slug.endswith(suf):
+            return slug[: -len(suf)], mode
+    return slug, ""
+
 CHORUSES_PER_ARRANGEMENT = 2
 BREATH_S = 2.4                           # コーラス間の息継ぎ
 
 
 def _chord_notes(name: str, trans: int) -> tuple[int, list[int]]:
     """和音の (ベース音 midi, 中音域の構成音 midi 3 つ)"""
-    root, pcs = _CHORDS[name]
+    root, pcs = _chord_def(name)
     bass = 36 + root + trans
     mids = []
     for pc in pcs:
@@ -434,9 +640,14 @@ def build_nursery(spec, seconds: float):
     """童謡 1 曲を、アレンジを変えながら `seconds` の間くり返す"""
     from . import tracks as TR
 
-    is_mb = spec.slug.endswith(MUSIC_BOX_SUFFIX)
-    song = NURSERY[spec.slug.removesuffix(MUSIC_BOX_SUFFIX)]
-    arrangements = MUSIC_BOX_ARRANGEMENTS if is_mb else ARRANGEMENTS
+    base, mode = split_mode(spec.slug)
+    is_mb = mode == "musicbox"
+    song = NURSERY[base]
+    arrangements = {"musicbox": MUSIC_BOX_ARRANGEMENTS, "bells": BELLS_ARRANGEMENTS,
+                    "calm": CALM_ARRANGEMENTS}.get(mode, ARRANGEMENTS)
+    tempo = song.get("calm_tempo", CALM_TEMPO) if mode == "calm" else 1.0
+    vel_mean = {"calm": 0.46, "bells": 0.52}.get(mode, 0.50)
+    six8 = bool(song.get("six8"))
     tune = parse_tune(song["tune"])
     bar_beats = song["bar"]
     chords = (chords_from_spec(song["chords"], bar_beats) if song.get("chords")
@@ -452,7 +663,8 @@ def build_nursery(spec, seconds: float):
     rng = np.random.default_rng(spec.seed)
     sr = dsp.SR
 
-    bars = max(int(seconds / (4 * 60.0 / song["bpm"])), 4)
+    bpm = song["bpm"] * tempo
+    bars = max(int(seconds / (4 * 60.0 / bpm)), 4)
     clock = Clock(total_seconds=seconds, bars=bars, beats_per_bar=4)
     n = clock.n_samples
     bank = I.SampleBank(seed=spec.seed, n_variants=3)
@@ -464,7 +676,7 @@ def build_nursery(spec, seconds: float):
     # 無音になっていた。コーラス数を決めてから速さを数 % だけ合わせる。
     head, tail = 0.8, 3.0
     avail = seconds - head - tail
-    beat0 = 60.0 / song["bpm"]
+    beat0 = 60.0 / bpm
     pass0 = total_beats * beat0
     n_pass = max(int(round((avail + BREATH_S) / (pass0 + BREATH_S))), 1)
     beat_s = (avail - (n_pass - 1) * BREATH_S) / (n_pass * total_beats)
@@ -476,10 +688,12 @@ def build_nursery(spec, seconds: float):
 
         # ── 旋律 ───────────────────────────────────────
         b = 0.0
-        for midi, d in tune:
+        last_i = max(i for i, (m, _) in enumerate(tune) if m is not None)
+        for i, (midi, d) in enumerate(tune):
             if midi is not None:
                 tt = t + b * beat_s + float(rng.normal(0, 0.006))
-                vel = float(np.clip(rng.normal(0.50, 0.04), 0.38, 0.62))
+                vel = float(np.clip(rng.normal(vel_mean, 0.04), vel_mean - 0.12,
+                                    vel_mean + 0.12))
                 pos = int(round(tt * sr))
                 lm = midi + arr.get("octave", 0) + mb_trans
                 A.add_panned(buf, bank.note(arr["lead"], lm, vel), pos,
@@ -488,7 +702,33 @@ def build_nursery(spec, seconds: float):
                     A.add_panned(buf, bank.note(arr["double_inst"],
                                                 lm + arr["double"], vel * 0.6),
                                  pos, arr["lg"] * 0.40, 0.12)
+                # 鈴のきらめき: のばす音 (1.5 拍以上) か、曲の最後の音に小さな鈴を重ねる
+                if ((arr.get("sparkle") and d >= 1.5)
+                        or (arr.get("sparkle_last") and i == last_i)):
+                    cm = lm + 12
+                    while cm < 84:
+                        cm += 12
+                    A.add_panned(buf, bank.note("crotale", cm, 0.40), pos,
+                                 arr["lg"] * SPARKLE_GAIN, 0.30)
             b += d
+
+        # ── そり鈴とトライアングル (鈴入り版) ─────────────────────
+        if arr.get("sleigh"):
+            if six8:
+                grid = [(x, x % 3 == 1.5) for x in np.arange(0, total_beats, 1.5)]
+            elif bar_beats == 3:
+                grid = [(x, x % 3 != 0) for x in np.arange(0, total_beats, 1.0)]
+            else:
+                grid = [(x, x % 2 == 1) for x in np.arange(0, total_beats, 1.0)]
+            for x, accent in grid:
+                if arr["sleigh"] == "back" and not accent:
+                    continue
+                sv = (0.85 if accent else 0.50) * float(rng.uniform(0.9, 1.1))
+                tt = t + x * beat_s + float(rng.normal(0, 0.008))
+                A.add_panned(buf, bank.hit("sleigh_real") * sv, int(round(tt * sr)),
+                             SLEIGH_GAIN, 0.28)
+            A.add_panned(buf, bank.hit("triangle", size=6), int(round(t * sr)),
+                         TRIANGLE_GAIN, -0.3)
 
         # ── 伴奏 (和声区間ごと) ───────────────────────────
         for (seg_start, seg_len, cname) in chords:
@@ -502,6 +742,23 @@ def build_nursery(spec, seconds: float):
                 for si in range(int(seg_len)):
                     A.add_panned(buf, bank.note("soft_piano", notes[si % 4], 0.32),
                                  int(round((seg_t + si * beat_s) * sr)), ag, 0.08)
+            elif arr["acc"] == "bounce":
+                # 弾む伴奏。小節の中の位置で「ベース」か「和音」かを決める
+                # (4 拍子: 1・3 拍目ベース / 2・4 拍目和音、3 拍子: 1 拍目ベース / 2・3 拍目和音、
+                # 6/8: 1 拍目ベース / 4 つ目の 8 分音符で和音)
+                step = 1.5 if six8 else 1.0
+                for x in np.arange(0.0, seg_len - 1e-9, step):
+                    pb = (seg_start + x) % bar_beats
+                    tt = seg_t + x * beat_s
+                    if pb == 0 or (bar_beats == 4 and pb == 2):
+                        bm = bass + 12 if pb == 0 else bass + 19 - (12 if bass + 19 > 55 else 0)
+                        A.add_panned(buf, bank.note("soft_piano", bm, 0.32),
+                                     int(round(tt * sr)), ag, -0.05)
+                    else:
+                        for ci, m in enumerate(mids):
+                            A.add_panned(buf, bank.note("soft_piano", m, 0.24),
+                                         int(round((tt + 0.012 * ci) * sr)), ag * 0.8,
+                                         (-0.1, 0.05, 0.15)[ci])
             elif arr["acc"] == "block":
                 # やわらかい和音を区間の頭で 1 回 (長い区間は半分の位置でもう 1 回)。
                 # 下から少しずらして弾くと、機械的な「ジャーン」にならない
@@ -518,7 +775,8 @@ def build_nursery(spec, seconds: float):
         t += pass_s + BREATH_S
     k = n_pass
 
-    ir = dsp.make_reverb_ir(2.4, rt60=2.2, damp=0.55, predelay=0.02,
+    ir = dsp.make_reverb_ir(2.4 if mode != "calm" else 3.0,
+                            rt60=2.2 if mode != "calm" else 2.8, damp=0.55, predelay=0.02,
                             width=0.55, seed=spec.seed)
 
     def master(x):
@@ -536,7 +794,8 @@ def build_nursery(spec, seconds: float):
             x = dsp.peak_eq(x, 700.0, -float(song["mid_cut"]), q=1.0)
         # 録音ピアノ (2026-10-28〜) は 3kHz より上が少ない。空気感だけ少し足す
         if not is_mb:                     # オルゴール版は元から明るいので足さない
-            x = dsp.shelf(x, 3000.0, 4.0, kind="high")
+            # 鈴入り版は鈴が高域を足すので控えめに。やすらぎ版も少し暗めに
+            x = dsp.shelf(x, 3000.0, {"bells": 2.0, "calm": 2.5}.get(mode, 4.0), kind="high")
         else:
             # 鉄琴は基音の約 2.8 倍・5.4 倍に強い倍音がある (旋律 C5〜A5 なら 1.5〜4.7kHz)。
             # そこを棚で下げて、耳に刺さらないオルゴールにする
