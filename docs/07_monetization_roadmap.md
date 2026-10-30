@@ -151,7 +151,7 @@
 | 11/11（水） | 12:00 | 04 Cozy Coffee Shop Jazz | B | 作り直し予定 |
 | 11/12（木） | 9:00 | n09 Ode to Joy | D | 完成 |
 | 11/13（金） | 9:00 | n14 Amazing Grace（ピアノ） | D | 完成 |
-| 11/14（土） | 12:00 | 17 Christmas Jazz | C | 作り直し予定 |
+| 11/14（土） | 12:00 | **x03 Christmas Piano & Sleigh Bells（2時間）** | C | 完成（17 Christmas Jazz は 12/11 へ） |
 | 11/15（日） | 9:00 | n06 Old MacDonald | D | 完成 |
 | 11/16（月） | 9:00 | n02 Mary Had a Little Lamb（オルゴール版） | D | 送付済み |
 | 11/17（火） | 9:00 | n15 All Through the Night（ピアノ） | D | 完成 |
@@ -164,6 +164,15 @@
 | 11/24（火） | 9:00 | **n11 10 Lullabies for Babies（2時間まとめ版）** | D | 完成 |
 | 11/25（水） | 9:00 | n04 Frère Jacques（オルゴール版） | D | 送付済み |
 | 11/26（木） | 9:00 | n15 All Through the Night（オルゴール版） | D | 完成 |
+| 11/27（金） | 12:00 | x05 Jingle Bells（ピアノと鈴・1時間） | C | 完成 |
+| 11/29（日） | 12:00 | x04 Calm Christmas Piano（2時間） | C | 完成 |
+| 12/1（火） | 12:00 | x08 Christmas Music Box Vol. 2（2時間） | C | 完成 |
+| 12/3（木） | 12:00 | x09 We Wish You a Merry Christmas（ピアノと鈴・1時間） | C | 完成 |
+| 12/5（土） | 12:00 | x06 Silent Night（やすらぎのピアノ・1時間） | C | 完成 |
+| 12/7（月） | 12:00 | x07 O Holy Night（やすらぎのピアノ・1時間） | C | 完成 |
+| 12/11（金） | 12:00 | 17 Christmas Jazz | C | 作り直し予定 |
+
+クリスマスの Shorts 12 本は、`out/クリスマス_投稿ガイド.md` の表のとおり 11/8〜12/4 の 20:00 に出す。
 
 > 8時間版は、音声だけでチャットの送信上限（400MB）を超えるため、チャット経由では渡せません。
 > 4時間版までをチャットで送り、8時間版は Mac で `run_all.sh` を動かせるようになってから作ります。

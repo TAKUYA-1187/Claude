@@ -368,7 +368,7 @@ ELEGANT = {
     "x06_silent_night_piano": (["SILENT", "NIGHT"], "CALM CHRISTMAS PIANO"),
     "x07_o_holy_night_piano": (["O HOLY", "NIGHT"], "CALM CHRISTMAS PIANO"),
     "x08_christmas_carols_2_musicbox": (["CHRISTMAS", "MUSIC BOX"], "VOL. 2 · 10 MORE CAROLS"),
-    "x09_we_wish_you_bells": (["MERRY", "CHRISTMAS"], "WE WISH YOU · PIANO & BELLS"),
+    "x09_we_wish_you_bells": (["MERRY", "CHRISTMAS"], "PIANO & SLEIGH BELLS"),
     "n12_brahms_lullaby": (["BRAHMS'", "LULLABY"], "SOFT PIANO FOR BABIES"),
     "n12_brahms_lullaby_musicbox": (["BRAHMS'", "LULLABY"], "MUSIC BOX LULLABY"),
     "n13_rockabye_baby": (["ROCK-A-BYE", "BABY"], "SOFT PIANO FOR BABIES"),

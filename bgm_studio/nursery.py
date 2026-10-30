@@ -596,6 +596,11 @@ CALM_TEMPO = 0.9
 # 鈴の音量 (旋律のピアノに対する倍率)。2 分の試作で 0.10 ではそり鈴が聞こえないほど小さく
 # (4〜8kHz 帯が基準帯の -48dB)、市販のクリスマス曲の「後ろで鳴っている鈴」くらいに上げた
 SLEIGH_GAIN = 0.32
+# そり鈴は「鳴った瞬間に、そのときの音楽より何 dB 小さいか」で全曲をそろえる。
+# 鈴の大きさを固定にすると、旋律の大きい曲ほど鈴が埋もれた (Jingle Bells で -15dB、
+# We Wish You で -22dB)。全体のエネルギー比でそろえても、拍子で鈴の数が違うので -15〜-24dB
+# にばらついた。Jingle Bells で聞きやすかった -15dB に合わせる
+SLEIGH_AT_HIT_DB = -15.0
 TRIANGLE_GAIN = 0.075
 SPARKLE_GAIN = 0.75
 
@@ -669,6 +674,7 @@ def build_nursery(spec, seconds: float):
     n = clock.n_samples
     bank = I.SampleBank(seed=spec.seed, n_variants=3)
     buf = np.zeros((n + int(12 * sr), 2), dtype=np.float32)
+    sleigh_buf = np.zeros_like(buf) if mode == "bells" else None
 
     # ── コーラス数と速さを、ループ長にぴったり収まるように決める ──
     # 以前は「次のコーラスが入らなければ打ち切り」にしていたため、
@@ -725,7 +731,7 @@ def build_nursery(spec, seconds: float):
                     continue
                 sv = (0.85 if accent else 0.50) * float(rng.uniform(0.9, 1.1))
                 tt = t + x * beat_s + float(rng.normal(0, 0.008))
-                A.add_panned(buf, bank.hit("sleigh_real") * sv, int(round(tt * sr)),
+                A.add_panned(sleigh_buf, bank.hit("sleigh_real") * sv, int(round(tt * sr)),
                              SLEIGH_GAIN, 0.28)
             A.add_panned(buf, bank.hit("triangle", size=6), int(round(t * sr)),
                          TRIANGLE_GAIN, -0.3)
@@ -774,6 +780,20 @@ def build_nursery(spec, seconds: float):
                     _pad_note(bank, m, dur, ag, buf, p0, (-0.2, 0.0, 0.2)[ci])
         t += pass_s + BREATH_S
     k = n_pass
+
+    if sleigh_buf is not None:
+        w = int(0.05 * sr)
+        k = len(buf) // w * w
+
+        def win_db(x):
+            m = x[:k].mean(axis=1).astype(np.float64).reshape(-1, w)
+            return 20 * np.log10(np.sqrt((m ** 2).mean(axis=1)) + 1e-12)
+        rs, rm = win_db(sleigh_buf), win_db(buf)
+        hits = rs > np.percentile(rs, 90)
+        if hits.any() and np.isfinite(rs[hits]).all():
+            gap = float(np.median(rs[hits] - rm[hits]))
+            buf += sleigh_buf * np.float32(10 ** ((SLEIGH_AT_HIT_DB - gap) / 20))
+        del sleigh_buf
 
     ir = dsp.make_reverb_ir(2.4 if mode != "calm" else 3.0,
                             rt60=2.2 if mode != "calm" else 2.8, damp=0.55, predelay=0.02,

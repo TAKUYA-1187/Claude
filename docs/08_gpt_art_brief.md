@@ -76,6 +76,13 @@ Please create a single illustration with these rules:
 | 21_halloween_night | A friendly Halloween night, glowing pumpkins on a fence on the right, a cute old house on a hill, a big moon — spooky but not scary. |
 | x01_christmas_piano | A cozy living room on Christmas Eve, a softly lit Christmas tree and an upright piano with a candle on the right, snow falling outside a big window, warm golden light. |
 | x02_christmas_musicbox | A small open wooden music box on a windowsill on the right, a tiny glowing Christmas tree and a snow globe beside it, snowy village and stars outside the window. |
+| x03_christmas_bells | A cozy cabin porch on a snowy Christmas evening, a wooden sled with a string of sleigh bells and a wrapped present on the right, warm lantern light, gentle snowfall. |
+| x04_christmas_calm | A quiet snowy village church under a starry violet sky on the right, warm candle light in its windows, soft falling snow, very peaceful. |
+| x05_jingle_bells_sleigh | A small red sleigh with golden sleigh bells resting in fresh snow on the right, a snowy pine forest at dusk, warm lights in the distance. |
+| x06_silent_night_piano | A single candle and a small nativity star glowing on a windowsill on the right, a silent snowy night outside, deep blue sky with stars. |
+| x07_o_holy_night_piano | A bright star shining over snowy hills on the right, a tiny stable far away with warm light, deep violet night sky. |
+| x08_christmas_carols_2_musicbox | An antique wooden music box with a tiny dancing figure and a snow globe on a table on the right, teal winter night through the window. |
+| x09_we_wish_you_bells | A cheerful Christmas front door with a wreath, sleigh bells hanging from the handle on the right, snow on the steps, warm light inside. |
 
 ---
 
