@@ -1,0 +1,33 @@
+{
+  "slug": "x03_christmas_bells",
+  "title": "Christmas Piano & Sleigh Bells 🔔 2 Hours of Joyful Christmas Carols | Cozy Christmas Music",
+  "description": "🔔 CHRISTMAS PIANO & SLEIGH BELLS — 2 hours of joyful Christmas carols\n\nTen cheerful Christmas carols on a warm piano, with soft sleigh bells keeping time,\na little bell sparkling on the long notes, and a triangle at the start of each verse.\nAbout twelve minutes each, while snow falls around a glowing Christmas tree.\n\n00:00 Jingle Bells\n12:00 Deck the Halls\n24:00 Ding Dong Merrily on High\n36:00 I Saw Three Ships\n48:00 We Wish You a Merry Christmas\n1:00:00 Good King Wenceslas\n1:12:00 Go Tell It on the Mountain\n1:24:00 God Rest Ye Merry, Gentlemen\n1:36:00 Joy to the World\n1:48:00 Hark! The Herald Angels Sing\n\n▸ Real recorded piano and bells — no synthesizers, no background noise\n▸ The bells rest every few verses, so it stays easy to listen to for hours\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are traditional or in the public domain. Arrangement and sound\n  made for this channel.\n\nFor decorating the tree, baking cookies, wrapping presents, or a cozy Christmas morning.\n",
+  "tags": [
+    "christmas music",
+    "sleigh bells",
+    "jingle bells piano",
+    "christmas carols",
+    "cozy christmas music",
+    "christmas piano",
+    "happy christmas music",
+    "christmas background music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "クリスマス曲10曲（ピアノと鈴・2時間）",
+    "use_case": "relax",
+    "bpm": 0.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 7200.0,
+    "total_seconds": 7200.0,
+    "total_hhmmss": "2 hours",
+    "lufs": -14.08,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -240.0,
+    "visual": "christmas_window_warm"
+  }
+}

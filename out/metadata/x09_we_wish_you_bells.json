@@ -1,0 +1,32 @@
+{
+  "slug": "x09_we_wish_you_bells",
+  "title": "We Wish You a Merry Christmas 🔔 1 Hour of Piano & Sleigh Bells | Happy Christmas Music",
+  "description": "🔔 WE WISH YOU A MERRY CHRISTMAS — 1 hour of piano & sleigh bells\n\nThe best-known Christmas greeting song, on a warm piano with soft sleigh bells,\na little bell sparkle and a triangle, for a full hour.\n\n▸ Real recorded piano and bells — no synthesizers, no background noise\n▸ The arrangement changes every couple of choruses; the key and tempo stay the same\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are traditional or in the public domain. Arrangement and sound\n  made for this channel.\n\nFor Christmas parties, wrapping presents, or a cheerful December afternoon.\n",
+  "tags": [
+    "we wish you a merry christmas",
+    "merry christmas song",
+    "christmas music",
+    "sleigh bells",
+    "christmas piano",
+    "happy christmas music",
+    "christmas songs"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "おめでとうクリスマス（ピアノと鈴・1時間）",
+    "use_case": "relax",
+    "bpm": 96.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.03,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -62.27,
+    "visual": "christmas_window_teal"
+  }
+}

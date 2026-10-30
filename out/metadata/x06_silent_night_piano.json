@@ -1,0 +1,32 @@
+{
+  "slug": "x06_silent_night_piano",
+  "title": "Silent Night 🌙 1 Hour of Calm Christmas Piano | Peaceful Carol for Sleep & Relaxation",
+  "description": "🌙 SILENT NIGHT — 1 hour of calm Christmas piano\n\n\"Silent Night\" (Franz Gruber, 1818), played very slowly and softly on a real piano,\nwith a long, warm reverb and a tiny bell on the last note of each verse.\n\n▸ Soft piano only — no rain, no hiss, no background noise\n▸ One calm key and tempo for the whole hour, with nothing sudden\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are traditional or in the public domain. Arrangement and sound\n  made for this channel.\n\nFor a quiet Christmas Eve, prayer and reflection, or falling asleep on a winter night.\n",
+  "tags": [
+    "silent night",
+    "silent night piano",
+    "calm christmas music",
+    "christmas sleep music",
+    "silent night 1 hour",
+    "peaceful christmas",
+    "christmas piano"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "きよしこの夜（やすらぎのピアノ・1時間）",
+    "use_case": "relax",
+    "bpm": 60.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.19,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -69.56,
+    "visual": "christmas_window"
+  }
+}

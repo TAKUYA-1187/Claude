@@ -1,0 +1,32 @@
+{
+  "slug": "x05_jingle_bells_sleigh",
+  "title": "Jingle Bells 🔔 1 Hour of Piano & Sleigh Bells | Cozy Christmas Music",
+  "description": "🔔 JINGLE BELLS — 1 hour of piano & sleigh bells\n\nThe whole song — \"Dashing through the snow\" and the famous chorus — on a warm\npiano, with soft sleigh bells, a little bell sparkle and a triangle, for a full hour.\n\n▸ Real recorded piano and bells — no synthesizers, no background noise\n▸ The arrangement changes every couple of choruses; the key and tempo stay the same\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are traditional or in the public domain. Arrangement and sound\n  made for this channel.\n\nFor decorating, holiday baking, Christmas parties, or a happy December morning.\n",
+  "tags": [
+    "jingle bells",
+    "jingle bells piano",
+    "sleigh bells",
+    "christmas music",
+    "jingle bells 1 hour",
+    "christmas songs",
+    "cozy christmas"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "ジングルベル（ピアノと鈴・1時間）",
+    "use_case": "relax",
+    "bpm": 96.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.4,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -66.2,
+    "visual": "christmas_window_warm"
+  }
+}

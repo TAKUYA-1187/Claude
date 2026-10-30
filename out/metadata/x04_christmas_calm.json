@@ -1,0 +1,33 @@
+{
+  "slug": "x04_christmas_calm",
+  "title": "Calm Christmas Piano 🌙 2 Hours of Peaceful Carols | Silent Night, O Holy Night & more",
+  "description": "🌙 CALM CHRISTMAS PIANO — 2 hours of peaceful carols\n\nTen of the gentlest Christmas carols, played slowly and softly on a real piano,\nwith a long, warm reverb and a tiny bell on the last note of each verse.\nAbout twelve minutes each.\n\n00:00 Silent Night\n12:00 O Little Town of Bethlehem\n24:00 Away in a Manger\n36:00 What Child Is This\n48:00 O Holy Night\n1:00:00 In the Bleak Midwinter\n1:12:00 It Came Upon the Midnight Clear\n1:24:00 Infant Holy, Infant Lowly\n1:36:00 Once in Royal David's City\n1:48:00 The First Noel\n\n▸ Soft piano only — no drums, no rain, no background noise\n▸ Slow, steady tempo with nothing sudden, for relaxing or falling asleep\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are traditional or in the public domain. Arrangement and sound\n  made for this channel.\n\nFor a quiet Christmas Eve, reading by the tree, or winding down on a December night.\n",
+  "tags": [
+    "calm christmas music",
+    "peaceful christmas piano",
+    "christmas sleep music",
+    "silent night piano",
+    "o holy night piano",
+    "relaxing christmas carols",
+    "quiet christmas music",
+    "christmas piano"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "静かなクリスマス曲10曲（やすらぎのピアノ・2時間）",
+    "use_case": "relax",
+    "bpm": 0.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 7200.0,
+    "total_seconds": 7200.0,
+    "total_hhmmss": "2 hours",
+    "lufs": -14.26,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -240.0,
+    "visual": "christmas_window_violet"
+  }
+}
