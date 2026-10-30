@@ -1370,6 +1370,45 @@ def build_lullaby_medley(spec, seconds):
     return out, info
 
 
+# クリスマス曲のまとめ版 (2026-10-30)。冒頭は誰でも知っている明るい曲、
+# 静かな曲と明るい曲を交互にして、10 曲 × 12 分 = 2 時間
+CHRISTMAS_ORDER = [
+    "c01_we_wish_you", "n08_silent_night_lullaby", "n10_jingle_bells_lullaby",
+    "c03_o_christmas_tree", "c02_deck_the_halls", "c06_away_in_a_manger",
+    "c04_joy_to_the_world", "c05_first_noel", "c07_hark_the_herald",
+    "c08_o_come_all_ye_faithful",
+]
+
+
+def build_christmas_medley(spec, seconds):
+    """
+    クリスマス曲 10 曲のまとめ版。ピアノ版と、slug が _musicbox で終わるオルゴール版。
+    各曲は子守唄と同じ build_nursery で作る (録音ピアノ・録音の鉄琴、432Hz、環境音なし)。
+    曲ごとに -14 LUFS 済みなので、つないだ後に音量を揃え直す必要はない
+    """
+    import dataclasses
+    from .nursery import build_nursery, MUSIC_BOX_SUFFIX
+    suffix = MUSIC_BOX_SUFFIX if spec.slug.endswith(MUSIC_BOX_SUFFIX) else ""
+    per_song = seconds / len(CHRISTMAS_ORDER)
+    parts = []
+    for i, key in enumerate(CHRISTMAS_ORDER):
+        sub = dataclasses.replace(spec, slug=key + suffix, seed=spec.seed + 37 * i)
+        song, _ = build_nursery(sub, per_song)
+        parts.append(dsp.fade(song, fade_in=0.3, fade_out=1.5))
+        del song
+    out = np.concatenate(parts, axis=0)
+    del parts
+    info = {
+        "lufs_after": dsp.lufs_integrated(out),
+        "true_peak_db": dsp.true_peak_db(out),
+        "seam_db": dsp.check_loop_seam(out),
+        "seam_dbfs": dsp.seam_step_dbfs(out),
+        "bpm": 0.0, "bars": 0,
+        "songs": len(CHRISTMAS_ORDER),
+    }
+    return out, info
+
+
 TRACKS: list[TrackSpec] = [
     TrackSpec(
         slug="01_lofi_rainy_study",
@@ -1831,6 +1870,35 @@ TRACKS: list[TrackSpec] = [
         seo=dict(
             title="Frère Jacques 🎵 1 Hour Music Box Lullaby for Babies to Sleep",
             keywords=['frere jacques music box', 'music box lullaby', 'baby sleep music', 'lullaby for babies', 'nursery rhymes music box', 'music box'],
+        ),
+    ),
+    # 2026-10-30 クリスマス曲のまとめ版 (一般向け。子ども向けには設定しない)
+    TrackSpec(
+        slug="x01_christmas_piano",
+        title_en="Christmas Piano",
+        genre_ja="クリスマス曲10曲（やさしいピアノ・2時間）",
+        use_case="relax", bpm=80.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window", seed=7101, a4=432.0,
+        build=build_christmas_medley,
+        seo=dict(
+            title="Christmas Piano Music 🎄 2 Hours of Soft Christmas Carols | Relaxing Instrumental",
+            keywords=["christmas piano music", "christmas carols piano", "relaxing christmas music",
+                      "christmas music instrumental", "soft christmas piano", "christmas songs",
+                      "christmas background music", "piano christmas carols 2 hours"],
+        ),
+    ),
+    TrackSpec(
+        slug="x02_christmas_musicbox",
+        title_en="Christmas Music Box",
+        genre_ja="クリスマス曲10曲（オルゴール・2時間）",
+        use_case="relax", bpm=80.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="christmas_window", seed=7202, a4=432.0,
+        build=build_christmas_medley,
+        seo=dict(
+            title="Christmas Music Box 🎁 2 Hours of Christmas Carols | Soft & Relaxing",
+            keywords=["christmas music box", "music box christmas songs", "christmas carols music box",
+                      "relaxing christmas music", "christmas lullaby", "christmas songs",
+                      "christmas music instrumental", "music box"],
         ),
     ),
     # 2026-10-29 海外でよく知られた子守唄 (ピアノ版とオルゴール版)

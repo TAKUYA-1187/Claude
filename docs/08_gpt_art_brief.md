@@ -74,6 +74,8 @@ Please create a single illustration with these rules:
 | 07_fireplace_winter_jazz | A cabin living room in winter, a crackling fireplace and an armchair with a sleeping cat on the right, snow outside the window. |
 | 17_christmas_jazz | A Christmas living room at night, a decorated tree with warm lights on the right, a fireplace with stockings, snow outside. |
 | 21_halloween_night | A friendly Halloween night, glowing pumpkins on a fence on the right, a cute old house on a hill, a big moon — spooky but not scary. |
+| x01_christmas_piano | A cozy living room on Christmas Eve, a softly lit Christmas tree and an upright piano with a candle on the right, snow falling outside a big window, warm golden light. |
+| x02_christmas_musicbox | A small open wooden music box on a windowsill on the right, a tiny glowing Christmas tree and a snow globe beside it, snowy village and stars outside the window. |
 
 ---
 

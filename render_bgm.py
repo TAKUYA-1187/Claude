@@ -360,6 +360,8 @@ ELEGANT = {
     "n09_ode_to_joy_lullaby": (["ODE TO", "JOY"], "MUSIC BOX LULLABY"),
     "n10_jingle_bells_lullaby": (["JINGLE", "BELLS"], "SLOW LULLABY"),
     "n11_lullaby_medley": (["10 BABY", "LULLABIES"], "SOFT PIANO & MUSIC BOX"),
+    "x01_christmas_piano": (["CHRISTMAS", "PIANO"], "10 CLASSIC CAROLS"),
+    "x02_christmas_musicbox": (["CHRISTMAS", "MUSIC BOX"], "10 CLASSIC CAROLS"),
     "n12_brahms_lullaby": (["BRAHMS'", "LULLABY"], "SOFT PIANO FOR BABIES"),
     "n12_brahms_lullaby_musicbox": (["BRAHMS'", "LULLABY"], "MUSIC BOX LULLABY"),
     "n13_rockabye_baby": (["ROCK-A-BYE", "BABY"], "SOFT PIANO FOR BABIES"),

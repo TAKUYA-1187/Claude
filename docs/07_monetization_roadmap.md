@@ -144,7 +144,7 @@
 | 11/4（水） | 12:00 | 05 Bossa Nova Cafe | B | 作り直し予定 |
 | 11/5（木） | 9:00 | n01 Twinkle Twinkle（オルゴール版） | D | 送付済み |
 | 11/6（金） | 9:00 | n07 Au clair de la lune | D | 完成（公開の数日前に送付） |
-| 11/7（土） | 12:00 | Sleep Piano 第2弾（別の曲・3時間） | A | 制作予定 |
+| 11/7（土） | 12:00 | **x01 Christmas Piano（クリスマス曲10曲・2時間）** | C | 完成（Sleep Piano 第2弾は 11/27 以降へ） |
 | 11/8（日） | 9:00 | n13 Rock-a-bye Baby（ピアノ） | D | 完成 |
 | 11/9（月） | 9:00 | n05 London Bridge | D | 完成 |
 | 11/10（火） | 9:00 | n12 Brahms' Lullaby（オルゴール版） | D | 完成 |
@@ -156,7 +156,7 @@
 | 11/16（月） | 9:00 | n02 Mary Had a Little Lamb（オルゴール版） | D | 送付済み |
 | 11/17（火） | 9:00 | n15 All Through the Night（ピアノ） | D | 完成 |
 | 11/18（水） | 9:00 | n08 Silent Night | D | 完成 |
-| 11/19（木） | 12:00 | Sleep Piano 第3弾（4時間） | A | 制作予定 |
+| 11/19（木） | 12:00 | **x02 Christmas Music Box（クリスマス曲10曲・2時間）** | C | 完成（Sleep Piano 第3弾は 11/27 以降へ） |
 | 11/20（金） | 9:00 | n13 Rock-a-bye Baby（オルゴール版） | D | 完成 |
 | 11/21（土） | 9:00 | n10 Jingle Bells | D | 完成 |
 | 11/22（日） | 9:00 | n03 Row Your Boat（オルゴール版） | D | 送付済み |

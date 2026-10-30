@@ -913,6 +913,62 @@ For bedtime, naptime, and quiet evenings.
 """
 
 
+# 2026-10-30 クリスマス曲のまとめ版
+DESCRIPTIONS["x01_christmas_piano"] = """\
+🎄 CHRISTMAS PIANO — {duration} of soft Christmas carols
+
+Ten of the best-loved Christmas carols, played slowly and gently on a real piano,
+about twelve minutes each, while snow drifts past a warm, glowing window.
+
+00:00 We Wish You a Merry Christmas
+12:00 Silent Night
+24:00 Jingle Bells
+36:00 O Christmas Tree
+48:00 Deck the Halls
+1:00:00 Away in a Manger
+1:12:00 Joy to the World
+1:24:00 The First Noel
+1:36:00 Hark! The Herald Angels Sing
+1:48:00 O Come, All Ye Faithful
+
+▸ Soft piano only — no rain, no crackle, no background noise
+▸ Every carol stays in one calm tempo, then moves gently into the next
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are traditional or in the public domain. Arrangement and sound
+  made for this channel.
+
+For Christmas dinner, wrapping presents, reading by the tree, or a quiet winter evening.
+"""
+
+DESCRIPTIONS["x02_christmas_musicbox"] = """\
+🎁 CHRISTMAS MUSIC BOX — {duration} of Christmas carols
+
+Ten of the best-loved Christmas carols, played on a music box, high and soft like
+the little tune inside a snow globe, with a quiet piano underneath. About twelve
+minutes each.
+
+00:00 We Wish You a Merry Christmas
+12:00 Silent Night
+24:00 Jingle Bells
+36:00 O Christmas Tree
+48:00 Deck the Halls
+1:00:00 Away in a Manger
+1:12:00 Joy to the World
+1:24:00 The First Noel
+1:36:00 Hark! The Herald Angels Sing
+1:48:00 O Come, All Ye Faithful
+
+▸ Music box with a soft piano — no rain, no crackle, no background noise
+▸ Every carol stays in one calm tempo, then moves gently into the next
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are traditional or in the public domain. Arrangement and sound
+  made for this channel.
+
+For Christmas Eve, decorating the tree, bedtime in December, or a cozy winter night.
+"""
+
 # 2026-10-29 海外でよく知られた子守唄 (ピアノ版とオルゴール版)
 DESCRIPTIONS["n12_brahms_lullaby"] = """\
 🌙 BRAHMS' LULLABY — {duration} of soft piano lullaby

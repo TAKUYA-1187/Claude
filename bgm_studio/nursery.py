@@ -91,6 +91,11 @@ NURSERY: dict[str, dict] = {
              "C/1 C/1 C/1 D/1 E/2 D/2 C/1 E/1 D/1 D/1 C/4"),
     "n08_silent_night_lullaby": dict(
         title="Silent Night", bar=3, bpm=60, visual="christmas_window",
+        # 1 小節 = 8 分音符 3 つ (6/8 の半小節)
+        chords="C C C C G G7 C C F F C C F F C C G G7 C C C G7 C",
+        # 旋律が F5 まで上がるので、オルゴール版は G 長調に下げ (最高音 F6 → C6)、
+        # 旋律を控えめにする (2 分の試作で 500Hz +16 / 4kHz -14 と前に出すぎた)
+        mb_trans=-5, mb_lg=0.75,
         tune="G/1.5 A/.5 G/1 E/3 G/1.5 A/.5 G/1 E/3 D5/2 D5/1 B/3 C5/2 C5/1 G/3 "
              "A/2 A/1 C5/1.5 B/.5 A/1 G/1.5 A/.5 G/1 E/3 "
              "A/2 A/1 C5/1.5 B/.5 A/1 G/1.5 A/.5 G/1 E/3 "
@@ -103,6 +108,8 @@ NURSERY: dict[str, dict] = {
              "E/1 E/1 F/1 G/1 G/1 F/1 E/1 D/1 C/1 C/1 D/1 E/1 D/1.5 C/.5 C/2"),
     "n10_jingle_bells_lullaby": dict(
         title="Jingle Bells", bar=4, bpm=92, visual="snow_cabin",
+        # 1 小節 = 8 分音符 4 つ (2/4)
+        chords="C C C C F C D7 G C C C C F C G7 C",
         tune="E/1 E/1 E/2 E/1 E/1 E/2 E/1 G/1 C/1.5 D/.5 E/4 "
              "F/1 F/1 F/1.5 F/.5 F/1 E/1 E/1 E/.5 E/.5 E/1 D/1 D/1 E/1 D/2 G/2 "
              "E/1 E/1 E/2 E/1 E/1 E/2 E/1 G/1 C/1.5 D/.5 E/4 "
@@ -154,6 +161,103 @@ NURSERY: dict[str, dict] = {
              "C5/1.5 B/.5 A/1 C5/1 D5/1.5 C5/.5 B/1 G/1 A/2 B/1.5 B/.5 C5/3 R/1 "
              "F5/1 E5/1 F5/1 G5/1 A5/1 G5/1 F5/1 E5/1 F5/1 E5/1 D5/1 C5/1 E5/1.5 D5/.5 C5/1 B/1 "
              "C5/1.5 B/.5 A/1 C5/1 D5/1.5 C5/.5 B/1 G/1 A/2 B/1.5 B/.5 C5/3 R/1"),
+    # ── クリスマス曲 (2026-10-30 追加) ───────────────────────────────
+    # どれも 19 世紀以前の作曲・伝承曲 (パブリックドメイン)。記憶で書かず、ABC 記譜の楽譜で
+    # 確認した:
+    #   Deck the Halls / Hark! the Herald: The Everyday Song Book (1927) (trillian.mit.edu)
+    #   We Wish You: trillian.mit.edu/~jc/music/abc/England/xmas (3 版を照合し多数派の "E E E")
+    #   それ以外: Paul Hardy's Xmas Tunebook (pghardy.net) の旋律と和音記号
+    # 旋律は C で書き、ピアノ版は trans で原調 (歌いやすい高さ) に戻す。旋律が高すぎると
+    # 伴奏より前に出すぎた (2 分の試作で 500Hz が基準超え)。オルゴール版は mb_trans で
+    # 旋律が C5〜D6 あたりに収まるようにする (それより上は鉄琴が耳に刺さる)
+    "c01_we_wish_you": dict(
+        # 原調 G → C。弱起 1 拍
+        title="We Wish You a Merry Christmas", bar=3, bpm=96, visual="christmas_window",
+        mb_trans=-7,
+        chords="C C F D7 G E7 Am F,G7,G7 C C G F G G C F,G7,G7 C C F D7 G E7 Am F,G7,G7 C",
+        tune="R/2 G/1 "
+             "C5/1 C5/.5 D5/.5 C5/.5 B/.5 A/1 A/1 A/1 D5/1 D5/.5 E5/.5 D5/.5 C5/.5 B/1 G/1 G/1 "
+             "E5/1 E5/.5 F5/.5 E5/.5 D5/.5 C5/1 A/1 A/.5 A/.5 A/1 D5/1 B/1 C5/2 G/1 "
+             "C5/1 C5/1 C5/1 B/2 B/1 C5/1 B/1 A/1 G/2 E5/1 "
+             "F5/1 E5/1 D5/1 G5/1 G/1 G/.5 G/.5 A/1 D5/1 B/1 C5/2 G/1 "
+             "C5/1 C5/.5 D5/.5 C5/.5 B/.5 A/1 A/1 A/1 D5/1 D5/.5 E5/.5 D5/.5 C5/.5 B/1 G/1 G/1 "
+             "E5/1 E5/.5 F5/.5 E5/.5 D5/.5 C5/1 A/1 A/.5 A/.5 A/1 D5/1 B/1 C5/2 R/1"),
+    "c02_deck_the_halls": dict(
+        # 原調 F。C で書いて trans=+5 で F に戻す
+        title="Deck the Halls", bar=4, bpm=80, visual="christmas_window",
+        trans=5, mb_trans=-5,
+        chords="C C G,C C,G,C,C C C G,C C,G,C,C G7 C,G C,Am G,D7,G,G C C F,C C,G,C,C",
+        tune="G/1.5 F/.5 E/1 D/1 C/1 D/1 E/1 C/1 D/.5 E/.5 F/.5 D/.5 E/1.5 D/.5 C/1 B3/1 C/2 "
+             "G/1.5 F/.5 E/1 D/1 C/1 D/1 E/1 C/1 D/.5 E/.5 F/.5 D/.5 E/1.5 D/.5 C/1 B3/1 C/2 "
+             "D/1.5 E/.5 F/1 D/1 E/1.5 F/.5 G/1 D/1 E/.5 F/.5 G/1 A/.5 B/.5 C5/1 B/1 A/1 G/2 "
+             "G/1.5 F/.5 E/1 D/1 C/1 D/1 E/1 C/1 A/.5 A/.5 A/.5 A/.5 G/1.5 F/.5 E/1 D/1 C/2"),
+    "c03_o_christmas_tree": dict(
+        # 原調 D。C で書いて trans=+7 (G)。弱起 1 拍。形は A A B A
+        title="O Christmas Tree", bar=3, bpm=72, visual="christmas_window",
+        trans=7, mb_trans=-5,
+        chords="C C,C,G7 C Dm,Dm,G7 G7,C,G7 C,C,G7 C Dm,Dm,G7 G7,C,G7 C,F,C G7 G7 C,C,G7 "
+               "C,C,G7 C Dm,Dm,G7 G7,C,C",
+        tune="R/2 G3/1 "
+             "C/.75 C/.25 C/1 D/1 E/.75 E/.25 E/1.5 E/.5 D/.5 E/.5 F/1 B3/1 D/1 C/1 G3/1 "
+             "C/.75 C/.25 C/1 D/1 E/.75 E/.25 E/1.5 E/.5 D/.5 E/.5 F/1 B3/1 D/1 C/1 R/.5 G/.5 "
+             "G/.5 E/.5 A/1.5 G/.5 G/.5 F/.5 F/1.5 F/.5 F/.5 D/.5 G/1.5 F/.5 F/.5 E/.5 E/1 G3/1 "
+             "C/.75 C/.25 C/1 D/1 E/.75 E/.25 E/1.5 E/.5 D/.5 E/.5 F/1 B3/1 D/1 C/1 R/1"),
+    "c04_joy_to_the_world": dict(
+        # 原調 D。C で書いて trans=+5 (F)
+        title="Joy to the World", bar=4, bpm=76, visual="christmas_window",
+        trans=2, mb_trans=-2,
+        chords="C,G C,C,C,G7 C,G7 C F G7 C C C C C C C C G7 G7 C,F C,C,C,Dm C,G7 C",
+        tune="C5/2 B/1.5 A/.5 G/3 F/1 E/2 D/2 C/3 G/1 A/3 A/1 B/3 B/1 C5/7 C5/1 "
+             "C5/1 B/1 A/1 G/1 G/1.5 F/.5 E/1 C5/1 C5/1 B/1 A/1 G/1 G/1.5 F/.5 E/1 E/1 "
+             "E/1 E/1 E/1 E/.5 F/.5 G/3 F/.5 E/.5 D/1 D/1 D/1 D/.5 E/.5 F/3 E/.5 D/.5 "
+             "C/1 C5/2 A/1 G/1.5 F/.5 E/1 F/1 E/2 D/2 C/4"),
+    "c05_first_noel": dict(
+        # 原調 D。C で書いて trans=+5 (F)。弱起 1 拍
+        title="The First Noel", bar=3, bpm=80, visual="christmas_window",
+        trans=2, mb_trans=-2,
+        chords="C,C,G7 C G F C F G7 C,C,G7 C,C,G7 C G F C F G7 C,C,G7 C,C,G7 "
+               "C Em F C F G7 C,C,G7 C",
+        tune="R/2 E/.5 D/.5 "
+             "C/1.5 D/.5 E/.5 F/.5 G/2 A/.5 B/.5 C5/1 B/1 A/1 G/2 A/.5 B/.5 "
+             "C5/1 B/1 A/1 G/1 A/1 B/1 C5/1 G/1 F/1 E/2 E/.5 D/.5 "
+             "C/1.5 D/.5 E/.5 F/.5 G/2 A/.5 B/.5 C5/1 B/1 A/1 G/2 A/.5 B/.5 "
+             "C5/1 B/1 A/1 G/1 A/1 B/1 C5/1 G/1 F/1 E/2 E/.5 D/.5 "
+             "C/1.5 D/.5 E/.5 F/.5 G/2 C5/.5 B/.5 A/2 A/1 G/3 "
+             "C5/1 B/1 A/1 G/1 A/1 B/1 C5/1 G/1 F/1 E/2 R/1"),
+    "c06_away_in_a_manger": dict(
+        # Kirkpatrick "Cradle Song" (1895)。原調 G → C。弱起 1 拍
+        title="Away in a Manger", bar=3, bpm=72, visual="christmas_window",
+        trans=-5, mb_trans=-2, mb_lg=0.8,
+        chords="C C,C,G7 C C,C,Am Dm G7 C D7 G7 C,C,G7 C C,C,Am Dm G7 C Dm,Dm,G7 C",
+        tune="R/2 G/1 "
+             "C5/1 C5/1 D5/.5 E5/.5 C5/1 C5/1 E5/.5 F5/.5 G5/1 G5/1 A5/1 F5/2 D5/.5 E5/.5 "
+             "F5/1 F5/1 G5/1 E5/1 E5/1 C5/.5 E5/.5 D5/1 A/1 C5/1 B/2 G/1 "
+             "C5/1 C5/1 D5/.5 E5/.5 C5/1 C5/1 E5/.5 F5/.5 G5/1 G5/1 A5/1 F5/2 D5/.5 E5/.5 "
+             "F5/1 F5/1 G5/1 E5/1 E5/1 C5/.5 E5/.5 D5/1 A/1 B/1 C5/2 R/1"),
+    "c07_hark_the_herald": dict(
+        # 原調 G → C
+        title="Hark! The Herald Angels Sing", bar=4, bpm=76, visual="christmas_window",
+        trans=-5, mb_trans=-2,
+        chords="C C,C,C,G C,G7 C,G,C,C C C,C,C,G G G,D7,G,G C F,C,C,G C F,C,C,G "
+               "F,F,F,C Dm,C,F,F G7,C F,G,C,C F,F,F,C Dm,C,F,F G7,C F,G,C,C",
+        tune="G/1 C5/1 C5/1.5 B/.5 C5/1 E5/1 E5/1 D5/1 G5/1 G5/1 G5/1.5 F5/.5 E5/1 D5/1 E5/2 "
+             "G/1 C5/1 C5/1.5 B/.5 C5/1 E5/1 E5/1 D5/1 G5/1 D5/1 D5/1.5 B/.5 B/1 A/1 G/2 "
+             "G5/1 G5/1 G5/1 C5/1 F5/1 E5/1 E5/1 D5/1 G5/1 G5/1 G5/1 C5/1 F5/1 E5/1 E5/1 D5/1 "
+             "A5/1 A5/1 A5/1 G5/1 F5/1 E5/1 F5/2 D5/1 E5/.5 F5/.5 G5/1.5 C5/.5 C5/1 D5/1 E5/2 "
+             "A5/1 A5/1 A5/1 G5/1 F5/1 E5/1 F5/2 D5/1 E5/.5 F5/.5 G5/1.5 C5/.5 C5/1 D5/1 C5/2"),
+    "c08_o_come_all_ye_faithful": dict(
+        # "Adeste Fideles"。原調 G → C。弱起 1 拍
+        title="O Come, All Ye Faithful", bar=4, bpm=72, visual="christmas_window",
+        mb_trans=-7,
+        chords="C C G C,C,C,F C,G Am,D G G,D7 G C F,C G,D7 G C,G,C,G C C,G,C,G7 C,G,C,C "
+               "G7,D7 G,G,C,F C,G C",
+        tune="R/3 C5/1 "
+             "C5/2 G/1 C5/1 D5/2 G/2 E5/1 D5/1 E5/1 F5/1 E5/2 D5/1 C5/1 "
+             "C5/2 B/1 A/1 B/1 C5/1 D5/1 E5/1 B/2 A/1.5 G/.5 G/3 R/1 "
+             "G5/2 F5/1 E5/1 F5/2 E5/2 D5/1 E5/1 C5/1 D5/1 B/1.5 A/.5 G/1 C5/1 "
+             "C5/1 B/1 C5/1 D5/1 C5/2 G/1 E5/1 "
+             "E5/1 D5/1 E5/1 F5/1 E5/2 D5/1 E5/1 F5/1 E5/1 D5/1 C5/1 B/2 C5/1 F5/1 "
+             "E5/2 D5/1.5 C5/.5 C5/3 R/1"),
 }
 
 # 使う和音 (ルート pc, 構成音 pc)。ハ長調の主要三和音 + 副三和音
@@ -162,6 +266,8 @@ _CHORDS = {
     "F": (5, (5, 9, 0)), "G": (7, (7, 11, 2)), "Am": (9, (9, 0, 4)),
     # 手書きの和声 (song["chords"]) で使う属七。5 度を省いて根音・3 度・7 度にする
     "G7": (7, (7, 11, 5)), "C7": (0, (0, 4, 10)),
+    # クリスマス曲の和声 (2026-10-30)。D・D7 は属調 (G) への転調、E7 は Am への導き
+    "D": (2, (2, 6, 9)), "D7": (2, (2, 6, 0)), "E7": (4, (4, 8, 2)),
 }
 
 
@@ -339,7 +445,8 @@ def build_nursery(spec, seconds: float):
     # オルゴール版だけの曲ごとの調整。旋律を 1 オクターブ上げると、元の旋律が高い曲
     # (Rock-a-bye Baby は F5 まで) は F6 に届いて耳に刺さる。そういう曲は曲全体を
     # 移調して音域を下げる (mb_trans)。旋律と伴奏の音量も曲ごとに変えられる (mb_lg, mb_ag)
-    mb_trans = int(song.get("mb_trans", 0)) if is_mb else 0
+    # trans: 曲全体の移調 (ピアノ版・オルゴール版とも)。旋律を C で書くと低すぎる曲用
+    mb_trans = int(song.get("trans", 0)) + (int(song.get("mb_trans", 0)) if is_mb else 0)
     lg_scale = float(song.get("mb_lg", 1.0)) if is_mb else 1.0
     ag_scale = float(song.get("mb_ag", 1.0)) if is_mb else 1.0
     rng = np.random.default_rng(spec.seed)
