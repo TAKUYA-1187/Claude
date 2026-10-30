@@ -918,7 +918,7 @@ DESCRIPTIONS["x01_christmas_piano"] = """\
 🎄 CHRISTMAS PIANO — {duration} of soft Christmas carols
 
 Ten of the best-loved Christmas carols, played slowly and gently on a real piano,
-about twelve minutes each, while snow drifts past a warm, glowing window.
+about twelve minutes each, while snow falls softly around a glowing Christmas tree.
 
 00:00 We Wish You a Merry Christmas
 12:00 Silent Night

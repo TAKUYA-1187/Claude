@@ -408,7 +408,8 @@ def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
             bg = IL.watercolor(Image.fromarray(np.clip(fr, 0, 255).astype(np.uint8)),
                                seed=spec.seed)
         im = IL.elegant_thumbnail(bg, lines, sub, _length_badge(total_seconds))
-        if spec.slug.endswith("_musicbox"):
+        # タイトルに MUSIC BOX と書いてあるときは、バッジを重ねると同じ言葉が 2 回になる
+        if spec.slug.endswith("_musicbox") and "MUSIC BOX" not in " ".join(lines):
             im = IL.corner_badge(im, "MUSIC BOX")
         return im
     return _make_thumbnail_v1(spec, total_seconds)

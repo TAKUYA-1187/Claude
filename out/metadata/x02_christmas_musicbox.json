@@ -1,0 +1,33 @@
+{
+  "slug": "x02_christmas_musicbox",
+  "title": "Christmas Music Box 🎁 2 Hours of Christmas Carols | Soft & Relaxing",
+  "description": "🎁 CHRISTMAS MUSIC BOX — 2 hours of Christmas carols\n\nTen of the best-loved Christmas carols, played on a music box, high and soft like\nthe little tune inside a snow globe, with a quiet piano underneath. About twelve\nminutes each.\n\n00:00 We Wish You a Merry Christmas\n12:00 Silent Night\n24:00 Jingle Bells\n36:00 O Christmas Tree\n48:00 Deck the Halls\n1:00:00 Away in a Manger\n1:12:00 Joy to the World\n1:24:00 The First Noel\n1:36:00 Hark! The Herald Angels Sing\n1:48:00 O Come, All Ye Faithful\n\n▸ Music box with a soft piano — no rain, no crackle, no background noise\n▸ Every carol stays in one calm tempo, then moves gently into the next\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are traditional or in the public domain. Arrangement and sound\n  made for this channel.\n\nFor Christmas Eve, decorating the tree, bedtime in December, or a cozy winter night.\n",
+  "tags": [
+    "christmas music box",
+    "music box christmas songs",
+    "christmas carols music box",
+    "relaxing christmas music",
+    "christmas lullaby",
+    "christmas songs",
+    "christmas music instrumental",
+    "music box"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "クリスマス曲10曲（オルゴール・2時間）",
+    "use_case": "relax",
+    "bpm": 0.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 7200.0,
+    "total_seconds": 7200.0,
+    "total_hhmmss": "2 hours",
+    "lufs": -14.0,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -240.0,
+    "visual": "christmas_window"
+  }
+}

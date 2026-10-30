@@ -1,0 +1,33 @@
+{
+  "slug": "x01_christmas_piano",
+  "title": "Christmas Piano Music 🎄 2 Hours of Soft Christmas Carols | Relaxing Instrumental",
+  "description": "🎄 CHRISTMAS PIANO — 2 hours of soft Christmas carols\n\nTen of the best-loved Christmas carols, played slowly and gently on a real piano,\nabout twelve minutes each, while snow falls softly around a glowing Christmas tree.\n\n00:00 We Wish You a Merry Christmas\n12:00 Silent Night\n24:00 Jingle Bells\n36:00 O Christmas Tree\n48:00 Deck the Halls\n1:00:00 Away in a Manger\n1:12:00 Joy to the World\n1:24:00 The First Noel\n1:36:00 Hark! The Herald Angels Sing\n1:48:00 O Come, All Ye Faithful\n\n▸ Soft piano only — no rain, no crackle, no background noise\n▸ Every carol stays in one calm tempo, then moves gently into the next\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are traditional or in the public domain. Arrangement and sound\n  made for this channel.\n\nFor Christmas dinner, wrapping presents, reading by the tree, or a quiet winter evening.\n",
+  "tags": [
+    "christmas piano music",
+    "christmas carols piano",
+    "relaxing christmas music",
+    "christmas music instrumental",
+    "soft christmas piano",
+    "christmas songs",
+    "christmas background music",
+    "piano christmas carols 2 hours"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "クリスマス曲10曲（やさしいピアノ・2時間）",
+    "use_case": "relax",
+    "bpm": 0.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 7200.0,
+    "total_seconds": 7200.0,
+    "total_hhmmss": "2 hours",
+    "lufs": -14.19,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -240.0,
+    "visual": "christmas_window"
+  }
+}
