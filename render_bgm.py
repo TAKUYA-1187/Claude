@@ -389,6 +389,13 @@ def _length_badge(total_seconds: float) -> str:
 
 
 def _make_thumbnail(spec: TR.TrackSpec, total_seconds: float):
+    # 2026-10-31〜 ChatGPT には 1 本につき 2 枚頼む: 文字なしの背景 (art/<slug>.png) と、
+    # 文字まで入れて仕上げたサムネ (art/<slug>_thumb.png)。サムネがあればそのまま使う
+    for ext in (".png", ".jpg", ".jpeg", ".webp"):
+        thumb = TR.ART_DIR / f"{spec.slug}_thumb{ext}"
+        if thumb.exists():
+            from PIL import Image
+            return Image.open(thumb).convert("RGB").resize((1280, 720), Image.LANCZOS)
     art = TR.art_for(spec)
     if art is not None:
         import json
