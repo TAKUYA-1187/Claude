@@ -969,6 +969,108 @@ minutes each.
 For Christmas Eve, decorating the tree, bedtime in December, or a cozy winter night.
 """
 
+# 2026-10-31 冬のメロディ
+DESCRIPTIONS["w01_winter_piano"] = """\
+❄️ WINTER PIANO — {duration} of beautiful winter melodies
+
+Ten melodies the whole world thinks of in winter, played slowly and gently on a real
+piano — from Vivaldi's "Winter" to Schubert's "Linden Tree", old winter carols, and
+"Auld Lang Syne" to close the year. About twelve minutes each, while snow falls over
+quiet hills and the lights of distant houses glow.
+
+00:00 Vivaldi – Winter (Largo), The Four Seasons
+12:00 In the Bleak Midwinter
+24:00 Greensleeves (What Child Is This)
+36:00 Schubert – Der Lindenbaum (The Linden Tree)
+48:00 See, Amid the Winter's Snow
+1:00:00 The Holly and the Ivy
+1:12:00 Huron Carol ('Twas in the Moon of Wintertime)
+1:24:00 Coventry Carol
+1:36:00 O Christmas Tree (O Tannenbaum)
+1:48:00 Auld Lang Syne
+
+▸ Soft piano only — no wind, no rain, no background noise
+▸ Every melody stays in one calm tempo, then moves gently into the next
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are in the public domain. Arrangement and sound made for this channel.
+
+For a snowy evening, a warm drink by the window, reading, or winding down in winter.
+"""
+
+DESCRIPTIONS["w02_winter_musicbox"] = """\
+❄️ WINTER MUSIC BOX — {duration} of gentle winter melodies
+
+The same ten winter melodies — Vivaldi's "Winter", Greensleeves, "Auld Lang Syne" and
+more — played on a music box, small and clear like snow falling at night, with a quiet
+piano underneath. About twelve minutes each.
+
+00:00 Vivaldi – Winter (Largo), The Four Seasons
+12:00 In the Bleak Midwinter
+24:00 Greensleeves (What Child Is This)
+36:00 Schubert – Der Lindenbaum (The Linden Tree)
+48:00 See, Amid the Winter's Snow
+1:00:00 The Holly and the Ivy
+1:12:00 Huron Carol ('Twas in the Moon of Wintertime)
+1:24:00 Coventry Carol
+1:36:00 O Christmas Tree (O Tannenbaum)
+1:48:00 Auld Lang Syne
+
+▸ Music box with a soft piano — no wind, no rain, no background noise
+▸ Every melody stays in one calm tempo, then moves gently into the next
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are in the public domain. Arrangement and sound made for this channel.
+
+For a quiet winter night, bedtime, or a peaceful moment with tea.
+"""
+
+DESCRIPTIONS["w03_vivaldi_winter_piano"] = """\
+❄️ VIVALDI — WINTER (LARGO) — {duration} of calm piano
+
+The famous slow movement of "Winter" from Antonio Vivaldi's The Four Seasons (1725) —
+the warm room by the fire while cold rain falls outside — played slowly and softly on
+a real piano, with a long, warm reverb.
+
+▸ Soft piano only — no rain, no hiss, no background noise
+▸ One calm key and tempo for the whole hour, with nothing sudden
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are in the public domain. Arrangement and sound made for this channel.
+
+For studying, reading, a winter afternoon, or falling asleep.
+"""
+
+DESCRIPTIONS["w04_greensleeves_piano"] = """\
+❄️ GREENSLEEVES — {duration} of calm piano
+
+"Greensleeves", the old English melody also sung at Christmas as "What Child Is This",
+played slowly and softly on a real piano, with a long, warm reverb.
+
+▸ Soft piano only — no rain, no hiss, no background noise
+▸ One calm key and tempo for the whole hour, with nothing sudden
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are in the public domain. Arrangement and sound made for this channel.
+
+For a snowy evening, reading by the window, or a peaceful winter night.
+"""
+
+DESCRIPTIONS["w05_auld_lang_syne_piano"] = """\
+✨ AULD LANG SYNE — {duration} of calm piano
+
+The song the whole world sings as the old year ends, played slowly and softly on a
+real piano, with a long, warm reverb — for looking back, and looking forward.
+
+▸ Soft piano only — no rain, no hiss, no background noise
+▸ One calm key and tempo for the whole hour, with nothing sudden
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ All melodies are in the public domain. Arrangement and sound made for this channel.
+
+For New Year's Eve, the last quiet evening of the year, or a calm start to January.
+"""
+
 # 2026-10-30 クリスマス第 2 弾
 DESCRIPTIONS["x03_christmas_bells"] = """\
 🔔 CHRISTMAS PIANO & SLEIGH BELLS — {duration} of joyful Christmas carols

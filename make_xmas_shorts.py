@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-クリスマス曲の Shorts (縦 1080x1920・45 秒) を作る。
+クリスマス曲・冬のメロディの Shorts (縦 1080x1920・45 秒) を作る。
 
-まとめ版 (x01〜x04, x08) の音源から、曲ごとの頭の 45 秒を切り出し、同じ動画の
+まとめ版 (x01〜x04, x08, w01, w02) の音源から、曲ごとの頭の 45 秒を切り出し、同じ動画の
 ループ映像のうちツリーのある右側を縦に切り出して使う。文字はサムネと同じ
 セリフ体 (Cinzel / Cormorant Garamond)。Shorts は「長尺は 1 日 1 本」の数に入れない。
 
@@ -56,16 +56,29 @@ SHORTS = [
      "What Child Is This 🎁 Christmas Music Box"),
     ("x01_christmas_piano", "c03_o_christmas_tree", ["O CHRISTMAS", "TREE"], "SOFT CHRISTMAS PIANO",
      "O Christmas Tree 🎄 Soft Christmas Piano"),
+    # 2026-10-31 冬のメロディ
+    ("w01_winter_piano", "d01_vivaldi_winter", ["VIVALDI", "WINTER"], "LARGO · SOFT PIANO",
+     "Vivaldi – Winter (Largo) ❄️ Soft Piano"),
+    ("w01_winter_piano", "c18_what_child", ["GREENSLEEVES"], "WINTER PIANO",
+     "Greensleeves ❄️ Soft Winter Piano"),
+    ("w01_winter_piano", "d02_lindenbaum", ["THE LINDEN", "TREE"], "SCHUBERT · WINTER PIANO",
+     "Schubert – Der Lindenbaum (The Linden Tree) ❄️ Soft Piano"),
+    ("w01_winter_piano", "d03_auld_lang_syne", ["AULD LANG", "SYNE"], "NEW YEAR'S EVE PIANO",
+     "Auld Lang Syne ✨ Soft Piano for New Year's Eve"),
+    ("w02_winter_musicbox", "d01_vivaldi_winter", ["VIVALDI", "WINTER"], "MUSIC BOX",
+     "Vivaldi – Winter (Largo) ❄️ Music Box"),
+    ("w02_winter_musicbox", "d06_huron_carol", ["HURON", "CAROL"], "MUSIC BOX",
+     "Huron Carol ('Twas in the Moon of Wintertime) ❄️ Music Box"),
 ]
 
 DESCRIPTION = """{title}
 
-A short piece from our {length} Christmas video: {full}.
+A short piece from our {length} {theme} video: {full}.
 Real recorded piano and bells, tuned to A = 432 Hz, with no background noise.
 
 The full version is on our channel.
 
-#christmasmusic #christmas #christmascarols #shorts
+{tags}
 """
 
 
@@ -112,7 +125,8 @@ def build(i: int) -> Path:
     d.mkdir(parents=True, exist_ok=True)
     kind = {"x01_christmas_piano": "piano", "x02_christmas_musicbox": "musicbox",
             "x03_christmas_bells": "bells", "x04_christmas_calm": "calm_piano",
-            "x08_christmas_carols_2_musicbox": "musicbox"}[src]
+            "x08_christmas_carols_2_musicbox": "musicbox",
+            "w01_winter_piano": "winter_piano", "w02_winter_musicbox": "winter_musicbox"}[src]
     words = " ".join(lines).lower().replace("-", " ").split()
     name = f"{i + 1:02d}_{'_'.join(words)}_{kind}"
     ov = d / f".ov_{name}.png"
@@ -137,10 +151,14 @@ def build(i: int) -> Path:
     subprocess.run(cmd, check=True, capture_output=True)
     ov.unlink(missing_ok=True)
     spec = BY_SLUG[src]
+    winter = src.startswith("w")
+    theme = "winter" if winter else "Christmas"
+    tags = ("#wintermusic #winter #pianomusic #shorts" if winter
+            else "#christmasmusic #christmas #christmascarols #shorts")
     length = "2-hour"
     out.with_suffix(".txt").write_text(
         f"[タイトル]\n{title} #shorts\n\n[説明]\n"
-        f"{DESCRIPTION.format(title=title, length=length, full=spec.seo['title'])}\n"
+        f"{DESCRIPTION.format(title=title, length=length, full=spec.seo['title'], theme=theme, tags=tags)}\n"
         "[設定]\n子ども向け: いいえ / AI の使用: はい / 関連動画: "
         f"「{spec.seo['title']}」\n", encoding="utf-8")
     return out

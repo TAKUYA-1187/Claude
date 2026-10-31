@@ -414,9 +414,11 @@ NURSERY: dict[str, dict] = {
     "d01_vivaldi_winter": dict(
         # Antonio Vivaldi「四季」より「冬」第 2 楽章 Largo (1725)。Mutopia Project の楽譜 (MIDI) の独奏ヴァイオリンを旋律、他の弦の音から拍ごとに和音を推定。原調 E♭
         title='Winter (Largo) from The Four Seasons', bar=4, bpm=46, visual="winter_window",
-        trans=-4, mb_trans=-5,
+        # 原曲の最後は 10 拍のばす音で、ゆっくり弾くとループの継ぎ目で 3.5 秒の無音になった。
+        # 最後の音を 6 拍にして 1 小節縮め、ループ末尾の余白も 1.5 秒にする
+        tail_s=1.5, trans=-4, mb_trans=-5,
         chords="C,C,G,G G7,G7,C,C G7,G7,A7,Dm G7,C,F,D7 G C,C,D7,D7 G,G,Dm,D7 D,D,G,G G,G,D,D "
-               "D7,D7,G,G G7,G7,C,C F,Dm,G,Em Am,F,G,G G,C,G,G G,C,G,G C,G,C,C C C",
+               "D7,D7,G,G G7,G7,C,C F,Dm,G,Em Am,F,G,G G,C,G,G G,C,G,G C,G,C,C C",
         tune="C5/0.5 G5/0.25 F5/0.25 E5/0.5 D5/0.25 C5/0.25 D5/0.5 G4/0.5 R/0.5 G4/0.5 F5/0.25 "
              "E5/0.25 D5/0.25 C5/0.25 B4/0.5 F5/0.5 F5/0.5 E5/0.5 R/0.5 E5/0.5 D5/0.5 E5/0.25 "
              "F5/0.25 G5/0.5 A5/0.25 B5/0.25 C5/0.5 D5/0.25 E5/0.25 F5/0.5 G5/0.25 A5/0.25 B4/0.5 "
@@ -431,7 +433,7 @@ NURSERY: dict[str, dict] = {
              "E5/0.25 F5/0.5 G5/0.25 A5/0.25 B4/1 R/0.5 B4/0.25 C5/0.25 D5/0.25 B4/0.25 A4/0.25 "
              "G4/0.25 E5/0.25 F5/0.25 G5/0.25 E5/0.25 D5/0.5 G4/0.5 R/0.5 B4/0.25 C5/0.25 D5/0.25 "
              "B4/0.25 A4/0.25 G4/0.25 E5/0.25 F5/0.25 G5/0.25 E5/0.25 D5/0.5 G4/0.5 R/0.5 D5/0.25 "
-             "G5/0.25 E5/0.5 D5/0.25 C5/0.25 B4/0.75 C5/0.25 C5/6 C5/4"),
+             "G5/0.25 E5/0.5 D5/0.25 C5/0.25 B4/0.75 C5/0.25 C5/6"),
     "d02_lindenbaum": dict(
         # Franz Schubert「冬の旅」(1827) の「菩提樹」、Silcher の民謡版。The Everyday Song Book (1927) X:201。原調 E♭
         title='Der Lindenbaum (The Linden Tree)', bar=3, bpm=72, visual="winter_window",
@@ -766,7 +768,7 @@ def build_nursery(spec, seconds: float):
     # 以前は「次のコーラスが入らなければ打ち切り」にしていたため、
     # 11 分ループの末尾に約 28 秒の無音が残り、33 分の動画で 3 回
     # 無音になっていた。コーラス数を決めてから速さを数 % だけ合わせる。
-    head, tail = 0.8, 3.0
+    head, tail = 0.8, float(song.get("tail_s", 3.0))
     avail = seconds - head - tail
     beat0 = 60.0 / bpm
     pass0 = total_beats * beat0
