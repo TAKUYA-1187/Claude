@@ -343,8 +343,8 @@ def audio_qa(slug: str) -> dict:
         issues.append(f"位相 {r['mono_corr']:.2f}")
     # 童謡 (n01-n10) は同じ旋律を繰り返すのが商品そのもの。環境音ノイズは
     # 敷いていないので、ノイズタイルの反復検査は意味を持たず除外する。
-    # クリスマス曲のまとめ版 (x01〜) も同じ童謡エンジンで作るので同じ扱い
-    is_nursery = len(slug) > 3 and slug[0] in "nx" and slug[1:3].isdigit()
+    # クリスマス曲 (x01〜)・冬のメロディ (w01〜) も同じ童謡エンジンで作るので同じ扱い
+    is_nursery = len(slug) > 3 and slug[0] in "nxw" and slug[1:3].isdigit()
     # 旋律のあるトラックも同様に除外する。旋律は進行ごとのフレーズを繰り返す
     # 作り (arrange.play_melody の motif) に変えたので、曲全体の包絡には
     # 「フレーズが戻ってくる周期」が出るのが正しい。ノイズタイルの反復は

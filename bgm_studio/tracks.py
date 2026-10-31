@@ -1399,12 +1399,21 @@ CHRISTMAS_MUSICBOX_2_ORDER = [
     "c12_good_king_wenceslas", "c17_midnight_clear", "c21_infant_holy",
     "c20_royal_davids_city",
 ]
+# 2026-10-31 冬のメロディ。依頼「世界的な、冬の風物詩となるメロディ、冬を想うメロディ」。
+# ヴィヴァルディ「冬」に始まり、冬を歌う曲を並べ、年越しの Auld Lang Syne で終わる
+WINTER_ORDER = [
+    "d01_vivaldi_winter", "c19_bleak_midwinter", "c18_what_child", "d02_lindenbaum",
+    "d07_see_amid_winters_snow", "d04_holly_and_ivy", "d06_huron_carol",
+    "d05_coventry_carol", "c03_o_christmas_tree", "d03_auld_lang_syne",
+]
 MEDLEY_SONGS = {
     "x01_christmas_piano": CHRISTMAS_ORDER,
     "x02_christmas_musicbox": CHRISTMAS_ORDER,
     "x03_christmas_bells": CHRISTMAS_BELLS_ORDER,
     "x04_christmas_calm": CHRISTMAS_CALM_ORDER,
     "x08_christmas_carols_2_musicbox": CHRISTMAS_MUSICBOX_2_ORDER,
+    "w01_winter_piano": WINTER_ORDER,
+    "w02_winter_musicbox": WINTER_ORDER,
 }
 # 1 曲を 1 時間かける版。動画の記号 → 童謡エンジンの曲名 + 編曲 (_bells / _calm)
 CHRISTMAS_SINGLES = {
@@ -1412,6 +1421,9 @@ CHRISTMAS_SINGLES = {
     "x06_silent_night_piano": "n08_silent_night_lullaby_calm",
     "x07_o_holy_night_piano": "c15_o_holy_night_calm",
     "x09_we_wish_you_bells": "c01_we_wish_you_bells",
+    "w03_vivaldi_winter_piano": "d01_vivaldi_winter_calm",
+    "w04_greensleeves_piano": "c18_what_child_calm",
+    "w05_auld_lang_syne_piano": "d03_auld_lang_syne_calm",
 }
 
 
@@ -1943,6 +1955,67 @@ TRACKS: list[TrackSpec] = [
             keywords=["christmas music box", "music box christmas songs", "christmas carols music box",
                       "relaxing christmas music", "christmas lullaby", "christmas songs",
                       "christmas music instrumental", "music box"],
+        ),
+    ),
+    # 2026-10-31 冬のメロディ (一般向け)
+    TrackSpec(
+        slug="w01_winter_piano",
+        title_en='Winter Piano',
+        genre_ja='冬のメロディ10曲（やさしいピアノ・2時間）',
+        use_case="relax", bpm=66.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="winter_window", seed=8101, a4=432.0,
+        build=build_christmas_medley,
+        seo=dict(
+            title='Winter Piano ❄️ 2 Hours of Beautiful Winter Melodies | Vivaldi Winter, Greensleeves, Auld Lang Syne',
+            keywords=['winter piano', 'winter music', 'vivaldi winter', 'greensleeves piano', 'auld lang syne piano', 'relaxing winter music', 'cozy winter music', 'piano music'],
+        ),
+    ),
+    TrackSpec(
+        slug="w02_winter_musicbox",
+        title_en='Winter Music Box',
+        genre_ja='冬のメロディ10曲（オルゴール・2時間）',
+        use_case="relax", bpm=66.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="winter_window_teal", seed=8202, a4=432.0,
+        build=build_christmas_medley,
+        seo=dict(
+            title='Winter Music Box ❄️ 2 Hours of Gentle Winter Melodies | Soft & Relaxing',
+            keywords=['winter music box', 'music box', 'winter music', 'vivaldi winter music box', 'greensleeves music box', 'relaxing music box', 'cozy winter music'],
+        ),
+    ),
+    TrackSpec(
+        slug="w03_vivaldi_winter_piano",
+        title_en='Vivaldi: Winter (Largo) – Calm Piano',
+        genre_ja='ヴィヴァルディ「冬」ラルゴ（やすらぎのピアノ・1時間）',
+        use_case="relax", bpm=46.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="winter_window_violet", seed=8303, a4=432.0,
+        build=build_christmas_single,
+        seo=dict(
+            title='Vivaldi – Winter (Largo) ❄️ 1 Hour of Calm Piano | The Four Seasons',
+            keywords=['vivaldi winter', 'vivaldi winter largo', 'four seasons winter', 'classical piano', 'winter largo piano', 'calm classical music', 'winter music'],
+        ),
+    ),
+    TrackSpec(
+        slug="w04_greensleeves_piano",
+        title_en='Greensleeves – Calm Piano',
+        genre_ja='グリーンスリーブス（やすらぎのピアノ・1時間）',
+        use_case="relax", bpm=78.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="winter_window", seed=8404, a4=432.0,
+        build=build_christmas_single,
+        seo=dict(
+            title='Greensleeves ❄️ 1 Hour of Calm Piano | Beautiful Winter Melody',
+            keywords=['greensleeves', 'greensleeves piano', 'what child is this', 'calm piano', 'winter music', 'relaxing piano', 'greensleeves 1 hour'],
+        ),
+    ),
+    TrackSpec(
+        slug="w05_auld_lang_syne_piano",
+        title_en='Auld Lang Syne – Calm Piano',
+        genre_ja='蛍の光（オールド・ラング・サイン・やすらぎのピアノ・1時間）',
+        use_case="relax", bpm=72.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="winter_window_violet", seed=8505, a4=432.0,
+        build=build_christmas_single,
+        seo=dict(
+            title="Auld Lang Syne ✨ 1 Hour of Calm Piano | New Year's Eve Music",
+            keywords=['auld lang syne', 'auld lang syne piano', 'new year music', 'new years eve', 'calm piano', 'happy new year', 'auld lang syne 1 hour'],
         ),
     ),
     # 2026-10-30 クリスマス第 2 弾 (鈴入り・やすらぎ・オルゴール第 2 集・1 曲 1 時間版)

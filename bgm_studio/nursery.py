@@ -407,6 +407,92 @@ NURSERY: dict[str, dict] = {
              "E5/0.5 D5/0.5 C5/2 C5/0.5 B4/0.5 A4/1 A4/1 D5/0.5 C5/0.5 B4/1 B4/1 E5/0.5 D5/0.5 "
              "C5/1 C5/1 F5/0.5 E5/0.5 D5/1 D5/1 E5/0.5 F5/0.5 G5/1 F5/1 E5/0.5 D5/0.5 C5/2 E5/0.5 "
              "F5/0.5 G5/1 F5/1 E5/0.5 D5/0.5 C5/2"),
+
+    # ── 冬のメロディ (2026-10-31 追加) ──────────────────────────────
+    # 依頼「世界的な、冬の風物詩となるメロディ、冬を想うメロディ」。すべてパブリックドメイン。
+    # ABC / MIDI の楽譜を abc_import.py と同じ方法で機械的に読み込んだ (手で書き写さない)
+    "d01_vivaldi_winter": dict(
+        # Antonio Vivaldi「四季」より「冬」第 2 楽章 Largo (1725)。Mutopia Project の楽譜 (MIDI) の独奏ヴァイオリンを旋律、他の弦の音から拍ごとに和音を推定。原調 E♭
+        title='Winter (Largo) from The Four Seasons', bar=4, bpm=46, visual="winter_window",
+        trans=-4, mb_trans=-5,
+        chords="C,C,G,G G7,G7,C,C G7,G7,A7,Dm G7,C,F,D7 G C,C,D7,D7 G,G,Dm,D7 D,D,G,G G,G,D,D "
+               "D7,D7,G,G G7,G7,C,C F,Dm,G,Em Am,F,G,G G,C,G,G G,C,G,G C,G,C,C C C",
+        tune="C5/0.5 G5/0.25 F5/0.25 E5/0.5 D5/0.25 C5/0.25 D5/0.5 G4/0.5 R/0.5 G4/0.5 F5/0.25 "
+             "E5/0.25 D5/0.25 C5/0.25 B4/0.5 F5/0.5 F5/0.5 E5/0.5 R/0.5 E5/0.5 D5/0.5 E5/0.25 "
+             "F5/0.25 G5/0.5 A5/0.25 B5/0.25 C5/0.5 D5/0.25 E5/0.25 F5/0.5 G5/0.25 A5/0.25 B4/0.5 "
+             "C5/0.25 D5/0.25 E5/0.5 F5/0.25 G5/0.25 A4/0.5 B4/0.25 C5/0.25 D5/0.5 E5/0.25 C5/0.25 "
+             "B4/1.25 G4/0.25 F#4/0.25 G4/0.25 D5/1.25 G4/0.25 F#4/0.25 G4/0.25 E5/1.25 G4/0.25 "
+             "F#4/0.25 G4/0.25 F#5/1.25 D5/0.25 C5/0.25 D5/0.25 G5/0.5 G4/0.5 R/0.5 G5/0.5 G5/0.25 "
+             "F5/0.25 E5/0.25 D5/0.25 C5/0.25 B4/0.25 A4/0.25 G4/0.25 A4/1.5 G4/0.5 G4/1 R/1 "
+             "G4/0.5 D5/0.25 C5/0.25 B4/0.5 A4/0.25 G4/0.25 A4/0.5 D4/0.5 R/0.5 D4/0.5 C5/0.25 "
+             "B4/0.25 A4/0.25 G4/0.25 F#4/0.5 C5/0.5 C5/0.5 B4/0.5 R/0.5 G4/0.5 F5/0.25 E5/0.25 "
+             "D5/0.25 C5/0.25 B4/0.5 F5/0.5 F5/0.5 E5/0.5 R/0.5 E5/0.5 A4/0.5 B4/0.25 C5/0.25 "
+             "D5/0.5 E5/0.25 F5/0.25 B4/0.5 C5/0.25 D5/0.25 E5/0.5 F5/0.25 G5/0.25 C5/0.5 D5/0.25 "
+             "E5/0.25 F5/0.5 G5/0.25 A5/0.25 B4/1 R/0.5 B4/0.25 C5/0.25 D5/0.25 B4/0.25 A4/0.25 "
+             "G4/0.25 E5/0.25 F5/0.25 G5/0.25 E5/0.25 D5/0.5 G4/0.5 R/0.5 B4/0.25 C5/0.25 D5/0.25 "
+             "B4/0.25 A4/0.25 G4/0.25 E5/0.25 F5/0.25 G5/0.25 E5/0.25 D5/0.5 G4/0.5 R/0.5 D5/0.25 "
+             "G5/0.25 E5/0.5 D5/0.25 C5/0.25 B4/0.75 C5/0.25 C5/6 C5/4"),
+    "d02_lindenbaum": dict(
+        # Franz Schubert「冬の旅」(1827) の「菩提樹」、Silcher の民謡版。The Everyday Song Book (1927) X:201。原調 E♭
+        title='Der Lindenbaum (The Linden Tree)', bar=3, bpm=72, visual="winter_window",
+        trans=5, mb_trans=-5, mb_lg=0.85,  # オルゴール版は旋律が少し前に出すぎた (500Hz +14.3)
+        tune="R/2.5 G4/0.5 G4/1.5 E4/0.5 E4/0.5 E4/0.5 E4/1 C4/1 R/0.5 C4/0.5 D4/1.5 E4/0.5 F4/0.5 "
+             "D4/0.5 E4/2 R/0.5 G4/0.5 G4/1.5 E4/0.5 E4/0.5 E4/0.5 E4/1 C4/1 R/0.5 C4/0.5 D4/1.5 "
+             "E4/0.5 G4/0.3333333333 F4/0.3333333333 D4/0.3333333333 C4/2 R/0.5 C4/0.5 D4/1.5 "
+             "D4/0.5 D4/0.5 D4/0.5 E4/0.75 F4/0.25 G4/1 R/0.5 G4/0.5 A4/1.5 G4/0.5 E4/0.5 C4/0.5 "
+             "D4/2 R/0.5 D4/0.5 D4/1.5 D4/0.5 D4/0.5 D4/0.5 E4/0.75 F4/0.25 G4/1 R/0.5 G4/0.5 C5/1 "
+             "G4/0.5 E4/0.5 F4/0.5 D4/0.5 G4/2 R/0.5 G4/0.5 C5/1 G4/0.5 E4/0.5 G4/0.3333333333 "
+             "F4/0.3333333333 D4/0.3333333333 C4/2 R/0.5 R/0.5"),
+    "d03_auld_lang_syne": dict(
+        # スコットランド民謡 (詞 Robert Burns)。The Everyday Song Book (1927) X:197。原調 F。和音は手で付けた
+        title='Auld Lang Syne', bar=2, bpm=72, visual="winter_window",
+        trans=5, mb_trans=-2, mb_lg=0.8,  # オルゴール版は旋律が前に出すぎた (500Hz +15.3)
+        chords="C C G7 C F C G7 F,G7 C C G7 C F C G7 F,G7 C",
+        tune="R/1.5 G3/0.5 C4/0.75 C4/0.25 C4/0.5 E4/0.5 D4/0.75 C4/0.25 D4/0.5 E4/0.5 C4/0.75 "
+             "C4/0.25 E4/0.5 G4/0.5 A4/1.5 A4/0.5 G4/0.75 E4/0.25 E4/0.5 C4/0.5 D4/0.75 C4/0.25 "
+             "D4/0.5 E4/0.5 C4/0.75 A3/0.25 A3/0.5 G3/0.5 C4/1.5 A4/0.5 G4/0.75 E4/0.25 E4/0.5 "
+             "C4/0.5 D4/0.75 C4/0.25 D4/0.5 A4/0.5 G4/0.75 E4/0.25 E4/0.5 G4/0.5 A4/1.5 A4/0.5 "
+             "G4/0.75 E4/0.25 E4/0.5 C4/0.5 D4/0.75 C4/0.25 D4/0.5 E4/0.5 C4/0.75 A3/0.25 A3/0.5 "
+             "G3/0.5 C4/1.5 R/0.5"),
+    "d04_holly_and_ivy": dict(
+        # 英国の伝承曲。原調 G。Paul Hardy's Xmas Tunebook X:8003
+        title='The Holly and the Ivy', bar=3, bpm=84, visual="winter_window",
+        trans=-4, mb_trans=-5,
+        chords="C C,C,F C C,C,F G C Dm,G,G C,C,G C C,C,F C C,C,F G C Dm,G,G C,C,G C",
+        tune="R/2 C5/1 C5/0.5 C5/0.5 C5/1 A5/1 G5/1 E5/1.5 C5/0.5 C5/0.5 C5/0.5 C5/1 A5/1 G5/2 "
+             "G5/0.5 F5/0.5 E5/0.5 D5/0.5 C5/1 E5/0.5 E5/0.5 A4/0.5 A4/0.5 G4/1 C5/0.5 D5/0.5 "
+             "E5/0.5 F5/0.5 E5/1 D5/1 C5/2 R/0.5 C5/0.5 C5/0.5 C5/0.5 C5/1 A5/1 G5/1 E5/1 C5/0.5 "
+             "C5/0.5 C5/0.5 C5/0.5 C5/1 A5/1 G5/2 G5/0.5 F5/0.5 E5/0.5 D5/0.5 C5/1 E5/1 A4/0.5 "
+             "A4/0.5 G4/1 C5/0.5 D5/0.5 E5/0.5 F5/0.5 E5/1 D5/1 C5/2 R/1"),
+    "d05_coventry_carol": dict(
+        # 16 世紀の英国の子守唄。原調 E 短調 → A 短調。Paul Hardy's Xmas Tunebook X:3005
+        title='Coventry Carol', bar=3, bpm=66, visual="winter_window",
+        trans=-1, mb_trans=-3, mb_lg=1.3,  # オルゴール版は旋律の音域が狭く (E5〜C6) こもって聞こえた (2kHz -29)
+        chords="Am,Am,E Am E,E,Am E Am,E,Am G,E,E Am,Am,E G,G,Am E,E,Am E,E,Am E Am,E,Am G,E,E A "
+               "Am,Am,E Am E,E,Am E Am,E,Am G,E,E Am,Am,E G,G,Am E,E,Am E,E,Am E Am,E,Am G,E,E A",
+        tune="A4/1 A4/1 Ab4/1 A4/2 C5/1 B4/1.5 B4/0.5 A4/0.5 A4/0.5 Ab4/3 A4/1 B4/1 C5/1 D5/1 B4/2 "
+             "A4/2 E5/1 D5/1.5 D5/0.5 C5/0.5 C5/0.5 B4/2 C5/1 B4/2 A4/1 Ab4/3 A4/1 B4/1 C5/1 D5/1 "
+             "B4/2 C#5/3 A4/1 A4/1 Ab4/1 A4/2 C5/1 B4/1.5 B4/0.5 A4/0.5 A4/0.5 Ab4/3 A4/1 B4/1 "
+             "C5/1 D5/1 B4/2 A4/2 E5/1 D5/1.5 D5/0.5 C5/0.5 C5/0.5 B4/2 C5/1 B4/2 A4/1 Ab4/3 A4/1 "
+             "Ab4/1 A4/1 D5/1 B4/2 C#5/3"),
+    "d06_huron_carol": dict(
+        # カナダ最古のクリスマスの歌。旋律はフランスの伝承曲 Une Jeune Pucelle。A 短調。Paul Hardy's Xmas Tunebook X:8004
+        title="Huron Carol ('Twas in the Moon of Wintertime)", bar=4, bpm=72, visual="winter_window",
+        trans=1, mb_trans=-5,
+        chords="Am Am Am Am,Em Am Am Am Am,Em Am Em G Am Em Am Em Am,Am,Am,Em Am",
+        tune="R/3 E4/1 A4/1 B4/1 C5/1 D5/1 C5/1 B4/1 A4/1 G4/1 A4/1 A4/1 B4/1 G4/1 A4/3 E4/1 A4/1 "
+             "B4/1 C5/1 D5/1 C5/1 B4/1 A4/1 G4/1 A4/1 A4/1 B4/1 G4/1 A4/3 E5/1 E5/1 E5/1 B4/1 C5/1 "
+             "D5/1 C5/1 B4/1 B4/1 C5/1 B4/1 A4/1 A4/1 B4/1 A4/1 A4/1 G4/1 E4/2 A4/1 A4/1 G4/1 F4/1 "
+             "E4/2 A4/2 G4/1 E4/1 A4/3 R/1"),
+    "d07_see_amid_winters_snow": dict(
+        # John Goss (1871)。原調 G。Paul Hardy's Xmas Tunebook X:19002
+        title="See, Amid the Winter's Snow", bar=4, bpm=76, visual="winter_window",
+        trans=-3, mb_trans=-4,
+        chords="C,Am F,G C,F C,G C,Am F,G C,C,C,F G,C C,F Dm,G C,F Dm,G C,Am F,G C,F G7,C",
+        tune="C5/1.5 D5/0.5 C5/1 B4/1 A4/1.5 G4/0.5 G4/2 C5/1 D5/1 F5/1 E5/1 E5/1.5 D5/0.5 D5/2 "
+             "C5/1.5 D5/0.5 C5/1 B4/1 A4/1.5 G4/0.5 G4/2 C5/1 D5/1 E5/1 F5/1 D5/1.5 C5/0.5 C5/2 "
+             "G5/1.5 G5/0.5 F5/1 E5/1 D5/1 C5/1 B4/2 G5/1.5 G5/0.5 F5/1 E5/1 D5/1 C5/1 B4/2 C5/1.5 "
+             "D5/0.5 C5/1 B4/1 A4/1.5 G4/0.5 G4/2 G5/1.5 E5/0.5 C5/1 F5/1 E5/1 D5/1 C5/2"),
 }
 
 # 使う和音 (ルート pc, 構成音 pc)。ハ長調の主要三和音 + 副三和音

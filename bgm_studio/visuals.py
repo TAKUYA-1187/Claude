@@ -1185,9 +1185,10 @@ _XMAS_TINTS = {
 }
 
 
-def scene_christmas_window(seed: int = 54, tint: str = "night"):
+def scene_christmas_window(seed: int = 54, tint: str = "night", tree_on: bool = True):
     """
     クリスマスの夜の窓辺。雪、ツリーの灯り、暖色の部屋。
+    tree_on=False は冬の動画用 (2026-10-31): ツリーの代わりに、雪の丘と遠くの家の灯り
     """
     rng = np.random.default_rng(seed)
     c = _XMAS_TINTS[tint]
@@ -1200,17 +1201,27 @@ def scene_christmas_window(seed: int = 54, tint: str = "night"):
     im = Image.new("RGB", (W, H), (0, 0, 0))
     d = ImageDraw.Draw(im)
     cx, cy = int(W * 0.78), int(H * 0.92)
-    for k in range(4):
-        wdt = 420 - 90 * k
-        top = cy - 240 - 150 * k
-        d.polygon([(cx - wdt // 2, top + 210), (cx + wdt // 2, top + 210),
-                   (cx, top)], fill=(10, 26, 16))
+    lights = []
+    if not tree_on:
+        # 雪の丘 (2 重) と、右側の丘の上に点々と灯る家の窓
+        for k, (y0, col) in enumerate(((0.80, (34, 40, 62)), (0.86, (46, 54, 80)))):
+            pts = [(0, H)]
+            for xx in range(0, W + 1, 48):
+                u = xx / W
+                yy = H * (y0 - 0.035 * np.sin(u * 5.1 + k * 1.7) - 0.025 * np.sin(u * 11.3 + k))
+                pts.append((xx, int(yy)))
+            pts.append((W, H))
+            d.polygon(pts, fill=col)
+        for _ in range(22):
+            lx = rng.uniform(0.48, 0.97)
+            ly = rng.uniform(0.79, 0.86)
+            col = [(255, 196, 110), (255, 170, 80), (255, 220, 150)][int(rng.integers(0, 3))]
+            lights.append((lx, ly, col, float(rng.uniform(0, 6.28))))
     tree = np.asarray(im, dtype=np.float32)
     tmask = (tree.sum(axis=2) > 1)[:, :, None]
 
     # ツリーの電飾 (シルエット内にランダムに配置)
-    lights = []
-    for _ in range(46):
+    for _ in range(46 if tree_on else 0):
         u = rng.random()
         lvl = int(u * 3.999)
         wdt = (420 - 90 * lvl) * 0.42
@@ -1230,7 +1241,8 @@ def scene_christmas_window(seed: int = 54, tint: str = "night"):
                    radial_glow(0.06, 0.72, 0.5, c["room"], c["room_s"], falloff=1.8, res_div=3))
     sprites = []
     for lx, ly, col, ph in lights:
-        g = radial_glow(lx, ly, 0.012, col, 0.9, falloff=1.2, res_div=3)
+        g = radial_glow(lx, ly, 0.012 if tree_on else 0.006, col, 0.9 if tree_on else 0.75,
+                        falloff=1.2, res_div=3)
         ys, xs = np.nonzero(g.max(axis=2) > 0.02)
         y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
         sprites.append((y0, y1, x0, x1, g[y0:y1, x0:x1].copy(), ph))
@@ -1239,7 +1251,9 @@ def scene_christmas_window(seed: int = 54, tint: str = "night"):
         img = still.copy()
         # 電飾: それぞれ位相の違う 2 周期のまたたき
         for y0, y1, x0, x1, g, ph in sprites:
-            tw = 0.55 + 0.45 * np.sin(TWO_PI * (2 * t01) + ph)
+            # 家の灯りは電飾よりゆっくり、かすかにゆらぐだけ
+            tw = (0.55 + 0.45 * np.sin(TWO_PI * (2 * t01) + ph) if tree_on
+                  else 0.85 + 0.15 * np.sin(TWO_PI * t01 + ph))
             img[y0:y1, x0:x1] = screen(img[y0:y1, x0:x1], g * tw)
         # 雪 (2 層)
         img = screen(img, _particle_layer(
@@ -1639,6 +1653,9 @@ SCENES = {
     "christmas_window_warm": lambda seed=54: scene_christmas_window(seed, "warm"),
     "christmas_window_violet": lambda seed=54: scene_christmas_window(seed, "violet"),
     "christmas_window_teal": lambda seed=54: scene_christmas_window(seed, "teal"),
+    "winter_window": lambda seed=54: scene_christmas_window(seed, "night", tree_on=False),
+    "winter_window_violet": lambda seed=54: scene_christmas_window(seed, "violet", tree_on=False),
+    "winter_window_teal": lambda seed=54: scene_christmas_window(seed, "teal", tree_on=False),
     "anime_dusk": scene_anime_dusk,
     "morning_meadow": scene_morning_meadow,
     "night_drive": scene_night_drive,

@@ -66,6 +66,7 @@ _TOKEN = re.compile(r"""
   | (?P<deco>![^!]*!|\+[^+]*\+)
   | (?P<grace>\{[^}]*\})
   | (?P<field>\[[A-Za-z]:[^\]]*\])
+  | (?P<multi>\[(?:(?:\^\^|\^|__|_|=)?[A-Ga-g][,']*\d*(?:/+\d*)?)+\]\d*(?:/+\d*)?)
   | (?P<bar>:\|\]|:\|\||\|\]|\[\||\|\||:\|:|::|:\||\|:|\|)
   | (?P<ending>\[?[12](?=[^/\d]|$))
   | (?P<tuplet>\(\d)
@@ -98,7 +99,7 @@ def parse(abc: str) -> dict:
     # 1) 字句を読んで、反復記号と終わりかっこを含む出来事の列にする
     ev: list[tuple] = []
     text = " ".join(body)
-    pos, local_acc, tuplet = 0, {}, 0
+    pos, local_acc, tuplet, tup_left = 0, {}, 0, 0
     broken = None
     while pos < len(text):
         m = _TOKEN.match(text, pos)
@@ -121,7 +122,7 @@ def parse(abc: str) -> dict:
             ev.append(("ending", int(tok.lstrip("["))))
             continue
         if kind == "tuplet":
-            tuplet = int(tok[1:])
+            tuplet = tup_left = int(tok[1:])
             continue
         if kind == "tie":
             ev.append(("tie",))
@@ -129,8 +130,29 @@ def parse(abc: str) -> dict:
         if kind == "broken":
             broken = tok
             continue
+        if kind == "multi":
+            # 重音 [BG] (2 声部の歌集の書き方)。いちばん上の音を旋律として読む
+            inner, _, outer = tok[1:].partition("]")
+            best = None
+            for nm in re.finditer(r"(\^\^|\^|__|_|=)?([A-Ga-g])([,']*)(\d*(?:/+\d*)?)", inner):
+                acc, letter, octs, dstr = nm.groups()
+                up = letter.upper()
+                octave = (4 if letter.isupper() else 5) + octs.count("'") - octs.count(",")
+                key = (up, octave)
+                if acc:
+                    local_acc[key] = {"^^": 2, "^": 1, "__": -2, "_": -1, "=": 0}[acc]
+                midi = 12 * (octave + 1) + _PC[up] + local_acc.get(key, sig.get(up, 0))
+                if best is None or midi > best[0]:
+                    best = (midi, _dur(dstr))
+            tok = "MULTI"
+            kind = "note"
+            midi_multi, d_multi = best[0], best[1] * _dur(outer)
+        else:
+            midi_multi = None
         if kind in ("note", "rest"):
-            if kind == "rest":
+            if midi_multi is not None:
+                midi, d = midi_multi, d_multi
+            elif kind == "rest":
                 d = _dur(tok[1:])
                 midi = None
             else:
@@ -145,10 +167,10 @@ def parse(abc: str) -> dict:
                 alter = local_acc.get(key, sig.get(up, 0))
                 midi = 12 * (octave + 1) + _PC[up] + alter
                 d = _dur(dstr)
-            if tuplet:
-                d = d * Fraction(2, 3) if tuplet == 3 else d * Fraction(tuplet - 1, tuplet)
-                tuplet = tuplet - 1 if tuplet > 1 else 0
-                tuplet = 0 if tuplet == 1 else tuplet
+            if tup_left:
+                # (3 は 3 つの音を 2 つ分の長さで、(2 は 2 つを 3 つ分で弾く
+                d = d * (Fraction(3, 2) if tuplet == 2 else Fraction(2 if tuplet in (3, 6) else 3, tuplet))
+                tup_left -= 1
             if broken:
                 # 直前の音と組で長さを分け合う (> は前が付点)
                 k = len(broken)
@@ -236,7 +258,7 @@ def to_song(abc: str, shift: int) -> dict:
     toks = []
     for m, d in notes:
         name = "R" if m is None else (lambda x: _NAMES[x % 12] + str(x // 12 - 1))(m + shift)
-        ds = format(float(d), "g")
+        ds = f"{float(d):.10g}"
         toks.append(f"{name}/{ds}")
 
     # 和音: 各小節を、和音の変わり目がすべて乗るいちばん粗い等分にする
