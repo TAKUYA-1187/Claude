@@ -1,0 +1,32 @@
+{
+  "slug": "w04_greensleeves_piano",
+  "title": "Greensleeves ❄️ 1 Hour of Calm Piano | Beautiful Winter Melody",
+  "description": "❄️ GREENSLEEVES — 1 hour of calm piano\n\n\"Greensleeves\", the old English melody also sung at Christmas as \"What Child Is This\",\nplayed slowly and softly on a real piano, with a long, warm reverb.\n\n▸ Soft piano only — no rain, no hiss, no background noise\n▸ One calm key and tempo for the whole hour, with nothing sudden\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are in the public domain. Arrangement and sound made for this channel.\n\nFor a snowy evening, reading by the window, or a peaceful winter night.\n",
+  "tags": [
+    "greensleeves",
+    "greensleeves piano",
+    "what child is this",
+    "calm piano",
+    "winter music",
+    "relaxing piano",
+    "greensleeves 1 hour"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "グリーンスリーブス（やすらぎのピアノ・1時間）",
+    "use_case": "relax",
+    "bpm": 70.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.48,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -72.78,
+    "visual": "winter_window"
+  }
+}

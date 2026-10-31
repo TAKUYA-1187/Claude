@@ -1,0 +1,33 @@
+{
+  "slug": "w01_winter_piano",
+  "title": "Winter Piano ❄️ 2 Hours of Beautiful Winter Melodies | Vivaldi Winter, Greensleeves, Auld Lang Syne",
+  "description": "❄️ WINTER PIANO — 2 hours of beautiful winter melodies\n\nTen melodies the whole world thinks of in winter, played slowly and gently on a real\npiano — from Vivaldi's \"Winter\" to Schubert's \"Linden Tree\", old winter carols, and\n\"Auld Lang Syne\" to close the year. About twelve minutes each, while snow falls over\nquiet hills and the lights of distant houses glow.\n\n00:00 Vivaldi – Winter (Largo), The Four Seasons\n12:00 In the Bleak Midwinter\n24:00 Greensleeves (What Child Is This)\n36:00 Schubert – Der Lindenbaum (The Linden Tree)\n48:00 See, Amid the Winter's Snow\n1:00:00 The Holly and the Ivy\n1:12:00 Huron Carol ('Twas in the Moon of Wintertime)\n1:24:00 Coventry Carol\n1:36:00 O Christmas Tree (O Tannenbaum)\n1:48:00 Auld Lang Syne\n\n▸ Soft piano only — no wind, no rain, no background noise\n▸ Every melody stays in one calm tempo, then moves gently into the next\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are in the public domain. Arrangement and sound made for this channel.\n\nFor a snowy evening, a warm drink by the window, reading, or winding down in winter.\n",
+  "tags": [
+    "winter piano",
+    "winter music",
+    "vivaldi winter",
+    "greensleeves piano",
+    "auld lang syne piano",
+    "relaxing winter music",
+    "cozy winter music",
+    "piano music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "冬のメロディ10曲（やさしいピアノ・2時間）",
+    "use_case": "relax",
+    "bpm": 0.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 7200.0,
+    "total_seconds": 7200.0,
+    "total_hhmmss": "2 hours",
+    "lufs": -14.12,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -240.0,
+    "visual": "winter_window"
+  }
+}

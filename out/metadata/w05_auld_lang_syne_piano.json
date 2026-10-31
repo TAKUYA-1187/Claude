@@ -1,0 +1,32 @@
+{
+  "slug": "w05_auld_lang_syne_piano",
+  "title": "Auld Lang Syne ✨ 1 Hour of Calm Piano | New Year's Eve Music",
+  "description": "✨ AULD LANG SYNE — 1 hour of calm piano\n\nThe song the whole world sings as the old year ends, played slowly and softly on a\nreal piano, with a long, warm reverb — for looking back, and looking forward.\n\n▸ Soft piano only — no rain, no hiss, no background noise\n▸ One calm key and tempo for the whole hour, with nothing sudden\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are in the public domain. Arrangement and sound made for this channel.\n\nFor New Year's Eve, the last quiet evening of the year, or a calm start to January.\n",
+  "tags": [
+    "auld lang syne",
+    "auld lang syne piano",
+    "new year music",
+    "new years eve",
+    "calm piano",
+    "happy new year",
+    "auld lang syne 1 hour"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "蛍の光（オールド・ラング・サイン・やすらぎのピアノ・1時間）",
+    "use_case": "relax",
+    "bpm": 64.67,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.0,
+    "true_peak_db": -1.09,
+    "loop_seam_db": -54.6,
+    "visual": "winter_window_violet"
+  }
+}

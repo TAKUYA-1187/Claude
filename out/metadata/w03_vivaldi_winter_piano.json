@@ -1,0 +1,32 @@
+{
+  "slug": "w03_vivaldi_winter_piano",
+  "title": "Vivaldi – Winter (Largo) ❄️ 1 Hour of Calm Piano | The Four Seasons",
+  "description": "❄️ VIVALDI — WINTER (LARGO) — 1 hour of calm piano\n\nThe famous slow movement of \"Winter\" from Antonio Vivaldi's The Four Seasons (1725) —\nthe warm room by the fire while cold rain falls outside — played slowly and softly on\na real piano, with a long, warm reverb.\n\n▸ Soft piano only — no rain, no hiss, no background noise\n▸ One calm key and tempo for the whole hour, with nothing sudden\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are in the public domain. Arrangement and sound made for this channel.\n\nFor studying, reading, a winter afternoon, or falling asleep.\n",
+  "tags": [
+    "vivaldi winter",
+    "vivaldi winter largo",
+    "four seasons winter",
+    "classical piano",
+    "winter largo piano",
+    "calm classical music",
+    "winter music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "ヴィヴァルディ「冬」ラルゴ（やすらぎのピアノ・1時間）",
+    "use_case": "relax",
+    "bpm": 41.33,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.01,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -66.15,
+    "visual": "winter_window_violet"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "w02_winter_musicbox",
+  "title": "Winter Music Box ❄️ 2 Hours of Gentle Winter Melodies | Soft & Relaxing",
+  "description": "❄️ WINTER MUSIC BOX — 2 hours of gentle winter melodies\n\nThe same ten winter melodies — Vivaldi's \"Winter\", Greensleeves, \"Auld Lang Syne\" and\nmore — played on a music box, small and clear like snow falling at night, with a quiet\npiano underneath. About twelve minutes each.\n\n00:00 Vivaldi – Winter (Largo), The Four Seasons\n12:00 In the Bleak Midwinter\n24:00 Greensleeves (What Child Is This)\n36:00 Schubert – Der Lindenbaum (The Linden Tree)\n48:00 See, Amid the Winter's Snow\n1:00:00 The Holly and the Ivy\n1:12:00 Huron Carol ('Twas in the Moon of Wintertime)\n1:24:00 Coventry Carol\n1:36:00 O Christmas Tree (O Tannenbaum)\n1:48:00 Auld Lang Syne\n\n▸ Music box with a soft piano — no wind, no rain, no background noise\n▸ Every melody stays in one calm tempo, then moves gently into the next\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ All melodies are in the public domain. Arrangement and sound made for this channel.\n\nFor a quiet winter night, bedtime, or a peaceful moment with tea.\n",
+  "tags": [
+    "winter music box",
+    "music box",
+    "winter music",
+    "vivaldi winter music box",
+    "greensleeves music box",
+    "relaxing music box",
+    "cozy winter music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "冬のメロディ10曲（オルゴール・2時間）",
+    "use_case": "relax",
+    "bpm": 0.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 7200.0,
+    "total_seconds": 7200.0,
+    "total_hhmmss": "2 hours",
+    "lufs": -13.99,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -240.0,
+    "visual": "winter_window_teal"
+  }
+}
