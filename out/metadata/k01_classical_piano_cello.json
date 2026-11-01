@@ -1,0 +1,34 @@
+{
+  "slug": "k01_classical_piano_cello",
+  "title": "Beautiful Classical Music for Relaxation 🌙 Piano & Cello | Satie, Debussy, Schubert, Bach",
+  "description": "🌙 BEAUTIFUL CLASSICAL MUSIC — 2:17:56 for relaxation\n\nEight of the most peaceful pieces in classical music, played exactly as the composers\nwrote them — on a real piano, with a cello singing the melodies of \"Ave Maria\" and\nBach's \"Arioso\".\n\n00:00 Satie – Gymnopédie No. 1\n03:09 Schubert – Ave Maria\n10:16 Debussy – Clair de Lune\n15:39 Bach – Arioso (BWV 1056)\n18:31 Satie – Gymnopédie No. 2\n22:53 Bach / Gounod – Ave Maria\n27:20 Debussy – Arabesque No. 1\n30:27 Satie – Gymnopédie No. 3\n\n▸ Real recorded piano and cello — no synthesizers, no background noise\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ The music is in the public domain. Score data: The Mutopia Project\n  (mutopiaproject.org); Bach's Arioso score is CC BY 3.0. Performance and sound made for this channel\n  with recorded piano and cello samples (University of Iowa Electronic Music Studios).\n\nFor reading, studying, a quiet evening, or winding down before sleep.\n",
+  "tags": [
+    "classical music",
+    "relaxing classical music",
+    "piano and cello",
+    "gymnopedie",
+    "clair de lune",
+    "ave maria cello",
+    "bach arioso",
+    "classical music for sleep",
+    "calm classical music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "クラシックの名曲8曲（ピアノとチェロ・2時間）",
+    "use_case": "relax",
+    "bpm": 59.97,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 2069.0,
+    "total_seconds": 8276.0,
+    "total_hhmmss": "2:17:56",
+    "lufs": -14.14,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -86.78,
+    "visual": "moon_lake"
+  }
+}

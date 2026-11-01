@@ -1,0 +1,32 @@
+{
+  "slug": "k02_gymnopedie_1",
+  "title": "Satie – Gymnopédie No. 1 🌙 1 Hour of Calm Piano | Relaxing Classical Music",
+  "description": "🌙 SATIE — GYMNOPÉDIE NO. 1 — 1:00:10 of calm piano\n\nErik Satie's \"Gymnopédie No. 1\" (1888), played slowly and softly on a real piano,\nexactly as written, again and again for a full hour.\n\n▸ Real recorded piano only — no synthesizers, no background noise\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ The music is in the public domain. Score data: The Mutopia Project\n  (mutopiaproject.org). Performance and sound made for this channel\n  with recorded piano samples (University of Iowa Electronic Music Studios).\n\nFor reading, studying, a quiet evening, or winding down before sleep.\n",
+  "tags": [
+    "gymnopedie",
+    "gymnopedie no 1",
+    "satie",
+    "gymnopedie 1 hour",
+    "calm piano",
+    "relaxing classical piano",
+    "classical music for sleep"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "サティ「ジムノペディ第1番」（ピアノ・1時間）",
+    "use_case": "relax",
+    "bpm": 59.37,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 190.0,
+    "total_seconds": 3610.0,
+    "total_hhmmss": "1:00:10",
+    "lufs": -14.24,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -49.33,
+    "visual": "golden_light"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "k03_clair_de_lune",
+  "title": "Debussy – Clair de Lune 🌙 1 Hour of Calm Piano | Relaxing Classical Music",
+  "description": "🌙 DEBUSSY — CLAIR DE LUNE — 1:04:48 of calm piano\n\nClaude Debussy's \"Clair de Lune\" (Suite bergamasque, 1905) — moonlight on still water —\nplayed on a real piano, exactly as written, for a full hour.\n\n▸ Real recorded piano only — no synthesizers, no background noise\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ The music is in the public domain. Score data: The Mutopia Project\n  (mutopiaproject.org). Performance and sound made for this channel\n  with recorded piano samples (University of Iowa Electronic Music Studios).\n\nFor reading, studying, a quiet evening, or winding down before sleep.\n",
+  "tags": [
+    "clair de lune",
+    "debussy",
+    "clair de lune 1 hour",
+    "clair de lune piano",
+    "relaxing classical piano",
+    "classical music for sleep",
+    "calm piano"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "ドビュッシー「月の光」（ピアノ・1時間）",
+    "use_case": "relax",
+    "bpm": 60.0,
+    "key": "C",
+    "a4_hz": 432.0,
+    "loop_seconds": 324.0,
+    "total_seconds": 3888.0,
+    "total_hhmmss": "1:04:48",
+    "lufs": -14.34,
+    "true_peak_db": -1.0,
+    "loop_seam_db": -87.43,
+    "visual": "moonlit_ocean"
+  }
+}
