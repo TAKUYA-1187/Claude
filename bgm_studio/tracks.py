@@ -1427,6 +1427,12 @@ CHRISTMAS_SINGLES = {
 }
 
 
+def build_classical_proxy(spec, seconds):
+    """クラシックの名曲。実体は classical.py"""
+    from .classical import build_classical
+    return build_classical(spec, seconds)
+
+
 def build_christmas_single(spec, seconds):
     import dataclasses
     from .nursery import build_nursery
@@ -1955,6 +1961,43 @@ TRACKS: list[TrackSpec] = [
             keywords=["christmas music box", "music box christmas songs", "christmas carols music box",
                       "relaxing christmas music", "christmas lullaby", "christmas songs",
                       "christmas music instrumental", "music box"],
+        ),
+    ),
+    # 2026-11-01 クラシックの名曲 (楽譜どおりに録音の楽器で演奏)
+    TrackSpec(
+        slug="k01_classical_piano_cello",
+        title_en='Classical Piano & Cello',
+        genre_ja='クラシックの名曲8曲（ピアノとチェロ・2時間）',
+        use_case="relax", bpm=60.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="moon_lake", seed=9101, a4=432.0,
+        build=build_classical_proxy,
+        seo=dict(
+            title='Beautiful Classical Music for Relaxation 🌙 Piano & Cello | Satie, Debussy, Schubert, Bach',
+            keywords=['classical music', 'relaxing classical music', 'piano and cello', 'gymnopedie', 'clair de lune', 'ave maria cello', 'bach arioso', 'classical music for sleep', 'calm classical music'],
+        ),
+    ),
+    TrackSpec(
+        slug="k02_gymnopedie_1",
+        title_en='Satie – Gymnopédie No. 1 (1 Hour)',
+        genre_ja='サティ「ジムノペディ第1番」（ピアノ・1時間）',
+        use_case="relax", bpm=60.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="golden_light", seed=9202, a4=432.0,
+        build=build_classical_proxy,
+        seo=dict(
+            title='Satie – Gymnopédie No. 1 🌙 1 Hour of Calm Piano | Relaxing Classical Music',
+            keywords=['gymnopedie', 'gymnopedie no 1', 'satie', 'gymnopedie 1 hour', 'calm piano', 'relaxing classical piano', 'classical music for sleep'],
+        ),
+    ),
+    TrackSpec(
+        slug="k03_clair_de_lune",
+        title_en='Debussy – Clair de Lune (1 Hour)',
+        genre_ja='ドビュッシー「月の光」（ピアノ・1時間）',
+        use_case="relax", bpm=60.0, key="C", key_root=0, scale="major",
+        prog_key="ambient", visual="moonlit_ocean", seed=9303, a4=432.0,
+        build=build_classical_proxy,
+        seo=dict(
+            title='Debussy – Clair de Lune 🌙 1 Hour of Calm Piano | Relaxing Classical Music',
+            keywords=['clair de lune', 'debussy', 'clair de lune 1 hour', 'clair de lune piano', 'relaxing classical piano', 'classical music for sleep', 'calm piano'],
         ),
     ),
     # 2026-10-31 冬のメロディ (一般向け)

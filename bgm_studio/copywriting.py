@@ -969,6 +969,65 @@ minutes each.
 For Christmas Eve, decorating the tree, bedtime in December, or a cozy winter night.
 """
 
+# 2026-11-01 クラシックの名曲
+DESCRIPTIONS["k01_classical_piano_cello"] = """\
+🌙 BEAUTIFUL CLASSICAL MUSIC — {duration} for relaxation
+
+Eight of the most peaceful pieces in classical music, played exactly as the composers
+wrote them — on a real piano, with a cello singing the melodies of "Ave Maria" and
+Bach's "Arioso".
+
+00:00 Satie – Gymnopédie No. 1
+03:15 Schubert – Ave Maria
+10:34 Debussy – Clair de Lune
+16:04 Bach – Arioso (BWV 1056)
+19:01 Satie – Gymnopédie No. 2
+23:28 Bach / Gounod – Ave Maria
+28:02 Debussy – Arabesque No. 1
+31:14 Satie – Gymnopédie No. 3
+
+▸ Real recorded piano and cello — no synthesizers, no background noise
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ The music is in the public domain. Score data: The Mutopia Project
+  (mutopiaproject.org); Bach's Arioso score is CC BY 3.0. Performance and sound made for this channel
+  with recorded piano and cello samples (University of Iowa Electronic Music Studios).
+
+For reading, studying, a quiet evening, or winding down before sleep.
+"""
+
+DESCRIPTIONS["k02_gymnopedie_1"] = """\
+🌙 SATIE — GYMNOPÉDIE NO. 1 — {duration} of calm piano
+
+Erik Satie's "Gymnopédie No. 1" (1888), played slowly and softly on a real piano,
+exactly as written, again and again for a full hour.
+
+▸ Real recorded piano only — no synthesizers, no background noise
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ The music is in the public domain. Score data: The Mutopia Project
+  (mutopiaproject.org). Performance and sound made for this channel
+  with recorded piano samples (University of Iowa Electronic Music Studios).
+
+For reading, studying, a quiet evening, or winding down before sleep.
+"""
+
+DESCRIPTIONS["k03_clair_de_lune"] = """\
+🌙 DEBUSSY — CLAIR DE LUNE — {duration} of calm piano
+
+Claude Debussy's "Clair de Lune" (Suite bergamasque, 1905) — moonlight on still water —
+played on a real piano, exactly as written, for a full hour.
+
+▸ Real recorded piano only — no synthesizers, no background noise
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ The music is in the public domain. Score data: The Mutopia Project
+  (mutopiaproject.org). Performance and sound made for this channel
+  with recorded piano samples (University of Iowa Electronic Music Studios).
+
+For reading, studying, a quiet evening, or winding down before sleep.
+"""
+
 # 2026-10-31 冬のメロディ
 DESCRIPTIONS["w01_winter_piano"] = """\
 ❄️ WINTER PIANO — {duration} of beautiful winter melodies

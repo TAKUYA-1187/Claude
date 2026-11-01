@@ -24,6 +24,7 @@ without restrictions" と明記されている (https://theremin.music.uiowa.edu
 from __future__ import annotations
 
 import argparse
+import re
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -210,12 +211,65 @@ def prepare_perc(skip_download: bool) -> None:
     print(f"クロタル {len(crot)} 音 → {CROTALE_CLEAN} / 鈴・トライアングル {len(PERC_FILES)} 本 → {PERC_CLEAN}")
 
 
+# ── 弦楽器 (2026-11-01)。クラシックのアダージョ (チェロとピアノ) 用 ──────────
+# Iowa MIS 2014 年収録の arco (弓) は ff だけなので、鳴らすときに音量と高域を下げる。
+# 同じ高さの音が複数の弦にあるときは、演奏者がふつう使う弦 (その音を出せるいちばん高い弦) を選ぶ
+STRINGS_URL = PERC_URL.replace("Percussion/", "Strings/")
+OPEN_STRINGS = {"Cello": [("sulA", 57), ("sulD", 50), ("sulG", 43), ("sulC", 36)],
+                "Violin": [("sulE", 76), ("sulA", 69), ("sulD", 62), ("sulG", 55)]}
+
+
+def prepare_strings(skip_download: bool, listing: dict[str, list[str]]) -> None:
+    for inst, opens in OPEN_STRINGS.items():
+        raw = ROOT / "samples" / f"iowa_{inst.lower()}"
+        dst = ROOT / "samples" / f"{inst.lower()}_clean"
+        raw.mkdir(parents=True, exist_ok=True)
+        dst.mkdir(parents=True, exist_ok=True)
+        have = {}
+        for path in listing[inst]:
+            m = re.search(rf"{inst}\.arco\.ff\.(sul[A-G])\.([A-G]b?\d)\.stereo\.aif$", path)
+            if m:
+                have.setdefault(_midi_of(m.group(2)), {})[m.group(1)] = path
+        chosen = {}
+        for midi, by_string in have.items():
+            for s, low in opens:
+                if s in by_string and midi >= low:
+                    chosen[midi] = by_string[s]
+                    break
+        if not skip_download:
+            def get(item):
+                midi, path = item
+                f = raw / f"m{midi}.aif"
+                if not f.exists():
+                    subprocess.run(["curl", "-sS", "--retry", "3", "-o", str(f),
+                                    "https://theremin.music.uiowa.edu/" + path.replace(" ", "%20")],
+                                   check=True)
+            with ThreadPoolExecutor(8) as ex:
+                list(ex.map(get, chosen.items()))
+        out = {m: clean(load(raw / f"m{m}.aif")).mean(axis=1) for m in chosen
+               if (raw / f"m{m}.aif").exists()}
+        peak = max(float(np.abs(v).max()) for v in out.values())
+        for m, v in out.items():
+            np.save(dst / f"m{m}.npy", (v * (0.9 / peak)).astype(np.float32))
+        lens = [len(v) / SR for v in out.values()]
+        print(f"{inst}: {len(out)} 音 ({min(out)}〜{max(out)}) → {dst}  長さ {min(lens):.1f}〜{max(lens):.1f} 秒")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--skip-download", action="store_true")
     ap.add_argument("--bells", action="store_true", help="オルゴール用の鉄琴だけを処理する")
     ap.add_argument("--perc", action="store_true", help="クリスマスの鈴 (クロタル・トライアングル・そり鈴)")
+    ap.add_argument("--strings", action="store_true", help="チェロとヴァイオリン (弓)")
     args = ap.parse_args()
+    if args.strings:
+        listing = {}
+        for inst in OPEN_STRINGS:
+            html = subprocess.run(["curl", "-sS", f"https://theremin.music.uiowa.edu/MIS-Pitches-2012/MIS{inst}2012.html"],
+                                  capture_output=True, text=True, check=True).stdout
+            listing[inst] = [h.removeprefix("../") for h in re.findall(r'href="([^"]+\.aif)"', html)]
+        prepare_strings(args.skip_download, listing)
+        return 0
     if args.bells:
         prepare_bells(args.skip_download)
         return 0
