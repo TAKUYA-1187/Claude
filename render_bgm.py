@@ -377,6 +377,7 @@ ELEGANT = {
     "k01_classical_piano_cello": (["CLASSICAL", "PIANO & CELLO"], "SATIE · DEBUSSY · BACH"),
     "k02_gymnopedie_1": (["GYMNOPÉDIE", "NO. 1"], "SATIE · CALM PIANO"),
     "k03_clair_de_lune": (["CLAIR", "DE LUNE"], "DEBUSSY · CALM PIANO"),
+    "h01_handpan_style_432": (["HANDPAN", "MEDITATION"], "432 HZ · SOFT METAL TONES"),
     "n12_brahms_lullaby": (["BRAHMS'", "LULLABY"], "SOFT PIANO FOR BABIES"),
     "n12_brahms_lullaby_musicbox": (["BRAHMS'", "LULLABY"], "MUSIC BOX LULLABY"),
     "n13_rockabye_baby": (["ROCK-A-BYE", "BABY"], "SOFT PIANO FOR BABIES"),

@@ -969,6 +969,25 @@ minutes each.
 For Christmas Eve, decorating the tree, bedtime in December, or a cozy winter night.
 """
 
+# 2026-11-01 ハンドパン風
+DESCRIPTIONS["h01_handpan_style_432"] = """\
+🌙 432 HZ HANDPAN-STYLE MEDITATION — {duration} of calm, gentle music
+
+Slow, spacious melodies in the handpan's "Kurd" scale (A minor), with a soft low "ding"
+and a quiet bowed drone underneath — gentle, round metal tones that ring and fade.
+
+About the sound: this is played on a recorded vibraphone (University of Iowa Electronic
+Music Studios), shaped to sound like a handpan — each note carries a soft octave and
+fifth above it, the way a handpan is tuned.
+
+▸ No background noise, no sudden sounds
+▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
+  no health claims are made)
+▸ Original music composed for this channel
+
+For meditation, yoga, reading, focus, or a quiet evening.
+"""
+
 # 2026-11-01 クラシックの名曲
 DESCRIPTIONS["k01_classical_piano_cello"] = """\
 🌙 BEAUTIFUL CLASSICAL MUSIC — {duration} for relaxation

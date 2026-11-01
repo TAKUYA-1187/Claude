@@ -1427,6 +1427,12 @@ CHRISTMAS_SINGLES = {
 }
 
 
+def build_handpan_proxy(spec, seconds):
+    """ハンドパン風。実体は handpan.py"""
+    from .handpan import build_handpan
+    return build_handpan(spec, seconds)
+
+
 def build_classical_proxy(spec, seconds):
     """クラシックの名曲。実体は classical.py"""
     from .classical import build_classical
@@ -1961,6 +1967,20 @@ TRACKS: list[TrackSpec] = [
             keywords=["christmas music box", "music box christmas songs", "christmas carols music box",
                       "relaxing christmas music", "christmas lullaby", "christmas songs",
                       "christmas music instrumental", "music box"],
+        ),
+    ),
+    # 2026-11-01 ハンドパン風 (再生数 1 位のジャンル。録音のヴィブラフォンで)
+    TrackSpec(
+        slug="h01_handpan_style_432",
+        title_en="Handpan-Style Meditation (432 Hz)",
+        genre_ja="ハンドパン風の瞑想音楽（ヴィブラフォン・1時間）",
+        use_case="relax", bpm=66.0, key="Am", key_root=9, scale="minor",
+        prog_key="ambient", visual="starry_night", seed=9401, a4=432.0,
+        build=build_handpan_proxy,
+        seo=dict(
+            title="432 Hz Handpan-Style Meditation 🌙 1 Hour of Calm, Gentle Music | Soft Metal Tones",
+            keywords=["handpan", "handpan music", "432 hz", "meditation music", "calm music", "relaxing music",
+                      "handpan meditation", "peaceful music"],
         ),
     ),
     # 2026-11-01 クラシックの名曲 (楽譜どおりに録音の楽器で演奏)

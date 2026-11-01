@@ -255,13 +255,49 @@ def prepare_strings(skip_download: bool, listing: dict[str, list[str]]) -> None:
         print(f"{inst}: {len(out)} 音 ({min(out)}〜{max(out)}) → {dst}  長さ {min(lens):.1f}〜{max(lens):.1f} 秒")
 
 
+# ── ヴィブラフォン (2026-11-01)。ハンドパン風の動画用 ────────────────────
+# 再生数 1 位のハンドパン動画に近い「やわらかい金属の打音」を、自由に使える録音から作る。
+# sustain = 叩いて響かせた音、bow = 弓でこすった長い音 (下で薄く敷く)
+VIBES_URL = PERC_URL + "Vibraphone/Vibraphone.{kind}.{name}.stereo.aif"
+
+
+def prepare_vibes(skip_download: bool) -> None:
+    for kind, url_kind in (("sustain", "sustain.ff"), ("bow", "bow")):
+        raw = ROOT / "samples" / f"iowa_vibes_{kind}"
+        dst = ROOT / "samples" / f"vibes_{kind}_clean"
+        raw.mkdir(parents=True, exist_ok=True)
+        dst.mkdir(parents=True, exist_ok=True)
+        notes = range(53, 90)                  # F3〜F6
+        if not skip_download:
+            def get(m):
+                f = raw / f"m{m}.aif"
+                if not f.exists():
+                    r = subprocess.run(["curl", "-sS", "--fail", "--retry", "3", "-o", str(f),
+                                        VIBES_URL.format(kind=url_kind, name=note_name(m))])
+                    if r.returncode != 0:
+                        f.unlink(missing_ok=True)
+            with ThreadPoolExecutor(8) as ex:
+                list(ex.map(get, notes))
+        out = {m: clean(load(raw / f"m{m}.aif")).mean(axis=1) for m in notes
+               if (raw / f"m{m}.aif").exists() and (raw / f"m{m}.aif").stat().st_size > 10000}
+        peak = max(float(np.abs(v).max()) for v in out.values())
+        for m, v in out.items():
+            np.save(dst / f"m{m}.npy", (v * (0.9 / peak)).astype(np.float32))
+        lens = [len(v) / SR for v in out.values()]
+        print(f"vibes {kind}: {len(out)} 音 ({min(out)}〜{max(out)})  長さ {min(lens):.1f}〜{max(lens):.1f} 秒")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--skip-download", action="store_true")
     ap.add_argument("--bells", action="store_true", help="オルゴール用の鉄琴だけを処理する")
     ap.add_argument("--perc", action="store_true", help="クリスマスの鈴 (クロタル・トライアングル・そり鈴)")
     ap.add_argument("--strings", action="store_true", help="チェロとヴァイオリン (弓)")
+    ap.add_argument("--vibes", action="store_true", help="ヴィブラフォン (叩いた音・弓)")
     args = ap.parse_args()
+    if args.vibes:
+        prepare_vibes(args.skip_download)
+        return 0
     if args.strings:
         listing = {}
         for inst in OPEN_STRINGS:
