@@ -106,6 +106,18 @@ BELLS_BAND_WINDOW = {
 }
 BELLS_TRACKS = {"x03_christmas_bells", "x05_jingle_bells_sleigh", "x09_we_wish_you_bells"}
 
+# 管楽器が旋律の曲 (2026-11-01: f = フルートの瞑想曲、j = サックスのジャズ)。
+# 管楽器は 2 倍音・3 倍音が強いので 1〜2kHz がピアノより明るいのが正しい
+# (試作でフルート 1k -4、サックス 2k -15)。ジャズはブラシが 4〜8kHz を少し足す。
+# 上限 (耳障りさ) は 2k -10 / 4k -22 / 8k -30、下限はフィルタのかけすぎを捕まえる位置
+WIND_BAND_WINDOW = {
+    500: (-14.0, 3.0),
+    1000: (-16.0, -2.0),
+    2000: (-26.0, -10.0),
+    4000: (-45.0, -22.0),
+    8000: (-65.0, -30.0),
+}
+
 BAND_WINDOW = {
     500: (-8.0, +3.0),
     1000: (-14.0, -1.0),
@@ -344,7 +356,8 @@ def audio_qa(slug: str) -> dict:
     # 童謡 (n01-n10) は同じ旋律を繰り返すのが商品そのもの。環境音ノイズは
     # 敷いていないので、ノイズタイルの反復検査は意味を持たず除外する。
     # クリスマス曲 (x01〜)・冬のメロディ (w01〜) も同じ童謡エンジンで作るので同じ扱い
-    is_nursery = len(slug) > 3 and slug[0] in "nxwkh" and slug[1:3].isdigit()
+    is_nursery = len(slug) > 3 and slug[0] in "nxwkhfj" and slug[1:3].isdigit()
+    is_wind = len(slug) > 3 and slug[0] in "fj" and slug[1:3].isdigit()
     # 旋律のあるトラックも同様に除外する。旋律は進行ごとのフレーズを繰り返す
     # 作り (arrange.play_melody の motif) に変えたので、曲全体の包絡には
     # 「フレーズが戻ってくる周期」が出るのが正しい。ノイズタイルの反復は
@@ -353,7 +366,8 @@ def audio_qa(slug: str) -> dict:
         issues.append(f"★{r['repeat_lag_s']:.1f}s周期でノイズが反復"
                       f"({r['repeat_corr']:.2f})")
     is_pure_piano = slug[:1] == "g" and slug[1:3].isdigit()
-    window = (BELLS_BAND_WINDOW if slug in BELLS_TRACKS else
+    window = (WIND_BAND_WINDOW if is_wind else
+              BELLS_BAND_WINDOW if slug in BELLS_TRACKS else
               MUSIC_BOX_BAND_WINDOW if slug.endswith("_musicbox") else
               NURSERY_BAND_WINDOW if is_nursery else
               PURE_PIANO_BAND_WINDOW if is_pure_piano else BAND_WINDOW)

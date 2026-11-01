@@ -1433,6 +1433,18 @@ def build_handpan_proxy(spec, seconds):
     return build_handpan(spec, seconds)
 
 
+def build_flute_proxy(spec, seconds):
+    """フルートの瞑想曲。実体は flute.py"""
+    from .flute import build_flute
+    return build_flute(spec, seconds)
+
+
+def build_jazz_proxy(spec, seconds):
+    """サックスのジャズ・バラード。実体は jazz.py"""
+    from .jazz import build_jazz
+    return build_jazz(spec, seconds)
+
+
 def build_classical_proxy(spec, seconds):
     """クラシックの名曲。実体は classical.py"""
     from .classical import build_classical
@@ -1981,6 +1993,34 @@ TRACKS: list[TrackSpec] = [
             title="432 Hz Handpan-Style Meditation 🌙 1 Hour of Calm, Gentle Music | Soft Metal Tones",
             keywords=["handpan", "handpan music", "432 hz", "meditation music", "calm music", "relaxing music",
                       "handpan meditation", "peaceful music"],
+        ),
+    ),
+    # 2026-11-01 フルートの瞑想曲 (録音のアルトフルート + タンプーラ風の持続音)
+    TrackSpec(
+        slug="f01_flute_meditation",
+        title_en="Flute Meditation",
+        genre_ja="フルートの瞑想曲（アルトフルートと持続音・1時間）",
+        use_case="relax", bpm=60.0, key="D", key_root=2, scale="major",
+        prog_key="ambient", visual="zen_water", seed=9501, a4=440.0,
+        build=build_flute_proxy,
+        seo=dict(
+            title="Peaceful Flute Meditation 🌿 1 Hour of Calm Flute & Soft Drone | Relaxing Music",
+            keywords=["flute meditation", "meditation music", "flute music", "relaxing flute", "calm music",
+                      "yoga music", "peaceful music", "flute and drone", "relaxing music"],
+        ),
+    ),
+    # 2026-11-01 サックスのジャズ・バラード (古い歌の旋律を録音のサックス・ピアノ・ベースで)
+    TrackSpec(
+        slug="j01_jazz_sax_ballads",
+        title_en="Jazz Saxophone Ballads",
+        genre_ja="サックスのジャズ・バラード7曲（サックス・ピアノ・ベース・1時間）",
+        use_case="relax", bpm=72.0, key="F", key_root=5, scale="major",
+        prog_key="ambient", visual="night_skyline", seed=9601, a4=440.0,
+        build=build_jazz_proxy,
+        seo=dict(
+            title="Relaxing Jazz Saxophone 🎷 Smooth Night Ballads | Sax, Piano & Bass for a Calm Evening",
+            keywords=["jazz saxophone", "relaxing jazz", "smooth jazz", "jazz ballads", "night jazz",
+                      "saxophone music", "jazz music", "evening jazz", "lounge jazz"],
         ),
     ),
     # 2026-11-01 クラシックの名曲 (楽譜どおりに録音の楽器で演奏)

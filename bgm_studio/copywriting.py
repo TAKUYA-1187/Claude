@@ -997,13 +997,13 @@ wrote them — on a real piano, with a cello singing the melodies of "Ave Maria"
 Bach's "Arioso".
 
 00:00 Satie – Gymnopédie No. 1
-03:15 Schubert – Ave Maria
-10:34 Debussy – Clair de Lune
-16:04 Bach – Arioso (BWV 1056)
-19:01 Satie – Gymnopédie No. 2
-23:28 Bach / Gounod – Ave Maria
-28:02 Debussy – Arabesque No. 1
-31:14 Satie – Gymnopédie No. 3
+03:10 Schubert – Ave Maria
+10:25 Debussy – Clair de Lune
+15:50 Bach – Arioso (BWV 1056)
+18:43 Satie – Gymnopédie No. 2
+23:06 Bach / Gounod – Ave Maria
+27:34 Debussy – Arabesque No. 1
+30:43 Satie – Gymnopédie No. 3
 
 ▸ Real recorded piano and cello — no synthesizers, no background noise
 ▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
@@ -1605,3 +1605,45 @@ SHORT_HOOKS["n07_au_clair_lullaby"] = ["by the light\\nof the moon", "a french l
 SHORT_HOOKS["n08_silent_night_lullaby"] = ["silent night,\\nslowest version", "christmas eve,\\nbedtime", "no noise.\\njust a music box"]
 SHORT_HOOKS["n09_ode_to_joy_lullaby"] = ["beethoven,\\nbut sleepy", "ode to joy\\nas a music box", "the triumphant tune,\\nturned gentle"]
 SHORT_HOOKS["n10_jingle_bells_lullaby"] = ["jingle bells,\\nslowed way down", "after the presents,\\nbefore sleep", "winter, in\\ntwo hands"]
+
+# 2026-11-01 フルートの瞑想曲
+DESCRIPTIONS["f01_flute_meditation"] = """\
+🌿 PEACEFUL FLUTE MEDITATION — {duration} of calm flute and soft drone
+
+A slow, unhurried flute improvisation over a gentle drone — long breathing notes,
+quiet pauses, and a soft plucked drone that keeps the same calm home note throughout.
+
+About the sound: the melody is a real recorded alto flute (University of Iowa Electronic
+Music Studios), a lower, breathier cousin of the concert flute. The drone is a soft
+plucked tone in the style of an Indian tanpura, with a quiet cello underneath.
+
+▸ No background noise, no sudden sounds
+▸ The melody stays in one peaceful five-note scale (D major pentatonic)
+▸ Original music composed for this channel
+
+For meditation, yoga, reading, focus, or a quiet evening.
+"""
+
+# 2026-11-01 サックスのジャズ・バラード
+DESCRIPTIONS["j01_jazz_sax_ballads"] = """\
+🎷 RELAXING JAZZ SAXOPHONE — {duration} of smooth night ballads
+
+Seven timeless melodies played as slow jazz ballads — a warm alto saxophone with piano,
+upright bass and soft brushes. Each song: a short piano intro, the saxophone melody,
+a piano chorus, and the saxophone again.
+
+00:00 Home, Sweet Home (H. R. Bishop, 1823)
+04:48 Amazing Grace (traditional)
+07:07 The Last Rose of Summer (Irish air)
+09:26 The Blue Bells of Scotland (Scottish air)
+10:50 All Through the Night (Welsh air)
+14:02 Greensleeves (English air)
+17:36 Slumber, My Darling (S. C. Foster, 1862)
+
+▸ Real recorded saxophone, piano and upright bass (University of Iowa Electronic Music
+  Studios); brushes are synthesized
+▸ All melodies are traditional or in the public domain (scores from the Mutopia Project,
+  public domain editions). Jazz arrangement made for this channel.
+
+For a calm evening, dinner, reading, work, or winding down at night.
+"""

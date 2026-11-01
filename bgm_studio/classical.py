@@ -49,7 +49,9 @@ PIECES = {
     "arioso_bach": dict(file="arioso.mid", title="Bach – Arioso (BWV 1056)",
                         tracks={1: "cello", 2: "piano", 3: "piano"}, tempo=1.0, lead=1),
 }
-GAP_S = 3.0                    # 曲と曲のあいだ
+GAP_S = 1.5                    # 曲と曲のあいだ (曲の後ろの静かな部分は render_piece で切ってある)
+# ジムノペディ第 1 番は低い音域だけで書かれていて、単曲版では 4kHz が検査の下限を 2dB 下回った
+EXTRA_SHELF = {"k02_gymnopedie_1": 2.5}
 
 
 def midi_notes(path: Path, tempo_scale: float = 1.0) -> list[tuple[int, float, float, int, int]]:
@@ -107,6 +109,8 @@ def midi_notes(path: Path, tempo_scale: float = 1.0) -> list[tuple[int, float, f
 
 # ── 弓で弾く弦 (チェロ・ヴァイオリン) ─────────────────────────────
 _BOWED: dict[str, dict[int, np.ndarray]] = {}
+# 高域を丸める基準の周波数 (強く鳴らすほど上げる)。管楽器 (flute.py / jazz.py) もこの関数で鳴らす
+SUSTAIN_CUT = {"cello": 1700.0, "violin": 2000.0, "altoflute": 2600.0, "altosax": 2000.0}
 
 
 def _bowed_bank(inst: str) -> dict[int, np.ndarray]:
@@ -150,7 +154,7 @@ def bowed_note(inst: str, midi: int, dur: float, vel: float, sr: int = dsp.SR) -
     nr = int(rel * sr)
     x[-nr:] *= np.linspace(1, 0, nr, dtype=np.float32) ** 2
     # 試聴で 2〜4kHz が強すぎた (ヴァイオリンで 2kHz が基準帯の -1.5dB) ので、しっかり丸める
-    cut = {"cello": 1700.0, "violin": 2000.0}[inst] + 1800.0 * vel ** 2
+    cut = SUSTAIN_CUT[inst] + 1800.0 * vel ** 2
     sos = sg.butter(2, cut, "lowpass", fs=sr, output="sos")
     return (sg.sosfilt(sos, x) * vel).astype(np.float32)
 
@@ -195,6 +199,16 @@ def render_piece(key: str, seed: int = 0) -> np.ndarray:
         rl = float(np.sqrt(np.mean(lead.astype(np.float64) ** 2))) + 1e-9
         # チェロは伴奏より 1.5dB 上、高いヴァイオリンは同じ大きさ (それ以上だと耳に刺さった)
         piano += lead * np.float32(rp / rl * 10 ** ({"cello": 1.5, "violin": 0.0}[lead_inst] / 20))
+    # 最後の音が消えた後の静かな部分を切る。1 本目では曲の後ろに -50dB 以下が 5〜8 秒続き、
+    # 検査で「無音」になった。最後の音が -36dB (最大値比) まで下がった 0.8 秒後で切る
+    # (-45dB で切ると、弱く終わるジムノペディでは切る位置がもう -50dBFS を下回っていて、
+    # 曲間が 4.5 秒あいた)。切った後の響きは残響が自然につなぐ
+    env = np.abs(piano).max(axis=1)
+    loud = np.nonzero(env > env.max() * 10 ** (-36 / 20))[0]
+    end = min(len(piano), int(loud[-1]) + int(0.8 * sr))
+    piano = piano[:end].copy()
+    nf = min(int(0.5 * sr), end // 4)
+    piano[-nf:] *= np.linspace(1, 0, nf, dtype=np.float32)[:, None]
     return piano
 
 
@@ -219,8 +233,10 @@ def build_classical(spec, seconds: float):
     clock = Clock(total_seconds=seconds, bars=max(int(seconds / 4), 4), beats_per_bar=4)
     ir = dsp.make_reverb_ir(3.0, rt60=2.6, damp=0.5, predelay=0.025, width=0.6, seed=spec.seed)
 
+    shelf_db = 2.5 + EXTRA_SHELF.get(spec.slug, 0.0)
+
     def master(x):
-        x = dsp.shelf(x, 3000.0, 2.5, kind="high")
+        x = dsp.shelf(x, 3000.0, shelf_db, kind="high")
         x = dsp.lowpass(x, 12000.0, order=2)
         return dsp.highpass(x, 40.0, order=2)
 
@@ -229,14 +245,10 @@ def build_classical(spec, seconds: float):
     return out, info
 
 
-def set_seconds(order: list[str], gap: float = GAP_S) -> float:
-    """曲の並びを演奏するのに必要なループ長 (整数秒に切り上げ)"""
-    sr = dsp.SR
-    total = 0.0
-    for k in order:
-        p = PIECES[k]
-        notes = midi_notes(DATA / p["file"], p["tempo"])
-        total += max(e for _, _, e, _, _ in notes) + 4.0 + gap
+def set_seconds(slug: str, seed: int, gap: float = GAP_S) -> float:
+    """その動画の曲の並びを、曲間 `gap` 秒で演奏するのに必要なループ長 (整数秒に切り上げ)。
+    曲の長さは後ろの静かな部分を切った後で決まるので、実際に演奏して測る"""
+    total = sum(len(render_piece(k, seed=seed + i)) / dsp.SR + gap for i, k in enumerate(SETS[slug]))
     return float(int(np.ceil(total)))
 
 

@@ -1,0 +1,33 @@
+{
+  "slug": "h01_handpan_style_432",
+  "title": "432 Hz Handpan-Style Meditation 🌙 1 Hour of Calm, Gentle Music | Soft Metal Tones",
+  "description": "🌙 432 HZ HANDPAN-STYLE MEDITATION — 1 hour of calm, gentle music\n\nSlow, spacious melodies in the handpan's \"Kurd\" scale (A minor), with a soft low \"ding\"\nand a quiet bowed drone underneath — gentle, round metal tones that ring and fade.\n\nAbout the sound: this is played on a recorded vibraphone (University of Iowa Electronic\nMusic Studios), shaped to sound like a handpan — each note carries a soft octave and\nfifth above it, the way a handpan is tuned.\n\n▸ No background noise, no sudden sounds\n▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;\n  no health claims are made)\n▸ Original music composed for this channel\n\nFor meditation, yoga, reading, focus, or a quiet evening.\n",
+  "tags": [
+    "handpan",
+    "handpan music",
+    "432 hz",
+    "meditation music",
+    "calm music",
+    "relaxing music",
+    "handpan meditation",
+    "peaceful music"
+  ],
+  "category": "Music",
+  "language": "en",
+  "visibility": "public",
+  "made_for_kids": false,
+  "specs": {
+    "genre_ja": "ハンドパン風の瞑想音楽（ヴィブラフォン・1時間）",
+    "use_case": "relax",
+    "bpm": 66.0,
+    "key": "Am",
+    "a4_hz": 432.0,
+    "loop_seconds": 720.0,
+    "total_seconds": 3600.0,
+    "total_hhmmss": "1 hour",
+    "lufs": -14.0,
+    "true_peak_db": -1.71,
+    "loop_seam_db": -61.6,
+    "visual": "starry_night"
+  }
+}

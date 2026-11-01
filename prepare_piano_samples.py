@@ -287,14 +287,62 @@ def prepare_vibes(skip_download: bool) -> None:
         print(f"vibes {kind}: {len(out)} 音 ({min(out)}〜{max(out)})  長さ {min(lens):.1f}〜{max(lens):.1f} 秒")
 
 
+# ── 管楽器 (2026-11-01)。フルートの瞑想曲とサックスのジャズ用 ─────────────
+# どちらも録音は ff だけ。vib = ビブラートあり。アルトフルートは普通のフルートより
+# 4 度低く、息の多いやわらかい音なので瞑想曲に向く
+WINDS = {
+    "altoflute": ("MISaltoflute2012.html", r"AltoFlute\.vib\.ff\.([A-G]b?\d)\.stereo\.aif$"),
+    "altosax": ("MISEbAltoSaxophone2012.html", r"AltoSax\.vib\.ff\.([A-G]b?\d)\.stereo\.aif$"),
+    "bass_pizz": ("MISDoubleBass2012.html", r"Bass\.pizz\.ff\.sul[A-G]\.([A-G]b?\d)\.stereo\.aif$"),
+}
+
+
+def prepare_winds(skip_download: bool, names: list[str]) -> None:
+    for name in names:
+        page, pat = WINDS[name]
+        raw = ROOT / "samples" / f"iowa_{name}"
+        dst = ROOT / "samples" / f"{name}_clean"
+        raw.mkdir(parents=True, exist_ok=True)
+        dst.mkdir(parents=True, exist_ok=True)
+        html = subprocess.run(["curl", "-sS", f"https://theremin.music.uiowa.edu/MIS-Pitches-2012/{page}"],
+                              capture_output=True, text=True, check=True).stdout
+        chosen = {}
+        for h in re.findall(r'href="([^"]+\.aif)"', html):
+            m = re.search(pat, h)
+            if m:
+                # 同じ高さが複数の弦にあるときは、いちばん高い弦 (一覧は低い弦から順なので最後のもの)
+                chosen[_midi_of(m.group(1))] = h.removeprefix("../")
+        if not skip_download:
+            def get(item):
+                midi, path = item
+                f = raw / f"m{midi}.aif"
+                if not f.exists():
+                    subprocess.run(["curl", "-sS", "--retry", "3", "-o", str(f),
+                                    "https://theremin.music.uiowa.edu/" + path.replace(" ", "%20")],
+                                   check=True)
+            with ThreadPoolExecutor(8) as ex:
+                list(ex.map(get, chosen.items()))
+        out = {m: clean(load(raw / f"m{m}.aif")).mean(axis=1) for m in chosen
+               if (raw / f"m{m}.aif").exists()}
+        peak = max(float(np.abs(v).max()) for v in out.values())
+        for m, v in out.items():
+            np.save(dst / f"m{m}.npy", (v * (0.9 / peak)).astype(np.float32))
+        lens = [len(v) / SR for v in out.values()]
+        print(f"{name}: {len(out)} 音 ({min(out)}〜{max(out)}) → {dst}  長さ {min(lens):.1f}〜{max(lens):.1f} 秒")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--winds", nargs="*", choices=sorted(WINDS), help="管楽器とコントラバスのピチカート")
     ap.add_argument("--skip-download", action="store_true")
     ap.add_argument("--bells", action="store_true", help="オルゴール用の鉄琴だけを処理する")
     ap.add_argument("--perc", action="store_true", help="クリスマスの鈴 (クロタル・トライアングル・そり鈴)")
     ap.add_argument("--strings", action="store_true", help="チェロとヴァイオリン (弓)")
     ap.add_argument("--vibes", action="store_true", help="ヴィブラフォン (叩いた音・弓)")
     args = ap.parse_args()
+    if args.winds is not None:
+        prepare_winds(args.skip_download, args.winds or sorted(WINDS))
+        return 0
     if args.vibes:
         prepare_vibes(args.skip_download)
         return 0
