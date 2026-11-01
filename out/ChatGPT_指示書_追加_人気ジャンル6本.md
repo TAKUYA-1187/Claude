@@ -130,7 +130,7 @@ Le son est un vibraphone enregistré, façonné pour sonner comme un handpan. Au
 
 ### 11/11(水) 21:00　k01_classical_piano_cello
 
-- zip：`k01_classical_piano_cello.zip`（2 時間 19 分）
+- zip：`k01_classical_piano_cello.zip`（2 時間 18 分）
 - 子ども向け：**いいえ**　／　再生リスト：Classical Music for Relaxation
 - 英語タイトル（`.txt` と同じ）：Beautiful Classical Music for Relaxation 🌙 Piano & Cello | Satie, Debussy, Schubert, Bach
 - 説明の曲の目次（00:00 Satie – Gymnopédie No. 1 …）は `.txt` のまま残す（YouTube のチャプターになる）
@@ -310,7 +310,7 @@ Aucun bruit de fond. Musique originale de cette chaîne.
 
 ### 11/30(月) 21:00　j01_jazz_sax_ballads
 
-- zip：`j01_jazz_sax_ballads.zip`（1 時間 5 分）
+- zip：`j01_jazz_sax_ballads.zip`（1 時間 4 分）
 - 子ども向け：**いいえ**　／　再生リスト：Relaxing Jazz
 - 英語タイトル（`.txt` と同じ）：Relaxing Jazz Saxophone 🎷 Smooth Night Ballads | Sax, Piano & Bass for a Calm Evening
 - 説明の曲の目次は `.txt` のまま残す

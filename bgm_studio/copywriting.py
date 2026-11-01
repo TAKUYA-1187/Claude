@@ -997,13 +997,13 @@ wrote them — on a real piano, with a cello singing the melodies of "Ave Maria"
 Bach's "Arioso".
 
 00:00 Satie – Gymnopédie No. 1
-03:10 Schubert – Ave Maria
-10:25 Debussy – Clair de Lune
-15:50 Bach – Arioso (BWV 1056)
-18:43 Satie – Gymnopédie No. 2
-23:06 Bach / Gounod – Ave Maria
-27:34 Debussy – Arabesque No. 1
-30:43 Satie – Gymnopédie No. 3
+03:09 Schubert – Ave Maria
+10:16 Debussy – Clair de Lune
+15:39 Bach – Arioso (BWV 1056)
+18:31 Satie – Gymnopédie No. 2
+22:53 Bach / Gounod – Ave Maria
+27:20 Debussy – Arabesque No. 1
+30:27 Satie – Gymnopédie No. 3
 
 ▸ Real recorded piano and cello — no synthesizers, no background noise
 ▸ Tuned to A = 432 Hz, a slightly lower, warmer reference pitch (a tuning choice;
@@ -1633,12 +1633,12 @@ upright bass and soft brushes. Each song: a short piano intro, the saxophone mel
 a piano chorus, and the saxophone again.
 
 00:00 Home, Sweet Home (H. R. Bishop, 1823)
-04:48 Amazing Grace (traditional)
-07:07 The Last Rose of Summer (Irish air)
-09:26 The Blue Bells of Scotland (Scottish air)
-10:50 All Through the Night (Welsh air)
-14:02 Greensleeves (English air)
-17:36 Slumber, My Darling (S. C. Foster, 1862)
+04:45 Amazing Grace (traditional)
+07:01 The Last Rose of Summer (Irish air)
+09:17 The Blue Bells of Scotland (Scottish air)
+10:38 All Through the Night (Welsh air)
+13:47 Greensleeves (English air)
+17:18 Slumber, My Darling (S. C. Foster, 1862)
 
 ▸ Real recorded saxophone, piano and upright bass (University of Iowa Electronic Music
   Studios); brushes are synthesized

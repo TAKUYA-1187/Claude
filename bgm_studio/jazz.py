@@ -335,7 +335,9 @@ def render_song(key: str, seed: int, sr: int = dsp.SR) -> np.ndarray:
         comp(off, chords[:-1] + [(s_, d_ + 2 * bar_q, r_, up_)] if last else chords, last=last)
         brushes(off, end + (2 * bar_q if last else 0))
         off += end
-    end_s = (off + 2 * bar_q) * beat + 3.0
+    # 最後の和音は 2 小節のばしてあるので、そこから 1 秒で切って 1.5 秒で消す
+    # (1 回目は +3 秒・2 秒で消していて、曲間が 4.5 秒の無音になった)
+    end_s = (off + 2 * bar_q) * beat + 1.0
     m = int(end_s * sr)
     # 楽器の音量比 (RMS): サックス基準で ピアノ -4dB、ベース -7dB、ブラシ -20dB
     def rms(x):
@@ -345,7 +347,7 @@ def render_song(key: str, seed: int, sr: int = dsp.SR) -> np.ndarray:
     out = sax[:m].copy()
     for part, db in ((pno, MIX["piano"]), (bass, MIX["bass"]), (drm, MIX["brush"])):
         out += part[:m] * np.float32(ref / rms(part) * 10 ** (db / 20))
-    nf = int(2.0 * sr)
+    nf = int(1.5 * sr)
     out[-nf:] *= np.linspace(1, 0, nf, dtype=np.float32)[:, None] ** 2
     return out
 
@@ -413,6 +415,6 @@ def build_jazz(spec, seconds: float):
     return out, info
 
 
-def set_seconds(slug: str, seed: int, gap: float = 1.5) -> float:
+def set_seconds(slug: str, seed: int, gap: float = 0.5) -> float:
     total = sum(len(render_song(k, seed=seed + i)) / dsp.SR + gap for i, k in enumerate(SETS[slug]))
     return float(int(np.ceil(total)))

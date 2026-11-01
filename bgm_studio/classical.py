@@ -49,7 +49,9 @@ PIECES = {
     "arioso_bach": dict(file="arioso.mid", title="Bach – Arioso (BWV 1056)",
                         tracks={1: "cello", 2: "piano", 3: "piano"}, tempo=1.0, lead=1),
 }
-GAP_S = 1.5                    # 曲と曲のあいだ (曲の後ろの静かな部分は render_piece で切ってある)
+# 曲と曲のあいだ。曲の後ろの静かな部分は render_piece で切ってあり、そこから先は残響が 2〜3 秒
+# 鳴るので、間はほとんど足さない (1.5 秒では、弱く終わるジムノペディの後が 4 秒の無音になった)
+GAP_S = 0.3
 # ジムノペディ第 1 番は低い音域だけで書かれていて、単曲版では 4kHz が検査の下限を 2dB 下回った
 EXTRA_SHELF = {"k02_gymnopedie_1": 2.5}
 
@@ -164,6 +166,9 @@ def render_piece(key: str, seed: int = 0) -> np.ndarray:
     p = PIECES[key]
     sr = dsp.SR
     notes = midi_notes(DATA / p["file"], p["tempo"])
+    # 楽譜の頭の休み (シューベルトのアヴェ・マリアは 2.5 秒) を詰める。曲間の無音になるため
+    lead_in = min(st for _, st, _, _, _ in notes)
+    notes = [(t, st - lead_in, e - lead_in, m, v) for t, st, e, m, v in notes]
     end = max(e for _, _, e, _, _ in notes) + 4.0
     n = int(end * sr)
     rng = np.random.default_rng(seed)
@@ -200,11 +205,11 @@ def render_piece(key: str, seed: int = 0) -> np.ndarray:
         # チェロは伴奏より 1.5dB 上、高いヴァイオリンは同じ大きさ (それ以上だと耳に刺さった)
         piano += lead * np.float32(rp / rl * 10 ** ({"cello": 1.5, "violin": 0.0}[lead_inst] / 20))
     # 最後の音が消えた後の静かな部分を切る。1 本目では曲の後ろに -50dB 以下が 5〜8 秒続き、
-    # 検査で「無音」になった。最後の音が -36dB (最大値比) まで下がった 0.8 秒後で切る
+    # 検査で「無音」になった。最後の音が -32dB (最大値比) まで下がった 0.8 秒後で切る
     # (-45dB で切ると、弱く終わるジムノペディでは切る位置がもう -50dBFS を下回っていて、
     # 曲間が 4.5 秒あいた)。切った後の響きは残響が自然につなぐ
     env = np.abs(piano).max(axis=1)
-    loud = np.nonzero(env > env.max() * 10 ** (-36 / 20))[0]
+    loud = np.nonzero(env > env.max() * 10 ** (-32 / 20))[0]
     end = min(len(piano), int(loud[-1]) + int(0.8 * sr))
     piano = piano[:end].copy()
     nf = min(int(0.5 * sr), end // 4)
@@ -221,7 +226,7 @@ def build_classical(spec, seconds: float):
     content = sum(len(x) for x in parts)
     n = int(round(seconds * sr))
     gap = (n - content) // len(parts)
-    if gap < int(1.0 * sr):
+    if gap < int(0.2 * sr):
         raise ValueError(f"{spec.slug}: ループ長 {seconds}s が短すぎます (曲だけで {content / sr:.0f}s)")
     buf = np.zeros((n + int(8 * sr), 2), dtype=np.float32)
     pos = 0
