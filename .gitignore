@@ -22,3 +22,6 @@ out/for_gpt/*.mp3
 samples/
 
 samples/
+
+# 無圧縮マスター (WAV) は同じ中身の FLAC をコミットしているので入れない。make_orig01.py で再生成できる
+out/release_*/*.wav
