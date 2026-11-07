@@ -332,7 +332,24 @@ def _piano_samples() -> dict[int, np.ndarray]:
             for p in _PIANO_DIR.glob("m*.npy"):
                 x = np.load(p)
                 _PIANO[int(p.stem[1:])] = (x.mean(axis=1) if x.ndim == 2 else x).astype(np.float32)
+            _even_out(_PIANO)
     return _PIANO
+
+
+def _even_out(bank: dict[int, np.ndarray], window: int = 3, max_db: float = 12.0) -> None:
+    """
+    録音ごとの音量のばらつきをならす (2026-11-07)。
+    Iowa のピアノ (mf) は弾いた強さが音ごとに違い、最初の 0.3 秒の RMS で B4 が B♭4 より 12dB 大きく、
+    G5 は F#5 より 14dB 小さかった。旋律の 1 音だけが飛び出して聞こえる原因になる。
+    前後 window 半音の録音の RMS の中央値に合わせる (高い音ほど小さい、という自然な傾きは残る)
+    """
+    keys = sorted(bank)
+    head = int(0.3 * SR)
+    rms = {k: float(np.sqrt(np.mean(bank[k][:head].astype(np.float64) ** 2))) + 1e-12 for k in keys}
+    for k in keys:
+        near = [rms[j] for j in keys if abs(j - k) <= window]
+        g = float(np.clip(np.median(near) / rms[k], 10 ** (-max_db / 20), 10 ** (max_db / 20)))
+        bank[k] = (bank[k] * g).astype(np.float32)
 
 
 def real_piano(m: int, vel: float = 0.8, sr: int = SR,

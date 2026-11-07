@@ -37,7 +37,9 @@ from bgm_studio import video as VID
 ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "samples" / "iowa_piano"
 CLEAN = ROOT / "samples" / "piano_clean"
-SR = 48000
+# 音源エンジン (bgm_studio.dsp.SR = 44.1kHz) と同じにする。2026-11-07 まで 48kHz で保存していて、
+# 44.1kHz として鳴らしたため、録音の楽器がすべて約 1.47 半音 (48000/44100) 低く鳴っていた
+from bgm_studio.dsp import SR  # noqa: E402
 LO, HI = 36, 96            # C2〜C7
 NAMES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
 URL = "https://theremin.music.uiowa.edu/sound%20files/MIS/Piano_Other/piano/Piano.mf.{}.aiff"

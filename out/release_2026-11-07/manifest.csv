@@ -1,0 +1,16 @@
+﻿作品ID,ファイル名,内容,容量(バイト),尺(秒),版番号,作成日
+release_audit_8,release_audit.csv,8本の曲別権利表（53行）,70981,,v1,2026-11-07
+release_audit_8,release_decisions.md,公開判断の資料,11640,,v1,2026-11-07
+orig01_winter_reading_piano,orig01_preview_3min.mp3,試聴版 MP3 320k,7135652,178.36,v1,2026-11-07
+orig01_winter_reading_piano,orig01_master.wav,マスター WAV 24bit/44.1kHz,47187746,178.34,v1,2026-11-07
+orig01_winter_reading_piano,orig01_master.flac,マスター FLAC（WAVと同じ中身）,21239564,178.34,v1,2026-11-07
+orig01_winter_reading_piano,orig01_score.mid,作曲データ MIDI,3614,,v1,2026-11-07
+orig01_winter_reading_piano,orig01_qa.json,自動検査の数値,2085,,v1,2026-11-07
+orig01_winter_reading_piano,orig01_audio_qa.md,検査結果,6151,,v1,2026-11-07
+orig01_winter_reading_piano,orig01_notes.md,構成メモとライセンス一覧,3765,,v1,2026-11-07
+orig01_winter_reading_piano,shorts_cues.csv,Shorts用の3区間,1435,,v1,2026-11-07
+orig01_winter_reading_piano,orig01_cue1_theme.mp3,Shorts区間1（主題）,1211080,30.25,v1,2026-11-07
+orig01_winter_reading_piano,orig01_cue2_minor.mp3,Shorts区間2（ニ短調）,1208991,30.20,v1,2026-11-07
+orig01_winter_reading_piano,orig01_cue3_ending.mp3,Shorts区間3（終わり）,1104501,27.59,v1,2026-11-07
+orig01_winter_reading_piano,gpt_visual_brief.md,GPTへの絵と映像の依頼,3645,,v1,2026-11-07
+release_audit_8,manifest.csv,この一覧,,,v1,2026-11-07
