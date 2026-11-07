@@ -19,3 +19,22 @@
 > The Everyday Song Book published by The Cable Company, Chicago 12th ed. 1927 This directory contains ABC transcriptions of a collection of children's songs of the early 20th century in the U.S. This collection is memorable for being the first to contain the "Happy Birthday" song, number 16, which surveys report to be the most-sung song in the world. This book was important evidence in the 2015 lawsuit that cancelled the long-standing copyright on the song claimed by a string of "owners", ending with Warner/Chapell's claim. Many of the songs in this collection are still well known and (sometimes not so well) sung. List files with: Session lister - Collection lister - Tune lister Transcription
 
 （このページに、ABC 転記の利用条件（ライセンス）の記載は見つからなかった）
+
+## 2026-11-08 追加：Silent Night の照合に使った版
+
+### Mutopia piece-info id=1295（https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=1295）取得 2026-11-08
+
+> Stille Nacht (hymntune) by F. X. Gruber (1787–1863) Instrument(s): Voice (SATB) Style: Hymn Opus: Not known Date of composition: Not known Source: www.cyberhymnal.org Copyright: Public Domain Last updated: 2008/Feb/19. View change history Music ID Number: Mutopia-2008/02/19-1295 Typeset using: LilyPond , version 2.10.33 Part of the following collections: Hymn medley Download: LilyPond file MIDI fi
+
+### Mutopia piece-info id=81（https://www.mutopiaproject.org/cgibin/piece-info.cgi?id=81）取得 2026-11-08
+
+> Stille Nacht by F. X. Gruber (1787–1863) Instrument(s): Voice (SA) and Guitar Style: Hymn Lyricist(s): J. Mohr (1792-1848) Opus: Not known Date of composition: 1816 Source: http://www.mutopiaproject.org/ftp/GruberFX/altenoten.jpg Copyright: Public Domain Last updated: 2013/Jan/06. View change history Music ID Number: Mutopia-2013/01/06-81 Typeset using: LilyPond , version 2.16.1 Download: LilyPond
+
+
+## 権利の分け方（この資料での使い方）
+
+- **原曲**：作曲者の権利。ここで扱う曲は、作曲者の死後 70 年以上、または 1931 年より前の出版で、パブリックドメインと判断している（一般的な文献知識。一次資料での確認は曲ごとに未実施）
+- **版**：その曲を楽譜データにした人の権利（Paul Hardy の曲集、Mutopia の各版、trillian.mit.edu の転記）。
+  CC ライセンスの条件（非営利・継承など）は、この「版」にかかる。**もとのパブリックドメインの旋律そのものには及ばない**
+- **編曲**：伴奏の型・音色・テンポ・和音。伴奏と音色は Claude のコード。和音は曲ごとに由来が違う（版の和音記号を使った曲がある）
+- **録音**：University of Iowa の楽器サンプル（制限なし）を Claude のコードで演奏した音

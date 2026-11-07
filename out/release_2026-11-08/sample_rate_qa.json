@@ -1,0 +1,189 @@
+{
+ "engine_sample_rate_hz": 44100,
+ "previous_sample_file_rate_hz": 48000,
+ "theoretical_shift_semitones": -1.467,
+ "method": "自己相関で基本周波数を測定（発音 0.25 秒後から 8192 サンプル）。平均律の目標周波数とのずれを cent で表示",
+ "raw_samples": [
+  {
+   "sample": "piano_clean/m57",
+   "target_hz@440": 220.0,
+   "before_hz (48k file read as 44.1k)": 203.0,
+   "before_cents": -139.2,
+   "after_hz": 220.9,
+   "after_cents": 7.1
+  },
+  {
+   "sample": "piano_clean/m69",
+   "target_hz@440": 440.0,
+   "before_hz (48k file read as 44.1k)": 405.68,
+   "before_cents": -140.6,
+   "after_hz": 441.51,
+   "after_cents": 5.9
+  },
+  {
+   "sample": "piano_clean/m76",
+   "target_hz@440": 659.26,
+   "before_hz (48k file read as 44.1k)": 608.78,
+   "before_cents": -137.9,
+   "after_hz": 662.57,
+   "after_cents": 8.7
+  },
+  {
+   "sample": "bells_clean/m81",
+   "target_hz@440": 880.0,
+   "before_hz (48k file read as 44.1k)": 811.73,
+   "before_cents": -139.8,
+   "after_hz": 883.98,
+   "after_cents": 7.8
+  },
+  {
+   "sample": "cello_clean/m50",
+   "target_hz@440": 146.83,
+   "before_hz (48k file read as 44.1k)": 135.46,
+   "before_cents": -139.6,
+   "after_hz": 147.44,
+   "after_cents": 7.1
+  },
+  {
+   "sample": "violin_clean/m69",
+   "target_hz@440": 440.0,
+   "before_hz (48k file read as 44.1k)": 405.86,
+   "before_cents": -139.8,
+   "after_hz": 441.74,
+   "after_cents": 6.8
+  },
+  {
+   "sample": "altosax_clean/m62",
+   "target_hz@440": 293.66,
+   "before_hz (48k file read as 44.1k)": 268.8,
+   "before_cents": -153.2,
+   "after_hz": 292.54,
+   "after_cents": -6.6
+  },
+  {
+   "sample": "altoflute_clean/m69",
+   "target_hz@440": 440.0,
+   "before_hz (48k file read as 44.1k)": 406.37,
+   "before_cents": -137.7,
+   "after_hz": 442.42,
+   "after_cents": 9.5
+  },
+  {
+   "sample": "vibes_sustain_clean/m69",
+   "target_hz@440": 440.0,
+   "before_hz (48k file read as 44.1k)": 406.94,
+   "before_cents": -135.2,
+   "after_hz": 442.8,
+   "after_cents": 11.0
+  },
+  {
+   "sample": "bass_pizz_clean/m45",
+   "target_hz@440": 110.0,
+   "before_hz (48k file read as 44.1k)": null,
+   "before_cents": null,
+   "after_hz": 110.99,
+   "after_cents": 15.5,
+   "note": "旧ファイルは低音の測定に失敗（自己相関の範囲外）。理論値は -146.7 cent"
+  }
+ ],
+ "engine_render_after_fix": [
+  {
+   "a4_setting": 440.0,
+   "path": "piano (instruments.real_piano)",
+   "midi": 69,
+   "target_hz": 440.0,
+   "measured_hz": 441.5,
+   "cents": 5.9
+  },
+  {
+   "a4_setting": 440.0,
+   "path": "music box (instruments.real_music_box)",
+   "midi": 81,
+   "target_hz": 880.0,
+   "measured_hz": 885.15,
+   "cents": 10.1
+  },
+  {
+   "a4_setting": 440.0,
+   "path": "cello (classical.bowed_note)",
+   "midi": 57,
+   "target_hz": 220.0,
+   "measured_hz": 221.1,
+   "cents": 8.6
+  },
+  {
+   "a4_setting": 440.0,
+   "path": "alto sax (classical.bowed_note)",
+   "midi": 69,
+   "target_hz": 440.0,
+   "measured_hz": 441.35,
+   "cents": 5.3
+  },
+  {
+   "a4_setting": 440.0,
+   "path": "alto flute (classical.bowed_note)",
+   "midi": 69,
+   "target_hz": 440.0,
+   "measured_hz": 442.44,
+   "cents": 9.6
+  },
+  {
+   "a4_setting": 440.0,
+   "path": "vibraphone (handpan._pitched)",
+   "midi": 69,
+   "target_hz": 440.0,
+   "measured_hz": 442.8,
+   "cents": 11.0
+  },
+  {
+   "a4_setting": 432.0,
+   "path": "piano (instruments.real_piano)",
+   "midi": 69,
+   "target_hz": 432.0,
+   "measured_hz": 433.55,
+   "cents": 6.2
+  },
+  {
+   "a4_setting": 432.0,
+   "path": "music box (instruments.real_music_box)",
+   "midi": 81,
+   "target_hz": 864.0,
+   "measured_hz": 869.04,
+   "cents": 10.1
+  },
+  {
+   "a4_setting": 432.0,
+   "path": "cello (classical.bowed_note)",
+   "midi": 57,
+   "target_hz": 216.0,
+   "measured_hz": 217.08,
+   "cents": 8.6
+  },
+  {
+   "a4_setting": 432.0,
+   "path": "alto sax (classical.bowed_note)",
+   "midi": 69,
+   "target_hz": 432.0,
+   "measured_hz": 433.27,
+   "cents": 5.1
+  },
+  {
+   "a4_setting": 432.0,
+   "path": "alto flute (classical.bowed_note)",
+   "midi": 69,
+   "target_hz": 432.0,
+   "measured_hz": 434.37,
+   "cents": 9.5
+  },
+  {
+   "a4_setting": 432.0,
+   "path": "vibraphone (handpan._pitched)",
+   "midi": 69,
+   "target_hz": 432.0,
+   "measured_hz": 434.75,
+   "cents": 11.0
+  }
+ ],
+ "double_correction_check": "録音を読む全ての経路（real_piano・real_music_box・real_crotale・classical.bowed_note・handpan._pitched・jazz._bass_note）は、『サンプルは A=440 の平均律で、エンジンと同じ 44.1kHz』という前提で、目標周波数 midi2hz(m)（set_tuning の A を使う）との比で再サンプリングする。サンプルレートの事前補償や移調の補正は、どこにも無かった（48000 を参照するのは video.py の出力 AAC だけ）。修正はサンプルの保存を 44.1kHz にした 1 か所だけなので、二重補正は起きない。A=432 は midi2hz で 1 回だけかかる",
+ "residual_note": "修正後に残る +5〜+11 cent は、録音そのもののピッチ（Iowa の録音は A≈443Hz 前後で弾かれている）。サンプルレートの問題ではない。1 cent = 半音の 1/100"
+}

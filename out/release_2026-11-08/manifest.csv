@@ -1,0 +1,19 @@
+﻿制作ID,ファイル名,内容,容量(バイト),尺(秒),sha256,版,作成日
+orig01_winter_reading_piano,orig01_preview_fixed.mp3,修正後の試聴版（11/7 に送ったものと同じ音。再生成でビット一致を確認）,7135652,178.36,50cacbed9dffc6fb41f3da58b6c3008d78a21a483c779d2d8eba04aa7fdd32c5,v1,2026-11-08
+orig01_winter_reading_piano,orig01_master_fixed.flac,修正後のマスター FLAC 44.1kHz/24bit,21239564,178.34,0909e8692d5e8e33d95b6c8dc7f1d7e41f4dfdc4b463801d52c85ae0283a1fd4,v1,2026-11-08
+orig01_winter_reading_piano,orig01_qa_fixed.json,orig01 の自動検査の数値,2085,,f3daa370f560a24f96dc900ded26ae7f4b91f8b0f063128e7c04c87e171e3a47,v1,2026-11-08
+orig01_winter_reading_piano,orig01_score.mid,作曲データ,3614,,19e572d1f6bd68e01c7c0bfcf4dcf9b332b95437717e8bb3a3df332db1074c59,v1,2026-11-08
+sample_rate_fix,sample_rate_fix.diff,修正の差分（コミット be7c5c9）,3738,,0fc245ded34adf10568a273b0cbe336a18ede664821a28060dc16d975681376c,v1,2026-11-08
+sample_rate_fix,sample_rate_qa.json,修正前後・A=440/432 の音程の測定,5163,,87f00e2da3855ecc7e460ec959a1a85397b69b88ea8e13fdc56c2bc777cda0aa,v1,2026-11-08
+sample_rate_fix,audio_impact.csv,影響した動画の一覧と推奨対応,25508,,c1471532ec8ed37e767550dec6be520c16dc45f72d5a01e5f696ab8ea3032899,v1,2026-11-08
+pet01,pet01_audio_check.json,pet01 の音の検査（GPT 制作の音源）,1317,,1e9bdc42945999d76296cdd14ff6cffd6cbe44fbe66a59986f7e51abb03d635e,v1,2026-11-08
+rights_v2,release_audit.csv,14 本・77 行の権利表（原曲・編曲・版・録音を分離）,87380,,1b5d79a6b4b4f7fb8c6d590f3f8d714b93854b80742e23f773ad118ad5a72a7e,v1,2026-11-08
+rights_v2,release_decisions_v2.md,公開判断 v2（Silent Night の出典確認を含む）,4156,,b9f2c70aaf592b46539009e47be84c8a6c55396d809d95d7acfa2c969ab5fc78,v1,2026-11-08
+rights_v2,rights_evidence.zip,譜面・ライセンス原文・照合スクリプトの一式,104393,,d81350d25b6d049ccb1127765a09da9100a5e9cd270a7e4d930c127299c148b7,v1,2026-11-08
+pet02,pet02_closing_the_book.flac,試作音源 FLAC,2307194,21.02,1a50e0ad77af633b9aecbcb8cd85cb771eb886d15ea46b01574909cf3e0f0312,v1,2026-11-08
+pet02,pet02_closing_the_book.mp3,試作音源 MP3 320k,843276,21.05,3757ba8f785e284558e48010a4a795cd048c377b0922aaf3e92c06270537598f,v1,2026-11-08
+pet02,pet02_closing_the_book_qa.json,自動検査,1745,,5ac18f664897b0adff6bd334153efcba09e61b310fd5b4c315eb3a2a03d7a2bb,v1,2026-11-08
+pet03,pet03_last_light.flac,試作音源 FLAC,2417156,22.35,8186a0dc77b5f1898e83d1f2ef285294da24b738c52ab410e03c590089f32e2a,v1,2026-11-08
+pet03,pet03_last_light.mp3,試作音源 MP3 320k,896566,22.39,95d19a78cd6333325ce5146322286fe8bc17b0dbd613fea86cbf089eebd83cfb,v1,2026-11-08
+pet03,pet03_last_light_qa.json,自動検査,1790,,bd0641fdfa8c9f4079e94bfa8fc25868a8fc388ee8002261ba9fb1fc46d4f7c5,v1,2026-11-08
+pet02/pet03,pet02_pet03_plans.md,企画と次に作る 1 本の理由,6587,,4abfb8e8b623cf1989d3e209dcef5b25c6ca9cbca528706edf79bd5956e6328e,v1,2026-11-08

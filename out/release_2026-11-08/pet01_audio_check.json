@@ -1,0 +1,38 @@
+{
+ "production_id": "pet01",
+ "video_id": "Z8rNJFpXkAM",
+ "checked_files": [
+  "pet01_audio_excerpt.flac（18.00 秒・192kHz/16bit で届いた）",
+  "pet01_reading_buddy_short.mp4（AAC 48kHz ステレオ 249kbps）"
+ ],
+ "integrated_lufs_ffmpeg": -12.3,
+ "lra_lu": 1.9,
+ "clipped_samples": 0,
+ "click_candidates": 0,
+ "rms_per_0_5s_db": {
+  "min": -16.8,
+  "max": -12.2
+ },
+ "first_1s_rms_db": [
+  -15.3,
+  -14.7
+ ],
+ "last_1s_rms_db": [
+  -14.2,
+  -15.1
+ ],
+ "pitch_grid": "強いピーク 40 本の、A=440 平均律からのずれの中央値 0.0 cent。48k/44.1k の不具合の影響は見られない（Claude の音源エンジン由来ではない）",
+ "bands_rel_250_500": {
+  "500": 1.5,
+  "1000": -1.6,
+  "2000": -8.0,
+  "4000": -10.1,
+  "8000": -13.1
+ },
+ "notes": [
+  "YouTube は -14 LUFS 付近へ下げて再生するので、-12.3 LUFS は約 1.7 dB 下げられる。音が割れる心配はない",
+  "2〜8kHz が Claude のピアノ曲より明るい（アンビエントのパッドと思われる）。耳に刺さるかは、人が聞いて判断してほしい",
+  "元の Velmora ep01 の作り方・使った音源・ライセンスは Claude は見ていない。権利表には含めていない"
+ ],
+ "human_listening": "Claude は音を聞けないので、すべて自動検査"
+}
