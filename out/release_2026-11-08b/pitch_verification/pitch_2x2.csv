@@ -1,0 +1,19 @@
+﻿読み込み経路,MIDI,A 設定,目標 Hz,修正前 Hz,修正前 cent,修正後 Hz,修正後 cent,修正前後の差 cent
+piano: instruments.real_piano,69,440.0,440.0,405.17,-142.77,441.01,3.98,146.75
+piano: instruments.real_piano,69,432.0,432.0,397.8,-142.78,432.99,3.97,146.75
+music box: instruments.real_music_box,81,440.0,880.0,813.08,-136.94,884.98,9.77,146.71
+music box: instruments.real_music_box,81,432.0,864.0,798.29,-136.94,868.89,9.77,146.71
+crotale: instruments.real_crotale,84,440.0,1046.5,969.81,-131.77,1055.51,14.83,146.6
+crotale: instruments.real_crotale,84,432.0,1027.47,952.18,-131.75,1036.33,14.86,146.61
+cello: classical.bowed_note,57,440.0,220.0,203.04,-138.86,220.98,7.71,146.56
+cello: classical.bowed_note,57,432.0,216.0,199.36,-138.82,216.97,7.73,146.55
+violin: classical.bowed_note,69,440.0,440.0,406.06,-138.98,442.04,8.01,146.99
+violin: classical.bowed_note,69,432.0,432.0,398.66,-139.04,433.99,7.95,146.99
+alto sax: classical.bowed_note,69,440.0,440.0,406.89,-135.42,442.92,11.47,146.89
+alto sax: classical.bowed_note,69,432.0,432.0,399.49,-135.46,434.86,11.43,146.89
+alto flute: classical.bowed_note,69,440.0,440.0,406.28,-138.03,442.04,8.02,146.04
+alto flute: classical.bowed_note,69,432.0,432.0,398.91,-137.96,434.05,8.18,146.14
+vibraphone: handpan._pitched,69,440.0,440.0,406.67,-136.36,442.64,10.35,146.71
+vibraphone: handpan._pitched,69,432.0,432.0,399.28,-136.36,434.59,10.35,146.71
+double bass pizz: jazz._bass_note,45,440.0,110.0,101.8,-134.16,110.81,12.7,146.86
+double bass pizz: jazz._bass_note,45,432.0,108.0,101.8,-102.4,110.81,44.46,146.86

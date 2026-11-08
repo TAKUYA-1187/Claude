@@ -26,7 +26,7 @@ SONGS = {
     "c01": ("We Wish You a Merry Christmas", "英国伝承曲", "パブリックドメイン（伝承曲）",
             "trillian.mit.edu の ABC 3 版を見比べて手で入力（data/licenses/trillian_ww_*.abc）",
             "England 版と 77%、Hardy 版と 62%（手で多数派をとったため完全一致はない）", "3 版とも転記サイトに利用条件の記載なし",
-            "和音は Hardy 版と 52% 一致（作業記録なし。手で付けたと推定）", UNK),
+            "和音は England 版の和音記号と 71%、Hardy 版と 52% 一致（作業記録なし）", UNK),
     "c02": ("Deck the Halls", "ウェールズ伝承曲", "パブリックドメイン（伝承曲）",
             f"作業記録では {ESB} No.105。照合では {HARDY} X:4002 と完全一致",
             "Hardy 版と 100%、ESB と 94%", "Hardy 版なら営利不可／ESB 版なら条件不明",
@@ -97,22 +97,30 @@ SONGS = {
 
 XMAS1 = ["c01", "n08", "n10", "c03", "c02", "c06", "c04", "c05", "c07", "c08"]
 WINTER = ["d01", "c19", "c18", "d02", "d07", "d04", "d06", "d05", "c03", "d03"]
-VIDEOS = [  # (制作記号, 動画ID, 状態 (GPT の報告), 曲順)
-    ("x01_christmas_piano", "（GPT 側で照合）", "保留（GPT 報告）", XMAS1),
-    ("x02_christmas_musicbox", "e7_aVz7byxE と思われる（GPT 側で照合）", "公開中（GPT 報告）", XMAS1),
+VIDEOS = [  # (制作記号, 動画ID, 状態, 曲順)。状態は GPT の報告（2026-11-07 保存後の一覧で確認）。Claude は Studio を見ていない
+    ("x01_christmas_piano", "V36WnCN9KW8", "非公開（11/7 GPT が予約→非公開に変更）", XMAS1),
+    ("x02_christmas_musicbox", "e7_aVz7byxE", "非公開（11/7 GPT が公開→非公開に変更）", XMAS1),
     ("x03_christmas_bells", "vaLVTWmRLro", "非公開・保留", ["c09", "c02", "c10", "c11", "c01", "c12", "c14", "c13", "c04", "c07"]),
     ("x04_christmas_calm", "JRm_lJp14Pg", "非公開・保留", ["n08", "c16", "c06", "c18", "c15", "c19", "c17", "c21", "c20", "c05"]),
     ("x05_jingle_bells_sleigh", "Mpl70FC93HQ", "非公開・保留", ["c09"]),
-    ("x06_silent_night_piano", "dnOzVffF1ZA と思われる（GPT 側で照合）", "公開中（GPT 報告）", ["n08"]),
+    ("x06_silent_night_piano", "dnOzVffF1ZA", "公開中（GPT 報告）", ["n08"]),
     ("x07_o_holy_night_piano", "XGKX2gVC7z0", "非公開・保留", ["c15"]),
     ("x08_christmas_carols_2_musicbox", "YqAkk1U7anw", "非公開・保留",
      ["c09", "c16", "c10", "c18", "c11", "c19", "c12", "c17", "c21", "c20"]),
-    ("x09_we_wish_you_bells", "（GPT 側で照合）", "保留（GPT 報告）", ["c01"]),
+    ("x09_we_wish_you_bells", "vDHxOVufT1k", "非公開（11/7 GPT が予約→非公開に変更）", ["c01"]),
     ("w01_winter_piano", "ZLoni33Q3Ts", "非公開・保留", WINTER),
     ("w02_winter_musicbox", "q6kjWb7OStk", "非公開・保留", WINTER),
-    ("w03_vivaldi_winter_piano", "（GPT 側で照合）", "保留（GPT 報告）", ["d01"]),
+    ("w03_vivaldi_winter_piano", "367csO2msJg", "非公開（11/7 GPT が予約→非公開に変更）", ["d01"]),
     ("w04_greensleeves_piano", "2kWitysD-Ds", "非公開・保留", ["c18"]),
-    ("w05_auld_lang_syne_piano", "（GPT 側で照合）", "不明", ["d03"]),
+    ("w05_auld_lang_syne_piano", "（GPT 側で特定）", "不明", ["d03"]),
+]
+# Shorts（make_xmas_shorts.py：元のまとめ版の、その曲の頭から 45 秒を切り出す）
+SHORTS = [  # (動画ID, 状態, 候補 [(Shorts 番号, 元の動画, 曲, 切り出し開始秒)])
+    ("rrtGfjSd6Ao", "公開中（GPT 報告。題名 a quiet christmas moment）",
+     [(5, "x04_christmas_calm", "n08", 0.5), (9, "x02_christmas_musicbox", "n08", 720.5)]),
+    ("VPE6z6MmnmY", "非公開（11/7 GPT が予約→非公開に変更）",
+     [(1, "x03_christmas_bells", "c09", 0.5), (10, "x02_christmas_musicbox", "n10", 1440.5)]),
+    ("sg26nMcWDeM", "非公開（11/7 GPT が予約→非公開に変更）", [(12, "x01_christmas_piano", "c03", 2160.5)]),
 ]
 PITCH = "録音の楽器が約 1.47 半音低い（48k/44.1k の不具合）。説明欄の『A=432Hz』は事実と違う（実際は約 A=397Hz）"
 
@@ -151,11 +159,22 @@ def main(out: str) -> int:
                 todo.append("GPT から 11/7 に収益化に関する通知ありと報告（内容は Claude 未確認）")
             todo.append(PITCH)
             rows.append([vid, slug, state, verdict, f"{i:02d}", t, comp, comp_r + "（作曲者情報は一般的な文献知識。一次資料での確認は未実施）",
-                         chords, ed, match, ed_r, IOWA, v, credit, "／".join(todo), "2026-11-08"])
+                         chords, ed, match, ed_r, IOWA, v, credit, "／".join(todo), "2026-11-08（状態は 11/7 の GPT の報告）"])
     with open(out, "w", newline="", encoding="utf-8-sig") as f:
         w = csv.writer(f)
         w.writerow(hdr)
         w.writerows(rows)
+    srows = [["Shorts の動画ID", "状態（GPT の報告）", "Shorts 番号（make_xmas_shorts.py）", "元の動画", "切り出し（元の音声の秒）",
+              "含まれる曲", "曲の判定", "Shorts の判定"]]
+    for vid, state, cands in SHORTS:
+        vs = {SONGS[k][7] for _, _, k, _ in cands}
+        verdict = ("元の動画は 1 つに特定できる" if len(cands) == 1 else
+                   "どちらの候補でも同じ曲（判定は同じ）" if len({k for _, _, k, _ in cands}) == 1 else
+                   "候補によって判定が違う。GPT 側で元の動画を特定してほしい（長さ・音・説明欄で見分けられる）")
+        for no, src, k, off in cands:
+            srows.append([vid, state, no, src, f"{off:g}〜{off + 45:g}", SONGS[k][0], SONGS[k][7], verdict])
+    with open(out.replace("release_audit", "shorts_audit"), "w", newline="", encoding="utf-8-sig") as f:
+        csv.writer(f).writerows(srows)
     print(f"{len(rows)} 行 → {out}")
     for slug, vid, state, order in VIDEOS:
         print(f"{slug:34s} {video_verdict(order)}")

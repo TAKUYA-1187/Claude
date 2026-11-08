@@ -1,0 +1,6 @@
+﻿Shorts の動画ID,状態（GPT の報告）,Shorts 番号（make_xmas_shorts.py）,元の動画,切り出し（元の音声の秒）,含まれる曲,曲の判定,Shorts の判定
+rrtGfjSd6Ao,公開中（GPT 報告。題名 a quiet christmas moment）,5,x04_christmas_calm,0.5〜45.5,Silent Night,資料が揃った,どちらの候補でも同じ曲（判定は同じ）
+rrtGfjSd6Ao,公開中（GPT 報告。題名 a quiet christmas moment）,9,x02_christmas_musicbox,720.5〜765.5,Silent Night,資料が揃った,どちらの候補でも同じ曲（判定は同じ）
+VPE6z6MmnmY,非公開（11/7 GPT が予約→非公開に変更）,1,x03_christmas_bells,0.5〜45.5,Jingle Bells,版の条件に合わない（営利不可）,候補によって判定が違う。GPT 側で元の動画を特定してほしい（長さ・音・説明欄で見分けられる）
+VPE6z6MmnmY,非公開（11/7 GPT が予約→非公開に変更）,10,x02_christmas_musicbox,1440.5〜1485.5,Jingle Bells（子守唄版・サビのみ）,版の条件が不明,候補によって判定が違う。GPT 側で元の動画を特定してほしい（長さ・音・説明欄で見分けられる）
+sg26nMcWDeM,非公開（11/7 GPT が予約→非公開に変更）,12,x01_christmas_piano,2160.5〜2205.5,O Christmas Tree,版の条件に合わない（営利不可）,元の動画は 1 つに特定できる

@@ -61,7 +61,7 @@ def qa(x, info, path: Path) -> dict:
     for s, d, m, sec in info["mel"]:
         for a0, ad, am, _ in info["acc"]:
             if a0 < s + d and s < a0 + ad and (m - am) % 12 in (1, 11):
-                clash.append((round(s, 2), sec, m, am))
+                clash.append({"beat": round(s, 2), "section": sec, "melody_midi": m, "accomp_midi": am})
     r["melody_accomp_semitone_overlaps"] = clash
     r["lowest_note_midi"] = info["lowest_note"]
     r["lowest_note_hz"] = round(float(440 * 2 ** ((info["lowest_note"] - 69) / 12)), 1)

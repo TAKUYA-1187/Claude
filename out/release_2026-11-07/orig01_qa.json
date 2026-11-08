@@ -140,12 +140,14 @@
  "click_candidates_total": 0,
  "clicks_not_at_onsets": [],
  "melody_accomp_semitone_overlaps": [
-  [
-   63.0,
-   "A2",
-   69,
-   46
-  ]
+  {
+   "time_s": 59.36,
+   "beat": 63.0,
+   "section": "A2",
+   "melody_midi": 69,
+   "accomp_midi": 46,
+   "interval_semitones": 23
+  }
  ],
  "sections_start_s": [
   [

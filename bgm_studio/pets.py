@@ -48,4 +48,10 @@ PET03 = Piece(
     ritard_bars=2, tail_s=3.4,
 )
 
-PIECES = {p.slug: p for p in (PET02, PET03)}
+# pet03 の比較版：7.3 秒（読書灯の場面）で入る旋律の 2 音だけを弱くしたもの。ほかは同じで、同じ -14 LUFS にそろえる
+# （原版は 1 秒ごとの音量が 6〜7 秒の間で +6.4dB。GPT の依頼で、全体を圧縮せずにその発音だけを弱めた版を作る）
+import dataclasses as _dc
+PET03_SOFT = _dc.replace(PET03, slug="pet03_last_light_soft_lamp",
+                         mel_vel={"window": 0.41, "lamp": 0.33, "closed": 0.36})
+
+PIECES = {p.slug: p for p in (PET02, PET03, PET03_SOFT)}

@@ -1,0 +1,231 @@
+{
+ "engine_sample_rate_hz": 44100,
+ "theoretical_shift_cents": -146.707,
+ "method": "FFT（2^15 サンプル・ハン窓・8 倍のゼロ詰め）で、目標の -2〜+1 半音の範囲の最大ピークを放物線補間。発音 0.15 秒後から",
+ "known_exception": "jazz._bass_note は A の設定を使わず、いつも A=440 で鳴る（A=432 の行で +44 cent になるのはこのため）。j01 は A=440 なので、作った動画には影響しない",
+ "states": {
+  "before": "修正前のバンク（48kHz 保存）を 44.1kHz として読む・音量均しなし",
+  "pitch_only": "修正後のバンク・音量均しなし",
+  "after": "修正後のバンク・音量均しあり（現在）"
+ },
+ "pitch_2x2": [
+  {
+   "読み込み経路": "piano: instruments.real_piano",
+   "MIDI": 69,
+   "A 設定": 440.0,
+   "目標 Hz": 440.0,
+   "修正前 Hz": 405.17,
+   "修正前 cent": -142.77,
+   "修正後 Hz": 441.01,
+   "修正後 cent": 3.98,
+   "修正前後の差 cent": 146.75
+  },
+  {
+   "読み込み経路": "piano: instruments.real_piano",
+   "MIDI": 69,
+   "A 設定": 432.0,
+   "目標 Hz": 432.0,
+   "修正前 Hz": 397.8,
+   "修正前 cent": -142.78,
+   "修正後 Hz": 432.99,
+   "修正後 cent": 3.97,
+   "修正前後の差 cent": 146.75
+  },
+  {
+   "読み込み経路": "music box: instruments.real_music_box",
+   "MIDI": 81,
+   "A 設定": 440.0,
+   "目標 Hz": 880.0,
+   "修正前 Hz": 813.08,
+   "修正前 cent": -136.94,
+   "修正後 Hz": 884.98,
+   "修正後 cent": 9.77,
+   "修正前後の差 cent": 146.71
+  },
+  {
+   "読み込み経路": "music box: instruments.real_music_box",
+   "MIDI": 81,
+   "A 設定": 432.0,
+   "目標 Hz": 864.0,
+   "修正前 Hz": 798.29,
+   "修正前 cent": -136.94,
+   "修正後 Hz": 868.89,
+   "修正後 cent": 9.77,
+   "修正前後の差 cent": 146.71
+  },
+  {
+   "読み込み経路": "crotale: instruments.real_crotale",
+   "MIDI": 84,
+   "A 設定": 440.0,
+   "目標 Hz": 1046.5,
+   "修正前 Hz": 969.81,
+   "修正前 cent": -131.77,
+   "修正後 Hz": 1055.51,
+   "修正後 cent": 14.83,
+   "修正前後の差 cent": 146.6
+  },
+  {
+   "読み込み経路": "crotale: instruments.real_crotale",
+   "MIDI": 84,
+   "A 設定": 432.0,
+   "目標 Hz": 1027.47,
+   "修正前 Hz": 952.18,
+   "修正前 cent": -131.75,
+   "修正後 Hz": 1036.33,
+   "修正後 cent": 14.86,
+   "修正前後の差 cent": 146.61
+  },
+  {
+   "読み込み経路": "cello: classical.bowed_note",
+   "MIDI": 57,
+   "A 設定": 440.0,
+   "目標 Hz": 220.0,
+   "修正前 Hz": 203.04,
+   "修正前 cent": -138.86,
+   "修正後 Hz": 220.98,
+   "修正後 cent": 7.71,
+   "修正前後の差 cent": 146.56
+  },
+  {
+   "読み込み経路": "cello: classical.bowed_note",
+   "MIDI": 57,
+   "A 設定": 432.0,
+   "目標 Hz": 216.0,
+   "修正前 Hz": 199.36,
+   "修正前 cent": -138.82,
+   "修正後 Hz": 216.97,
+   "修正後 cent": 7.73,
+   "修正前後の差 cent": 146.55
+  },
+  {
+   "読み込み経路": "violin: classical.bowed_note",
+   "MIDI": 69,
+   "A 設定": 440.0,
+   "目標 Hz": 440.0,
+   "修正前 Hz": 406.06,
+   "修正前 cent": -138.98,
+   "修正後 Hz": 442.04,
+   "修正後 cent": 8.01,
+   "修正前後の差 cent": 146.99
+  },
+  {
+   "読み込み経路": "violin: classical.bowed_note",
+   "MIDI": 69,
+   "A 設定": 432.0,
+   "目標 Hz": 432.0,
+   "修正前 Hz": 398.66,
+   "修正前 cent": -139.04,
+   "修正後 Hz": 433.99,
+   "修正後 cent": 7.95,
+   "修正前後の差 cent": 146.99
+  },
+  {
+   "読み込み経路": "alto sax: classical.bowed_note",
+   "MIDI": 69,
+   "A 設定": 440.0,
+   "目標 Hz": 440.0,
+   "修正前 Hz": 406.89,
+   "修正前 cent": -135.42,
+   "修正後 Hz": 442.92,
+   "修正後 cent": 11.47,
+   "修正前後の差 cent": 146.89
+  },
+  {
+   "読み込み経路": "alto sax: classical.bowed_note",
+   "MIDI": 69,
+   "A 設定": 432.0,
+   "目標 Hz": 432.0,
+   "修正前 Hz": 399.49,
+   "修正前 cent": -135.46,
+   "修正後 Hz": 434.86,
+   "修正後 cent": 11.43,
+   "修正前後の差 cent": 146.89
+  },
+  {
+   "読み込み経路": "alto flute: classical.bowed_note",
+   "MIDI": 69,
+   "A 設定": 440.0,
+   "目標 Hz": 440.0,
+   "修正前 Hz": 406.28,
+   "修正前 cent": -138.03,
+   "修正後 Hz": 442.04,
+   "修正後 cent": 8.02,
+   "修正前後の差 cent": 146.04
+  },
+  {
+   "読み込み経路": "alto flute: classical.bowed_note",
+   "MIDI": 69,
+   "A 設定": 432.0,
+   "目標 Hz": 432.0,
+   "修正前 Hz": 398.91,
+   "修正前 cent": -137.96,
+   "修正後 Hz": 434.05,
+   "修正後 cent": 8.18,
+   "修正前後の差 cent": 146.14
+  },
+  {
+   "読み込み経路": "vibraphone: handpan._pitched",
+   "MIDI": 69,
+   "A 設定": 440.0,
+   "目標 Hz": 440.0,
+   "修正前 Hz": 406.67,
+   "修正前 cent": -136.36,
+   "修正後 Hz": 442.64,
+   "修正後 cent": 10.35,
+   "修正前後の差 cent": 146.71
+  },
+  {
+   "読み込み経路": "vibraphone: handpan._pitched",
+   "MIDI": 69,
+   "A 設定": 432.0,
+   "目標 Hz": 432.0,
+   "修正前 Hz": 399.28,
+   "修正前 cent": -136.36,
+   "修正後 Hz": 434.59,
+   "修正後 cent": 10.35,
+   "修正前後の差 cent": 146.71
+  },
+  {
+   "読み込み経路": "double bass pizz: jazz._bass_note",
+   "MIDI": 45,
+   "A 設定": 440.0,
+   "目標 Hz": 110.0,
+   "修正前 Hz": 101.8,
+   "修正前 cent": -134.16,
+   "修正後 Hz": 110.81,
+   "修正後 cent": 12.7,
+   "修正前後の差 cent": 146.86
+  },
+  {
+   "読み込み経路": "double bass pizz: jazz._bass_note",
+   "MIDI": 45,
+   "A 設定": 432.0,
+   "目標 Hz": 108.0,
+   "修正前 Hz": 101.8,
+   "修正前 cent": -102.4,
+   "修正後 Hz": 110.81,
+   "修正後 cent": 44.46,
+   "修正前後の差 cent": 146.86
+  }
+ ],
+ "not_pitch_scaled": {
+  "triangle / tambourine roll (instruments.triangle_real / sleigh_real)": "音程を持たない打楽器。音程の計算はせず、録音をそのまま (sleigh_real は意図的に 5 度下げて) 使う。48k/44.1k の不具合では、修正前は再生が約 8.8% 遅く・低くなっていた",
+  "合成の楽器 (instruments.additive を使う soft_piano 以外の合成音、flute.tanpura_pluck)": "録音を使わず 44.1kHz で直接合成するので、この不具合の影響を受けない"
+ },
+ "orig01_compare_lufs_before_matching": {
+  "A_theme_before": -13.38,
+  "B_minor_before": -14.21,
+  "coda_before": -15.73,
+  "A_theme_pitch_only": -13.71,
+  "B_minor_pitch_only": -13.49,
+  "coda_pitch_only": -16.22,
+  "A_theme_after": -13.37,
+  "B_minor_after": -13.89,
+  "coda_after": -15.85
+ },
+ "orig01_compare_note": "3 状態とも同じ楽譜・同じ乱数。各 25 秒を -18 LUFS（同じ知覚音量）にそろえた。リミッタなし",
+ "not_verified": [
+  "人の耳での比較（Claude は聞けない）",
+  "修正前のバンクは Claude の作業場所にだけある（リポジトリには入れていない）"
+ ]
+}

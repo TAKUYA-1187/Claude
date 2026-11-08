@@ -1,0 +1,17 @@
+{
+ "production_id": "n08_silent_night_lullaby（x06 と x04 の 1 曲目、関連 Shorts で使用）",
+ "source_file": "bgm_studio/nursery.py",
+ "title": "Silent Night",
+ "bar_beats": 3,
+ "tune_as_used": "G/1.5 A/.5 G/1 E/3 G/1.5 A/.5 G/1 E/3 D5/2 D5/1 B/3 C5/2 C5/1 G/3 A/2 A/1 C5/1.5 B/.5 A/1 G/1.5 A/.5 G/1 E/3 A/2 A/1 C5/1.5 B/.5 A/1 G/1.5 A/.5 G/1 E/3 D5/2 D5/1 F5/1.5 D5/.5 B/1 C5/3 E5/3 C5/1.5 G/.5 E/1 G/1.5 F/.5 D/1 C/3",
+ "chords_as_used": "C C C C G G7 C C F F C C F F C C G G7 C C C G7 C",
+ "git_history_of_this_entry": [
+  "60c67fc 2026-10-30 13:48:23 +0000 Add 13 more carols from ABC scores, sleigh-bell and calm arrangements",
+  "e1d51f4 2026-10-30 11:45:33 +0000 Add Christmas carol medleys in piano and music box versions",
+  "70d9086 2026-10-23 03:26:06 +0000 feat: 童謡・子守唄シリーズ10本 (ChatGPT側の企画を取り込み) を追加する"
+ ],
+ "how_it_was_made": "2026-10-23 に Claude が手で入力。入力時に参照した譜面の記録はない（作業記録にも出典 URL がない）",
+ "what_the_match_shows": "旋律が、パブリックドメインの讃美歌の形（Mutopia 1295）と同じであること",
+ "what_the_match_does_not_show": "入力時に他の版・編曲を一度も見なかったこと（記録がないので証明できない）",
+ "chords": "C・F・G・G7 だけの 1 小節ごとの和音（手で付けた）。特定の版の和音記号と照合する対象はない"
+}

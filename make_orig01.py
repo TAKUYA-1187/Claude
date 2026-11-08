@@ -126,7 +126,9 @@ def main() -> int:
     for s, d, m, sec in info["mel"]:
         for a0, ad, am, _ in info["acc"]:
             if a0 < s + d and s < a0 + ad and (m - am) % 12 in (1, 11) and abs(m - am) < 24:
-                clash.append((round(s, 2), sec, m, am))
+                clash.append({"time_s": round(tm(s), 2), "beat": round(s, 2), "section": sec,
+                              "melody_midi": m, "accomp_midi": am, "interval_semitones": m - am})
+    # 2026-11-08: 1 回目は拍 (beat) だけを書いていて、秒と取り違えられた。秒と拍の両方を書く
     r["melody_accomp_semitone_overlaps"] = clash
     r["sections_start_s"] = info["section_times"]
     (OUT / "orig01_qa.json").write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")

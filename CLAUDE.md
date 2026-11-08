@@ -30,7 +30,21 @@ GPT と Claude は直接つながっていない。文書と実ファイルで�
 - ピアノの録音は、音ごとの音量を隣の音にそろえて使う（`instruments._even_out`）
 - 再現：`PYTHONHASHSEED=0` で実行する
 
-## 現状（2026-11-08）
+## 毎回の作業の始めに確かめること
+1. 前回の未完了の項目（下の「未完了」）と、そのファイルが実在するか（`ls`・ハッシュ）
+2. 書き出しやアップロードが本当に終わったか。前回の自分の発言だけで判断しない
+3. 渡したはずのファイルが、相手（GPT）に届いているか。作業場所にあることと、相手が受け取ったことは別
+
+## 自分の失敗の記録（次回の確認項目）
+| 日付 | 失敗 | 次回からの確認 |
+|---|---|---|
+| 10/28〜11/7 | 録音サンプルを 48kHz で保存し、44.1kHz として鳴らした（約 1.47 半音低い） | 新しいサンプルを足したら `verify_pitch.py` で A4 を測る |
+| 10/30〜31 | 営利不可（CC BY-NC-SA）の曲集の譜面と和音記号を使った | 譜面を取り込む前にライセンスの原文を保存し、NC・SA なら使わない |
+| 11/7 | QA の「ぶつかり」の時刻を拍で書き、秒と取り違えられた | 時刻は必ず秒で書き、拍は別の欄に |
+| 11/7 | 子守唄の合成パッドも濁ると書いたが、実際は使われていなかった | 影響の説明は、コードで呼ばれているかを確かめてから書く |
+| 11/8 | 音声本体を ZIP に入れず、相手に届かなかった | 音声は音声だけの ZIP にして、ファイル名とハッシュを一覧に書く |
+
+## 現状（2026-11-08 第 3 便の後）
 
 **新しい曲**
 | 制作ID | 状態 | ファイル |
@@ -42,17 +56,35 @@ GPT と Claude は直接つながっていない。文書と実ファイルで�
 **投稿済み・GPT の担当**
 - pet01（GPT 制作）：Z8rNJFpXkAM、非公開。音源は Velmora ep01 の 84〜102 秒で、Claude のエンジン由来ではない
 
-**権利**
-- 権利表：`out/release_2026-11-08/release_audit.csv`（`python3 audit_rights.py` で作り直せる）
-- 判断資料：`release_decisions_v2.md`
-- 公開判断の資料が揃った：x06 Silent Night のみ。ただし説明欄の「A=432Hz」は要修正
+**公開の状態**（GPT の 11/7 の報告。Claude は Studio を見ていない）
+- **公開中**：x06 Silent Night（dnOzVffF1ZA）と、その Shorts（rrtGfjSd6Ao）、ep01（OeGDYhGTp9U）
+  - ep01 について、11/7 夜にオーナーから「映像が止まる・ずっと雑音」という申告と削除の希望があった
+- **非公開**：
+  - 11/7 に GPT が予約・公開から非公開に変更：x01（V36WnCN9KW8）、x02（e7_aVz7byxE）、w03（367csO2msJg）、x09（vDHxOVufT1k）、Shorts sg26nMcWDeM・VPE6z6MmnmY
+  - 以前からの保留：x03・x04・x05・x07・x08・w01・w02・w04
+  - その他：k01（t1RntqxDe2I）、k02（6LPA7TH_VdE）、n04 オルゴール（mv-rDt0-7YY）、pet01（Z8rNJFpXkAM）、Velmora Shorts（Jw5x27D811s）
+- pet01 と Jw5x27D811s は ep01 と同じ音源なので、ep01 の申告の確認が済むまで非公開のまま
+
+**権利**（`out/release_2026-11-08b/rights/release_audit.csv` v3、`python3 audit_rights.py` と `python3 verify_sources.py` で作り直せる）
+- 公開判断の資料が揃った：x06 Silent Night（説明欄の「A=432Hz」は要修正）
 - 資料が足りない：x09、w05
 - 許諾または差し替えが必要：x01〜x05、x07、x08、w01〜w04
 
+**音程**（`verify_pitch.py`、`out/release_2026-11-08b/pitch_verification/`）：修正済み・二重補正なし
+- 例外：`jazz._bass_note` は A の設定を使っていない
+
+**未完了**
+- 人の耳での確認（orig01・pet02・pet03・修正前後の比較）
+- x09・w05 の書籍原本との照合
+- Jingle Bells 1 曲の作り直し（orig01 の承認の後）
+
 **オーナーの判断待ち**
-1. orig01・pet02・pet03 の音色
-2. 音程がずれた既存の動画の扱い
-3. 権利の解決方法（許諾／原典から作り直し／新曲）
+1. orig01 の音色
+2. pet03 の原版か比較版か
+3. Jingle Bells の作り直しを始める時期
+
+## 記録の分け方
+企画・素材・音質・権利・投稿・実績・次の改善を、同じ制作 ID で結ぶ。別名の指示書を毎回作り直さず、この CLAUDE.md と `out/release_*/` の一覧（manifest）に追記する。
 
 ## 制作 ID で結ぶもの
 企画 → 素材 → 音質検査（`*_qa.json`）→ 権利（`release_audit.csv`）→ 投稿（GPT の upload_receipt）→ 実績（`pilot_metrics.csv`）を、同じ制作 ID で結ぶ。
