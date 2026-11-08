@@ -76,6 +76,10 @@ def _fetch(url, path, accept_lang="ja-JP,ja;q=0.9", tries=3):
             # A single "$" is normal: product pages carry a "$00" placeholder in the bought-together total.
             session_init()
             continue
+        if jp and "アメリカ合衆国にお届け" in body:
+            # the delivery address fell back to the US: items that only ship in Japan show no price
+            session_init()
+            continue
         if len(body) > 5000 and not blocked:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(body)
@@ -207,13 +211,42 @@ def amazon_detail(asin):
 
 
 # ---------------------------------------------------------------------------
+def _cn_count(t):
+    """'1', '100+', '1.2万+' -> int"""
+    m = re.search(r"([\d.]+)\s*(万)?", t or "")
+    return int(float(m.group(1)) * (10000 if m.group(2) else 1)) if m else 0
+
+
+def _m1688_json(s):
+    """2026-11 market page layout: one JSON object per offer card (price range = cheapest..dearest SKU)."""
+    starts = [m.start() for m in re.finditer(r'\{"productId":"\d+","rank":\d+', s)]
+    out = []
+    for k, i in enumerate(starts):
+        seg = s[i:starts[k + 1] if k + 1 < len(starts) else i + 8000]
+
+        def g(key, pat=r'"((?:[^"\\]|\\.)*)"'):
+            m = re.search('"%s":' % key + pat, seg)
+            return m.group(1) if m else None
+        oid, title, pmin = g("productId"), g("title"), g("priceMin", r"([\d.]+)")
+        if not (oid and title and pmin):
+            continue
+        pmax = g("priceMax", r"([\d.]+)")
+        out.append(dict(id=oid, url=f"https://detail.1688.com/offer/{oid}.html", title=html.unescape(title),
+                        price=float(pmin), pmax=float(pmax) if pmax else float(pmin),
+                        sold=_cn_count(g("monthlySalesText")), total=_cn_count(g("saleText")),
+                        shop=g("supplierName") or "", moq=g("moq", r"(\d+)"), ad=g("isAd", r"(true|false)") == "true"))
+    return out
+
+
 def m1688_market(kw_cn):
     """Offer cards of the 1688 market page: id, url, title, price (yuan), monthly sales, shop."""
     h = "".join("%02X" % b for b in kw_cn.encode("gbk"))
     url = f"https://www.1688.com/market/-{h}.html"
     path = os.path.join(CACHE, "1688", f"{h}.html")
     s = _fetch(url, path, accept_lang="zh-CN,zh;q=0.9")
-    offers = []
+    offers = _m1688_json(s)
+    if offers:
+        return offers
     for blk in re.split(r'<li rank="\d+" offerId=', s)[1:]:
         oid = re.match(r'"(\d+)"', blk)
         title = re.search(r'sm-offerShopwindow-titleLink[^>]*title="([^"]+)"', blk)
