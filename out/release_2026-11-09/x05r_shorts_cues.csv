@@ -1,0 +1,3 @@
+﻿区間ID,ファイル,切り出し元,開始(秒),終了(秒),長さ(秒),中身,冒頭 0.5 秒,終わり方,処理,注意
+cue1_chorus,x05r_cue1_chorus.flac,x05r_jingle_bells_piano.flac（試作 v1）,31.55,56.55,25.00,"サビ 8 小節（Jingle bells, jingle bells…）",サビの頭の D5 の連打がすぐ鳴る,主音 B♭4 をのばした中で 1.2 秒のフェード。次の『終わり』の部分は入れていない,頭 0.03 秒・終わり 1.2 秒のフェードのみ,試作からの候補。本編ができたら本編から切り直す
+cue2_verse,x05r_cue2_verse.flac,x05r_jingle_bells_piano.flac（試作 v1）,6.29,31.29,25.00,ヴァース 8 小節（Dashing through the snow…）,ヴァースの頭の F4-D5-C5-B♭4 がすぐ鳴る,主音 B♭4 をのばした中で 1.2 秒のフェード。サビの頭は入れていない,同上,同上

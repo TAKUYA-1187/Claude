@@ -1,0 +1,10 @@
+Internet Archive mostpopularhomes00nobl_scandata.xml より（2026-11-09 取得）
+leaf 58 = printed page 50
+leaf 59 = printed page 51
+leaf 60 = printed page 52
+leaf 61 = printed page 53
+leaf 62 = printed page 54
+leaf 63 = printed page 55
+leaf 64 = printed page 56
+leaf 65 = printed page 57
+leaf 66 = printed page 58

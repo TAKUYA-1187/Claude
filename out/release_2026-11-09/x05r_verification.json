@@ -1,0 +1,128 @@
+{
+ "melody_equals_1913_source_transposed_plus3": true,
+ "melody_notes_compared": 97,
+ "melody_vs_old_c09_pitch_steps_ratio": 0.939,
+ "chord_comparison_vs_old_c09": {
+  "method": "旋律の音高の動きで x05r と旧 c09 の音を対応させ、それぞれの音の上で鳴る和音を C 長調の『根音+種類』にそろえて比べた（分数和音の低音は無視）",
+  "melody_notes_aligned": 96,
+  "same_chord_at_aligned_notes": 14,
+  "same_ratio": 0.146,
+  "same_root_at_aligned_notes": 45,
+  "same_root_ratio": 0.469,
+  "root_note": "根音だけ同じ（種類は違ってもよい）の割合。主和音・属和音など、どの編曲でも重なりやすい所を含む",
+  "note": "旧 c09 の和音は Paul Hardy 版の和音記号そのもの。x05r は 7 の和音・maj7・m7 などの 4 和音で付け直した",
+  "first_20_pairs_(beat, x05r_in_C, c09)": [
+   [
+    8.0,
+    "Cmaj7",
+    "C"
+   ],
+   [
+    8.5,
+    "Cmaj7",
+    "C"
+   ],
+   [
+    9.0,
+    "Cmaj7",
+    "C"
+   ],
+   [
+    9.5,
+    "Cmaj7",
+    "C"
+   ],
+   [
+    10.0,
+    "Am7",
+    "C"
+   ],
+   [
+    11.5,
+    "Am7",
+    "C"
+   ],
+   [
+    11.75,
+    "Am7",
+    "C"
+   ],
+   [
+    12.0,
+    "C",
+    "C"
+   ],
+   [
+    12.5,
+    "C",
+    "C"
+   ],
+   [
+    13.0,
+    "C",
+    "C"
+   ],
+   [
+    13.5,
+    "C",
+    "C"
+   ],
+   [
+    14.0,
+    "Dm7",
+    "F"
+   ],
+   [
+    16.0,
+    "Dm7",
+    "Dm"
+   ],
+   [
+    16.5,
+    "Dm7",
+    "Dm"
+   ],
+   [
+    17.0,
+    "Dm7",
+    "Dm"
+   ],
+   [
+    17.5,
+    "Dm7",
+    "Dm"
+   ],
+   [
+    20.0,
+    "G7",
+    "G7"
+   ],
+   [
+    20.5,
+    "G7",
+    "G7"
+   ],
+   [
+    21.0,
+    "G7",
+    "G7"
+   ],
+   [
+    21.5,
+    "G7",
+    "G7"
+   ]
+  ]
+ },
+ "source_files_sha256": {
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/one_horse_open_sleigh_1857_p1.png": "cbe1c41fa250d3dc82fe17f4e49c1e6eebb7159355126fc00bd81027118692fa",
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/one_horse_open_sleigh_1857_p2.png": "bf38b49b1c3aa6bdbbd3561728772cd6d6d6cbae2a06134183c21637acf2ca8d",
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/one_horse_open_sleigh_1857_p3.png": "1da3f2725a4eaa89512553f8e55ecd627894060be27ef7fcfc0f7d5cea96d602",
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/one_horse_open_sleigh_1857_p4.png": "fc9c6a7b3987db1fb2be9cfacf5b99cf4297111c1c177fc440f671d11efc2a8a",
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/wikimedia_commons_imageinfo.json": "ea347e18b1d4c112dc0551a96a954e1d96ccea4b2cbf444060157414a516573b",
+  "data/licenses/x05r_jingle_bells/1913_most_popular_home_songs/ia_metadata.json": "ce215155417b92cab0def15545e6739c6896a76f9f5f3292d772cd8989142310",
+  "data/licenses/x05r_jingle_bells/1913_most_popular_home_songs/ia_mostpopularhomes00nobl_leaf61_p54.jpg": "5f81ed739213886f73a22650341a5ad7e8c489ce338f7a4a84654fd58ac08fe2",
+  "data/licenses/x05r_jingle_bells/1913_most_popular_home_songs/ia_mostpopularhomes00nobl_leaf62_p55.jpg": "6fc423c79439f4e99b2d6d89106f2e536669f7982b67a2d9937f49193f3f7f57",
+  "data/licenses/x05r_jingle_bells/1913_most_popular_home_songs/scandata_leaf58-66.txt": "2643438c0f45498d060cc1ccde69c0837e10ccbcc283352e2a6294a04d1242a6"
+ }
+}
