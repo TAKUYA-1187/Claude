@@ -168,7 +168,8 @@ def gentle_compressor(x: np.ndarray, ratio: float = 2.0, pct: float = 75.0,
                "time_over_1db_s": round(float((g < -1).sum() * 0.05), 2)}
 
 
-def render(sr: int = dsp.SR):
+def render(sr: int = dsp.SR, add_layers=None):
+    """add_layers(buf, tm, chords) を渡すと、残響の前に別の楽器を足せる (v5 のそり鈴)。None なら v4 と同じ音"""
     assert sr == dsp.SR
     V2._Q.update(V3._Q_EXTRA)
     rng = np.random.default_rng(SEED)
@@ -215,6 +216,7 @@ def render(sr: int = dsp.SR):
         if e["role"] == "mel":
             mel_buf[i0:i0 + k] += y[:k]
 
+    layers = add_layers(buf, tm, chords) if add_layers is not None else None
     ir = dsp.make_reverb_ir(2.2, rt60=1.4, damp=0.55, predelay=0.016, width=0.75, seed=SEED)
     x = dsp.reverb(buf, ir, mix=0.15, tail=False)[:n]
     x = dsp.highpass(x, 35.0, order=2)                     # v3 の高域 -2 dB はやめた
@@ -247,5 +249,6 @@ def render(sr: int = dsp.SR):
         piano_variant=piano.variant, tm=tm,
         melody_vs_rest_db=V2._stem_ratio(mel_buf, buf - mel_buf),
         harm_count={"first_half": 0, "second_half": sum(1 for e in events if e["role"] == "harm")},
+        layers=layers,
     )
     return x, info
