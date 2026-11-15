@@ -73,7 +73,8 @@ orig01・pet02・pet03・Velmora・新しいジャンルは後回し。
 **新しい曲**
 | 制作ID | 状態 | ファイル |
 |---|---|---|
-| x05r_60s（x05r v3） | **60〜90 秒の試作（79.8 秒）。人の耳での確認待ち。これが最新**。Genspark の指示書への回答。原本 48k/24bit の Salamander、ハンマーノイズ、前奏で主題、♩=66、-14.5 LUFS（リミッター最大 1.9 dB）。旋律・和声は v2 と同じ | `out/release_2026-11-15b/`（4 点セット）、`make_x05r_v3.py`、`bgm_studio/x05r_v3.py` |
+| x05r_60s（x05r v4） | **60〜90 秒の試作（63.0 秒）。人の耳での確認待ち。これが最新**。v3 の試聴判定を反映：ハ長調・♩=84・長三和音中心・副旋律を小さく（旋律と伴奏の差 +4.1 dB）・サビ 7 小節目の「o-pen」を今の一般的な形に（版にない 1 音、記録済み）・-14.4 LUFS | `out/release_2026-11-15c/`（4 点セット）、`make_x05r_v4.py`、`bgm_studio/x05r_v4.py` |
+| x05r_60s（x05r v3） | **不合格**（オーナー 11/15：副旋律の音が大きい・音色が暗い・テンポを速く。旋律の大きさと音量 -14.5 はよい）。Genspark の指示書への回答。原本 48k/24bit の Salamander、ハンマーノイズ、前奏で主題、♩=66、-14.5 LUFS（リミッター最大 1.9 dB）。旋律・和声は v2 と同じ | `out/release_2026-11-15b/`（4 点セット）、`make_x05r_v3.py`、`bgm_studio/x05r_v3.py` |
 | x05r_jingle_bells_piano_v2 | 試聴版（73.5 秒）。v3 で置き換え。Salamander のピアノ。ヴァースは 1857 年版（Levy 所蔵譜）を基本に 2 小節だけ 1913 年版、サビは 1913 年版。和声は新しく付けた | `out/release_2026-11-15/`、`make_x05r_v2.py`、`verify_x05r_v2.py`、`bgm_studio/x05r_v2.py` |
 | x05r_jingle_bells_piano | 試作 v1（67 秒、Iowa のピアノ）。v2 で置き換え | `out/release_2026-11-09/`、`make_x05r.py`、`verify_x05r.py` |
 | orig01_winter_reading_piano | 3 分の試聴版。オーナーの音色の確認待ち | `out/release_2026-11-07/`、`make_orig01.py` |
@@ -125,7 +126,7 @@ orig01 の試作品について：GPT が rHrUJs0h6bU で非公開アップロ�
 - x09・w05 の書籍原本との照合
 
 **オーナーの判断待ち**
-1. x05r_60s（v3）の音色（`out/release_2026-11-15b/x05r_provenance.md` の 9 節「まだ人の耳で聴いていない項目」）。合格するまで長尺と x06r には進まない（Genspark の指示書）
+1. x05r_60s（v4）の音色（`out/release_2026-11-15c/x05r_provenance.md` の 0 節と 9 節）。合格するまで長尺と x06r には進まない（Genspark の指示書）
 2. orig01 の音色
 3. pet03 の原版か比較版か
 

@@ -1,0 +1,260 @@
+{
+ "file": "x05r_60s.flac",
+ "duration_s": 62.987,
+ "sample_rate": {
+  "declared_flac_header_hz": 44100,
+  "declared_mp3_header_hz": 44100,
+  "flac_bits": "24",
+  "flac_channels": 2,
+  "effective_hz_from_reference_tone": [
+   44082.7,
+   44075.8
+  ],
+  "effective_vs_declared_percent": [
+   -0.039,
+   -0.055
+  ],
+  "criterion": "差 0.5% 未満",
+  "pass": true,
+  "note": "基準音の高さのずれをすべてレートの誤差とみなした上限値。実際には録音のピアノ自体の調律 (A4 で約 +1 cent) を含む"
+ },
+ "integrated_lufs": {
+  "ffmpeg_flac": -14.4,
+  "ffmpeg_mp3": -14.4,
+  "internal": -14.0,
+  "criterion": "-14±1 (目安。合格の根拠にしない)",
+  "within": true
+ },
+ "loudness_range_lu": 5.6,
+ "true_peak": {
+  "ffmpeg_flac_dbtp": -1.8,
+  "ffmpeg_mp3_dbtp": -1.7,
+  "internal_4x_dbtp": -1.75,
+  "criterion": "-1.0 dBTP 以下",
+  "pass": true
+ },
+ "clipping": {
+  "samples_abs_ge_0_9999_flac": 0,
+  "samples_abs_ge_0_9999_mp3": 0,
+  "criterion": "0"
+ },
+ "isolated_clicks": {
+  "count": 0,
+  "times_s": [],
+  "method": "2 階差分が周りより 18 dB 以上大きい所のうち、打鍵の時刻から 15 ms より離れたもの。段差の大きさが -90 dBFS 未満のもの (24 bit の最小単位付近の量子化) は数えない",
+  "raw_detections_before_level_floor": [
+   {
+    "time_s": 62.9,
+    "step_dbfs": -240.0
+   },
+   {
+    "time_s": 62.9,
+    "step_dbfs": -240.0
+   },
+   {
+    "time_s": 62.9,
+    "step_dbfs": -240.0
+   },
+   {
+    "time_s": 62.901,
+    "step_dbfs": -240.0
+   },
+   {
+    "time_s": 62.901,
+    "step_dbfs": -240.0
+   }
+  ],
+  "criterion": "0"
+ },
+ "silence_inside_song": {
+  "runs_s": [],
+  "count": 0,
+  "method": "10 ms ごとの RMS (左右の大きい方) が -55 dBFS 以下で 0.45 秒以上続く所。最後のペダルを上げた時刻より前だけを見る",
+  "end_of_song_damper_s": 60.49,
+  "criterion": "0 (末尾の減衰・余韻は可)"
+ },
+ "reference_pitch": {
+  "declared": "A4 = 440 Hz、平均律",
+  "measurements": [
+   {
+    "note": "A4",
+    "velocity": 40,
+    "expected_hz": 440.0,
+    "measured_hz": 440.174,
+    "cents": 0.68
+   },
+   {
+    "note": "A4",
+    "velocity": 62,
+    "expected_hz": 440.0,
+    "measured_hz": 440.241,
+    "cents": 0.95
+   }
+  ],
+  "criterion": "±10 cent 以内",
+  "pass": true
+ },
+ "melody_matches_sources": {
+  "verse_and_chorus_32_bars": true,
+  "intro_4_bars_vs_1913_chorus_1_4": true,
+  "method": "採譜の文字列 (1857 年版 +2 半音、1913 年版 +3 半音) だけから期待される旋律を作り、制作データ (変ロ長調で組んだもの) と小節ごとに比べた。サビ 7 小節目はオーナーの指示による 1 音の変更を期待値に入れた。書き出しはさらに +2 半音でハ長調",
+  "editorial_change": "サビ 7 小節目 (2/4) の 4 つ目の音：1908/1913 年版 G (ト長調) → 今の一般的な形 B。ハ長調では E5 (版のままなら C5)"
+ },
+ "loop": "ループ納品ではない (最後は余韻で消える)。継ぎ目の確認用の切り出しは不要",
+ "limiter": {
+  "max_gain_reduction_db": -0.0,
+  "time_with_reduction_over_1db_s": 0.0,
+  "time_with_reduction_over_3db_s": 0.0,
+  "samples_hard_clipped_at_ceiling": 0,
+  "compressor": {
+   "ratio": 2.0,
+   "threshold_dbfs_rms_50ms": -17.5,
+   "max_reduction_db": 2.72,
+   "time_over_1db_s": 9.8
+  },
+  "ceiling_db": -1.2,
+  "makeup_gain_db": 4.31,
+  "lufs_before": -18.31,
+  "true_peak_before_db": -6.06
+ },
+ "loudness_jumps_over_6db_per_1s": [
+  [
+   46,
+   6.1
+  ]
+ ],
+ "bands_db_rel_250_500": {
+  "500": 3.9,
+  "1000": -11.1,
+  "2000": -19.8,
+  "4000": -38.1,
+  "8000": -68.1
+ },
+ "band_window_PURE_PIANO": {
+  "500": [
+   -14.0,
+   3.0
+  ],
+  "1000": [
+   -21.0,
+   -1.0
+  ],
+  "2000": [
+   -34.0,
+   -5.0
+  ],
+  "4000": [
+   -62.0,
+   -10.0
+  ],
+  "8000": [
+   -80.0,
+   -16.0
+  ]
+ },
+ "melody_accomp_semitone_overlaps": [],
+ "melody_vs_accompaniment": {
+  "melody_lufs": -17.84,
+  "accompaniment_lufs": -21.91,
+  "melody_minus_accompaniment_db": 4.07
+ },
+ "lowest_note": "C2",
+ "section_times_s": [
+  [
+   "intro",
+   0.0
+  ],
+  [
+   "verse",
+   5.81
+  ],
+  [
+   "chorus",
+   28.85
+  ],
+  [
+   "coda",
+   52.25
+  ]
+ ],
+ "mp3_vs_flac_correlation": 1.0,
+ "piano": {
+  "name": "Salamander Grand Piano V3 (Yamaha C5)",
+  "variant": "48kHz/24bit 原本",
+  "velocity_layers_in_library": 16,
+  "layers_used": [
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "6",
+   "7",
+   "8",
+   "9",
+   "10"
+  ],
+  "release_samples": "弦共鳴リリース (harmS/harmL) とハンマーノイズ (rel) を使用",
+  "sustain_pedal": "和音が変わるたびに踏み替え (時刻は pedal_changes_s)"
+ },
+ "resampling": {
+  "per_note": "1 回 (音の高さ合わせと 48k→44.1k を同時に)",
+  "unique_resample_operations": 177,
+  "prepare_stage": "なし (配布された 48kHz/24bit の WAV をそのまま読む)",
+  "export_stage": "なし (44.1kHz で書き出し)"
+ },
+ "pedal_changes_s": [
+  0.0,
+  1.429,
+  2.892,
+  4.327,
+  5.807,
+  7.22,
+  8.632,
+  10.046,
+  11.532,
+  12.941,
+  14.361,
+  15.802,
+  17.301,
+  18.738,
+  20.182,
+  21.606,
+  23.089,
+  24.51,
+  25.915,
+  27.307,
+  28.851,
+  30.265,
+  31.714,
+  33.173,
+  34.669,
+  36.092,
+  37.51,
+  38.942,
+  40.417,
+  41.845,
+  43.245,
+  44.67,
+  46.155,
+  47.576,
+  48.992,
+  50.546,
+  52.255,
+  53.827,
+  55.487
+ ],
+ "machine_checked": "上の数値すべて",
+ "not_listened_by_human": [
+  "副旋律 (旋律の下の音・伴奏) が小さくなったか",
+  "明るく聞こえるか",
+  "テンポ ♩=84 の速さ",
+  "46 秒付近 (のばした音の後の句の入り) で急に大きく感じないか",
+  "コンプレッサーの効き (最大の下げ幅は limiter.compressor)",
+  "打鍵の自然さ",
+  "低音の濁り",
+  "ペダルの濁り・切れ",
+  "終わりの余韻"
+ ],
+ "self_judgement_of_tone": "しない (指示書のとおり)"
+}
