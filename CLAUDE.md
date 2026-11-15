@@ -8,7 +8,9 @@
 - **GPT**：画像・動画の編集・字幕・タイトルと翻訳・サムネイル・YouTube Studio への投稿と設定・実績の分析。作曲・合成はしない。試聴が承認された音源を受け取ってから動画を組み立てる
 - **オーナー**：本人認証、音色の好みの最終判断、公開日時の決定、費用のかかる判断
 
-GPT と Claude は直接つながっていない。文書と実ファイルで引き継ぐ。Claude は YouTube Studio を見られないので、GPT の報告は「GPT の報告」として書く。
+- **Genspark**（2026-11-15 から）：GPT と同じく、指示書と実ファイルでやり取りする相手。x05r の 60〜90 秒の試作の指示書を受け取った（4 点セット：`x05r_60s.flac`・`x05r_60s.mp3`・`x05r_provenance.md`・`x05r_qa.json`）
+
+GPT・Genspark と Claude は直接つながっていない。文書と実ファイルで引き継ぐ。Claude は YouTube Studio を見られないので、GPT の報告は「GPT の報告」として書く。
 
 ## 必ず守ること
 - AI 使用の開示は常に「はい」。開示を隠すための加工はしない
@@ -29,8 +31,9 @@ GPT と Claude は直接つながっていない。文書と実ファイルで�
   - 影響した動画の一覧：`out/release_2026-11-08/audio_impact.csv`
 - ピアノの録音は、音ごとの音量を隣の音にそろえて使う（`instruments._even_out`）
 - **2026-11-15 から、新しいピアノ曲は Salamander Grand Piano V3（`bgm_studio/grand.py`、CC BY 3.0、16 段階の強さ・ペダル・ダンパー）で作る**
-  - 取得：`python3 prepare_salamander.py`（44.1kHz/16bit 版。レート変換なし。読み込み時に 44.1kHz かを確かめる）
-  - 説明欄に表示が必要：「Piano samples: Salamander Grand Piano V3 by Alexander Holm, licensed under CC BY 3.0」
+  - 取得：`python3 prepare_salamander.py --variant 48k24`（原本 48kHz/24bit。読み込み時にヘッダーの 48kHz・24bit を確かめ、鳴らすときに音の高さ合わせと 48k→44.1k を 1 回の再サンプリングで行う）。v2 は `--variant` なし（44.1kHz/16bit 版）
+  - 離鍵の弦共鳴（harm）とハンマーノイズ（rel）の録音も鳴らす（`Grand("48k24", hammer=True)`）
+  - 説明欄に表示が必要：「Piano: Salamander Grand Piano V3 by Alexander Holm (CC BY 3.0)」と https://creativecommons.org/licenses/by/3.0/
   - 旧 Iowa の mf 1 段階のピアノ（`instruments.SampleBank` の soft_piano）は、強さで音色が変わらず「薄い」と評価された。新しい曲には使わない
 - 再現：`PYTHONHASHSEED=0` で実行する
 
@@ -70,7 +73,8 @@ orig01・pet02・pet03・Velmora・新しいジャンルは後回し。
 **新しい曲**
 | 制作ID | 状態 | ファイル |
 |---|---|---|
-| x05r_jingle_bells_piano_v2 | **試聴版（73.5 秒）。人の耳での確認待ち**。Salamander のピアノ。ヴァースは 1857 年版（Levy 所蔵譜）を基本に 2 小節だけ 1913 年版、サビは 1913 年版。和声は新しく付けた | `out/release_2026-11-15/`、`make_x05r_v2.py`、`verify_x05r_v2.py`、`bgm_studio/x05r_v2.py` |
+| x05r_60s（x05r v3） | **60〜90 秒の試作（79.8 秒）。人の耳での確認待ち。これが最新**。Genspark の指示書への回答。原本 48k/24bit の Salamander、ハンマーノイズ、前奏で主題、♩=66、-14.5 LUFS（リミッター最大 1.9 dB）。旋律・和声は v2 と同じ | `out/release_2026-11-15b/`（4 点セット）、`make_x05r_v3.py`、`bgm_studio/x05r_v3.py` |
+| x05r_jingle_bells_piano_v2 | 試聴版（73.5 秒）。v3 で置き換え。Salamander のピアノ。ヴァースは 1857 年版（Levy 所蔵譜）を基本に 2 小節だけ 1913 年版、サビは 1913 年版。和声は新しく付けた | `out/release_2026-11-15/`、`make_x05r_v2.py`、`verify_x05r_v2.py`、`bgm_studio/x05r_v2.py` |
 | x05r_jingle_bells_piano | 試作 v1（67 秒、Iowa のピアノ）。v2 で置き換え | `out/release_2026-11-09/`、`make_x05r.py`、`verify_x05r.py` |
 | orig01_winter_reading_piano | 3 分の試聴版。オーナーの音色の確認待ち | `out/release_2026-11-07/`、`make_orig01.py` |
 | pet02_closing_the_book | 企画と 21 秒の試作音源 | `out/release_2026-11-08/`、`make_pets.py` |
@@ -115,13 +119,13 @@ orig01 の試作品について：GPT が rHrUJs0h6bU で非公開アップロ�
 **未完了**
 - 人の耳での確認（x05r v2・orig01・pet02・pet03）
 - x05r：1908/1913 年版のサビ（1857 年版と違う旋律）の来歴。米国以外での扱い。Levy（JHU）の画像の利用条件のページは Cloudflare で取れていない
-- x05r：試聴版が合格したら、本番用のマスターと 15〜30 分の展開版を作る
+- x05r：試作（x05r_60s）が合格したら、本番用のマスターと 15〜30 分の展開版を作る。未承認のまま x06r に進まない
 - orig01・pet02・pet03 は Iowa のピアノで作ったもの。作り直すなら Salamander で
 - x06r Silent Night の新録（x05r の次）
 - x09・w05 の書籍原本との照合
 
 **オーナーの判断待ち**
-1. x05r v2 試聴版の音色（`out/release_2026-11-15/x05r_v2_README.md` の 7 項目。音量は -17.5 LUFS で、上げるかどうかも）
+1. x05r_60s（v3）の音色（`out/release_2026-11-15b/x05r_provenance.md` の 9 節「まだ人の耳で聴いていない項目」）。合格するまで長尺と x06r には進まない（Genspark の指示書）
 2. orig01 の音色
 3. pet03 の原版か比較版か
 
