@@ -3,9 +3,9 @@
 チャンネル：Quiet Hours Music（@quiethoursmusic1187、UCXkOUfDDRCUjA08kfCmcm3w）。
 目標：世界の視聴者に届けて収益化し、将来は月間の事業利益 100 万円。達成時期や利益は保証しない。実測で改善する。
 
-## 分担
-- **Claude**：作曲・音源の修正・音質検査・権利資料・Shorts 用の区間の指定
-- **GPT**：画像・動画の編集・字幕・タイトルと翻訳・サムネイル・YouTube Studio への投稿と設定・実績の分析
+## 分担（GPT 指示書 §26、2026-11-15：BGM は Claude、画像と映像は GPT）
+- **Claude**：作曲・編曲・音源の制作と修正・音質検査・権利資料・Shorts 用の区間の指定。BGM はすべて Claude が作る
+- **GPT**：画像・動画の編集・字幕・タイトルと翻訳・サムネイル・YouTube Studio への投稿と設定・実績の分析。作曲・合成はしない。試聴が承認された音源を受け取ってから動画を組み立てる
 - **オーナー**：本人認証、音色の好みの最終判断、公開日時の決定、費用のかかる判断
 
 GPT と Claude は直接つながっていない。文書と実ファイルで引き継ぐ。Claude は YouTube Studio を見られないので、GPT の報告は「GPT の報告」として書く。
@@ -28,6 +28,10 @@ GPT と Claude は直接つながっていない。文書と実ファイルで�
   - 2026-11-07 まで 48 kHz で保存していて、10/28〜11/7 に作った録音の楽器が約 1.47 半音低かった
   - 影響した動画の一覧：`out/release_2026-11-08/audio_impact.csv`
 - ピアノの録音は、音ごとの音量を隣の音にそろえて使う（`instruments._even_out`）
+- **2026-11-15 から、新しいピアノ曲は Salamander Grand Piano V3（`bgm_studio/grand.py`、CC BY 3.0、16 段階の強さ・ペダル・ダンパー）で作る**
+  - 取得：`python3 prepare_salamander.py`（44.1kHz/16bit 版。レート変換なし。読み込み時に 44.1kHz かを確かめる）
+  - 説明欄に表示が必要：「Piano samples: Salamander Grand Piano V3 by Alexander Holm, licensed under CC BY 3.0」
+  - 旧 Iowa の mf 1 段階のピアノ（`instruments.SampleBank` の soft_piano）は、強さで音色が変わらず「薄い」と評価された。新しい曲には使わない
 - 再現：`PYTHONHASHSEED=0` で実行する
 
 ## 毎回の作業の始めに確かめること
@@ -45,8 +49,15 @@ GPT と Claude は直接つながっていない。文書と実ファイルで�
 | 11/8 | 音声本体を ZIP に入れず、相手に届かなかった | 音声は音声だけの ZIP にして、ファイル名とハッシュを一覧に書く |
 | 11/8 | pet03 比較版の変更範囲を「2 音」と書いたが、実際は 6 音・全体の音量にも差 | 説明を書く前に、コードの変更範囲と、実際の音の差を測る |
 | 11/9 | x05r の 1 回目の和声で、低音と旋律が長 7 度・短 9 度でぶつかる所が 10 か所 | 和音を付けたら、必ず melody_accomp_semitone_overlaps を見る |
+| 11/15 | x05r v2 の表の注記で、1913 年版の「o-pen」の違いをサビ 4・12 小節目と書いた（正しくは 7 小節目だけ。納品前に表を見て直した） | 出典の違いは、表の音を 1 小節ずつ見て書く。推測で小節番号を書かない |
 
-## 現状（2026-11-09：クリスマス優先へ変更の後）
+## 現状（2026-11-15：§26 の後）
+
+**GPT 指示書 §19〜§26 の要点**（GPT の報告。Claude は Studio を見ていない）
+- §19〜20：dnOzVffF1ZA・rrtGfjSd6Ao の説明欄は、11/10 朝と 11/11 朝の読み取りで新しい説明と全文一致。432Hz の句はなし。§18 の「反映未確認」は解消
+- §22・§24・§25：GPT が自分で作曲・合成したオリジナル 3 本（Lanterns in the Snow、Christmas Bookshop、The Paper Star）を作った
+- §26：オーナーの評価は「画像はよいが BGM がチープ」。GPT 音源の 3 本は投稿しない（非公開アップロードも不可）。絵とサムネイルは残し、曲に合えば使う。BGM は Claude が作る
+- 新しい公開・予約・アップロードは 0 件（§19〜§26 の時点）
 
 **優先順位（GPT 指示書 §17、2026-11-10 JST）**
 クリスマスを最優先にする。順番は次のとおり：
@@ -59,7 +70,8 @@ orig01・pet02・pet03・Velmora・新しいジャンルは後回し。
 **新しい曲**
 | 制作ID | 状態 | ファイル |
 |---|---|---|
-| x05r_jingle_bells_piano | 試作 v1（67 秒）。旋律は 1908/1913 年版から読み取った。和声は新しく付けた。人の耳での確認待ち | `out/release_2026-11-09/`、`make_x05r.py`、`verify_x05r.py` |
+| x05r_jingle_bells_piano_v2 | **試聴版（73.5 秒）。人の耳での確認待ち**。Salamander のピアノ。ヴァースは 1857 年版（Levy 所蔵譜）を基本に 2 小節だけ 1913 年版、サビは 1913 年版。和声は新しく付けた | `out/release_2026-11-15/`、`make_x05r_v2.py`、`verify_x05r_v2.py`、`bgm_studio/x05r_v2.py` |
+| x05r_jingle_bells_piano | 試作 v1（67 秒、Iowa のピアノ）。v2 で置き換え | `out/release_2026-11-09/`、`make_x05r.py`、`verify_x05r.py` |
 | orig01_winter_reading_piano | 3 分の試聴版。オーナーの音色の確認待ち | `out/release_2026-11-07/`、`make_orig01.py` |
 | pet02_closing_the_book | 企画と 21 秒の試作音源 | `out/release_2026-11-08/`、`make_pets.py` |
 | pet03_last_light | 企画と 22 秒の試作音源 | 同上 |
@@ -88,7 +100,7 @@ orig01 の試作品について：GPT が rHrUJs0h6bU で非公開アップロ�
 **GPT が YouTube で行った変更**（§15・§18、GPT の報告。Claude は Studio を見ていない）
 - f01 と思われる aus8kpTQ28E（2027/1/4 に予約）、h01 と思われる Th9Hc5hn9Fo（2026/12/20 に予約）：予約は変えていない。音程と表記の問題は未解決
 - 11/10 00:45〜00:50 JST の変更：
-  - dnOzVffF1ZA（Silent Night）と rrtGfjSd6Ao（その Shorts）：説明欄から「A=432Hz」と「real piano」を除く書き込みをした。成功の応答はあったが、読み戻すと古い説明のまま。反映は未確認。同じ書き込みを繰り返さない
+  - dnOzVffF1ZA（Silent Night）と rrtGfjSd6Ao（その Shorts）：説明欄から「A=432Hz」と「real piano」を除く書き込みをした。直後の読み戻しは古いままだったが、11/10 朝・11/11 朝の読み取りで新しい説明と全文一致（§19〜20）。同じ書き込みを繰り返さない
   - dnOzVffF1ZA：サムネイルを silent_night_thumbnail_v2.jpg に変更。配信されていることを確認済み
 - 新しい公開・予約・アップロードは 0 件
 
@@ -101,14 +113,15 @@ orig01 の試作品について：GPT が rHrUJs0h6bU で非公開アップロ�
 - 例外：`jazz._bass_note` は A の設定を使っていない
 
 **未完了**
-- 人の耳での確認（x05r・orig01・pet02・pet03・修正前後の比較）
-- x05r：1908 年版の旋律に、編曲者 Rosey 自身の手が入っているか。米国以外での扱い
-- x05r：試作が合格したら、15〜30 分の展開版を作る
+- 人の耳での確認（x05r v2・orig01・pet02・pet03）
+- x05r：1908/1913 年版のサビ（1857 年版と違う旋律）の来歴。米国以外での扱い。Levy（JHU）の画像の利用条件のページは Cloudflare で取れていない
+- x05r：試聴版が合格したら、本番用のマスターと 15〜30 分の展開版を作る
+- orig01・pet02・pet03 は Iowa のピアノで作ったもの。作り直すなら Salamander で
 - x06r Silent Night の新録（x05r の次）
 - x09・w05 の書籍原本との照合
 
 **オーナーの判断待ち**
-1. x05r 試作 v1 の音色（旋律の大きさ・伴奏の濃さ）
+1. x05r v2 試聴版の音色（`out/release_2026-11-15/x05r_v2_README.md` の 7 項目。音量は -17.5 LUFS で、上げるかどうかも）
 2. orig01 の音色
 3. pet03 の原版か比較版か
 

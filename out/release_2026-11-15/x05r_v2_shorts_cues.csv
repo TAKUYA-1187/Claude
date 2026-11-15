@@ -1,0 +1,3 @@
+cue,start_s,end_s,length_s,start_beat,end_beat,fade_in_s,fade_out_s,why
+cue1_verse_end_to_chorus,26.86,47.11,20.25,32,56,0.01,0.6,ヴァース最後の句 (What fun it is to ride…) からサビ前半。サビ前半の終わり (sleigh、F7sus4) で止め、次の Jingle bells の打鍵の前で切る。Shorts でくり返すと属和音から主和音の頭へ戻る
+cue2_chorus_second_half_to_end,47.11,70.02,22.91,56,最後の和音,0.01,2.0,サビ後半の Jingle bells から始め、終わりの動機・E♭m6・最後の B♭ の和音まで。最後の和音の響きの中で 2 秒フェード

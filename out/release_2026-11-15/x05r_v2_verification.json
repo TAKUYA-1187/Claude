@@ -1,0 +1,300 @@
+{
+ "melody_matches_sources_bar_by_bar": true,
+ "melody_bars": [
+  {
+   "part": "verse",
+   "bar_2_4": 1,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 2,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 3,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 4,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 5,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 6,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 7,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 8,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 9,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 10,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 11,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 12,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 13,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 14,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 15,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "verse",
+   "bar_2_4": 16,
+   "source": "1857",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 1,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 2,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 3,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 4,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 5,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 6,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 7,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 8,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 9,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 10,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 11,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 12,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 13,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 14,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 15,
+   "source": "1913",
+   "same": true
+  },
+  {
+   "part": "chorus",
+   "bar_2_4": 16,
+   "source": "1913",
+   "same": true
+  }
+ ],
+ "melody_notes_from_1857": 42,
+ "melody_notes_from_1913": 59,
+ "chord_comparison_vs_old_c09": {
+  "method": "旋律の音高の動きで v2 と旧 c09 の音を対応させ、それぞれの音の上の和音を C 長調の根音と長短でそろえて比べた",
+  "aligned_notes": 101,
+  "same_root_and_major_minor": 48,
+  "same_ratio": 0.475,
+  "same_root": 48,
+  "same_root_ratio": 0.475,
+  "note": "根音だけの一致は、主和音・属和音など、どの編曲でも重なりやすい所を含む。旧 c09 の和音は Paul Hardy 版の和音記号"
+ },
+ "piano_single_note_pitch": [
+  {
+   "note": 69,
+   "velocity": 40,
+   "expected_hz": 440.0,
+   "measured_hz": 440.174,
+   "cents": 0.68
+  },
+  {
+   "note": 69,
+   "velocity": 62,
+   "expected_hz": 440.0,
+   "measured_hz": 440.241,
+   "cents": 0.95
+  },
+  {
+   "note": 70,
+   "velocity": 40,
+   "expected_hz": 466.164,
+   "measured_hz": 466.32,
+   "cents": 0.58
+  },
+  {
+   "note": 70,
+   "velocity": 62,
+   "expected_hz": 466.164,
+   "measured_hz": 466.392,
+   "cents": 0.85
+  },
+  {
+   "note": 74,
+   "velocity": 40,
+   "expected_hz": 587.33,
+   "measured_hz": 588.49,
+   "cents": 3.42
+  },
+  {
+   "note": 74,
+   "velocity": 62,
+   "expected_hz": 587.33,
+   "measured_hz": 588.48,
+   "cents": 3.39
+  },
+  {
+   "note": 77,
+   "velocity": 40,
+   "expected_hz": 698.456,
+   "measured_hz": 700.375,
+   "cents": 4.75
+  },
+  {
+   "note": 77,
+   "velocity": 62,
+   "expected_hz": 698.456,
+   "measured_hz": 700.368,
+   "cents": 4.73
+  },
+  {
+   "note": 46,
+   "velocity": 40,
+   "expected_hz": 116.541,
+   "measured_hz": 116.172,
+   "cents": -5.49
+  },
+  {
+   "note": 46,
+   "velocity": 62,
+   "expected_hz": 116.541,
+   "measured_hz": 116.171,
+   "cents": -5.5
+  }
+ ],
+ "files_sha256": {
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/one_horse_open_sleigh_1857_p1.png": "cbe1c41fa250d3dc82fe17f4e49c1e6eebb7159355126fc00bd81027118692fa",
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/one_horse_open_sleigh_1857_p2.png": "bf38b49b1c3aa6bdbbd3561728772cd6d6d6cbae2a06134183c21637acf2ca8d",
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/one_horse_open_sleigh_1857_p3.png": "1da3f2725a4eaa89512553f8e55ecd627894060be27ef7fcfc0f7d5cea96d602",
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/one_horse_open_sleigh_1857_p4.png": "fc9c6a7b3987db1fb2be9cfacf5b99cf4297111c1c177fc440f671d11efc2a8a",
+  "data/licenses/x05r_jingle_bells/1857_first_edition_loc/wikimedia_commons_imageinfo.json": "ea347e18b1d4c112dc0551a96a954e1d96ccea4b2cbf444060157414a516573b",
+  "data/licenses/x05r_jingle_bells/1857_levy_jhu/README.md": "395981d0a68388fcf08ca9e9d490a27acd6b31988cf5f8fc109018749a3ed8d7",
+  "data/licenses/x05r_jingle_bells/1857_levy_jhu/levy-062-044.pdf": "92be1597925020847193ec17a89800b1837ec416238e9d80296288e65b15351b",
+  "data/licenses/x05r_jingle_bells/1857_levy_jhu/levy_062_044_item.html": "307299e19009ef6a919b4b69edeaca305702ff9d0ec4c8bc407f35ea53ea8757",
+  "data/licenses/x05r_jingle_bells/1857_levy_jhu/musicians.html": "f212b6a6c0361ffa49d6ecfea044946e681ac181a8c0bc28c0067c0a12706560",
+  "data/licenses/x05r_jingle_bells/1913_most_popular_home_songs/ia_metadata.json": "ce215155417b92cab0def15545e6739c6896a76f9f5f3292d772cd8989142310",
+  "data/licenses/x05r_jingle_bells/1913_most_popular_home_songs/ia_mostpopularhomes00nobl_leaf61_p54.jpg": "5f81ed739213886f73a22650341a5ad7e8c489ce338f7a4a84654fd58ac08fe2",
+  "data/licenses/x05r_jingle_bells/1913_most_popular_home_songs/ia_mostpopularhomes00nobl_leaf62_p55.jpg": "6fc423c79439f4e99b2d6d89106f2e536669f7982b67a2d9937f49193f3f7f57",
+  "data/licenses/x05r_jingle_bells/1913_most_popular_home_songs/scandata_leaf58-66.txt": "2643438c0f45498d060cc1ccde69c0837e10ccbcc283352e2a6294a04d1242a6",
+  "data/licenses/salamander_grand_piano_v3/README_from_archive.txt": "0a452c83ef9f5e2ad778e12a2d477e705d56b5119138598ce874c5f17989c364",
+  "data/licenses/salamander_grand_piano_v3/SalamanderGrandPianoV3.sfz": "84247d1a6af9a6ec6aa45eb28ea914c86bb8cc4618ee08510f9261dbfebb77a1",
+  "data/licenses/salamander_grand_piano_v3/cc_by_3.0_legalcode.txt": "e6bc9e9c474700b708f568bac9e5a8a9bcb2b1dad53442f5ba449fcb848b8e76",
+  "data/licenses/salamander_grand_piano_v3/freepats_acoustic_grand_piano_page_20261115.html": "b46621c9ed55008986c10a050531de2a3a2631a991e0333117f767365c847fdc",
+  "samples/salamander_raw/SalamanderGrandPianoV3_44khz16bit.tar.xz (git には入れない)": "58750eb1366761e187f71ddb9b932355ea894d28ec4331e74ab8acb44c819936"
+ }
+}

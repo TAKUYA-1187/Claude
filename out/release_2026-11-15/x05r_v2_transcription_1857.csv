@@ -1,0 +1,34 @@
+pdf_page,system,bar_2_4,notes_sounding_pitch_Ab_major,confidence,remark
+2,2,0,R/1 R/.5 Eb4/.5,高,弱起。上の歌詞「2. A」は 2 番だけの音 (1 番の歌詞は次の小節から)
+2,2,1,Eb4/.5 C5/.5 Bb4/.5 Ab4/.5,高,1. Dash-ing thro' the
+2,2,2,Eb4/1 R/.5 Eb4/.25 Eb4/.25,高,"snow, In a (16 分音符 2 つ)"
+2,2,3,Eb4/.5 C5/.5 Bb4/.5 Ab4/.5,高,one horse o-pen
+2,2,4,F4/1.5 F4/.5,高,"sleigh, (付点 4 分と 8 分をスラーで結ぶ)"
+2,2,5,F4/.5 Db5/.5 C5/.5 Bb4/.5,高,O'er the hills we
+2,3,6,G4/1.5 G4/.5,高,"go, (スラー)"
+2,3,7,G4/.5 F5/.5 Eb5/.5 Db5/.5,高,Laugh-ing all the。低い G4 から F5 へ 7 度跳ぶ (今の形とは違う)
+2,3,8,C5/1.5 Eb4/.5,高,way; の後の 8 分音符は 2 番の歌詞「The」の音
+2,3,9,Eb4/.5 C5/.5 Bb4/.5 Ab4/.5,高,Bells on bob tail
+2,3,10,Eb4/1.5 Eb4/.5,高,"ring, (スラー)"
+2,3,11,Eb4/.5 C5/.5 Bb4/.5 Ab4/.5,高,Mak-ing spir-its
+2,4,12,F4/1.5 F4/.5,高,"bright, (スラー)"
+2,4,13,F4/.5 Db5/.5 C5/.5 Bb4/.5,高,Oh what sport to
+2,4,14,G4/.5 Eb5/.5 D5/.5 Eb5/.5,高,ride and sing A。3 つ目の D に ♮ (D♮5)。今の形 (同じ音を 4 回) とは違う
+2,4,15,F5/.5 Eb5/.5 Db5/.5 Bb4/.5,高,sleigh-ing song to
+2,4,16,Ab4/2,高,night. (2 分音符・複縦線)
+3,1,1,C5/.5 C5/.5 C5/1,高,"Jin-gle bells,"
+3,1,2,Eb5/.5 Eb5/.5 Eb5/1,高,"Jin-gle bells,"
+3,1,3,C5/.5 C5/.5 F5/.75 F5/.25,高,Jin-gle all the (付点 8 分と 16 分)
+3,1,4,E5/2,高,way; (E に ♮。E♮5)
+3,1,5,F5/.5 Db5/.5 Ab4/.5 F5/.5,中,Oh! what joy it。3 つ目は A♭4 (第 2 間) と読んだ。400 dpi で確認
+3,2,6,Eb5/.5 C5/.5 Ab4/.5 Ab4/.25 Bb4/.25,高,is to ride In a
+3,2,7,C5/.5 Bb4/.5 Ab4/.5 Bb4/.5,高,one horse o-pen
+3,2,8,C5/2,高,sleigh.
+3,2,9,C5/.5 C5/.5 C5/1,高,"Jin-gle bells,"
+3,2,10,Eb5/.5 Eb5/.5 Eb5/1,高,"Jin-gle bells,"
+4,1,11,C5/.5 C5/.5 F5/.5 F5/.5,高,Jin-gle all the
+4,1,12,E5/2,高,"way, (E♮5)"
+4,1,13,F4/.5 Db5/.5 C5/.5 Bb4/.5,高,Oh! what joy it
+4,1,14,Ab4/.5 Eb5/.5 D5/.5 Eb5/.25 Eb5/.25,高,is to ride In a (D に ♮)
+4,1,15,F5/.5 Eb5/.5 Db5/.5 Bb4/.5,高,one horse o-pen
+4,1,16,Ab4/1 R/1,高,sleigh. (4 分音符と休符・終止線)
