@@ -1,7 +1,7 @@
 {
-  "run_at": "2026-11-25T11:00:27",
+  "run_at": "2026-11-26T10:36:04",
   "mode": "both",
-  "candidates": 512,
+  "candidates": 511,
   "buyback_candidates": 0,
   "skipped_unreachable": 0,
   "price_hits": {
