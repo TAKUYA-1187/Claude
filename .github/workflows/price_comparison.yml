@@ -56,6 +56,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run price comparison
+        # Yahoo!停止後は楽天・Amazonも未設定のため「API未設定」で終了コード2になる。後続の手順は従来どおり動かす
+        continue-on-error: true
         env:
           AMAZON_ACCESS_KEY: ${{ secrets.AMAZON_ACCESS_KEY }}
           AMAZON_SECRET_KEY: ${{ secrets.AMAZON_SECRET_KEY }}
@@ -64,7 +66,10 @@ jobs:
           RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
           RAKUTEN_ACCESS_KEY: ${{ secrets.RAKUTEN_ACCESS_KEY }}
           RAKUTEN_REFERER: ${{ vars.RAKUTEN_REFERER || 'https://sedori-note.pages.dev/' }}
-          YAHOO_APP_ID: ${{ secrets.YAHOO_APP_ID }}
+          # 2026-11-28 Muse指示（Inoue経由）: 旧経路のYahoo! API利用を停止。
+          # 利用枠を claude/ledger-import の買取ルートに回すため。コード・データは削除していない。
+          # 戻すときは次の行を ${{ secrets.YAHOO_APP_ID }} に戻す。
+          YAHOO_APP_ID: ''
           ONEDRIVE_SHARE_URL: ${{ secrets.ONEDRIVE_SHARE_URL }}
           ENABLED_SHOPS: ${{ vars.ENABLED_SHOPS || '買取商店,ウィキ' }}
           AMAZON_REFERRAL_FEE_RATE: ${{ vars.AMAZON_REFERRAL_FEE_RATE || '0.10' }}
