@@ -1,10 +1,10 @@
 {
- "run_at": "2026-11-28 15:15:58",
- "data_generated_at": "2026-11-28 15:19:12",
+ "run_at": "2026-11-28 23:27:36",
+ "data_generated_at": "2026-11-28 23:30:38",
  "status": "部分成功",
  "reasons": [
-  "Yahoo!の問い合わせを途中で停止: 429（利用制限）を 2026-11-28 15:19:12 に受信。60分の冷却期間中のため停止",
-  "未調査・鮮度切れで突合できなかった商品 6099件（次回以降に巡回）"
+  "Yahoo!の問い合わせを途中で停止: 今回の実行の予算 28 回を使い切った",
+  "未調査・鮮度切れで突合できなかった商品 6071件（次回以降に巡回）"
  ],
  "sources": {
   "kaitori": "https://www.kaitorishouten-co.jp/api/v1/products",
@@ -17,29 +17,31 @@
   "items_with_new_price": 6160,
   "items_without_jan": 397,
   "api_total": 6924,
-  "started_at": "2026-11-28 15:15:58",
-  "finished_at": "2026-11-28 15:18:26",
+  "started_at": "2026-11-28 23:27:36",
+  "finished_at": "2026-11-28 23:29:57",
   "unique_jan_new_price": 6160
  },
  "yahoo": {
   "targets": 6160,
-  "cached_fresh": 31,
-  "queried": 30,
-  "found": 29,
-  "not_found": 1,
+  "cached_fresh": 61,
+  "queried": 28,
+  "found": 24,
+  "not_found": 4,
   "failed": 0,
-  "stopped_reason": "429（利用制限）を 2026-11-28 15:19:12 に受信。60分の冷却期間中のため停止",
+  "stopped_reason": "今回の実行の予算 28 回を使い切った",
+  "categories": 5,
+  "queried_categories": 5,
   "api_counts": {
-   "requests": 31,
-   "ok": 30,
+   "requests": 28,
+   "ok": 28,
    "http_error": 0,
    "network_error": 0,
-   "rate_limited": 1
+   "rate_limited": 0
   },
-  "daily_used": 63,
-  "fresh_checked": 61,
-  "uninvestigated_or_stale": 6099,
-  "matched": 58,
-  "profitable": 1
+  "daily_used": 91,
+  "fresh_checked": 89,
+  "uninvestigated_or_stale": 6071,
+  "matched": 82,
+  "profitable": 7
  }
 }
