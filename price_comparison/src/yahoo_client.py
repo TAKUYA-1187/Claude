@@ -5,71 +5,41 @@ Docs: https://developer.yahoo.co.jp/webapi/shopping/v3/itemsearch.html
 from __future__ import annotations
 
 import logging
-import time
 from typing import Optional
 
-import requests
-from tenacity import retry, stop_after_attempt, wait_exponential
-
-ENDPOINT = "https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch"
+from .yahoo_budget import BudgetExhausted, RateLimited, YahooBudget
 
 log = logging.getLogger(__name__)
 
 
-# 連続失敗がこの回数に達したらクライアントを無効化し、残りのJANを高速スキップする
-CIRCUIT_BREAKER_THRESHOLD = 10
-
-
 class YahooClient:
-    def __init__(self, app_id: str):
+    """JANで最安値を引く。利用量は YahooBudget で一元管理し、同じJANは1実行で1回だけ問い合わせる。"""
+
+    def __init__(self, app_id: str, budget: YahooBudget | None = None):
         if not app_id:
             raise ValueError("YAHOO_APP_ID is required")
         self.app_id = app_id
-        self._last_call = 0.0
-        self._consecutive_failures = 0
+        self.budget = budget or YahooBudget.shared()
+        self._cache: dict[str, Optional[int]] = {}
         self.dead = False
 
-    def _throttle(self):
-        # 1req/sec 程度に抑制
-        elapsed = time.time() - self._last_call
-        if elapsed < 0.3:
-            time.sleep(0.3 - elapsed)
-        self._last_call = time.time()
-
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=2, max=16))
-    def _get(self, params: dict) -> dict:
-        self._throttle()
-        r = requests.get(ENDPOINT, params=params, timeout=15)
-        if not r.ok:
-            log.warning("Yahoo API HTTP %d: %s", r.status_code, r.text[:200])
-        r.raise_for_status()
-        return r.json()
-
     def min_price_by_jan(self, jan: str) -> Optional[int]:
+        if jan in self._cache:            # 重複問い合わせの排除
+            return self._cache[jan]
         if self.dead:
             return None
-        params = {
-            "appid": self.app_id,
-            "jan_code": jan,
-            "sort": "+price",
-            "results": 5,
-            "in_stock": "true",
-        }
+        params = {"appid": self.app_id, "jan_code": jan, "sort": "+price",
+                  "results": 5, "in_stock": "true", "condition": "new"}
         try:
-            data = self._get(params)
+            data = self.budget.get(params)
+        except (RateLimited, BudgetExhausted) as e:
+            self.dead = True
+            log.error("Yahoo検索を停止: %s", e)
+            return None
         except Exception as e:
             log.warning("Yahoo search failed for %s: %s", jan, e)
-            self._consecutive_failures += 1
-            if self._consecutive_failures >= CIRCUIT_BREAKER_THRESHOLD:
-                self.dead = True
-                log.error(
-                    "Yahoo API が %d 回連続で失敗したため以降スキップします。"
-                    "YAHOO_APP_ID が有効か確認してください。",
-                    self._consecutive_failures,
-                )
             return None
-
-        self._consecutive_failures = 0
-        hits = data.get("hits", []) or []
+        hits = [h for h in (data.get("hits") or []) if str(h.get("janCode") or "") == jan]
         prices = [h.get("price") for h in hits if h.get("price")]
-        return min(prices) if prices else None
+        self._cache[jan] = min(prices) if prices else None
+        return self._cache[jan]

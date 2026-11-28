@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import os
 import subprocess
 import sys
@@ -67,23 +68,26 @@ def to_ledger_rows(report_path: str, survey_time: str, source_note: str) -> tupl
             yahoo = ledger.to_yen(r.get("yahoo_price"))
             point = round(yahoo * float(point_rate)) if (yahoo is not None and point_rate) else ""
             rows.append({
-                "調査日時": survey_time,
+                "調査日時": r.get("yahoo_fetched_at") or survey_time,
                 "商品名": r.get("kaitori_name") or r.get("ec_name") or "",
                 "JANコード": r.get("jan") or "",
                 "仕入先": "Yahoo!ショッピング",
                 "仕入価格": r.get("yahoo_price") or "",
                 "獲得ポイント": str(point),                 # レポートの既定還元率（会員状況で変動）
-                "仕入送料": "",                             # レポートに無い → 未確認
+                "仕入URL": r.get("yahoo_url") or "",
+                "仕入送料": "0" if "送料無料" in (r.get("yahoo_shipping") or "") else "",   # 送料無料表記のみ0、他は未確認
                 "販売先": "買取商店",
                 "販売URL": r.get("kaitori_url") or "",
                 "買取価格": r.get("kaitori_price") or "",
                 "販売手数料": "0",                          # 買取は販売手数料なし
                 "発送費用": r.get("shipping") or "",        # レポートの買取店への送料
                 "その他経費": "",                           # 振込手数料等は未確認
-                "在庫状況": "",                             # レポートでは未確認
+                "在庫状況": "在庫あり" if r.get("yahoo_fetched_at") else "",   # 復旧版はin_stock=trueで検索
                 "検証状況": "未検証候補" + (f"（{note}）" if note else ""),
                 "価格変動リスク": "",
-                "情報源": source_note + f" ／ EC商品名: {r.get('ec_name') or ''}",
+                "情報源": source_note + f" ／ 買取取得{r.get('kaitori_fetched_at') or '不明'}"
+                          f" ／ Yahoo取得{r.get('yahoo_fetched_at') or '不明'} {r.get('yahoo_store') or ''}"
+                          f" ／ EC商品名: {r.get('ec_name') or ''}",
             })
     return rows, stats
 
@@ -98,7 +102,22 @@ def main(argv=None) -> int:
     a = p.parse_args(argv)
 
     now = datetime.fromisoformat(a.now).astimezone(JST) if a.now else datetime.now(JST)
-    dt, how = data_time(a.report)
+    status_path = os.path.join(os.path.dirname(os.path.abspath(a.report)), "kaitori_run_status.json")
+    run_status = None
+    if os.path.exists(status_path):
+        with open(status_path, encoding="utf-8") as f:
+            run_status = json.load(f)
+        print(f"実行状態: {run_status.get('status')} ／ " + " / ".join(run_status.get("reasons") or []))
+        if run_status.get("status") == "取得失敗":
+            print("取込中止: 直近の実行は取得失敗。出力ファイルは前回のものなので取り込みません。")
+            return 2
+        if not run_status.get("data_generated_at"):
+            print("取込中止: データ生成日時が記録されていません。")
+            return 2
+        dt = datetime.strptime(run_status["data_generated_at"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=JST)
+        how = "実行状態ファイルのデータ生成日時"
+    else:
+        dt, how = data_time(a.report)
     age_h = (now - dt).total_seconds() / 3600
     dt_s = dt.strftime("%Y-%m-%d %H:%M")
     differs = dt.strftime("%Y-%m-%d") != a.run_date
@@ -107,7 +126,7 @@ def main(argv=None) -> int:
 
     print(f"データ日時: {dt_s} JST（{how}）／ 経過 {age_h:.1f} 時間")
     if age_h > a.max_age_hours:
-        print(f"取込中止: データが{a.max_age_hours:.0f}時間より古いため、最新として台帳に取り込みません。")
+        print(f"取込中止（古いデータ使用）: データが{a.max_age_hours:.0f}時間より古いため、最新として台帳に取り込みません。")
         return 2
 
     rows, stats = to_ledger_rows(a.report, dt_s, source)

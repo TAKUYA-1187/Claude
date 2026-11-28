@@ -27,6 +27,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 log = logging.getLogger(__name__)
 
 YAHOO_ENDPOINT = "https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch"
+from .yahoo_budget import BudgetExhausted, RateLimited, YahooBudget  # noqa: E402
 RAKUTEN_BOOKS_ENDPOINT = (
     "https://app.rakuten.co.jp/services/api/BooksTotal/Search/20170404"
 )
@@ -48,22 +49,10 @@ def _valid_jan(code: str) -> bool:
 class YahooJanCollector:
     def __init__(self, app_id: str):
         self.app_id = app_id
-        self._last_call = 0.0
+        self.budget = YahooBudget.shared()   # 価格検索と同じ利用枠を共有
 
-    def _throttle(self):
-        elapsed = time.time() - self._last_call
-        if elapsed < 0.3:
-            time.sleep(0.3 - elapsed)
-        self._last_call = time.time()
-
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=2, max=16))
     def _get(self, params: dict) -> dict:
-        self._throttle()
-        r = requests.get(YAHOO_ENDPOINT, params=params, timeout=15)
-        if not r.ok:
-            log.warning("Yahoo collect HTTP %d: %s", r.status_code, r.text[:200])
-        r.raise_for_status()
-        return r.json()
+        return self.budget.get(params)
 
     def collect(
         self,
@@ -88,6 +77,10 @@ class YahooJanCollector:
                 }
                 try:
                     data = self._get(params)
+                except (RateLimited, BudgetExhausted) as e:
+                    log.error("Yahoo収集を停止: %s", e)
+                    log.info("Yahoo collector: %d items with JAN", len(items))
+                    return items
                 except Exception as e:
                     log.warning("Yahoo collect failed (%s p%d): %s", label, page + 1, e)
                     break

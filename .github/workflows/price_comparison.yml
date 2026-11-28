@@ -37,6 +37,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: price-comparison-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -55,7 +59,23 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Unit tests (ledger / recovery)
+        run: |
+          python -m unittest tests.test_recovery
+          cd ledger && python -m unittest test_ledger test_import
+
+      - name: Fetch Kaitorishouten new-item buyback prices and match Yahoo (recovery 2026-11-28)
+        working-directory: price_comparison/scripts
+        env:
+          YAHOO_APP_ID: ${{ secrets.YAHOO_APP_ID }}
+          SHIPPING_COST: ${{ vars.SHIPPING_COST || '600' }}
+          POINT_RATE: ${{ vars.POINT_RATE || '0.05' }}
+          YAHOO_DAILY_BUDGET: ${{ vars.YAHOO_DAILY_BUDGET || '5000' }}
+          YAHOO_RUN_BUDGET: ${{ vars.YAHOO_RUN_BUDGET || '2000' }}
+        run: python kaitori_catalog.py
+
       - name: Run price comparison
+        continue-on-error: true   # 旧経路（OneDrive・楽天・Amazon）は未設定項目が多いため、失敗しても買取ルートを止めない
         env:
           AMAZON_ACCESS_KEY: ${{ secrets.AMAZON_ACCESS_KEY }}
           AMAZON_SECRET_KEY: ${{ secrets.AMAZON_SECRET_KEY }}
@@ -86,13 +106,6 @@ jobs:
             ARGS="$ARGS --limit ${{ github.event.inputs.limit }}"
           fi
           python -m src.main $ARGS
-
-      - name: Match against Kaitorishouten buyback prices
-        working-directory: price_comparison/scripts
-        env:
-          SHIPPING_COST: ${{ vars.SHIPPING_COST || '600' }}
-          POINT_RATE: ${{ vars.POINT_RATE || '0.05' }}
-        run: python kaitori_catalog.py
 
       - name: Import into product ledger (stale data is refused)
         working-directory: price_comparison/ledger
@@ -132,7 +145,10 @@ jobs:
                    price_comparison/data/collected/collected_latest.csv \
                    price_comparison/ledger_data/master.csv \
                    price_comparison/ledger_data/history.csv \
-                   price_comparison/ledger_data/excluded.csv; do
+                   price_comparison/ledger_data/excluded.csv \
+                   price_comparison/data/output/kaitori_run_status.json \
+                   price_comparison/data/state/yahoo_usage.json \
+                   price_comparison/data/state/yahoo_price_cache.json; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
           if ! git diff --cached --quiet; then
@@ -141,3 +157,12 @@ jobs:
           else
             echo "No changes to commit"
           fi
+
+      - name: Fail the run if data acquisition failed
+        run: |
+          python - <<'PY'
+          import json, sys
+          s = json.load(open("data/output/kaitori_run_status.json", encoding="utf-8"))
+          print("STATUS:", s["status"], "/", " / ".join(s.get("reasons") or []))
+          sys.exit(1 if s["status"] == "取得失敗" else 0)
+          PY

@@ -71,6 +71,25 @@ class T(unittest.TestCase):
         self.assertEqual(row["現金利益"], "")                 # 0で埋めて計算しない
         self.assertIn("データ日時", row["情報源"])
 
+    def _status(self, status, generated):
+        import json
+        with open(os.path.join(self.d, "kaitori_run_status.json"), "w", encoding="utf-8") as f:
+            json.dump({"status": status, "data_generated_at": generated, "reasons": []}, f, ensure_ascii=False)
+
+    def test_status_failure_refused(self):
+        self._status("取得失敗", "2026-11-28 09:00:00")
+        self.assertEqual(imp.main(["--report", self.rep, "--ledger-dir", self.led,
+                                   "--now", "2026-11-28T10:00:00+09:00"]), 2)
+
+    def test_status_stale_refused_and_fresh_accepted(self):
+        self._status("部分成功", "2026-11-26 09:00:00")
+        self.assertEqual(imp.main(["--report", self.rep, "--ledger-dir", self.led,
+                                   "--now", "2026-11-28T10:00:00+09:00"]), 2)
+        self._status("部分成功", "2026-11-28 09:00:00")
+        self.assertIn(imp.main(["--report", self.rep, "--ledger-dir", self.led,
+                                "--now", "2026-11-28T10:00:00+09:00"]), (0, 1))
+        self.assertEqual(len(read(os.path.join(self.led, "master.csv"))), 1)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)
