@@ -1,2 +1,5 @@
 ﻿商品キー,JANコード,ASIN,型番,商品名,除外理由,除外日,判断者
 JAN:4902370552683,4902370552683,,BEE-S-KB6AA,Nintendo Switch 2 多言語版,購入条件（Switchプレイ時間50時間以上）を満たさないため仕入不可（Muse 2026-11-28報告・本人回答）,2026-11-28,Inoue
+ASIN:B0DRVB48LJ,,B0DRVB48LJ,A3957,Anker Soundcore Liberty 5 ミッドナイトブラック,ブランドの出品許可が必要（セラーセントラル 2026-11-28 16:45確認）。UPC 194644231101,2026-11-28,Inoue（16:44承認）
+ASIN:B0DRVCTZV2,,B0DRVCTZV2,,Anker Soundcore Liberty 5 シャンパンゴールド,同一商品の色違い。ブランドの出品許可が必要（ブラックで確認）,2026-11-28,Inoue（16:44承認）
+ASIN:B0DRVDC63C,,B0DRVDC63C,,Anker Soundcore Liberty 5 ディープブルー,同一商品の色違い。ブランドの出品許可が必要（ブラックで確認）,2026-11-28,Inoue（16:44承認）
