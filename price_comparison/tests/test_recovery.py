@@ -158,6 +158,17 @@ class CatalogTest(unittest.TestCase):
         self.assertIn("ストア名にアウトレット", self.kc.caution_note("SONY α7R V", "秋葉原 アウトレットプラザ"))
         self.assertEqual(self.kc.caution_note("SONY α7R V", "ヨドバシ"), "")
 
+    def test_suspect_ratio_flag(self):
+        items = [{"id": 1, "name": "【テスト】BOX", "jan": "4549995429213", "price_new": {"amount": 92000}}]
+        yahoo = Resp(200, {"hits": [{"janCode": "4549995429213", "price": 5290, "name": "【テスト】1本"}]})
+        sess = mock.Mock(); sess.headers = {}
+        sess.get.side_effect = self.kaitori_pages([items])
+        with mock.patch("requests.Session", return_value=sess), mock.patch("requests.get", return_value=yahoo):
+            self.kc.main()
+        import csv
+        row = next(csv.DictReader(open(self.kc.OUT_DIR / "kaitorishouten_all_latest.csv", encoding="utf-8-sig")))
+        self.assertIn("単位違い", row["note"])
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)

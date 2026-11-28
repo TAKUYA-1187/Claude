@@ -56,7 +56,8 @@ SHIPPING_COST = int(os.getenv("SHIPPING_COST", "600"))
 MIN_PROFIT = int(os.getenv("MIN_PROFIT", "1"))
 POINT_RATE = float(os.getenv("POINT_RATE", "0.05"))
 CACHE_HOURS = float(os.getenv("YAHOO_CACHE_HOURS", "20"))
-FRESH_HOURS = float(os.getenv("FRESH_HOURS", "36"))                 # 突合に使うYahoo価格の鮮度上限
+FRESH_HOURS = float(os.getenv("FRESH_HOURS", "36"))
+SUSPECT_RATIO = float(os.getenv("SUSPECT_RATIO", "1.5"))          # 買取÷仕入がこれを超えたら要確認                 # 突合に使うYahoo価格の鮮度上限
 YAHOO_APP_ID = os.getenv("YAHOO_APP_ID", "")
 
 CAUTION_WORDS = ["中古", "ばら売り", "バラ売り", "ジャンク", "訳あり", "アウトレット",
@@ -313,6 +314,11 @@ def main() -> int:
         yp = y["price"]
         profit = it["price"] - yp - SHIPPING_COST
         eff_cost = int(round(yp * (1 - POINT_RATE)))
+        note = caution_note(y.get("name", ""), y.get("store", ""))
+        if yp and it["price"] / yp > SUSPECT_RATIO:
+            # 例: 買取はBOX/本体、Yahooは1パック/ミニボトル。JANの誤登録もありうる
+            sus = f"買取価格がYahoo価格の{it['price'] / yp:.1f}倍（単位違い・JAN誤登録の疑い）"
+            note = (note + "、" + sus) if note else "要確認: " + sus
         eff = it["price"] - eff_cost - SHIPPING_COST
         both.append({
             "jan": jan, "ec_name": y.get("name", ""), "kaitori_name": it["name"], "kaitori_price": it["price"],
@@ -320,7 +326,7 @@ def main() -> int:
             "profit_rate": round(profit / yp, 4) if yp else 0, "point_rate": POINT_RATE,
             "effective_cost": eff_cost, "effective_profit": eff,
             "effective_profit_rate": round(eff / eff_cost, 4) if eff_cost else 0,
-            "note": caution_note(y.get("name", ""), y.get("store", "")),
+            "note": note,
             "kaitori_url": BASE,   # 個別商品ページのURL形式は未確認のためトップを記載（商品名で検索）
             "category": it["category"], "yahoo_url": y.get("url", ""), "yahoo_store": y.get("store", ""),
             "yahoo_shipping": y.get("shipping_name", ""),
