@@ -7,7 +7,7 @@
 
 上限値は環境変数で設定する。既定値は控えめな仮置きで、Yahoo!の公式上限は未確認。
   YAHOO_DAILY_BUDGET   … 1日あたりの上限（既定 5000）
-  YAHOO_RUN_BUDGET     … 1回の実行あたりの上限（既定 2000）
+  YAHOO_RUN_BUDGET     … 1回の実行あたりの上限（既定 28。2026-11-28の実測で約30件目に429）
   YAHOO_MIN_INTERVAL   … リクエスト間隔の秒数（既定 1.5。公式の目安は「1クエリー/秒」）
   YAHOO_COOLDOWN_MIN   … 429を受けてから再開しない時間（既定 60分）。公式は「一定時間利用できなくなる」とのみ記載
 """
@@ -51,7 +51,7 @@ class YahooBudget:
     def __init__(self, state_path: Path = STATE):
         self.state_path = Path(state_path)
         self.daily = int(os.getenv("YAHOO_DAILY_BUDGET", "5000"))
-        self.per_run = int(os.getenv("YAHOO_RUN_BUDGET", "2000"))
+        self.per_run = int(os.getenv("YAHOO_RUN_BUDGET", "28"))
         self.interval = float(os.getenv("YAHOO_MIN_INTERVAL", "1.5"))
         self.cooldown_min = float(os.getenv("YAHOO_COOLDOWN_MIN", "60"))
         self.run_used = 0

@@ -72,7 +72,7 @@ jobs:
           SHIPPING_COST: ${{ vars.SHIPPING_COST || '600' }}
           POINT_RATE: ${{ vars.POINT_RATE || '0.05' }}
           YAHOO_DAILY_BUDGET: ${{ vars.YAHOO_DAILY_BUDGET || '5000' }}
-          YAHOO_RUN_BUDGET: ${{ vars.YAHOO_RUN_BUDGET || '2000' }}
+          YAHOO_RUN_BUDGET: ${{ vars.YAHOO_RUN_BUDGET || '28' }}   # 実測で約30件目に429が出るため
         run: python kaitori_catalog.py
 
       - name: Run price comparison
@@ -83,7 +83,7 @@ jobs:
           AMAZON_PARTNER_TAG: ${{ secrets.AMAZON_PARTNER_TAG }}
           RAKUTEN_APP_ID: ${{ secrets.RAKUTEN_APP_ID }}
           RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
-          YAHOO_APP_ID: ${{ secrets.YAHOO_APP_ID }}
+          YAHOO_APP_ID: ''   # 旧経路（src.main）のYahoo!収集・検索は停止。利用枠は上の買取ルートだけが使う（2026-11-28 Muse指示）
           ONEDRIVE_SHARE_URL: ${{ secrets.ONEDRIVE_SHARE_URL }}
           ENABLED_SHOPS: ${{ vars.ENABLED_SHOPS || '買取商店,ウィキ' }}
           AMAZON_REFERRAL_FEE_RATE: ${{ vars.AMAZON_REFERRAL_FEE_RATE || '0.10' }}
@@ -149,7 +149,8 @@ jobs:
                    price_comparison/ledger_data/excluded.csv \
                    price_comparison/data/output/kaitori_run_status.json \
                    price_comparison/data/state/yahoo_usage.json \
-                   price_comparison/data/state/yahoo_price_cache.json; do
+                   price_comparison/data/state/yahoo_price_cache.json \
+                   price_comparison/data/state/yahoo_rotation.json; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
           if ! git diff --cached --quiet; then

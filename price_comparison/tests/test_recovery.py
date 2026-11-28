@@ -82,6 +82,7 @@ class CatalogTest(unittest.TestCase):
         self.kc = importlib.reload(kc)
         self.kc.OUT_DIR, self.kc.STATE_DIR = self.tmp / "out", self.tmp / "state"
         self.kc.CACHE_FILE = self.kc.STATE_DIR / "c.json"
+        self.kc.ROTATION_FILE = self.kc.STATE_DIR / "r.json"
         self.kc.STATUS_FILE = self.kc.OUT_DIR / "s.json"
         yb.YahooBudget._instance = yb.YahooBudget(self.tmp / "u.json")
 
@@ -143,6 +144,19 @@ class CatalogTest(unittest.TestCase):
                                        yb.YahooBudget._instance)
         self.assertEqual(order, ["4549995429220"])    # 未調査が最優先、429で即停止
         self.assertIn("429", st["stopped_reason"])
+
+    def test_category_round_robin_and_rotation(self):
+        catalog = {"1": {"category": "A", "price": 100}, "2": {"category": "A", "price": 900},
+                   "3": {"category": "B", "price": 50}, "4": {"category": "C", "price": 70}}
+        order, cats = self.kc.prioritize(list(catalog), catalog, {})
+        self.assertEqual(order, ["2", "3", "4", "1"])     # A(高額)→B→C→A の順に1件ずつ
+        self.kc.save_rotation(cats, ["2", "3"], catalog)  # Bまで調べた → 次回はCから
+        order2, _ = self.kc.prioritize(list(catalog), catalog, {})
+        self.assertEqual(order2[0], "4")
+
+    def test_store_caution(self):
+        self.assertIn("ストア名にアウトレット", self.kc.caution_note("SONY α7R V", "秋葉原 アウトレットプラザ"))
+        self.assertEqual(self.kc.caution_note("SONY α7R V", "ヨドバシ"), "")
 
 
 if __name__ == "__main__":

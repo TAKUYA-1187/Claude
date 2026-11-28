@@ -44,6 +44,7 @@ API = f"{BASE}/api/v1/products"
 OUT_DIR = ROOT / "data" / "output"
 STATE_DIR = ROOT / "data" / "state"
 CACHE_FILE = STATE_DIR / "yahoo_price_cache.json"
+ROTATION_FILE = STATE_DIR / "yahoo_rotation.json"
 STATUS_FILE = OUT_DIR / "kaitori_run_status.json"
 
 UA = {"User-Agent": "Mozilla/5.0 (compatible; LIFESTAR-price-research/2.0)", "Accept": "application/json"}
@@ -71,9 +72,18 @@ def ts(d: datetime) -> str:
     return d.strftime("%Y-%m-%d %H:%M:%S")
 
 
-def caution_note(ec_name: str) -> str:
+STORE_CAUTION_WORDS = ["アウトレット", "リユース", "中古", "リサイクル", "買取", "質屋", "訳あり", "ジャンク", "B級", "展示"]
+
+
+def caution_note(ec_name: str, store: str = "") -> str:
     hits = [w for w in CAUTION_WORDS if w in ec_name]
-    return "要確認: " + "/".join(hits) if hits else ""
+    shits = [w for w in STORE_CAUTION_WORDS if w in (store or "")]
+    parts = []
+    if hits:
+        parts.append("/".join(hits))
+    if shits:
+        parts.append("ストア名に" + "/".join(shits))
+    return "要確認: " + "、".join(parts) if parts else ""
 
 
 # ---- 買取商店 ---------------------------------------------------------------
@@ -147,13 +157,54 @@ def age_hours(stamp: str | None) -> float:
     return (now() - datetime.strptime(stamp, "%Y-%m-%d %H:%M:%S").replace(tzinfo=JST)).total_seconds() / 3600
 
 
-def refresh_yahoo(jans: list[str], cache: dict, budget: YahooBudget) -> dict:
-    """キャッシュが古いJANだけを、最後に調べた日時が古い順に問い合わせる。"""
+def prioritize(due: list[str], catalog: dict, cache: dict) -> tuple[list[str], list[str]]:
+    """問い合わせ順を決める。
+    1) 一度も調べていないJANを先に、カテゴリーを1件ずつ順番に回す（ラウンドロビン）。
+       各カテゴリー内は買取価格の高い順。前回の続きのカテゴリーから始める。
+    2) その後に、調べたことはあるがキャッシュが古いJANを、確認日時の古い順。
+    """
+    never = [j for j in due if not cache.get(j, {}).get("checked_at")]
+    stale = sorted((j for j in due if cache.get(j, {}).get("checked_at")), key=lambda j: cache[j]["checked_at"])
+    groups: dict[str, list[str]] = {}
+    for j in never:
+        groups.setdefault(catalog.get(j, {}).get("category") or "(なし)", []).append(j)
+    cats = sorted(groups)
+    for c in cats:
+        groups[c].sort(key=lambda j: -catalog.get(j, {}).get("price", 0))
+    start = 0
+    if ROTATION_FILE.exists() and cats:
+        try:
+            last = json.loads(ROTATION_FILE.read_text(encoding="utf-8")).get("next_category")
+            start = cats.index(last) if last in cats else 0
+        except Exception:
+            start = 0
+    order = cats[start:] + cats[:start]
+    rr = []
+    while any(groups[c] for c in order):
+        for c in order:
+            if groups[c]:
+                rr.append(groups[c].pop(0))
+    return rr + stale, order
+
+
+def save_rotation(order: list[str], queried_jans: list[str], catalog: dict):
+    if not order:
+        return
+    last_cat = catalog.get(queried_jans[-1], {}).get("category") if queried_jans else None
+    nxt = order[(order.index(last_cat) + 1) % len(order)] if last_cat in order else order[0]
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    ROTATION_FILE.write_text(json.dumps({"next_category": nxt, "categories": len(order)}, ensure_ascii=False),
+                             encoding="utf-8")
+
+
+def refresh_yahoo(jans: list[str], cache: dict, budget: YahooBudget, catalog: dict | None = None) -> dict:
+    """キャッシュが古いJANだけを、prioritize() の順に問い合わせる。"""
     st = {"targets": len(jans), "cached_fresh": 0, "queried": 0, "found": 0, "not_found": 0,
           "failed": 0, "stopped_reason": None}
     due = [j for j in jans if age_hours(cache.get(j, {}).get("checked_at")) >= CACHE_HOURS]
     st["cached_fresh"] = len(jans) - len(due)
-    due.sort(key=lambda j: cache.get(j, {}).get("checked_at") or "")   # 未調査（空）が最優先
+    due, order = prioritize(due, catalog or {}, cache)
+    queried_jans: list[str] = []
     if not YAHOO_APP_ID:
         st["stopped_reason"] = "YAHOO_APP_ID 未設定"
         return st
@@ -170,6 +221,7 @@ def refresh_yahoo(jans: list[str], cache: dict, budget: YahooBudget) -> dict:
             log.warning("Yahoo %s 失敗: %s", jan, e)
             continue
         st["queried"] += 1
+        queried_jans.append(jan)
         hits = [h for h in (data.get("hits") or []) if str(h.get("janCode") or "") == jan and h.get("price")]
         entry = {"checked_at": ts(now())}
         if hits:
@@ -185,6 +237,9 @@ def refresh_yahoo(jans: list[str], cache: dict, budget: YahooBudget) -> dict:
         if st["queried"] % 100 == 0:
             save_cache(cache)
     save_cache(cache)
+    save_rotation(order, queried_jans, catalog or {})
+    st["categories"] = len(order)
+    st["queried_categories"] = len({(catalog or {}).get(j, {}).get("category") for j in queried_jans})
     return st
 
 
@@ -243,7 +298,7 @@ def main() -> int:
     budget = YahooBudget.shared()
     cache = load_cache()
     jans = sorted(catalog, key=lambda j: -catalog[j]["price"])   # 高額商品から優先
-    yst = refresh_yahoo(jans, cache, budget)
+    yst = refresh_yahoo(jans, cache, budget, catalog)
     yst["api_counts"] = budget.counts
     yst["daily_used"] = budget.state["used"]
     budget.save()
@@ -265,7 +320,7 @@ def main() -> int:
             "profit_rate": round(profit / yp, 4) if yp else 0, "point_rate": POINT_RATE,
             "effective_cost": eff_cost, "effective_profit": eff,
             "effective_profit_rate": round(eff / eff_cost, 4) if eff_cost else 0,
-            "note": caution_note(y.get("name", "")),
+            "note": caution_note(y.get("name", ""), y.get("store", "")),
             "kaitori_url": BASE,   # 個別商品ページのURL形式は未確認のためトップを記載（商品名で検索）
             "category": it["category"], "yahoo_url": y.get("url", ""), "yahoo_store": y.get("store", ""),
             "yahoo_shipping": y.get("shipping_name", ""),
