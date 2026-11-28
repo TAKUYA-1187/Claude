@@ -49,9 +49,9 @@ class T(unittest.TestCase):
         make_report(self.rep, SAMPLE)
 
     def test_real_report_is_stale_and_refused(self):
-        # リポジトリ上の旧データは拒否される（通常クローン=古い日時で拒否、浅いクローン=日時不明で拒否）
+        # リポジトリ上のデータを、生成から36時間を超えた時点で取り込もうとすると拒否される
         try:
-            code = imp.main(["--report", REPORT, "--ledger-dir", self.led, "--now", "2026-11-28T12:00:00+09:00"])
+            code = imp.main(["--report", REPORT, "--ledger-dir", self.led, "--now", "2027-01-31T12:00:00+09:00"])
         except SystemExit as e:
             code = 2 if "取込中止" in str(e.code) else e.code
         self.assertEqual(code, 2)

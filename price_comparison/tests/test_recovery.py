@@ -45,6 +45,11 @@ class BudgetTest(unittest.TestCase):
         b2 = yb.YahooBudget(self.state)               # 同じ日の別実行でも止まったまま
         self.assertIsNotNone(b2.stopped_reason)
         self.assertEqual(b2.remaining(), 0)
+        os.environ["YAHOO_COOLDOWN_MIN"] = "0"           # 冷却期間が過ぎれば再開できる
+        try:
+            self.assertIsNone(yb.YahooBudget(self.state).stopped_reason)
+        finally:
+            del os.environ["YAHOO_COOLDOWN_MIN"]
 
     def test_run_budget(self):
         os.environ["YAHOO_RUN_BUDGET"] = "2"

@@ -1,14 +1,15 @@
 """Yahoo!ショッピングAPIの利用量を一元管理する。
 
 - 収集（jan_collector）と価格検索（yahoo_client / kaitori_catalog）が同じ予算を共有する
-- 429（利用上限）を受けたら、その日はそれ以上呼ばない（再試行しない・回避しない）
+- 429（利用上限）を受けたら即停止し、冷却期間中は別の実行でも呼ばない（再試行しない・回避しない）
 - 1日の利用数を data/state/yahoo_usage.json に保存し、同じ日の別実行とも共有する
   （GitHub Actionsの実行間は、このファイルをコミットして引き継ぐ）
 
 上限値は環境変数で設定する。既定値は控えめな仮置きで、Yahoo!の公式上限は未確認。
   YAHOO_DAILY_BUDGET   … 1日あたりの上限（既定 5000）
   YAHOO_RUN_BUDGET     … 1回の実行あたりの上限（既定 2000）
-  YAHOO_MIN_INTERVAL   … リクエスト間隔の秒数（既定 1.0）
+  YAHOO_MIN_INTERVAL   … リクエスト間隔の秒数（既定 1.5。公式の目安は「1クエリー/秒」）
+  YAHOO_COOLDOWN_MIN   … 429を受けてから再開しない時間（既定 60分）。公式は「一定時間利用できなくなる」とのみ記載
 """
 from __future__ import annotations
 
@@ -51,7 +52,8 @@ class YahooBudget:
         self.state_path = Path(state_path)
         self.daily = int(os.getenv("YAHOO_DAILY_BUDGET", "5000"))
         self.per_run = int(os.getenv("YAHOO_RUN_BUDGET", "2000"))
-        self.interval = float(os.getenv("YAHOO_MIN_INTERVAL", "1.0"))
+        self.interval = float(os.getenv("YAHOO_MIN_INTERVAL", "1.5"))
+        self.cooldown_min = float(os.getenv("YAHOO_COOLDOWN_MIN", "60"))
         self.run_used = 0
         self.counts = {"requests": 0, "ok": 0, "http_error": 0, "network_error": 0, "rate_limited": 0}
         self._last = 0.0
@@ -69,7 +71,7 @@ class YahooBudget:
             except Exception:
                 s = {}
         if s.get("date") != self._today():
-            s = {"date": self._today(), "used": 0, "rate_limited_at": None}
+            s = {"date": self._today(), "used": 0, "rate_limited_at": s.get("rate_limited_at")}
         self.state = s
 
     def save(self):
@@ -79,8 +81,11 @@ class YahooBudget:
     # ---- 判定 ----
     @property
     def stopped_reason(self) -> str | None:
-        if self.state.get("rate_limited_at"):
-            return f"429（利用上限）を {self.state['rate_limited_at']} に受信したため本日は停止"
+        rl = self.state.get("rate_limited_at")
+        if rl:
+            since = datetime.strptime(rl, "%Y-%m-%d %H:%M:%S").replace(tzinfo=JST)
+            if datetime.now(JST) - since < timedelta(minutes=self.cooldown_min):
+                return f"429（利用制限）を {rl} に受信。{self.cooldown_min:.0f}分の冷却期間中のため停止"
         if self.state["used"] >= self.daily:
             return f"1日の予算 {self.daily} 回を使い切った"
         if self.run_used >= self.per_run:
@@ -120,7 +125,7 @@ class YahooBudget:
                 self.counts["rate_limited"] += 1
                 self.state["rate_limited_at"] = datetime.now(JST).strftime("%Y-%m-%d %H:%M:%S")
                 self.save()
-                log.error("Yahoo API が 429（利用上限）を返したため、本日の呼び出しを停止します")
+                log.error("Yahoo API が 429（利用上限）を返したため、冷却期間まで呼び出しを停止します")
                 raise RateLimited(self.stopped_reason)
             if r.status_code >= 500 and attempts < 2:   # サーバー側の一時エラーのみ1回再試行
                 self.counts["http_error"] += 1
