@@ -43,6 +43,9 @@ def data_time(report_path: str) -> tuple[datetime, str]:
     def git(*args):
         return subprocess.run(["git", *args], cwd=d, capture_output=True, text=True)
     tracked = git("ls-files", "--error-unmatch", "--", path).returncode == 0
+    if tracked and git("rev-parse", "--is-shallow-repository").stdout.strip() == "true":
+        # 浅いクローン（GitHub Actionsの既定）ではコミット日時が実際のデータ日時を表さない
+        raise SystemExit("取込中止: 浅いクローンのためデータ日時を特定できません（実行状態ファイルが必要）")
     if tracked:
         if git("status", "--porcelain", "--", path).stdout.strip() == "":
             iso = git("log", "-1", "--format=%cI", "--", path).stdout.strip()
