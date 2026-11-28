@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - claude/resale-profit-analysis-nhbnaz
+      - claude/ledger-import          # 復旧作業の動作テスト用（本番反映後に削除）
     paths:
       - "price_comparison/src/**"
       - "price_comparison/scripts/**"
