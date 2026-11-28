@@ -10,6 +10,7 @@ on:
     paths:
       - "price_comparison/src/**"
       - "price_comparison/scripts/**"
+      - "price_comparison/ledger/**"
       - "price_comparison/.refresh"
       - ".github/workflows/price_comparison.yml"
   workflow_dispatch:
@@ -93,6 +94,19 @@ jobs:
           POINT_RATE: ${{ vars.POINT_RATE || '0.05' }}
         run: python kaitori_catalog.py
 
+      - name: Import into product ledger (stale data is refused)
+        working-directory: price_comparison/ledger
+        run: |
+          set +e
+          python import_kaitori_report.py \
+            --report ../data/output/kaitorishouten_all_latest.csv \
+            --ledger-dir ../ledger_data \
+            --run-date "$(TZ=Asia/Tokyo date +%Y-%m-%d)"
+          code=$?
+          # 2 = データが古いため取込中止（正常な安全停止）。1 = 要確認行あり（台帳は更新済み）
+          if [ $code -ne 0 ] && [ $code -ne 1 ] && [ $code -ne 2 ]; then exit $code; fi
+          exit 0
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -115,7 +129,10 @@ jobs:
                    price_comparison/data/output/kaitorishouten_all_latest.csv \
                    price_comparison/data/output/kaitorishouten_profitable_latest.csv \
                    price_comparison/data/output/kaitorishouten_catalog_latest.csv \
-                   price_comparison/data/collected/collected_latest.csv; do
+                   price_comparison/data/collected/collected_latest.csv \
+                   price_comparison/ledger_data/master.csv \
+                   price_comparison/ledger_data/history.csv \
+                   price_comparison/ledger_data/excluded.csv; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
           if ! git diff --cached --quiet; then
